@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Math Kitchen Ninja – Complete Edition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&display=swap');
+
+  :root {
+    --bg: #1b120d;
+    --surface: #2b1d15;
+    --surface2: #3a2818;
+    --border: #5a3d26;
+    --text: #fbeee0;
+    --muted: #b9a488;
+    --accent: #e8482c;
+    --accent2: #ff8c3f;
+    --gold: #f4b400;
+    --gold2: #d68a00;
+    --green: #7cb518;
+    --red: #d7263d;
+    --blue: #2a9d8f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    user-select: none;
+  }
+
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* ── HOME ── */
+  #home { background: radial-gradient(ellipse at top, #3a2412 0%, #1b120d 60%); }
+
+  .home-header { padding: 26px 22px 8px; text-align: center; }
+
+  .home-title {
+    font-family: 'Bangers', cursive;
+    font-size: 2.4rem;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #ff8c3f, #f4b400);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+
+  .home-subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+  .xp-panel {
+    margin: 14px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 18px;
+  }
+
+  .xp-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+
+  .level-badge {
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .xp-count { font-size: 0.78rem; color: var(--muted); }
+  .xp-count span { color: var(--gold); font-weight: 800; }
+
+  .xp-bar-bg { background: var(--border); border-radius: 999px; height: 10px; overflow: hidden; }
+  .xp-bar-fill {
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    height: 100%; border-radius: 999px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  .continue-btn {
+    margin: 0 20px 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 16px;
+    padding: 16px 18px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    transition: transform 0.1s;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+  }
+  .continue-btn:active { transform: scale(0.97); }
+  .continue-icon { font-size: 1.8rem; }
+  .continue-text { flex: 1; text-align: left; }
+  .continue-title { font-family: 'Bangers', cursive; font-size: 1.1rem; letter-spacing: 1px; color: white; }
+  .continue-sub { font-size: 0.75rem; color: rgba(255,255,255,0.85); margin-top: 2px; }
+
+  .levels-label {
+    padding: 0 20px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .levels-list { padding: 0 20px 30px; display: flex; flex-direction: column; gap: 10px; }
+
+  .level-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: transform 0.12s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .level-card.locked { opacity: 0.45; pointer-events: none; }
+
+  .level-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+
+  .level-card[data-l="1"]::before { background: #7cb518; }
+  .level-card[data-l="2"]::before { background: #2a9d8f; }
+  .level-card[data-l="3"]::before { background: #d68a00; }
+  .level-card[data-l="4"]::before { background: #d7263d; }
+  .level-card[data-l="5"]::before { background: #ff8c3f; }
+
+  .level-card:active { transform: scale(0.97); }
+
+  .level-num-badge {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    color: var(--accent2);
+    flex-shrink: 0;
+  }
+
+  .level-info { flex: 1; }
+  .level-title { font-size: 0.95rem; font-weight: 800; }
+  .level-progress-text { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  .level-progress-bar { background: var(--border); border-radius: 999px; height: 5px; margin-top: 6px; overflow: hidden; }
+  .level-progress-fill { height: 100%; border-radius: 999px; background: var(--accent2); transition: width 0.4s; }
+
+  .level-star { font-size: 1.2rem; flex-shrink: 0; }
+
+  /* ── GENERIC HEADER ── */
+  .simple-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .back-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 14px;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .screen-title-block { flex: 1; }
+  .screen-title { font-family: 'Bangers', cursive; font-size: 1.2rem; letter-spacing: 1px; }
+  .screen-subtitle { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+
+  .mission-counter { font-size: 0.78rem; color: var(--muted); font-weight: 700; white-space: nowrap; }
+
+  /* Mission dots */
+  .mission-dots { display: flex; justify-content: center; gap: 4px; padding: 10px 16px 4px; flex-wrap: wrap; }
+  .m-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.2s, width 0.2s;
+  }
+  .m-dot.active { background: var(--accent2); width: 18px; border-radius: 3px; }
+  .m-dot.correct { background: var(--green); }
+  .m-dot.wrong { background: var(--red); }
+
+  /* ── MISSION VIEWPORT ── */
+  .mission-viewport { flex: 1; padding: 16px 20px 20px; display: flex; flex-direction: column; }
+
+  .mission-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 26px 22px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-y: auto;
+  }
+
+  .mission-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 22px 22px 0 0;
+  }
+
+  .mc-1::before { background: #7cb518; }
+  .mc-2::before { background: #2a9d8f; }
+  .mc-3::before { background: #d68a00; }
+  .mc-4::before { background: #d7263d; }
+  .mc-5::before { background: #ff8c3f; }
+
+  .mission-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    align-self: flex-start;
+  }
+
+  .mission-badge.boss { background: rgba(215,38,61,0.15); color: var(--red); }
+
+  .mission-instruction {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  .mission-problem {
+    font-size: 1.8rem;
+    font-weight: 900;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    background: var(--surface2);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 18px;
+    line-height: 1.4;
+  }
+
+  .mission-problem .small-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+    font-family: 'Nunito', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Answer input */
+  .answer-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .answer-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+    font-size: 1.3rem;
+    font-weight: 800;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .answer-input:focus { border-color: var(--accent2); }
+  .answer-input.correct { border-color: var(--green); background: rgba(124,181,24,0.1); }
+  .answer-input.wrong { border-color: var(--red); background: rgba(215,38,61,0.1); }
+
+  .btn-check {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 14px;
+    padding: 0 24px;
+    color: white;
+    font-weight: 900;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-check:active { opacity: 0.85; }
+
+  /* Feedback */
+  .feedback-box {
+    display: none;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    align-items: center;
+    gap: 10px;
+  }
+  .feedback-box.show { display: flex; }
+  .feedback-box.correct { background: rgba(124,181,24,0.12); color: var(--green); border: 1px solid rgba(124,181,24,0.3); }
+  .feedback-box.wrong { background: rgba(215,38,61,0.12); color: var(--red); border: 1px solid rgba(215,38,61,0.3); }
+
+  .feedback-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+  /* Hint */
+  .hint-btn {
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: var(--gold);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+    transition: background 0.15s;
+  }
+  .hint-btn:active { background: rgba(251,191,36,0.2); }
+
+  .hint-panel {
+    display: none;
+    background: var(--surface2);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--gold);
+  }
+  .hint-panel.open { display: block; }
+
+  /* Solution reveal */
+  .solution-box {
+    display: none;
+    background: var(--surface2);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .solution-box.show { display: block; }
+  .solution-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .solution-step { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.88rem; }
+  .solution-arrow-action {
+    background: var(--accent);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 800;
+    border-radius: 999px;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+
+  .btn-nav-row { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; }
+
+  .btn-secondary {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    flex: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    color: white;
+    font-weight: 900;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:active { opacity: 0.85; }
+  .btn-primary:disabled { opacity: 0.4; pointer-events: none; }
+
+  .btn-primary.go {
+    background: linear-gradient(135deg, var(--green), #059669);
+  }
+
+  /* Complete view */
+  .complete-view {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 24px;
+    text-align: center;
+    gap: 12px;
+  }
+  .complete-emoji { font-size: 4rem; }
+  .complete-title {
+    font-family: 'Bangers', cursive;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+  .complete-stats { font-size: 1rem; color: var(--muted); }
+  .complete-stats span { color: var(--gold); font-weight: 900; font-size: 1.3rem; }
+  .complete-score { font-size: 0.85rem; color: var(--muted); margin-top: -4px; }
+
+  /* XP popup */
+  .xp-popup {
+    display: none;
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    background: var(--gold);
+    color: #1a1a00;
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    padding: 12px 26px;
+    border-radius: 16px;
+    z-index: 999;
+    pointer-events: none;
+    box-shadow: 0 0 40px rgba(251,191,36,0.6);
+    transition: transform 0.3s cubic-bezier(.17,.67,.35,1.3), opacity 0.3s;
+  }
+  .xp-popup.show { display: block; transform: translate(-50%, -50%) scale(1); }
+
+  .level-up-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 1000;
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 14px;
+  }
+  .level-up-overlay.show { display: flex; }
+  .level-up-title {
+    font-family: 'Bangers', cursive;
+    font-size: 3rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(251,191,36,0.8);
+  }
+  .btn-dismiss {
+    background: var(--gold);
+    color: #1a1a00;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 40px;
+    font-weight: 900;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  /* ── SYNC ── */
+  .sync-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+  }
+  .sync-badge.synced { color: var(--green); border-color: var(--green); }
+  .sync-badge.offline { color: var(--gold); border-color: var(--gold2); }
+
+  .sync-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 1100;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .sync-overlay.show { display: flex; }
+  .sync-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 22px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+  }
+  .sync-modal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .sync-desc { color: var(--muted); font-size: 0.85rem; margin-bottom: 14px; line-height: 1.4; }
+  .sync-btn {
+    display: block;
+    width: 100%;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .sync-btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: white; }
+  .sync-btn-danger { color: var(--red); border-color: var(--red); background: transparent; }
+  .sync-or { color: var(--muted); font-size: 0.75rem; margin: 8px 0; }
+  .sync-input {
+    display: block;
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    color: var(--text);
+    font-size: 1rem;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .sync-error { color: var(--red); font-size: 0.78rem; min-height: 16px; margin-bottom: 4px; }
+  .sync-code-display {
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    word-break: break-all;
+    color: var(--gold);
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .sync-status-line { color: var(--muted); font-size: 0.78rem; margin-bottom: 14px; }
+  .sync-close { background: none; border: none; color: var(--muted); font-size: 0.85rem; margin-top: 6px; cursor: pointer; text-decoration: underline; }
+  /* ── SLICE FX (signature correct-answer moment) ── */
+  .slice-fx {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slice-line {
+    position: absolute;
+    top: 50%;
+    left: -20%;
+    width: 140%;
+    height: 5px;
+    background: linear-gradient(90deg, transparent, rgba(255,244,224,0.15) 15%, #fff 50%, rgba(255,244,224,0.15) 85%, transparent);
+    box-shadow: 0 0 24px 5px rgba(255, 220, 150, 0.55);
+    transform: translateX(-120%) rotate(-22deg);
+    opacity: 0;
+  }
+
+  .slice-fx.active .slice-line {
+    animation: sliceMove 0.5s cubic-bezier(.22,.9,.32,1) forwards;
+  }
+
+  @keyframes sliceMove {
+    0%   { transform: translateX(-120%) rotate(-22deg); opacity: 0; }
+    12%  { opacity: 1; }
+    55%  { opacity: 1; }
+    100% { transform: translateX(120%) rotate(-22deg); opacity: 0; }
+  }
+
+  .slice-emoji {
+    font-size: 2.6rem;
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  .slice-fx.active .slice-emoji {
+    animation: slicePop 0.5s cubic-bezier(.22,.9,.32,1) forwards;
+  }
+
+  @keyframes slicePop {
+    0%   { opacity: 0; transform: scale(0.3) rotate(-15deg); }
+    30%  { opacity: 1; transform: scale(1.15) rotate(8deg); }
+    55%  { opacity: 1; transform: scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: scale(1) rotate(0deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slice-fx.active .slice-line, .slice-fx.active .slice-emoji { animation: none; opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slice-fx" id="slice-fx">
+  <div class="slice-line"></div>
+  <div class="slice-emoji" id="slice-emoji">🔪</div>
+</div>
+
+
+<!-- ══════════════════════ HOME ══════════════════════ -->
+<div id="home" class="screen active">
+  <div class="home-header">
+    <div class="home-title">🔪 MATH KITCHEN NINJA</div>
+    <div class="home-subtitle">Complete Edition · Year 8 · 28 Levels · 280 Recipes</div>
+    <div class="sync-badge" id="sync-badge" onclick="openSyncModal()">⚙️ Set up sync</div>
+  </div>
+
+  <div class="xp-panel">
+    <div class="xp-top">
+      <div class="level-badge">🏆 <span id="rank-label">Rank 1 – Apprentice</span></div>
+      <div class="xp-count"><span id="xp-display">0</span> / <span id="xp-next">300</span> XP</div>
+    </div>
+    <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-bar" style="width:0%"></div></div>
+  </div>
+
+  <button class="continue-btn" onclick="openLevel(currentUnlockedLevel())">
+    <div class="continue-icon">🎯</div>
+    <div class="continue-text">
+      <div class="continue-title">CONTINUE</div>
+      <div class="continue-sub" id="continue-sub">Level 1 · Don't Panic</div>
+    </div>
+    <div style="color:white; font-size:1.2rem">→</div>
+  </button>
+
+  <div class="levels-label">All 28 Levels · 280 Missions</div>
+  <div class="levels-list" id="levels-list">
+    <!-- injected -->
+  </div>
+</div>
+
+<!-- ══════════════════════ MISSION SCREEN ══════════════════════ -->
+<div id="mission-screen" class="screen">
+  <div class="simple-header">
+    <button class="back-btn" onclick="exitMission()">← Back</button>
+    <div class="screen-title-block">
+      <div class="screen-title" id="mh-title">Level 1</div>
+      <div class="screen-subtitle" id="mh-sub">Don't Panic</div>
+    </div>
+    <div class="mission-counter" id="mission-counter">1 / 10</div>
+  </div>
+  <div class="mission-dots" id="mission-dots"></div>
+  <div class="mission-viewport" id="mission-viewport">
+    <!-- injected -->
+  </div>
+</div>
+
+<!-- XP Popup -->
+<div class="xp-popup" id="xp-popup">+10 XP ⭐</div>
+
+<!-- Level Up -->
+<div class="level-up-overlay" id="level-up">
+  <div style="font-size:4rem">🏆</div>
+  <div class="level-up-title">LEVEL UP!</div>
+  <div style="font-size:1.1rem" id="level-up-label">You are now Rank 2</div>
+  <button class="btn-dismiss" onclick="document.getElementById('level-up').classList.remove('show')">
+    Keep going! 💪
+  </button>
+</div>
+
+<!-- Sync Modal -->
+<div class="sync-overlay" id="sync-overlay">
+  <div class="sync-modal">
+    <div class="sync-modal-title">🔗 Sync Progress Across Devices</div>
+
+    <div id="sync-view-nocode">
+      <p class="sync-desc">Use the same Family Code on every device (iPad, phone, laptop) to keep progress in sync.</p>
+      <button class="sync-btn sync-btn-primary" onclick="createSyncCode()">✨ Create a New Family Code</button>
+      <div class="sync-or">or</div>
+      <input type="text" id="sync-join-input" class="sync-input" placeholder="Paste code from other device" maxlength="40">
+      <button class="sync-btn" onclick="joinSyncCode()">Join with This Code</button>
+      <div class="sync-error" id="sync-error"></div>
+    </div>
+
+    <div id="sync-view-active" style="display:none">
+      <p class="sync-desc">This device is syncing with Family Code:</p>
+      <div class="sync-code-display" id="sync-code-display">------</div>
+      <p class="sync-desc" style="font-size:0.78rem">Tap Copy Code below, then paste it into "Join with This Code" on your son's other device.</p>
+      <div class="sync-status-line" id="sync-status-line">Checking connection…</div>
+      <button class="sync-btn" onclick="copySyncCode()">📋 Copy Code</button>
+      <button class="sync-btn sync-btn-danger" onclick="disconnectSync()">Disconnect This Device</button>
+    </div>
+
+    <button class="sync-close" onclick="closeSyncModal()">Close</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════ MISSION DATA — LEVELS 1–5 ══════════════════════
+
+const LEVELS = {
+  1: {
+    title: "Don't Panic!",
+    color: 1,
+    emoji: '🧑‍🍳',
+    missions: [
+      { type: 'circle', instruction: 'Circle the <strong>x</strong> in this equation (type it back to confirm you found it)', problem: '3x + 5 = 20', answer: 'x', hint: 'Look for the letter — that\'s the unknown you\'re solving for.' },
+      { type: 'identify', instruction: 'Write down <strong>all the numbers</strong> you see, separated by commas', problem: '4x − 8 = 24', answer: '4,8,24', hint: 'There are 3 numbers in this equation. List them in order.' },
+      { type: 'classify', instruction: 'For <strong>5x = 40</strong>: what is the <strong>Known</strong> number (the one already given)?', problem: '5x = 40', answer: '5,40', hint: 'Known = numbers you already have. Unknown = x. List the known numbers, comma separated.' },
+      { type: 'check', instruction: 'Guess: does <strong>x = 5</strong> make this equation true? Substitute it in. Type the result of 5x.', problem: 'If x = 5, what does 5x equal?', answer: '25', hint: '5 × 5 = ?' },
+      { type: 'step', instruction: 'For <strong>x + 8 = 15</strong>, write ONLY Step 1: what do you do to both sides?', problem: 'x + 8 = 15', answer: 'subtract 8', hint: 'To remove +8, you do the opposite operation.' },
+      { type: 'step', instruction: 'For <strong>x − 6 = 11</strong>, write ONLY Step 1: what do you do to both sides?', problem: 'x − 6 = 11', answer: 'add 6', hint: 'To remove −6, you do the opposite operation.' },
+      { type: 'solve', instruction: 'Now solve it completely', problem: 'x + 8 = 15', answer: '7', hint: 'Subtract 8 from both sides: x = 15 − 8' },
+      { type: 'explain', instruction: 'Why do we do the SAME operation to both sides? Type "balance" if you know the reason.', problem: 'x + 8 = 15  →  x = 7', answer: 'balance', hint: 'Think of the equation like a balanced scale — both sides must stay equal.' },
+      { type: 'check', instruction: 'Check your answer: does x = 7 make x + 8 = 15 true? Type the result of 7 + 8.', problem: 'x = 7, check: 7 + 8 = ?', answer: '15', hint: 'If it matches the right side (15), your answer is correct!' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Solve this two-step equation', problem: '2(x + 4) = 18', answer: '5', hint: 'Step 1: divide both sides by 2 → x + 4 = 9. Step 2: subtract 4 → x = 5', solution: [
+        { action: '÷2', detail: 'both sides → x + 4 = 9' },
+        { action: '−4', detail: 'both sides → x = 5' }
+      ]},
+    ]
+  },
+  2: {
+    title: 'Positive & Negative Numbers',
+    color: 2,
+    emoji: '🌡️',
+    missions: [
+      { type: 'calc', instruction: 'Solve it', problem: '5 + 8', answer: '13', hint: 'Both positive — just add them.' },
+      { type: 'calc', instruction: 'Solve it', problem: '5 − 8', answer: '-3', hint: 'You\'re taking away more than you have — answer goes negative.' },
+      { type: 'calc', instruction: 'Solve it', problem: '−5 + 8', answer: '3', hint: 'Start at −5, move up 8 steps on the number line.' },
+      { type: 'calc', instruction: 'Solve it', problem: '−5 − 8', answer: '-13', hint: 'Two negatives in a row — keep going down.' },
+      { type: 'calc', instruction: 'Solve it', problem: '12 + (−7)', answer: '5', hint: 'Adding a negative is the same as subtracting.' },
+      { type: 'calc', instruction: 'Solve it', problem: '−10 + 15', answer: '5', hint: 'Start at −10, move up 15.' },
+      { type: 'calc', instruction: 'Solve it', problem: '−20 − 6', answer: '-26', hint: 'Subtracting from a negative makes it more negative.' },
+      { type: 'calc', instruction: 'Solve it', problem: '9 − 15', answer: '-6', hint: 'You don\'t have enough — goes negative.' },
+      { type: 'calc', instruction: 'Solve it', problem: '−18 + 30', answer: '12', hint: 'Start at −18, move up 30.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Work left to right', problem: '−8 + 15 − 12 + 9', answer: '4', hint: '−8 + 15 = 7.  7 − 12 = −5.  −5 + 9 = 4.', solution: [
+        { action: '−8 + 15', detail: '= 7' },
+        { action: '7 − 12', detail: '= −5' },
+        { action: '−5 + 9', detail: '= 4' }
+      ]},
+    ]
+  },
+  3: {
+    title: 'Order of Operations',
+    color: 3,
+    emoji: '📋',
+    missions: [
+      { type: 'calc', instruction: 'Solve using BIDMAS/PEMDAS (multiply before add)', problem: '5 + 2 × 3', answer: '11', hint: 'Multiply first: 2×3=6. Then 5+6=11.' },
+      { type: 'calc', instruction: 'Solve (divide before add)', problem: '12 ÷ 3 + 7', answer: '11', hint: 'Divide first: 12÷3=4. Then 4+7=11.' },
+      { type: 'calc', instruction: 'Solve (multiply before subtract)', problem: '6 × 4 − 5', answer: '19', hint: 'Multiply first: 6×4=24. Then 24−5=19.' },
+      { type: 'calc', instruction: 'Solve (brackets first!)', problem: '2(5 + 3)', answer: '16', hint: 'Brackets first: 5+3=8. Then 2×8=16.' },
+      { type: 'calc', instruction: 'Solve (brackets first!)', problem: '18 − (4 + 6)', answer: '8', hint: 'Brackets first: 4+6=10. Then 18−10=8.' },
+      { type: 'calc', instruction: 'Solve it', problem: '20 − 3 × 4', answer: '8', hint: 'Multiply first: 3×4=12. Then 20−12=8.' },
+      { type: 'calc', instruction: 'Solve it', problem: '(8 − 2) × 3', answer: '18', hint: 'Brackets first: 8−2=6. Then 6×3=18.' },
+      { type: 'calc', instruction: 'Solve it', problem: '15 ÷ (2 + 3)', answer: '3', hint: 'Brackets first: 2+3=5. Then 15÷5=3.' },
+      { type: 'calc', instruction: 'Solve it', problem: '4 + 6 × 2 − 1', answer: '15', hint: 'Multiply first: 6×2=12. Then 4+12−1=15.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Multiple steps — go carefully', problem: '5 + 3 × (6 − 2)', answer: '17', hint: 'Brackets first, then multiply, then add.', solution: [
+        { action: 'Brackets', detail: '(6−2) = 4' },
+        { action: 'Multiply', detail: '3 × 4 = 12' },
+        { action: 'Add', detail: '5 + 12 = 17' }
+      ]},
+    ]
+  },
+  4: {
+    title: 'One-Step Equations',
+    color: 4,
+    emoji: '⚖️',
+    missions: [
+      { type: 'solve', instruction: 'Solve for x', problem: 'x + 7 = 19', answer: '12', hint: 'Subtract 7 from both sides.' },
+      { type: 'solve', instruction: 'Solve for x', problem: 'x − 5 = 12', answer: '17', hint: 'Add 5 to both sides.' },
+      { type: 'solve', instruction: 'Solve for x', problem: '6x = 42', answer: '7', hint: 'Divide both sides by 6.' },
+      { type: 'solve', instruction: 'Solve for x', problem: 'x ÷ 4 = 8', answer: '32', hint: 'Multiply both sides by 4.' },
+      { type: 'solve', instruction: 'Solve for x', problem: 'x + 15 = 22', answer: '7', hint: 'Subtract 15 from both sides.' },
+      { type: 'solve', instruction: 'Solve for x', problem: 'x − 9 = 3', answer: '12', hint: 'Add 9 to both sides.' },
+      { type: 'solve', instruction: 'Solve for x', problem: '8x = 56', answer: '7', hint: 'Divide both sides by 8.' },
+      { type: 'solve', instruction: 'Solve for x', problem: 'x ÷ 5 = 9', answer: '45', hint: 'Multiply both sides by 5.' },
+      { type: 'solve', instruction: 'Solve for x (number is on the LEFT this time)', problem: '20 = x + 8', answer: '12', hint: 'Still subtract 8 from both sides, even though it looks backwards.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Number on the left', problem: '12 = x + 3', answer: '9', hint: 'Subtract 3 from both sides: 12 − 3 = x', solution: [
+        { action: '−3', detail: 'both sides → 9 = x' }
+      ]},
+    ]
+  },
+  5: {
+    title: 'Two-Step Equations',
+    color: 5,
+    emoji: '🍳',
+    missions: [
+      { type: 'solve', instruction: 'Solve for x (2 steps!)', problem: '2x + 6 = 18', answer: '6', hint: 'Step 1: subtract 6 → 2x = 12. Step 2: divide by 2 → x = 6.' },
+      { type: 'solve', instruction: 'Solve for x', problem: '5x − 10 = 15', answer: '5', hint: 'Step 1: add 10 → 5x = 25. Step 2: divide by 5 → x = 5.' },
+      { type: 'solve', instruction: 'Solve for x (brackets first!)', problem: '3(x + 2) = 18', answer: '4', hint: 'Step 1: divide by 3 → x+2 = 6. Step 2: subtract 2 → x = 4.' },
+      { type: 'solve', instruction: 'Solve for x', problem: '4x − 8 = 20', answer: '7', hint: 'Step 1: add 8 → 4x = 28. Step 2: divide by 4 → x = 7.' },
+      { type: 'solve', instruction: 'Solve for x', problem: '3x + 9 = 24', answer: '5', hint: 'Step 1: subtract 9 → 3x = 15. Step 2: divide by 3 → x = 5.' },
+      { type: 'solve', instruction: 'Solve for x', problem: '7x − 4 = 24', answer: '4', hint: 'Step 1: add 4 → 7x = 28. Step 2: divide by 7 → x = 4.' },
+      { type: 'solve', instruction: 'Solve for x (brackets first!)', problem: '2(x − 3) = 10', answer: '8', hint: 'Step 1: divide by 2 → x−3 = 5. Step 2: add 3 → x = 8.' },
+      { type: 'solve', instruction: 'Solve for x', problem: '5x + 15 = 40', answer: '5', hint: 'Step 1: subtract 15 → 5x = 25. Step 2: divide by 5 → x = 5.' },
+      { type: 'solve', instruction: 'Solve for x', problem: '9x − 6 = 21', answer: '3', hint: 'Step 1: add 6 → 9x = 27. Step 2: divide by 9 → x = 3.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Brackets + 2 steps', problem: '6(x − 1) = 30', answer: '6', hint: 'Step 1: divide both sides by 6. Step 2: add 1.', solution: [
+        { action: '÷6', detail: 'both sides → x − 1 = 5' },
+        { action: '+1', detail: 'both sides → x = 6' }
+      ]},
+    ]
+  },
+  6: {
+    title: 'Fractions',
+    color: 1,
+    emoji: '🍕',
+    missions: [
+      { type: 'calc', instruction: 'Add the fractions (same denominator)', problem: '1/2 + 1/2', answer: '1', hint: 'Same bottom number — just add the tops: 1+1=2, so 2/2 = 1.' },
+      { type: 'calc', instruction: 'Add the fractions', problem: '1/4 + 2/4', answer: '3/4', hint: 'Same bottom — add tops: 1+2=3. Answer: 3/4.' },
+      { type: 'calc', instruction: 'Subtract the fractions', problem: '3/5 − 1/5', answer: '2/5', hint: 'Same bottom — subtract tops: 3−1=2. Answer: 2/5.' },
+      { type: 'calc', instruction: 'Add — different denominators! Find a common one first', problem: '2/3 + 1/6', answer: '5/6', hint: 'Convert 2/3 → 4/6. Then 4/6 + 1/6 = 5/6.' },
+      { type: 'calc', instruction: 'Subtract — different denominators', problem: '3/4 − 1/8', answer: '5/8', hint: 'Convert 3/4 → 6/8. Then 6/8 − 1/8 = 5/8.' },
+      { type: 'calc', instruction: 'Add these fractions', problem: '1/3 + 1/4', answer: '7/12', hint: 'Common denominator is 12. 4/12 + 3/12 = 7/12.' },
+      { type: 'calc', instruction: 'Simplify this fraction', problem: '6/8', answer: '3/4', hint: 'Divide top and bottom by 2: 6÷2=3, 8÷2=4.' },
+      { type: 'calc', instruction: 'Simplify this fraction', problem: '9/12', answer: '3/4', hint: 'Divide top and bottom by 3.' },
+      { type: 'calc', instruction: 'Mixed number — split into whole + fraction', problem: '2½ + 1¼', answer: '3¾', hint: 'Whole: 2+1=3. Fractions: ½+¼ = 2/4+1/4 = 3/4. Total: 3¾.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Different denominators', problem: '5/6 − 2/9', answer: '11/18', hint: 'Common denominator is 18. 15/18 − 4/18 = 11/18.', solution: [
+        { action: 'Common denom', detail: 'LCM of 6 and 9 = 18' },
+        { action: 'Convert', detail: '5/6 = 15/18  and  2/9 = 4/18' },
+        { action: 'Subtract', detail: '15/18 − 4/18 = 11/18' }
+      ]},
+    ]
+  },
+  7: {
+    title: 'Decimals',
+    color: 2,
+    emoji: '🥄',
+    missions: [
+      { type: 'calc', instruction: 'Add the decimals', problem: '0.5 + 0.7', answer: '1.2', hint: 'Line up decimal points: 0.5 + 0.7 = 1.2.' },
+      { type: 'calc', instruction: 'Subtract the decimals', problem: '3.6 − 2.1', answer: '1.5', hint: 'Line up decimal points: 3.6 − 2.1 = 1.5.' },
+      { type: 'calc', instruction: 'Multiply', problem: '4.2 × 2', answer: '8.4', hint: 'Ignore decimal first: 42 × 2 = 84. Then put decimal back: 8.4.' },
+      { type: 'calc', instruction: 'Divide', problem: '5.5 ÷ 0.5', answer: '11', hint: 'Multiply both by 10 first: 55 ÷ 5 = 11.' },
+      { type: 'calc', instruction: 'Add the decimals', problem: '2.35 + 1.6', answer: '3.95', hint: 'Line up: 2.35 + 1.60 = 3.95.' },
+      { type: 'calc', instruction: 'Subtract the decimals', problem: '5.0 − 2.75', answer: '2.25', hint: '5.00 − 2.75 = 2.25.' },
+      { type: 'calc', instruction: 'Multiply', problem: '3.5 × 4', answer: '14', hint: '35 × 4 = 140. Shift decimal: 14.0.' },
+      { type: 'calc', instruction: 'Round to 1 decimal place', problem: '3.76', answer: '3.8', hint: 'Look at the 2nd decimal (6). It\'s ≥5, so round up.' },
+      { type: 'calc', instruction: 'Round to 1 decimal place', problem: '8.32', answer: '8.3', hint: 'Look at the 2nd decimal (2). It\'s <5, so round down.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Multi-step decimal problem', problem: '(3.6 + 1.4) × 2.5', answer: '12.5', hint: 'Brackets first: 3.6+1.4=5. Then 5 × 2.5 = 12.5.', solution: [
+        { action: 'Brackets', detail: '3.6 + 1.4 = 5.0' },
+        { action: 'Multiply', detail: '5.0 × 2.5 = 12.5' }
+      ]},
+    ]
+  },
+  8: {
+    title: 'Percentages',
+    color: 3,
+    emoji: '🧁',
+    missions: [
+      { type: 'calc', instruction: 'Find 10% of 50', problem: '10% of 50', answer: '5', hint: 'Divide by 10: 50 ÷ 10 = 5.' },
+      { type: 'calc', instruction: 'Find 25% of 80', problem: '25% of 80', answer: '20', hint: '25% = ¼. So 80 ÷ 4 = 20.' },
+      { type: 'calc', instruction: 'Find 50% of 64', problem: '50% of 64', answer: '32', hint: '50% = half. So 64 ÷ 2 = 32.' },
+      { type: 'calc', instruction: 'Find 15% of 200', problem: '15% of 200', answer: '30', hint: '10% = 20. 5% = 10. 15% = 20+10 = 30.' },
+      { type: 'calc', instruction: 'Find 20% of 150', problem: '20% of 150', answer: '30', hint: '10% of 150 = 15. Double it: 30.' },
+      { type: 'calc', instruction: 'Find 75% of 40', problem: '75% of 40', answer: '30', hint: '50% = 20. 25% = 10. 75% = 20+10 = 30.' },
+      { type: 'calc', instruction: 'What % is 30 of 120?', problem: '30 out of 120 = ?%', answer: '25', hint: '30/120 = 1/4 = 25%.' },
+      { type: 'calc', instruction: 'Increase 80 by 10%', problem: '80 + 10% of 80', answer: '88', hint: '10% of 80 = 8. Then 80 + 8 = 88.' },
+      { type: 'calc', instruction: 'Decrease 200 by 20%', problem: '200 − 20% of 200', answer: '160', hint: '20% of 200 = 40. Then 200 − 40 = 160.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find the percentage', problem: '45 out of 180 = ?%', answer: '25', hint: '45/180 = 1/4 = 25%.', solution: [
+        { action: 'Fraction', detail: '45 ÷ 180 = 0.25' },
+        { action: '× 100', detail: '0.25 × 100 = 25%' }
+      ]},
+    ]
+  },
+  9: {
+    title: 'Ratio',
+    color: 4,
+    emoji: '🥣',
+    missions: [
+      { type: 'calc', instruction: 'Simplify the ratio', problem: '4 : 8', answer: '1:2', hint: 'Divide both by 4.' },
+      { type: 'calc', instruction: 'Simplify the ratio', problem: '6 : 9', answer: '2:3', hint: 'Divide both by 3.' },
+      { type: 'calc', instruction: 'Ratio 2:3, total = 20. Find the FIRST part', problem: '2:3, Total = 20, first part = ?', answer: '8', hint: 'Total parts = 5. Each part = 20÷5 = 4. First = 2×4 = 8.' },
+      { type: 'calc', instruction: 'Ratio 2:3, total = 20. Find the SECOND part', problem: '2:3, Total = 20, second part = ?', answer: '12', hint: 'Total parts = 5. Each part = 4. Second = 3×4 = 12.' },
+      { type: 'calc', instruction: 'Simplify the ratio', problem: '15 : 25', answer: '3:5', hint: 'Divide both by 5.' },
+      { type: 'calc', instruction: 'Share £40 in ratio 3:5. Find the FIRST share', problem: '3:5, Total = £40, first share = ?', answer: '15', hint: 'Total parts = 8. Each part = £5. First = 3×5 = £15.' },
+      { type: 'calc', instruction: 'Share £40 in ratio 3:5. Find the SECOND share', problem: '3:5, Total = £40, second share = ?', answer: '25', hint: 'Total parts = 8. Each part = £5. Second = 5×5 = £25.' },
+      { type: 'calc', instruction: 'Are these ratios equivalent?', problem: '2:3  and  8:12', answer: 'yes', hint: '8÷4=2 and 12÷4=3. Yes, they are equivalent.' },
+      { type: 'calc', instruction: 'Find the missing number', problem: '5 : 8 = 15 : ?', answer: '24', hint: '5×3=15, so multiply 8 by 3 too: 8×3=24.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Share in ratio 5:7, Total = 60', problem: '5:7, Total = 60', answer: '25,35', hint: 'Total parts = 12. Each part = 5. First = 25, Second = 35.', solution: [
+        { action: 'Total parts', detail: '5 + 7 = 12' },
+        { action: 'Each part', detail: '60 ÷ 12 = 5' },
+        { action: 'First share', detail: '5 × 5 = 25' },
+        { action: 'Second share', detail: '7 × 5 = 35' }
+      ]},
+    ]
+  },
+  10: {
+    title: 'Geometry',
+    color: 5,
+    emoji: '🍪',
+    missions: [
+      { type: 'calc', instruction: 'Angles in a triangle add up to 180°. Find the missing angle', problem: 'Triangle: 60° + 70° + ? = 180°', answer: '50', hint: '60 + 70 = 130. Then 180 − 130 = 50.' },
+      { type: 'calc', instruction: 'All angles in a square are equal. What is each angle?', problem: 'Square: each angle = ?°', answer: '90', hint: 'A square has 4 right angles. 360 ÷ 4 = 90.' },
+      { type: 'calc', instruction: 'Angles in a full circle', problem: 'Full circle = ?°', answer: '360', hint: 'A full turn is always 360°.' },
+      { type: 'calc', instruction: 'Find the missing angle in this triangle', problem: 'Triangle: 90° + 45° + ? = 180°', answer: '45', hint: '90 + 45 = 135. Then 180 − 135 = 45.' },
+      { type: 'calc', instruction: 'How many sides does a hexagon have?', problem: 'Hexagon has ? sides', answer: '6', hint: 'Hex = 6 in Greek.' },
+      { type: 'calc', instruction: 'Sum of angles in a quadrilateral', problem: 'Quadrilateral angles sum = ?°', answer: '360', hint: 'Any 4-sided shape — angles always add to 360°.' },
+      { type: 'calc', instruction: 'Find the missing angle', problem: 'Triangle: 35° + 110° + ? = 180°', answer: '35', hint: '35 + 110 = 145. Then 180 − 145 = 35.' },
+      { type: 'calc', instruction: 'Interior angle of a regular hexagon', problem: 'Regular hexagon: each angle = ?°', answer: '120', hint: 'Sum = (6−2)×180 = 720. Each angle = 720÷6 = 120.' },
+      { type: 'calc', instruction: 'Sum of interior angles of a pentagon', problem: 'Pentagon: total angles = ?°', answer: '540', hint: 'Formula: (n−2)×180. So (5−2)×180 = 3×180 = 540.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find the missing angle in a polygon', problem: 'Quadrilateral: 80° + 95° + 110° + ? = 360°', answer: '75', hint: '80+95+110 = 285. Then 360−285 = 75.', solution: [
+        { action: 'Add known', detail: '80 + 95 + 110 = 285' },
+        { action: 'Subtract', detail: '360 − 285 = 75°' }
+      ]},
+    ]
+  },
+  11: {
+    title: 'Area & Perimeter',
+    color: 1,
+    emoji: '🧇',
+    missions: [
+      { type: 'calc', instruction: 'Find the area of this rectangle', problem: 'Rectangle: 8 × 5 = ?', answer: '40', hint: 'Area = length × width = 8 × 5 = 40.' },
+      { type: 'calc', instruction: 'Find the area of this square', problem: 'Square: 9 × 9 = ?', answer: '81', hint: 'Area = side² = 9² = 81.' },
+      { type: 'calc', instruction: 'Find the area of a triangle (b=6, h=4)', problem: 'Triangle: ½ × 6 × 4 = ?', answer: '12', hint: 'Area = ½ × base × height = ½ × 6 × 4 = 12.' },
+      { type: 'calc', instruction: 'Find the perimeter of a rectangle 8×5', problem: 'Rectangle 8×5: perimeter = ?', answer: '26', hint: 'Perimeter = 2(l+w) = 2(8+5) = 2×13 = 26.' },
+      { type: 'calc', instruction: 'Find the perimeter of a square with side 7', problem: 'Square side 7: perimeter = ?', answer: '28', hint: 'Perimeter = 4 × side = 4 × 7 = 28.' },
+      { type: 'calc', instruction: 'Area of a triangle (b=10, h=6)', problem: 'Triangle: ½ × 10 × 6 = ?', answer: '30', hint: '½ × 10 × 6 = 30.' },
+      { type: 'calc', instruction: 'Rectangle area (l=12, w=3)', problem: 'Rectangle: 12 × 3 = ?', answer: '36', hint: '12 × 3 = 36.' },
+      { type: 'calc', instruction: 'Perimeter of a triangle with sides 5, 7, 9', problem: 'Triangle perimeter: 5 + 7 + 9 = ?', answer: '21', hint: 'Add all three sides.' },
+      { type: 'calc', instruction: 'Area of a rectangle (l=15, w=4)', problem: 'Rectangle: 15 × 4 = ?', answer: '60', hint: '15 × 4 = 60.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: L-shaped composite area', problem: 'L-shape: 10×6 rectangle minus 4×3 corner = ?', answer: '48', hint: 'Big area = 60. Cut out = 12. 60−12 = 48.', solution: [
+        { action: 'Big rect', detail: '10 × 6 = 60' },
+        { action: 'Cut out', detail: '4 × 3 = 12' },
+        { action: 'Subtract', detail: '60 − 12 = 48' }
+      ]},
+    ]
+  },
+  12: {
+    title: 'Angles',
+    color: 2,
+    emoji: '🔪',
+    missions: [
+      { type: 'calc', instruction: 'Angles on a straight line add to 180°. Find the missing angle', problem: 'Straight line: 90° + ? = 180°', answer: '90', hint: '180 − 90 = 90.' },
+      { type: 'calc', instruction: 'Find the missing angle on a straight line', problem: 'Straight line: 55° + ? = 180°', answer: '125', hint: '180 − 55 = 125.' },
+      { type: 'calc', instruction: 'Angles around a point add to 360°. Find the missing angle', problem: '360°: 120° + 80° + ? = 360°', answer: '160', hint: '120+80=200. 360−200=160.' },
+      { type: 'calc', instruction: 'Vertically opposite angles are equal. Find angle b', problem: 'If angle a = 65°, vertically opposite b = ?', answer: '65', hint: 'Vertically opposite angles are always equal.' },
+      { type: 'calc', instruction: 'Find the missing angle (angles on a straight line)', problem: '130° + ? = 180°', answer: '50', hint: '180 − 130 = 50.' },
+      { type: 'calc', instruction: 'Alternate angles are equal. Find the missing angle', problem: 'Parallel lines — alternate angle to 72° = ?', answer: '72', hint: 'Alternate angles (Z-angles) are equal.' },
+      { type: 'calc', instruction: 'Co-interior angles add to 180°. Find the missing angle', problem: 'Co-interior: 115° + ? = 180°', answer: '65', hint: '180 − 115 = 65.' },
+      { type: 'calc', instruction: 'Find the reflex angle if the other angle is 70°', problem: 'Reflex angle = 360° − 70° = ?', answer: '290', hint: '360 − 70 = 290.' },
+      { type: 'calc', instruction: 'Corresponding angles are equal. Find the missing angle', problem: 'Parallel lines — corresponding angle to 48° = ?', answer: '48', hint: 'Corresponding angles (F-angles) are equal.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find all missing angles', problem: 'Two parallel lines cut by a transversal. One angle = 65°. Find: co-interior = ?, alternate = ?', answer: '115,65', hint: 'Co-interior = 180−65=115. Alternate = 65.', solution: [
+        { action: 'Alternate', detail: '= 65° (Z-angles equal)' },
+        { action: 'Co-interior', detail: '= 180 − 65 = 115° (adds to 180)' }
+      ]},
+    ]
+  },
+  13: {
+    title: 'Graphs',
+    color: 3,
+    emoji: '📈',
+    missions: [
+      { type: 'calc', instruction: 'Reading a bar graph: the bar for Monday shows 8 students. Tuesday shows 12. How many more on Tuesday?', problem: 'Tuesday − Monday = ?', answer: '4', hint: '12 − 8 = 4.' },
+      { type: 'calc', instruction: 'What is the total across Monday (8), Tuesday (12), Wednesday (6)?', problem: '8 + 12 + 6 = ?', answer: '26', hint: 'Add all three values.' },
+      { type: 'calc', instruction: 'A line graph shows temperature: Mon=15°, Tue=18°, Wed=14°. What was the highest temperature?', problem: 'Highest temp = ?°', answer: '18', hint: 'Look for the biggest value.' },
+      { type: 'calc', instruction: 'By how much did temp drop from Tuesday to Wednesday?', problem: '18° − 14° = ?', answer: '4', hint: '18 − 14 = 4.' },
+      { type: 'calc', instruction: 'Plot point: x=3, y=5. What quadrant is it in?', problem: 'x=3, y=5 → Quadrant ?', answer: '1', hint: 'Both positive → Quadrant 1 (top right).' },
+      { type: 'calc', instruction: 'Plot point: x=−2, y=4. What quadrant?', problem: 'x=−2, y=4 → Quadrant ?', answer: '2', hint: 'Negative x, positive y → Quadrant 2 (top left).' },
+      { type: 'calc', instruction: 'What is the gradient (slope) of a line going through (0,0) and (4,8)?', problem: 'Gradient = rise ÷ run = 8 ÷ 4 = ?', answer: '2', hint: 'Rise = 8, Run = 4. Gradient = 8÷4 = 2.' },
+      { type: 'calc', instruction: 'y = 2x + 1. What is y when x = 3?', problem: 'y = 2(3) + 1 = ?', answer: '7', hint: '2×3 = 6. 6+1 = 7.' },
+      { type: 'calc', instruction: 'y = 3x − 2. What is y when x = 4?', problem: 'y = 3(4) − 2 = ?', answer: '10', hint: '3×4 = 12. 12−2 = 10.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find gradient and y-intercept', problem: 'Line equation: y = 5x + 3. Gradient = ?, y-intercept = ?', answer: '5,3', hint: 'y = mx + c form. m = gradient, c = y-intercept.', solution: [
+        { action: 'y = mx + c', detail: 'y = 5x + 3' },
+        { action: 'Gradient m', detail: '= 5' },
+        { action: 'y-intercept c', detail: '= 3' }
+      ]},
+    ]
+  },
+  14: {
+    title: 'Probability',
+    color: 4,
+    emoji: '🎲',
+    missions: [
+      { type: 'calc', instruction: 'A dice has 6 faces. What is P(rolling a 3)?', problem: 'P(3) on a fair dice = ?', answer: '1/6', hint: 'One outcome out of 6 possible outcomes.' },
+      { type: 'calc', instruction: 'A fair coin is flipped. What is P(Heads)?', problem: 'P(Heads) = ?', answer: '1/2', hint: '1 heads out of 2 outcomes.' },
+      { type: 'calc', instruction: 'A bag has 3 red and 7 blue balls. P(red) = ?', problem: 'P(red) = 3 out of 10 = ?', answer: '3/10', hint: '3 red balls out of 10 total.' },
+      { type: 'calc', instruction: 'P(blue) from the same bag', problem: 'P(blue) = 7 out of 10 = ?', answer: '7/10', hint: '7 blue balls out of 10.' },
+      { type: 'calc', instruction: 'P(red) + P(blue) should equal what?', problem: '3/10 + 7/10 = ?', answer: '1', hint: 'All probabilities must add up to 1.' },
+      { type: 'calc', instruction: 'What is P(rolling an even number) on a dice?', problem: 'P(even) on dice 1−6 = ?', answer: '1/2', hint: 'Even numbers: 2,4,6 = 3 out of 6 = 1/2.' },
+      { type: 'calc', instruction: 'What is P(rolling a number > 4) on a dice?', problem: 'P(> 4) on dice = ?', answer: '1/3', hint: 'Numbers >4: just 5 and 6. So 2/6 = 1/3.' },
+      { type: 'calc', instruction: 'P(event) = 0.4. What is P(not event)?', problem: 'P(not A) = 1 − 0.4 = ?', answer: '0.6', hint: 'P(not A) = 1 − P(A).' },
+      { type: 'calc', instruction: 'A bag has 5 green, 3 yellow, 2 purple. P(yellow) = ?', problem: 'P(yellow) = 3 out of 10 = ?', answer: '3/10', hint: '3 yellow out of 5+3+2=10 total.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find the probability and its complement', problem: 'P(A) = 2/5. What is P(not A)?', answer: '3/5', hint: 'P(not A) = 1 − 2/5 = 5/5 − 2/5 = 3/5.', solution: [
+        { action: 'P(not A)', detail: '= 1 − P(A)' },
+        { action: 'Substitute', detail: '= 1 − 2/5 = 3/5' }
+      ]},
+    ]
+  },
+  15: {
+    title: 'Word Problems',
+    color: 5,
+    emoji: '📝',
+    missions: [
+      { type: 'step', instruction: 'CUBES Step 1 — Circle the numbers. How many numbers are in this problem? Type the count.', problem: 'A train travels 240 km in 3 hours. How fast does it go?', answer: '2', hint: 'Circle 240 and 3 — that\'s 2 numbers.' },
+      { type: 'step', instruction: 'CUBES Step 2 — Underline the question. Type the KEY question word.', problem: 'A train travels 240 km in 3 hours. How fast does it go?', answer: 'how fast', hint: 'The question asks "how fast" — that means find the speed.' },
+      { type: 'step', instruction: 'CUBES Step 3 — Box the keywords. What operation does "how fast" suggest?', problem: 'Speed = distance ÷ time', answer: 'divide', hint: 'Speed = distance ÷ time. The word "per" or "each" usually means divide.' },
+      { type: 'calc', instruction: 'Now solve: speed = 240 ÷ 3', problem: '240 ÷ 3 = ?', answer: '80', hint: '240 ÷ 3 = 80 km/h.' },
+      { type: 'calc', instruction: 'A book costs £12. Three friends share the cost equally. How much each?', problem: '£12 ÷ 3 = ?', answer: '4', hint: '12 ÷ 3 = 4.' },
+      { type: 'calc', instruction: 'A rectangle has area 48 cm². Width = 6 cm. Find the length.', problem: 'Length = 48 ÷ 6 = ?', answer: '8', hint: 'Area = l × w. So l = area ÷ width = 48 ÷ 6 = 8.' },
+      { type: 'calc', instruction: 'Tom has £50. He spends £17.50 and £12.30. How much is left?', problem: '£50 − £17.50 − £12.30 = ?', answer: '20.2', hint: '17.50 + 12.30 = 29.80. Then 50 − 29.80 = 20.20.' },
+      { type: 'calc', instruction: 'A bag weighs 2.5 kg. 8 identical bags weigh how much in total?', problem: '2.5 × 8 = ?', answer: '20', hint: '2.5 × 8 = 20 kg.' },
+      { type: 'calc', instruction: '30 students. 40% walk to school. How many walk?', problem: '40% of 30 = ?', answer: '12', hint: '10% of 30 = 3. 40% = 4 × 3 = 12.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Full CUBES word problem', problem: 'A car uses 6 litres per 100km. How many litres for a 350km journey?', answer: '21', hint: '6 litres per 100km. 350 ÷ 100 = 3.5. Then 3.5 × 6 = 21.', solution: [
+        { action: 'Rate', detail: '6 litres per 100 km' },
+        { action: 'Ratio', detail: '350 ÷ 100 = 3.5 portions' },
+        { action: 'Multiply', detail: '3.5 × 6 = 21 litres' }
+      ]},
+    ]
+  },
+  16: {
+    title: 'Algebra Patterns',
+    color: 1,
+    emoji: '🥧',
+    missions: [
+      { type: 'calc', instruction: 'Find the next number in the sequence', problem: '2, 4, 6, 8, ?', answer: '10', hint: 'Add 2 each time.' },
+      { type: 'calc', instruction: 'Find the next number', problem: '3, 6, 12, 24, ?', answer: '48', hint: 'Multiply by 2 each time.' },
+      { type: 'calc', instruction: 'Find the next number', problem: '100, 90, 80, 70, ?', answer: '60', hint: 'Subtract 10 each time.' },
+      { type: 'calc', instruction: 'What is the nth term rule for: 2, 4, 6, 8...?', problem: 'nth term = ?n', answer: '2n', hint: 'Each term = 2 × position number.' },
+      { type: 'calc', instruction: 'What is the 10th term of: 3, 6, 9, 12...?', problem: 'nth term = 3n. When n=10, answer = ?', answer: '30', hint: '3 × 10 = 30.' },
+      { type: 'calc', instruction: 'Find the missing term', problem: '5, 10, ?, 20, 25', answer: '15', hint: 'Add 5 each time.' },
+      { type: 'calc', instruction: 'nth term rule for: 5, 8, 11, 14...?', problem: 'nth term = 3n + ?', answer: '3n+2', hint: 'Difference is 3, so 3n. Check: when n=1, 3(1)=3, but sequence starts at 5. So add 2.' },
+      { type: 'calc', instruction: 'Find the 5th term of nth term = 4n − 1', problem: '4(5) − 1 = ?', answer: '19', hint: '4 × 5 = 20. 20 − 1 = 19.' },
+      { type: 'calc', instruction: 'Find the next two terms', problem: '1, 1, 2, 3, 5, 8, ?', answer: '13', hint: 'Each term = sum of previous two (Fibonacci!).' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find the nth term rule', problem: 'Sequence: 7, 11, 15, 19, 23... nth term = ?', answer: '4n+3', hint: 'Difference = 4, so 4n. Check n=1: 4(1)=4, but sequence starts at 7. Add 3.', solution: [
+        { action: 'Difference', detail: '11−7=4, so 4n' },
+        { action: 'Check n=1', detail: '4(1)=4, but 1st term=7' },
+        { action: 'Adjust', detail: '7−4=3, so nth term = 4n+3' }
+      ]},
+    ]
+  },
+  17: {
+    title: 'Sequences',
+    color: 2,
+    emoji: '🎂',
+    missions: [
+      { type: 'calc', instruction: 'Arithmetic sequence — find the common difference', problem: '3, 7, 11, 15... difference = ?', answer: '4', hint: '7−3=4. Check: 11−7=4 ✓' },
+      { type: 'calc', instruction: 'Find the next term', problem: 'Arithmetic: 3, 7, 11, 15, ?', answer: '19', hint: '15 + 4 = 19.' },
+      { type: 'calc', instruction: 'Geometric sequence — find the common ratio', problem: '2, 6, 18, 54... ratio = ?', answer: '3', hint: '6÷2=3. Check: 18÷6=3 ✓' },
+      { type: 'calc', instruction: 'Find the next term in the geometric sequence', problem: '2, 6, 18, 54, ?', answer: '162', hint: '54 × 3 = 162.' },
+      { type: 'calc', instruction: 'Is this arithmetic or geometric? Type "arithmetic" or "geometric"', problem: '5, 10, 20, 40, 80', answer: 'geometric', hint: 'Each term is ×2 the previous. That\'s geometric.' },
+      { type: 'calc', instruction: 'Is this arithmetic or geometric?', problem: '100, 93, 86, 79, 72', answer: 'arithmetic', hint: 'Each term decreases by 7. That\'s arithmetic.' },
+      { type: 'calc', instruction: 'Find the 6th term of arithmetic sequence starting at 4 with difference 5', problem: 'a=4, d=5: 6th term = a + (n−1)d = ?', answer: '29', hint: '4 + (6−1)×5 = 4 + 25 = 29.' },
+      { type: 'calc', instruction: 'Find the sum of arithmetic sequence: 1 + 2 + 3 + ... + 10', problem: '1+2+3+...+10 = ?', answer: '55', hint: 'Sum = n/2 × (first+last) = 10/2 × (1+10) = 5 × 11 = 55.' },
+      { type: 'calc', instruction: 'Find the 4th term of geometric sequence: first=3, ratio=4', problem: 'a=3, r=4: 4th term = 3×4³ = ?', answer: '192', hint: '3 × 4³ = 3 × 64 = 192.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Identify and extend both types', problem: 'Sequence A: 8, 13, 18, 23... 6th term = ?\nSequence B: 1, 3, 9, 27... 5th term = ?', answer: '33,81', hint: 'A: arithmetic d=5. 8+(5×5)=33. B: geometric r=3. 27×3=81.', solution: [
+        { action: 'Seq A (arith)', detail: '8 + 5×5 = 8 + 25 = 33' },
+        { action: 'Seq B (geom)', detail: '27 × 3 = 81' }
+      ]},
+    ]
+  },
+  18: {
+    title: 'Powers, Roots & Indices',
+    color: 3,
+    emoji: '🌶️',
+    missions: [
+      { type: 'calc', instruction: 'Evaluate the power', problem: '3²', answer: '9', hint: '3² means 3 × 3 = 9.' },
+      { type: 'calc', instruction: 'Evaluate the power', problem: '5³', answer: '125', hint: '5³ means 5 × 5 × 5 = 125.' },
+      { type: 'calc', instruction: 'Find the square root', problem: '√49', answer: '7', hint: 'What number times itself gives 49? 7×7=49.' },
+      { type: 'calc', instruction: 'Find the cube root', problem: '∛27', answer: '3', hint: 'What number cubed gives 27? 3×3×3=27.' },
+      { type: 'calc', instruction: 'Law of indices: multiplying powers of the same base — ADD the powers. Type your answer as e.g. x^5', problem: 'x³ × x²', answer: 'x^5', hint: 'x³ × x² = x^(3+2) = x^5.' },
+      { type: 'calc', instruction: 'Law of indices: dividing powers of the same base — SUBTRACT the powers', problem: 'x⁵ ÷ x²', answer: 'x^3', hint: 'x⁵ ÷ x² = x^(5−2) = x^3.' },
+      { type: 'calc', instruction: 'Law of indices: power of a power — MULTIPLY the powers', problem: '(x²)³', answer: 'x^6', hint: '(x²)³ = x^(2×3) = x^6.' },
+      { type: 'calc', instruction: 'Anything to the power 0 equals...?', problem: '7⁰', answer: '1', hint: 'Any non-zero number to the power 0 always equals 1.' },
+      { type: 'calc', instruction: 'Evaluate the power', problem: '10²', answer: '100', hint: '10 × 10 = 100.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Combine the laws of indices', problem: 'x⁴ × x³ ÷ x²', answer: 'x^5', hint: 'Multiply first: x^(4+3)=x^7. Then divide: x^(7−2)=x^5.', solution: [
+        { action: 'Multiply', detail: 'x⁴ × x³ = x^7' },
+        { action: 'Divide', detail: 'x^7 ÷ x² = x^5' }
+      ]},
+    ]
+  },
+  19: {
+    title: 'Algebraic Expressions',
+    color: 4,
+    emoji: '🧾',
+    missions: [
+      { type: 'calc', instruction: 'Simplify by collecting like terms', problem: '3x + 5x', answer: '8x', hint: 'Same term (x) — just add the numbers: 3+5=8.' },
+      { type: 'calc', instruction: 'Simplify', problem: '7y − 2y', answer: '5y', hint: 'Same term (y) — subtract: 7−2=5.' },
+      { type: 'calc', instruction: 'Simplify (two different letters)', problem: '4a + 3b − a + 2b', answer: '3a+5b', hint: 'Collect a-terms: 4a−a=3a. Collect b-terms: 3b+2b=5b.' },
+      { type: 'calc', instruction: 'Expand the bracket', problem: '3(x + 4)', answer: '3x+12', hint: 'Multiply everything inside by 3: 3×x=3x, 3×4=12.' },
+      { type: 'calc', instruction: 'Expand the bracket', problem: '5(2x − 3)', answer: '10x-15', hint: '5×2x=10x, 5×(−3)=−15.' },
+      { type: 'calc', instruction: 'Expand and simplify', problem: '2(x + 3) + 4', answer: '2x+10', hint: 'Expand: 2x+6. Then add 4: 2x+10.' },
+      { type: 'calc', instruction: 'Factorize — find the common factor', problem: '6x + 9', answer: '3(2x+3)', hint: 'HCF of 6 and 9 is 3. 6x÷3=2x, 9÷3=3.' },
+      { type: 'calc', instruction: 'Factorize', problem: '10x − 15', answer: '5(2x-3)', hint: 'HCF of 10 and 15 is 5. 10x÷5=2x, 15÷5=3.' },
+      { type: 'calc', instruction: 'Substitute x = 4 into the expression', problem: '3x + 2, when x = 4', answer: '14', hint: '3×4=12. 12+2=14.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Expand both brackets then simplify', problem: '4(x + 2) − 3(x − 1)', answer: 'x+11', hint: 'Expand: 4x+8 − (3x−3) = 4x+8−3x+3.', solution: [
+        { action: 'Expand first', detail: '4(x+2) = 4x + 8' },
+        { action: 'Expand second', detail: '3(x−1) = 3x − 3' },
+        { action: 'Subtract & simplify', detail: '4x+8−3x+3 = x + 11' }
+      ]},
+    ]
+  },
+  20: {
+    title: 'Circles',
+    color: 5,
+    emoji: '🍩',
+    missions: [
+      { type: 'calc', instruction: 'Circumference = π × diameter (use π = 3.14). Radius = 5, so diameter = 10', problem: 'C = π × 10', answer: '31.4', hint: '3.14 × 10 = 31.4.' },
+      { type: 'calc', instruction: 'Circumference from diameter directly', problem: 'diameter = 10, C = π × 10', answer: '31.4', hint: '3.14 × 10 = 31.4.' },
+      { type: 'calc', instruction: 'Area = π × r² (use π = 3.14)', problem: 'radius = 4, A = 3.14 × 4²', answer: '50.24', hint: '4²=16. 3.14×16=50.24.' },
+      { type: 'calc', instruction: 'Find the radius from the diameter', problem: 'diameter = 14, radius = ?', answer: '7', hint: 'radius = diameter ÷ 2 = 14 ÷ 2 = 7.' },
+      { type: 'calc', instruction: 'Find the area', problem: 'radius = 3, A = 3.14 × 3²', answer: '28.26', hint: '3²=9. 3.14×9=28.26.' },
+      { type: 'calc', instruction: 'Find the circumference', problem: 'radius = 10, C = 2 × 3.14 × 10', answer: '62.8', hint: '2×3.14×10=62.8.' },
+      { type: 'calc', instruction: 'Find the diameter from the circumference', problem: 'C = 18.84, diameter = C ÷ π', answer: '6', hint: '18.84 ÷ 3.14 = 6.' },
+      { type: 'calc', instruction: 'Find the area of a semicircle (half a circle)', problem: 'radius = 4, semicircle area = (3.14 × 4²) ÷ 2', answer: '25.12', hint: 'Full circle area = 50.24. Half of that = 25.12.' },
+      { type: 'calc', instruction: 'Find the area', problem: 'radius = 2, A = 3.14 × 2²', answer: '12.56', hint: '2²=4. 3.14×4=12.56.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find both circumference and area', problem: 'radius = 10 — find C and A (use π = 3.14)', answer: '62.8,314', hint: 'C = 2×3.14×10 = 62.8. A = 3.14×10² = 314.', solution: [
+        { action: 'Circumference', detail: '2 × 3.14 × 10 = 62.8' },
+        { action: 'Area', detail: '3.14 × 10² = 3.14 × 100 = 314' }
+      ]},
+    ]
+  },
+  21: {
+    title: 'Volume & Surface Area',
+    color: 1,
+    emoji: '🧊',
+    missions: [
+      { type: 'calc', instruction: 'Volume of a cuboid = length × width × height', problem: '5 × 3 × 2', answer: '30', hint: '5×3=15. 15×2=30.' },
+      { type: 'calc', instruction: 'Volume of a cube = side³', problem: 'side = 4, V = 4³', answer: '64', hint: '4×4×4=64.' },
+      { type: 'calc', instruction: 'Volume of a prism = cross-section area × length', problem: 'area = 12, length = 5', answer: '60', hint: '12×5=60.' },
+      { type: 'calc', instruction: 'Surface area of a cube = 6 × side²', problem: 'side = 3, SA = 6 × 3²', answer: '54', hint: '3²=9. 6×9=54.' },
+      { type: 'calc', instruction: 'Surface area of a cuboid = 2(lw + lh + wh)', problem: 'l=4, w=3, h=2', answer: '52', hint: 'lw=12, lh=8, wh=6. Sum=26. 2×26=52.' },
+      { type: 'calc', instruction: 'Volume of a cylinder = π × r² × h (use π = 3.14)', problem: 'r=3, h=5', answer: '141.3', hint: '3.14×9×5=141.3.' },
+      { type: 'calc', instruction: 'Volume of a cuboid', problem: '10 × 2 × 3', answer: '60', hint: '10×2=20. 20×3=60.' },
+      { type: 'calc', instruction: 'Find the missing height. Volume = 60, length = 5, width = 4', problem: 'h = 60 ÷ (5 × 4)', answer: '3', hint: '5×4=20. 60÷20=3.' },
+      { type: 'calc', instruction: 'Volume of a cube', problem: 'side = 5, V = 5³', answer: '125', hint: '5×5×5=125.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find volume then surface area', problem: 'Cuboid: l=6, w=5, h=4', answer: '120,148', hint: 'Volume=6×5×4=120. SA=2(30+24+20)=148.', solution: [
+        { action: 'Volume', detail: '6 × 5 × 4 = 120' },
+        { action: 'Surface area', detail: '2(30+24+20) = 2×74 = 148' }
+      ]},
+    ]
+  },
+  22: {
+    title: 'Averages & Range',
+    color: 2,
+    emoji: '🍽️',
+    missions: [
+      { type: 'calc', instruction: 'Find the mean (add up, divide by how many)', problem: '4, 6, 8, 10, 12', answer: '8', hint: 'Sum=40. 40÷5=8.' },
+      { type: 'calc', instruction: 'Find the median (middle value when sorted)', problem: '3, 7, 9, 2, 5', answer: '5', hint: 'Sorted: 2,3,5,7,9. Middle value is 5.' },
+      { type: 'calc', instruction: 'Find the mode (most frequent value)', problem: '2, 3, 3, 5, 7, 3', answer: '3', hint: '3 appears three times — more than any other number.' },
+      { type: 'calc', instruction: 'Find the range (biggest − smallest)', problem: '4, 9, 15, 2, 11', answer: '13', hint: 'Biggest=15, smallest=2. 15−2=13.' },
+      { type: 'calc', instruction: 'Find the mean', problem: '10, 20, 30, 40, 50, 60', answer: '35', hint: 'Sum=210. 210÷6=35.' },
+      { type: 'calc', instruction: 'Find the median (even number of values — average the middle two)', problem: '1, 2, 3, 4', answer: '2.5', hint: 'Middle two are 2 and 3. (2+3)÷2=2.5.' },
+      { type: 'calc', instruction: 'The mean of 5 numbers is 10. Four of them are 8, 9, 11, 12. Find the fifth', problem: 'Total needed = 5×10 = 50', answer: '10', hint: 'Sum of four known = 40. Fifth = 50−40 = 10.' },
+      { type: 'calc', instruction: 'Find the range', problem: 'max = 45, min = 12', answer: '33', hint: '45−12=33.' },
+      { type: 'calc', instruction: 'Find the mean (decimal answer)', problem: '2, 3, 4, 5', answer: '3.5', hint: 'Sum=14. 14÷4=3.5.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find mean, median AND mode', problem: '5, 7, 7, 9, 12', answer: '8,7,7', hint: 'Mean: sum=40, 40÷5=8. Median: middle value=7. Mode: most frequent=7.', solution: [
+        { action: 'Mean', detail: '(5+7+7+9+12)÷5 = 40÷5 = 8' },
+        { action: 'Median', detail: 'sorted middle value = 7' },
+        { action: 'Mode', detail: 'most frequent value = 7' }
+      ]},
+    ]
+  },
+  23: {
+    title: "Pythagoras' Theorem",
+    color: 3,
+    emoji: '📐',
+    missions: [
+      { type: 'calc', instruction: 'Pythagoras: a² + b² = c² (c is the longest side). Find c', problem: 'a=3, b=4, c=?', answer: '5', hint: '3²+4²=9+16=25. √25=5.' },
+      { type: 'calc', instruction: 'Find the hypotenuse (longest side)', problem: 'a=6, b=8, c=?', answer: '10', hint: '6²+8²=36+64=100. √100=10.' },
+      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=5, b=12, c=?', answer: '13', hint: '5²+12²=25+144=169. √169=13.' },
+      { type: 'calc', instruction: 'Find a missing SHORT side this time — rearrange: b² = c² − a²', problem: 'c=13, a=5, b=?', answer: '12', hint: '13²−5²=169−25=144. √144=12.' },
+      { type: 'calc', instruction: 'Find the missing short side', problem: 'c=10, a=6, b=?', answer: '8', hint: '10²−6²=100−36=64. √64=8.' },
+      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=9, b=12, c=?', answer: '15', hint: '9²+12²=81+144=225. √225=15.' },
+      { type: 'calc', instruction: 'Find the missing short side', problem: 'c=25, a=7, b=?', answer: '24', hint: '25²−7²=625−49=576. √576=24.' },
+      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=8, b=15, c=?', answer: '17', hint: '8²+15²=64+225=289. √289=17.' },
+      { type: 'calc', instruction: 'Is a triangle with these three sides right-angled? Check if a²+b²=c²', problem: 'sides 5, 12, 13', answer: 'yes', hint: '5²+12²=25+144=169=13². Yes, it works!' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Real-world Pythagoras', problem: 'A 10m ladder leans against a wall. Its base is 6m from the wall. How high up the wall does it reach?', answer: '8', hint: 'ladder=hypotenuse=10. base=6. height²=10²−6²=100−36=64. height=8.', solution: [
+        { action: 'Set up', detail: 'height² = 10² − 6²' },
+        { action: 'Calculate', detail: '= 100 − 36 = 64' },
+        { action: 'Square root', detail: '√64 = 8m' }
+      ]},
+    ]
+  },
+  24: {
+    title: 'Transformations',
+    color: 4,
+    emoji: '🥞',
+    missions: [
+      { type: 'calc', instruction: 'Reflect the point in the x-axis (flip the sign of the y-coordinate)', problem: 'Point (3, 4) reflected in the x-axis = ?', answer: '(3,-4)', hint: 'x stays the same, y flips sign: (3,4) → (3,−4).' },
+      { type: 'calc', instruction: 'Reflect the point in the y-axis (flip the sign of the x-coordinate)', problem: 'Point (2, 5) reflected in the y-axis = ?', answer: '(-2,5)', hint: 'y stays the same, x flips sign: (2,5) → (−2,5).' },
+      { type: 'calc', instruction: 'Translate the point by the vector (add to each coordinate)', problem: 'Point (1, 2) translated by (3, −1) = ?', answer: '(4,1)', hint: '1+3=4, 2+(−1)=1. New point: (4,1).' },
+      { type: 'calc', instruction: 'Translate the point', problem: 'Point (−2, 3) translated by (2, 2) = ?', answer: '(0,5)', hint: '−2+2=0, 3+2=5. New point: (0,5).' },
+      { type: 'identify', instruction: 'A shape flips over a mirror line. This transformation is called...?', problem: 'Shape flips over a line', answer: 'reflection', hint: 'Think of a mirror image.' },
+      { type: 'identify', instruction: 'A shape turns around a fixed point. This transformation is called...?', problem: 'Shape turns around a point', answer: 'rotation', hint: 'Think of a clock hand turning.' },
+      { type: 'identify', instruction: 'A shape slides without turning or flipping. This transformation is called...?', problem: 'Shape slides in a straight direction', answer: 'translation', hint: 'It moves, but stays facing the same way.' },
+      { type: 'identify', instruction: 'A shape gets bigger or smaller by a scale factor. This transformation is called...?', problem: 'Shape resizes', answer: 'enlargement', hint: 'Think of zooming in or out.' },
+      { type: 'calc', instruction: 'Enlarge by scale factor 2 — multiply the length', problem: 'original length = 5, scale factor = 2', answer: '10', hint: '5 × 2 = 10.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Enlarge a rectangle and find the new area', problem: 'Rectangle 3×4 enlarged by scale factor 3. Find the new area.', answer: '108', hint: 'New sides: 3×3=9, 4×3=12. New area = 9×12=108.', solution: [
+        { action: 'Scale sides', detail: '3×3=9  and  4×3=12' },
+        { action: 'New area', detail: '9 × 12 = 108' }
+      ]},
+    ]
+  },
+  25: {
+    title: 'Speed, Distance & Time',
+    color: 5,
+    emoji: '⏱️',
+    missions: [
+      { type: 'calc', instruction: 'Speed = distance ÷ time', problem: 'distance=100km, time=2h', answer: '50', hint: '100 ÷ 2 = 50 km/h.' },
+      { type: 'calc', instruction: 'Distance = speed × time', problem: 'speed=60km/h, time=3h', answer: '180', hint: '60 × 3 = 180 km.' },
+      { type: 'calc', instruction: 'Time = distance ÷ speed', problem: 'distance=150km, speed=50km/h', answer: '3', hint: '150 ÷ 50 = 3 hours.' },
+      { type: 'calc', instruction: 'Find the speed', problem: 'distance=240km, time=4h', answer: '60', hint: '240 ÷ 4 = 60 km/h.' },
+      { type: 'calc', instruction: 'Find the speed', problem: 'distance=90 miles, time=1.5h', answer: '60', hint: '90 ÷ 1.5 = 60 mph.' },
+      { type: 'calc', instruction: 'Find the distance', problem: 'speed=45km/h, time=2h', answer: '90', hint: '45 × 2 = 90 km.' },
+      { type: 'calc', instruction: 'Find the time', problem: 'speed=30km/h, distance=120km', answer: '4', hint: '120 ÷ 30 = 4 hours.' },
+      { type: 'calc', instruction: 'Direct proportion: if 5 apples cost £2, find the cost of 15 apples', problem: '15 apples = 3 × 5 apples', answer: '6', hint: '3 times as many apples = 3 × £2 = £6.' },
+      { type: 'calc', instruction: 'Find the average speed for a two-part journey', problem: '100km in 2h, then 80km in 2h — total distance ÷ total time', answer: '45', hint: 'Total distance=180km. Total time=4h. 180÷4=45km/h.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Multi-part journey — find the overall average speed', problem: 'A car travels 150km in 3h, then 100km in 2h. Find the average speed for the whole journey.', answer: '50', hint: 'Total distance=250km. Total time=5h. 250÷5=50km/h.', solution: [
+        { action: 'Total distance', detail: '150 + 100 = 250 km' },
+        { action: 'Total time', detail: '3 + 2 = 5 hours' },
+        { action: 'Average speed', detail: '250 ÷ 5 = 50 km/h' }
+      ]},
+    ]
+  },
+  26: {
+    title: 'Mixed Challenge',
+    color: 1,
+    emoji: '🍲',
+    missions: [
+      { type: 'solve', instruction: 'Mixed: Solve the equation', problem: '3x + 7 = 22', answer: '5', hint: 'Step 1: −7. Step 2: ÷3.' },
+      { type: 'calc', instruction: 'Mixed: Calculate', problem: '−4 + 9 − 3', answer: '2', hint: '−4+9=5. 5−3=2.' },
+      { type: 'calc', instruction: 'Mixed: Order of operations', problem: '3 + 4² − 10', answer: '9', hint: 'Powers first: 4²=16. Then 3+16−10=9.' },
+      { type: 'calc', instruction: 'Mixed: Percentages', problem: '35% of 60', answer: '21', hint: '10%=6. 30%=18. 5%=3. 35%=21.' },
+      { type: 'calc', instruction: 'Mixed: Fractions', problem: '2/3 + 3/4', answer: '17/12', hint: 'Common denom = 12: 8/12 + 9/12 = 17/12.' },
+      { type: 'calc', instruction: 'Mixed: Ratio', problem: '3:7, Total = 50, find the larger share', answer: '35', hint: 'Total parts=10. Each part=5. Larger=7×5=35.' },
+      { type: 'calc', instruction: 'Mixed: Area', problem: 'Triangle: base=12, height=7. Area = ?', answer: '42', hint: '½ × 12 × 7 = 42.' },
+      { type: 'calc', instruction: 'Mixed: Probability', problem: 'Bag: 4 red, 6 blue. P(red) = ?', answer: '2/5', hint: '4 out of 10 = 2/5.' },
+      { type: 'calc', instruction: 'Mixed: nth term', problem: 'Sequence 4, 9, 14, 19... 8th term = ?', answer: '39', hint: 'nth term = 5n−1. 8th = 5(8)−1 = 39.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Multi-topic problem', problem: 'A rectangle has perimeter 36cm, ratio of sides 2:7. Find the area.', answer: '98', hint: 'Perimeter=36 → 2(l+w)=36 → l+w=18. Ratio 2:7: w=4, l=14. Area=4×14=56... wait, l+w=18: parts=9, each=2, so 4 and 14. Area=56. No: 2 parts → each part=18/9=2. w=4,l=14. Area=56.', solution: [
+        { action: 'Half perim', detail: 'l + w = 18' },
+        { action: 'Ratio 2:7', detail: 'parts = 9, each = 2' },
+        { action: 'Sides', detail: 'w = 4, l = 14' },
+        { action: 'Area', detail: '4 × 14 = 56' }
+      ]},
+    ]
+  },
+  27: {
+    title: 'Exam Survival',
+    color: 2,
+    emoji: '🔥',
+    missions: [
+      { type: 'step', instruction: '5-minute timed challenge — Step 1: circle all numbers in this question. How many numbers?', problem: 'A box holds 24 chocolates. Sara buys 3 boxes. She eats 7. How many left?', answer: '3', hint: 'Numbers: 24, 3, 7 = three numbers.' },
+      { type: 'calc', instruction: 'Now solve the chocolate problem', problem: '(24 × 3) − 7 = ?', answer: '65', hint: '24 × 3 = 72. 72 − 7 = 65.' },
+      { type: 'step', instruction: 'Never leave a blank! What do you ALWAYS write even when unsure?', problem: 'Exam tip: always write ___', answer: 'something', hint: 'Any working, any formula, any guess — partial marks exist!' },
+      { type: 'calc', instruction: 'Quick fire: estimate first, then solve', problem: '19 × 21 ≈ ?  (estimate to nearest 10)', answer: '400', hint: '20 × 20 = 400. Estimation is fine!' },
+      { type: 'solve', instruction: 'Timed: 60 seconds — solve it!', problem: '4(2x − 3) = 20', answer: '4', hint: 'Expand: 8x−12=20. Add 12: 8x=32. Divide: x=4.' },
+      { type: 'calc', instruction: 'Timed: Quick percentage', problem: '17.5% of 80', answer: '14', hint: '10%=8, 5%=4, 2.5%=2. Total=14.' },
+      { type: 'step', instruction: 'Check your work strategy — what do you do LAST in an exam?', problem: 'After finishing: always ___ your answers', answer: 'check', hint: 'Substitute back in, re-read the question, check units.' },
+      { type: 'calc', instruction: 'Timed: Solve this', problem: '2x² = 50  →  x² = 25  →  x = ?', answer: '5', hint: 'x² = 25, so x = √25 = 5.' },
+      { type: 'calc', instruction: 'Show your working — what is 23% of 400?', problem: '23% of 400 = ?', answer: '92', hint: '20%=80, 3%=12. Total=92.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: 3-minute mixed exam question', problem: 'Solve: 5(x+2) = 3x + 16', answer: '3', hint: 'Expand: 5x+10=3x+16. 2x=6. x=3.', solution: [
+        { action: 'Expand', detail: '5x + 10 = 3x + 16' },
+        { action: 'Collect x', detail: '2x = 6' },
+        { action: 'Divide', detail: 'x = 3' }
+      ]},
+    ]
+  },
+  28: {
+    title: 'Master Chef Showdown',
+    color: 3,
+    emoji: '👨\u200d🍳',
+    missions: [
+      { type: 'solve', instruction: '👨\u200d🍳 Master Chef Q1: Equations', problem: '3(2x − 4) = 2x + 8', answer: '5', hint: 'Expand: 6x−12=2x+8. 4x=20. x=5.' },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q2: Negative numbers', problem: '−6 × −4', answer: '24', hint: 'Negative × Negative = Positive.' },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q3: BIDMAS', problem: '4² + (3 × 5) − 8', answer: '23', hint: 'Powers: 16. Brackets: 15. 16+15−8=23.' },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q4: Fractions', problem: '3/4 ÷ 1/2', answer: '3/2', hint: 'Flip the second fraction and multiply: 3/4 × 2/1 = 6/4 = 3/2.' },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q5: Percentage change', problem: 'Price goes from £80 to £100. % increase = ?', answer: '25', hint: 'Change = 20. (20/80)×100 = 25%.' },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q6: Ratio & proportion', problem: '4:5:6, Total = 90. Find the middle share.', answer: '30', hint: 'Total parts=15. Each=6. Middle=5×6=30.' },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q7: Area', problem: 'Trapezium: a=8, b=12, h=5. Area = ½(a+b)×h = ?', answer: '50', hint: '½ × (8+12) × 5 = ½ × 20 × 5 = 50.' },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q8: Probability', problem: 'P(A)=0.3, P(B)=0.5, mutually exclusive. P(A or B) = ?', answer: '0.8', hint: 'P(A or B) = P(A) + P(B) = 0.3 + 0.5 = 0.8.' },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q9: nth term', problem: 'Sequence: 1, 4, 9, 16, 25... What is the 7th term?', answer: '49', hint: 'These are square numbers! 7² = 49.' },
+      { type: 'boss', instruction: '🔪 MEGA CHEF CHALLENGE Q10: Multi-step word problem', problem: 'A phone costs £360. It\'s reduced by 15%, then VAT of 20% is added. Final price = ?', answer: '367.2', hint: 'Reduced: 360×0.85=306. VAT: 306×1.20=367.20.', solution: [
+        { action: '15% off', detail: '360 × 0.85 = £306' },
+        { action: '20% VAT', detail: '306 × 1.20 = £367.20' }
+      ]},
+    ]
+  }
+};
+
+const LEVEL_NAMES = {
+  1: "Don't Panic!", 2: 'Positive & Negative Numbers', 3: 'Order of Operations',
+  4: 'One-Step Equations', 5: 'Two-Step Equations', 6: 'Fractions',
+  7: 'Decimals', 8: 'Percentages', 9: 'Ratio', 10: 'Geometry',
+  11: 'Area & Perimeter', 12: 'Angles', 13: 'Graphs', 14: 'Probability',
+  15: 'Word Problems', 16: 'Algebra Patterns', 17: 'Sequences',
+  18: 'Powers, Roots & Indices', 19: 'Algebraic Expressions', 20: 'Circles',
+  21: 'Volume & Surface Area', 22: 'Averages & Range', 23: "Pythagoras' Theorem",
+  24: 'Transformations', 25: 'Speed, Distance & Time',
+  26: 'Mixed Challenge', 27: 'Exam Survival', 28: 'Master Chef Showdown'
+};
+
+const TOTAL_LEVELS = Object.keys(LEVELS).length;
+
+// ══════════════════════ RANK / XP SYSTEM ══════════════════════
+
+const RANKS = [
+  { name: 'Apprentice', xp: 0 },
+  { name: 'Prep Cook Ninja', xp: 300 },
+  { name: 'Chopping Champion', xp: 700 },
+  { name: 'Sizzle Sensei', xp: 1200 },
+  { name: 'Sauce Samurai', xp: 1800 },
+  { name: 'Flambé Fighter', xp: 2500 },
+  { name: 'Wok Warrior', xp: 3300 },
+  { name: 'Kitchen Guardian', xp: 4200 },
+  { name: 'Head Chef', xp: 5200 },
+  { name: 'Master Chef Ninja', xp: 6300 },
+];
+
+// ══════════════════════ CLOUD SYNC (KVdb.io) ══════════════════════
+// No setup needed! The first time anyone taps "Create a New Family Code",
+// the app automatically creates a private cloud storage slot and gives
+// back a code. Paste that code into "Join with This Code" on the other
+// device and the two devices will sync from then on. No account, no API
+// key, nothing to configure.
+const KVDB_BASE = 'https://kvdb.io';
+const SYNC_CODE_KEY = 'math-family-code';
+let syncPushTimer = null;
+
+function getSyncCode() {
+  return localStorage.getItem(SYNC_CODE_KEY) || '';
+}
+function setSyncCodeLocal(code) {
+  localStorage.setItem(SYNC_CODE_KEY, code);
+}
+function clearSyncCodeLocal() {
+  localStorage.removeItem(SYNC_CODE_KEY);
+}
+
+// Progress only ever goes up, so merging by taking the maximum of each field
+// is always safe — no device can lose progress by merging with another.
+function mergeStates(a, b) {
+  const merged = { xp: Math.max(a.xp || 0, b.xp || 0), levelProgress: {}, levelMissionResults: {} };
+  const levelKeys = new Set([...Object.keys(a.levelProgress || {}), ...Object.keys(b.levelProgress || {})]);
+  for (const lvl of levelKeys) {
+    merged.levelProgress[lvl] = Math.max((a.levelProgress || {})[lvl] || 0, (b.levelProgress || {})[lvl] || 0);
+  }
+  const resultKeys = new Set([...Object.keys(a.levelMissionResults || {}), ...Object.keys(b.levelMissionResults || {})]);
+  for (const lvl of resultKeys) {
+    const arrA = (a.levelMissionResults || {})[lvl] || [];
+    const arrB = (b.levelMissionResults || {})[lvl] || [];
+    const len = Math.max(arrA.length, arrB.length, 10);
+    const arr = new Array(len).fill(null);
+    for (let i = 0; i < len; i++) {
+      if (arrA[i] === 'correct' || arrB[i] === 'correct') arr[i] = 'correct';
+      else if (arrA[i] === 'wrong' || arrB[i] === 'wrong') arr[i] = 'wrong';
+    }
+    merged.levelMissionResults[lvl] = arr;
+  }
+  return merged;
+}
+
+async function pullCloudState(bucketId) {
+  if (!bucketId) return null;
+  try {
+    const res = await fetch(`${KVDB_BASE}/${encodeURIComponent(bucketId)}/progress`);
+    if (res.status === 404) return null; // bucket exists but nothing saved yet
+    if (!res.ok) return null;
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+  } catch (e) { console.warn('Cloud pull failed', e); return null; }
+}
+
+async function pushCloudState(bucketId, s) {
+  if (!bucketId) return false;
+  try {
+    // No explicit Content-Type header here on purpose: setting one (like
+    // application/json) forces the browser to send a CORS "preflight"
+    // request first, which some APIs don't answer correctly — causing the
+    // real save to silently never happen. Plain-string bodies default to a
+    // preflight-free content type, and KVdb doesn't care what it's labelled.
+    const res = await fetch(`${KVDB_BASE}/${encodeURIComponent(bucketId)}/progress`, {
+      method: 'POST',
+      body: JSON.stringify({
+        xp: s.xp, levelProgress: s.levelProgress, levelMissionResults: s.levelMissionResults, updatedAt: Date.now()
+      })
+    });
+    return res.ok;
+  } catch (e) { console.warn('Cloud push failed', e); return false; }
+}
+
+function placeholderEmail() {
+  // KVdb asks for an email so a bucket can be recovered later, but this app
+  // doesn't need bucket management, so a syntactically-valid placeholder is used.
+  const rand = Math.random().toString(36).slice(2, 10);
+  return `mathkitchenninja${rand}@gmail.com`;
+}
+
+async function createCloudBucket() {
+  try {
+    const body = new URLSearchParams({ email: placeholderEmail(), default_ttl: '0' }); // default_ttl 0 = never expires
+    const res = await fetch(KVDB_BASE, { method: 'POST', body });
+    if (!res.ok) return null;
+    const bucketId = (await res.text()).trim();
+    return bucketId || null;
+  } catch (e) { console.warn('Bucket creation failed', e); return null; }
+}
+
+function scheduleCloudPush() {
+  const code = getSyncCode();
+  if (!code) return;
+  clearTimeout(syncPushTimer);
+  syncPushTimer = setTimeout(() => pushCloudState(code, state), 600);
+}
+
+function updateSyncBadge(mode) {
+  // mode: 'off' | 'synced' | 'offline'
+  const badge = document.getElementById('sync-badge');
+  if (!badge) return;
+  badge.classList.remove('synced', 'offline');
+  if (mode === 'synced') { badge.textContent = '🔗 Synced'; badge.classList.add('synced'); }
+  else if (mode === 'offline') { badge.textContent = '📴 Offline'; badge.classList.add('offline'); }
+  else { badge.textContent = '⚙️ Set up sync'; }
+}
+
+function updateSyncStatusLine(text) {
+  const el = document.getElementById('sync-status-line');
+  if (el) el.textContent = text;
+}
+
+async function syncOnLoad() {
+  const code = getSyncCode();
+  if (!code) { updateSyncBadge('off'); return; }
+  const cloud = await pullCloudState(code);
+  if (cloud) {
+    state = mergeStates(state, cloud);
+    try { localStorage.setItem('math-complete-state', JSON.stringify(state)); } catch (e) {}
+    renderXP();
+    renderLevelsList();
+  }
+  await pushCloudState(code, state);
+  updateSyncBadge('synced');
+}
+
+function openSyncModal() {
+  const code = getSyncCode();
+  document.getElementById('sync-overlay').classList.add('show');
+  document.getElementById('sync-error').textContent = '';
+  if (code) {
+    document.getElementById('sync-view-nocode').style.display = 'none';
+    document.getElementById('sync-view-active').style.display = 'block';
+    document.getElementById('sync-code-display').textContent = code;
+    updateSyncStatusLine('Connected ✅');
+  } else {
+    document.getElementById('sync-view-nocode').style.display = 'block';
+    document.getElementById('sync-view-active').style.display = 'none';
+  }
+}
+
+function closeSyncModal() {
+  document.getElementById('sync-overlay').classList.remove('show');
+}
+
+async function createSyncCode() {
+  const errEl = document.getElementById('sync-error');
+  errEl.textContent = 'Setting up your family code…';
+  const bucketId = await createCloudBucket();
+  if (!bucketId) {
+    errEl.textContent = 'Could not connect. Check your internet connection and try again.';
+    return;
+  }
+  // Save, then read it straight back — if the round-trip doesn't check out,
+  // retry once before ever showing the code, so we never hand out a code
+  // that looks fine but has no data behind it.
+  let saved = await pushCloudState(bucketId, state);
+  if (saved) {
+    const verify = await pullCloudState(bucketId);
+    saved = !!verify;
+  }
+  if (!saved) {
+    saved = await pushCloudState(bucketId, state);
+    if (saved) {
+      const verify = await pullCloudState(bucketId);
+      saved = !!verify;
+    }
+  }
+  if (!saved) {
+    errEl.textContent = 'Created the code, but saving progress to it failed. Check your internet connection and try again.';
+    return;
+  }
+  setSyncCodeLocal(bucketId);
+  updateSyncBadge('synced');
+  openSyncModal();
+}
+
+async function joinSyncCode() {
+  const errEl = document.getElementById('sync-error');
+  const input = document.getElementById('sync-join-input');
+  const code = input.value.replace(/\s+/g, '');
+  errEl.textContent = '';
+  if (!code) { errEl.textContent = 'Paste a code first.'; return; }
+  errEl.textContent = 'Connecting…';
+  const cloud = await pullCloudState(code);
+  if (!cloud) { errEl.textContent = 'No progress found for that code — double-check it, or create a new code instead.'; return; }
+  state = mergeStates(state, cloud);
+  setSyncCodeLocal(code);
+  try { localStorage.setItem('math-complete-state', JSON.stringify(state)); } catch (e) {}
+  await pushCloudState(code, state);
+  renderXP();
+  renderLevelsList();
+  updateSyncBadge('synced');
+  input.value = '';
+  openSyncModal();
+}
+
+function copySyncCode() {
+  const code = getSyncCode();
+  if (!code) return;
+  navigator.clipboard?.writeText(code).catch(() => {});
+  updateSyncStatusLine('Copied! ✅');
+  setTimeout(() => updateSyncStatusLine('Connected ✅'), 1500);
+}
+
+function disconnectSync() {
+  clearSyncCodeLocal();
+  updateSyncBadge('off');
+  openSyncModal();
+}
+
+let state = { xp: 0, levelProgress: {}, levelMissionResults: {} };
+// levelProgress[level] = number of missions completed (out of 10)
+// levelMissionResults[level] = array of 'correct'/'wrong'/null per mission
+
+async function loadState() {
+  try {
+    const raw = localStorage.getItem('math-complete-state');
+    if (raw) state = { ...state, ...JSON.parse(raw) };
+  } catch(e) {}
+  renderXP();
+  renderLevelsList();
+  updateSyncBadge(getSyncCode() ? 'offline' : 'off');
+  syncOnLoad();
+}
+
+async function saveState() {
+  try { localStorage.setItem('math-complete-state', JSON.stringify(state)); } catch(e) {}
+  scheduleCloudPush();
+}
+
+function getRankInfo() {
+  for (let i = RANKS.length - 1; i >= 0; i--) {
+    if (state.xp >= RANKS[i].xp) {
+      const next = RANKS[i + 1];
+      return { level: i + 1, name: RANKS[i].name, nextXP: next ? next.xp : RANKS[i].xp + 500, prevXP: RANKS[i].xp };
+    }
+  }
+  return { level: 1, name: 'Apprentice', nextXP: 300, prevXP: 0 };
+}
+
+function renderXP() {
+  const info = getRankInfo();
+  document.getElementById('xp-display').textContent = state.xp;
+  document.getElementById('xp-next').textContent = info.nextXP;
+  document.getElementById('rank-label').textContent = `Rank ${info.level} – ${info.name}`;
+  const pct = Math.min(100, ((state.xp - info.prevXP) / (info.nextXP - info.prevXP)) * 100);
+  document.getElementById('xp-bar').style.width = pct + '%';
+}
+
+function addXP(amount) {
+  const before = getRankInfo().level;
+  state.xp += amount;
+  renderXP();
+  saveState();
+  const pop = document.getElementById('xp-popup');
+  pop.textContent = `+${amount} XP ⭐`;
+  pop.classList.add('show');
+  setTimeout(() => pop.classList.remove('show'), 1100);
+  const after = getRankInfo().level;
+  if (after > before) {
+    setTimeout(() => {
+      document.getElementById('level-up-label').textContent =
+        `You are now Rank ${after} – ${getRankInfo().name}!`;
+      document.getElementById('level-up').classList.add('show');
+    }, 1300);
+  }
+}
+
+// ══════════════════════ LEVEL LIST RENDERING ══════════════════════
+
+function currentUnlockedLevel() {
+  for (let i = 1; i <= TOTAL_LEVELS; i++) {
+    const done = state.levelProgress[i] || 0;
+    if (done < 10) return i;
+  }
+  return TOTAL_LEVELS;
+}
+
+function isLevelUnlocked(levelNum) {
+  if (levelNum === 1) return true;
+  const prevDone = state.levelProgress[levelNum - 1] || 0;
+  return prevDone >= 10;
+}
+
+function renderLevelsList() {
+  const container = document.getElementById('levels-list');
+  container.innerHTML = '';
+  for (let i = 1; i <= TOTAL_LEVELS; i++) {
+    const unlocked = isLevelUnlocked(i);
+    const done = state.levelProgress[i] || 0;
+    const pct = (done / 10) * 100;
+    const isFinal = i === TOTAL_LEVELS;
+    const star = done >= 10 ? '⭐' : (unlocked ? (isFinal ? '👑' : '▶️') : '🔒');
+
+    const div = document.createElement('div');
+    div.className = `level-card ${unlocked ? '' : 'locked'}`;
+    div.dataset.l = i % 5 || 5; // cycle colors 1-5
+    div.onclick = () => { if (unlocked) openLevel(i); };
+    div.innerHTML = `
+      <div class="level-num-badge" style="color:${isFinal ? 'var(--gold)' : 'var(--accent2)'}">${i}</div>
+      <div class="level-info">
+        <div class="level-title">${LEVELS[i].emoji} ${LEVELS[i].title}</div>
+        <div class="level-progress-text">${done} / 10 missions${!unlocked ? ' · 🔒 Complete previous level' : ''}</div>
+        <div class="level-progress-bar"><div class="level-progress-fill" style="width:${pct}%; background:${isFinal ? 'var(--gold)' : 'var(--accent2)'}"></div></div>
+      </div>
+      <div class="level-star">${star}</div>`;
+    container.appendChild(div);
+  }
+
+  // Update continue button
+  const cl = currentUnlockedLevel();
+  document.getElementById('continue-sub').textContent = `Level ${cl} · ${LEVEL_NAMES[cl]}`;
+}
+
+// ══════════════════════ MISSION ENGINE ══════════════════════
+
+let currentLevel = 1;
+let currentMissionIndex = 0;
+let missionAnswered = false;
+
+function openLevel(levelNum) {
+  currentLevel = levelNum;
+  currentMissionIndex = state.levelProgress[levelNum] || 0;
+  if (currentMissionIndex >= 10) currentMissionIndex = 0; // replay from start if already done
+
+  if (!state.levelMissionResults[levelNum]) {
+    state.levelMissionResults[levelNum] = new Array(10).fill(null);
+  }
+
+  document.getElementById('mh-title').textContent = `Level ${levelNum}`;
+  document.getElementById('mh-sub').textContent = LEVELS[levelNum].title;
+  showScreen('mission-screen');
+  renderMissionDots();
+  renderMission();
+}
+
+function exitMission() {
+  showScreen('home');
+  renderLevelsList();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function renderMissionDots() {
+  const dotsEl = document.getElementById('mission-dots');
+  dotsEl.innerHTML = '';
+  const results = state.levelMissionResults[currentLevel] || new Array(10).fill(null);
+  for (let i = 0; i < 10; i++) {
+    const d = document.createElement('div');
+    let cls = 'm-dot';
+    if (i === currentMissionIndex) cls += ' active';
+    else if (results[i] === 'correct') cls += ' correct';
+    else if (results[i] === 'wrong') cls += ' wrong';
+    d.className = cls;
+    dotsEl.appendChild(d);
+  }
+  document.getElementById('mission-counter').textContent = `${currentMissionIndex + 1} / 10`;
+}
+
+function renderMission() {
+  missionAnswered = false;
+  const level = LEVELS[currentLevel];
+  const m = level.missions[currentMissionIndex];
+  const viewport = document.getElementById('mission-viewport');
+
+  const isBoss = m.type === 'boss';
+  const badgeText = isBoss ? '🔪 Chef Challenge' : `Mission ${currentMissionIndex + 1}`;
+
+  viewport.innerHTML = `
+    <div class="mission-card mc-${level.color}">
+      <div class="mission-badge ${isBoss ? 'boss' : ''}">${badgeText}</div>
+      <div class="mission-instruction">${m.instruction}</div>
+      <div class="mission-problem">${m.problem}</div>
+
+      <div class="answer-row">
+        <input type="text" class="answer-input" id="answer-input" placeholder="Your answer" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="btn-check" onclick="checkAnswer()">Check</button>
+      </div>
+
+      <div class="feedback-box" id="feedback-box"></div>
+
+      <button class="hint-btn" onclick="toggleHint()">💡 Need a hint?</button>
+      <div class="hint-panel" id="hint-panel">${m.hint}</div>
+
+      ${m.solution ? `
+      <div class="solution-box" id="solution-box">
+        <div class="solution-title">📖 Worked Solution</div>
+        ${m.solution.map(s => `
+          <div class="solution-step">
+            <div class="solution-arrow-action">${s.action}</div>
+            <div>${s.detail}</div>
+          </div>`).join('')}
+      </div>` : ''}
+
+      <div class="btn-nav-row">
+        <button class="btn-secondary" onclick="prevMission()" ${currentMissionIndex === 0 ? 'disabled style="opacity:0.3;pointer-events:none"' : ''}>← Back</button>
+        <button class="btn-primary go" id="next-btn" onclick="nextMission()" disabled>Next →</button>
+      </div>
+    </div>`;
+
+  // Enter key support
+  const input = document.getElementById('answer-input');
+  input.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
+  setTimeout(() => input.focus(), 100);
+
+  renderMissionDots();
+}
+
+function normalizeAnswer(str) {
+  return str.trim().toLowerCase().replace(/\s+/g, '').replace(/−/g, '-');
+}
+
+function triggerSliceEffect(isBig) {
+  const fx = document.getElementById('slice-fx');
+  const emojiEl = document.getElementById('slice-emoji');
+  if (!fx || !emojiEl) return;
+  emojiEl.textContent = isBig ? '🔪✨' : '🔪';
+  fx.classList.remove('active');
+  void fx.offsetWidth; // restart animation from scratch
+  fx.classList.add('active');
+  setTimeout(() => fx.classList.remove('active'), 550);
+}
+
+function checkAnswer() {
+  if (missionAnswered) return;
+  const level = LEVELS[currentLevel];
+  const m = level.missions[currentMissionIndex];
+  const input = document.getElementById('answer-input');
+  const userAnswer = normalizeAnswer(input.value);
+  const correctAnswer = normalizeAnswer(m.answer);
+
+  // Allow comma-separated answers in any order for 'identify'/'classify' types
+  let isCorrect = false;
+  if (m.type === 'identify' || m.type === 'classify') {
+    const userParts = userAnswer.split(',').map(s => s.trim()).filter(Boolean).sort();
+    const correctParts = correctAnswer.split(',').map(s => s.trim()).filter(Boolean).sort();
+    isCorrect = JSON.stringify(userParts) === JSON.stringify(correctParts);
+  } else if (m.type === 'step' || m.type === 'explain') {
+    // lenient match - just check if it contains the key word
+    isCorrect = userAnswer.includes(correctAnswer) || correctAnswer.includes(userAnswer);
+  } else {
+    isCorrect = userAnswer === correctAnswer;
+  }
+
+  missionAnswered = true;
+  input.disabled = true;
+
+  const feedbackBox = document.getElementById('feedback-box');
+  const nextBtn = document.getElementById('next-btn');
+  const solutionBox = document.getElementById('solution-box');
+
+  // record result
+  if (!state.levelMissionResults[currentLevel]) {
+    state.levelMissionResults[currentLevel] = new Array(10).fill(null);
+  }
+
+  if (isCorrect) {
+    input.classList.add('correct');
+    feedbackBox.className = 'feedback-box show correct';
+    feedbackBox.innerHTML = `<div class="feedback-icon">✅</div><div>Correct! ${m.type === 'boss' ? 'Sliced it, Chef!' : 'Nice work.'}</div>`;
+    state.levelMissionResults[currentLevel][currentMissionIndex] = 'correct';
+    addXP(m.type === 'boss' ? 30 : 15);
+    triggerSliceEffect(m.type === 'boss');
+  } else {
+    input.classList.add('wrong');
+    feedbackBox.className = 'feedback-box show wrong';
+    feedbackBox.innerHTML = `<div class="feedback-icon">💡</div><div>Not quite — correct answer: <strong>${m.answer}</strong>. That's OK, keep going!</div>`;
+    state.levelMissionResults[currentLevel][currentMissionIndex] = 'wrong';
+    addXP(5); // still get XP for trying
+  }
+
+  if (solutionBox) solutionBox.classList.add('show');
+  nextBtn.disabled = false;
+  renderMissionDots();
+
+  // update level progress (max reached)
+  const reached = currentMissionIndex + 1;
+  if (reached > (state.levelProgress[currentLevel] || 0)) {
+    state.levelProgress[currentLevel] = reached;
+  }
+  saveState();
+}
+
+function toggleHint() {
+  document.getElementById('hint-panel').classList.toggle('open');
+}
+
+function prevMission() {
+  if (currentMissionIndex > 0) {
+    currentMissionIndex--;
+    renderMission();
+  }
+}
+
+function nextMission() {
+  const level = LEVELS[currentLevel];
+  if (currentMissionIndex < level.missions.length - 1) {
+    currentMissionIndex++;
+    renderMission();
+  } else {
+    completeLevel();
+  }
+}
+
+function completeLevel() {
+  const level = LEVELS[currentLevel];
+  const results = state.levelMissionResults[currentLevel] || [];
+  const correctCount = results.filter(r => r === 'correct').length;
+
+  const viewport = document.getElementById('mission-viewport');
+  document.getElementById('mission-dots').innerHTML = '';
+  document.getElementById('mission-counter').textContent = '✓ Complete';
+
+  const nextLevel = currentLevel + 1;
+  const hasNext = nextLevel <= TOTAL_LEVELS;
+
+  viewport.innerHTML = `
+    <div class="complete-view">
+      <div class="complete-emoji">${level.emoji}</div>
+      <div class="complete-title">LEVEL ${currentLevel} COMPLETE!</div>
+      <div class="complete-stats"><span>${correctCount}/10</span> correct</div>
+      <div class="complete-score">${correctCount >= 8 ? 'Perfectly plated! 🔪✨' : correctCount >= 5 ? 'Needs a bit more seasoning — try again anytime!' : 'Keep practicing — every slice earns XP!'}</div>
+      <div style="display:flex; gap:10px; margin-top:8px; width:100%; max-width:320px">
+        <button class="btn-secondary" onclick="exitMission()" style="flex:1">🏠 Home</button>
+        ${hasNext ? `<button class="btn-primary go" onclick="openLevel(${nextLevel})" style="flex:1">Level ${nextLevel} →</button>` : ''}
+      </div>
+    </div>`;
+}
+
+// ══════════════════════ INIT ══════════════════════
+loadState();
+</script>
+</body>
+</html>

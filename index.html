@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Kitchen Ninja HQ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&display=swap');
+
+  :root {
+    --bg: #201410;
+    --surface: #32211a;
+    --border: #5a3d26;
+    --text: #fbeee0;
+    --muted: #c2a68a;
+    --gold: #f4b400;
+    --math-a: #e8482c;
+    --math-b: #ff8c3f;
+    --thai-a: #e8752c;
+    --thai-b: #a855f7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: radial-gradient(ellipse at top, #3a2412 0%, #201410 55%, #150d0a 100%);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 34px 20px 40px;
+  }
+
+  .steam {
+    position: fixed;
+    top: -60px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+    animation: drift 14s linear infinite;
+    pointer-events: none;
+  }
+  .steam.s2 { left: 70%; animation-duration: 19s; animation-delay: -6s; }
+  .steam.s1 { left: 15%; animation-duration: 16s; animation-delay: -2s; }
+  @keyframes drift {
+    0%   { transform: translateY(0) scale(1); opacity: 0; }
+    15%  { opacity: 1; }
+    100% { transform: translateY(110vh) scale(1.4); opacity: 0; }
+  }
+
+  header { text-align: center; margin-bottom: 8px; z-index: 1; }
+
+  .kicker {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  h1 {
+    font-family: 'Bangers', cursive;
+    font-size: 2.6rem;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    margin-top: 4px;
+    background: linear-gradient(135deg, var(--gold), #ff8c3f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+    max-width: 320px;
+  }
+
+  .stations {
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 30px;
+  }
+
+  .station {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 22px 20px;
+    overflow: hidden;
+    transition: transform 0.15s ease;
+  }
+  .station:active { transform: scale(0.97); }
+
+  .station::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.16;
+  }
+  .station.math::before { background: linear-gradient(135deg, var(--math-a), var(--math-b)); }
+  .station.thai::before { background: linear-gradient(135deg, var(--thai-a), var(--thai-b)); }
+
+  .station-inner { position: relative; display: flex; align-items: center; gap: 16px; }
+
+  .station-icon {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+  }
+  .station.math .station-icon { background: linear-gradient(135deg, var(--math-a), var(--math-b)); }
+  .station.thai .station-icon { background: linear-gradient(135deg, var(--thai-a), var(--thai-b)); }
+
+  .station-text { flex: 1; }
+
+  .station-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.35rem;
+    letter-spacing: 1px;
+  }
+
+  .station-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .station-progress {
+    margin-top: 10px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: var(--gold);
+    display: none;
+  }
+  .station-progress.show { display: block; }
+
+  .station-arrow {
+    font-size: 1.4rem;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  footer {
+    z-index: 1;
+    margin-top: 34px;
+    text-align: center;
+    font-size: 0.68rem;
+    color: var(--muted);
+    max-width: 320px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+  <div class="steam s1"></div>
+  <div class="steam s2"></div>
+
+  <header>
+    <div class="kicker">Kitchen Ninja HQ</div>
+    <h1>Pick Your Station</h1>
+    <p class="sub">Two kitchens, one chef. Choose what you're practicing today.</p>
+  </header>
+
+  <div class="stations">
+    <a class="station math" href="math-survival-complete.html">
+      <div class="station-inner">
+        <div class="station-icon">🔪</div>
+        <div class="station-text">
+          <div class="station-title">Math Kitchen Ninja</div>
+          <div class="station-desc">Slice through Stage 8 missions, level by level.</div>
+          <div class="station-progress" id="mathProgress"></div>
+        </div>
+        <div class="station-arrow">›</div>
+      </div>
+    </a>
+
+    <a class="station thai" href="Thai_Exam_Survival_-_Index.html">
+      <div class="station-inner">
+        <div class="station-icon">🍳</div>
+        <div class="station-text">
+          <div class="station-title">Thai Reading Survival</div>
+          <div class="station-desc">Cook up reading, vocab, and exam-day skills.</div>
+          <div class="station-progress" id="thaiProgress"></div>
+        </div>
+        <div class="station-arrow">›</div>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    Keep this file in the same folder as the other two apps — tap a station to open it.
+  </footer>
+
+<script>
+  // Best-effort progress preview. If the browser keeps these files on
+  // separate storage origins, this silently does nothing — the links
+  // above still work regardless.
+  function tryShowProgress(key, elId, xpKey) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      const xp = state && typeof state[xpKey] === 'number' ? state[xpKey] : null;
+      if (xp === null) return;
+      const el = document.getElementById(elId);
+      el.textContent = xp + ' XP so far';
+      el.classList.add('show');
+    } catch (e) { /* ignore */ }
+  }
+  tryShowProgress('math-complete-state', 'mathProgress', 'xp');
+  tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
+</script>
+
+</body>
+</html>
