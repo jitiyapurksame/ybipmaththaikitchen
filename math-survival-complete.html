@@ -252,6 +252,13 @@
     line-height: 1.4;
   }
 
+  .mission-visual {
+    background: #fff8ec;
+    border-radius: 14px;
+    padding: 14px 10px 6px;
+    margin-bottom: 14px;
+  }
+
   .mission-problem {
     font-size: 1.8rem;
     font-weight: 900;
@@ -971,16 +978,16 @@ const LEVELS = {
     color: 3,
     emoji: '📈',
     missions: [
-      { type: 'calc', instruction: 'Reading a bar graph: the bar for Monday shows 8 students. Tuesday shows 12. How many more on Tuesday?', problem: 'Tuesday − Monday = ?', answer: '4', hint: '12 − 8 = 4.' },
-      { type: 'calc', instruction: 'What is the total across Monday (8), Tuesday (12), Wednesday (6)?', problem: '8 + 12 + 6 = ?', answer: '26', hint: 'Add all three values.' },
-      { type: 'calc', instruction: 'A line graph shows temperature: Mon=15°, Tue=18°, Wed=14°. What was the highest temperature?', problem: 'Highest temp = ?°', answer: '18', hint: 'Look for the biggest value.' },
-      { type: 'calc', instruction: 'By how much did temp drop from Tuesday to Wednesday?', problem: '18° − 14° = ?', answer: '4', hint: '18 − 14 = 4.' },
-      { type: 'calc', instruction: 'Plot point: x=3, y=5. What quadrant is it in?', problem: 'x=3, y=5 → Quadrant ?', answer: '1', hint: 'Both positive → Quadrant 1 (top right).' },
-      { type: 'calc', instruction: 'Plot point: x=−2, y=4. What quadrant?', problem: 'x=−2, y=4 → Quadrant ?', answer: '2', hint: 'Negative x, positive y → Quadrant 2 (top left).' },
-      { type: 'calc', instruction: 'What is the gradient (slope) of a line going through (0,0) and (4,8)?', problem: 'Gradient = rise ÷ run = 8 ÷ 4 = ?', answer: '2', hint: 'Rise = 8, Run = 4. Gradient = 8÷4 = 2.' },
-      { type: 'calc', instruction: 'y = 2x + 1. What is y when x = 3?', problem: 'y = 2(3) + 1 = ?', answer: '7', hint: '2×3 = 6. 6+1 = 7.' },
-      { type: 'calc', instruction: 'y = 3x − 2. What is y when x = 4?', problem: 'y = 3(4) − 2 = ?', answer: '10', hint: '3×4 = 12. 12−2 = 10.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find gradient and y-intercept', problem: 'Line equation: y = 5x + 3. Gradient = ?, y-intercept = ?', answer: '5,3', hint: 'y = mx + c form. m = gradient, c = y-intercept.', solution: [
+      { type: 'calc', instruction: 'Reading a bar graph: the bar for Monday shows 8 students. Tuesday shows 12. How many more on Tuesday?', visual: svgBarChart([['Mon', 8], ['Tue', 12]]), problem: 'Tuesday − Monday = ?', answer: '4', hint: '12 − 8 = 4.' },
+      { type: 'calc', instruction: 'What is the total across Monday (8), Tuesday (12), Wednesday (6)?', visual: svgBarChart([['Mon', 8], ['Tue', 12], ['Wed', 6]]), problem: '8 + 12 + 6 = ?', answer: '26', hint: 'Add all three values.' },
+      { type: 'calc', instruction: 'A line graph shows temperature: Mon=15°, Tue=18°, Wed=14°. What was the highest temperature?', visual: svgLineChart([['Mon', 15], ['Tue', 18], ['Wed', 14]], '#2a9d8f'), problem: 'Highest temp = ?°', answer: '18', hint: 'Look for the biggest value.' },
+      { type: 'calc', instruction: 'By how much did temp drop from Tuesday to Wednesday?', visual: svgLineChart([['Mon', 15], ['Tue', 18], ['Wed', 14]], '#2a9d8f'), problem: '18° − 14° = ?', answer: '4', hint: '18 − 14 = 4.' },
+      { type: 'calc', instruction: 'Plot point: x=3, y=5. What quadrant is it in?', visual: svgCoordGrid({ points: [{ x: 3, y: 5 }] }), problem: 'x=3, y=5 → Quadrant ?', answer: '1', hint: 'Both positive → Quadrant 1 (top right).' },
+      { type: 'calc', instruction: 'Plot point: x=−2, y=4. What quadrant?', visual: svgCoordGrid({ points: [{ x: -2, y: 4 }] }), problem: 'x=−2, y=4 → Quadrant ?', answer: '2', hint: 'Negative x, positive y → Quadrant 2 (top left).' },
+      { type: 'calc', instruction: 'What is the gradient (slope) of a line going through (0,0) and (4,8)?', visual: svgCoordGrid({ range: 10, line: { x1: 0, y1: 0, x2: 4, y2: 8 }, points: [{ x: 0, y: 0 }, { x: 4, y: 8 }] }), problem: 'Gradient = rise ÷ run = 8 ÷ 4 = ?', answer: '2', hint: 'Rise = 8, Run = 4. Gradient = 8÷4 = 2.' },
+      { type: 'calc', instruction: 'y = 2x + 1. What is y when x = 3?', visual: svgCoordGrid({ range: 11, line: { x1: -1, y1: -1, x2: 4, y2: 9, color: '#f4b400' }, points: [{ x: 3, y: 7, color: '#f4b400' }] }), problem: 'y = 2(3) + 1 = ?', answer: '7', hint: '2×3 = 6. 6+1 = 7.' },
+      { type: 'calc', instruction: 'y = 3x − 2. What is y when x = 4?', visual: svgCoordGrid({ range: 12, line: { x1: -1, y1: -5, x2: 4, y2: 10, color: '#7cb518' }, points: [{ x: 4, y: 10, color: '#7cb518' }] }), problem: 'y = 3(4) − 2 = ?', answer: '10', hint: '3×4 = 12. 12−2 = 10.' },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find gradient and y-intercept', visual: svgCoordGrid({ range: 10, line: { x1: -1, y1: -2, x2: 1, y2: 8 }, points: [{ x: 0, y: 3 }] }), problem: 'Line equation: y = 5x + 3. Gradient = ?, y-intercept = ?', answer: '5,3', hint: 'y = mx + c form. m = gradient, c = y-intercept.', solution: [
         { action: 'y = mx + c', detail: 'y = 5x + 3' },
         { action: 'Gradient m', detail: '= 5' },
         { action: 'y-intercept c', detail: '= 3' }
@@ -1689,6 +1696,81 @@ function renderMissionDots() {
   document.getElementById('mission-counter').textContent = `${currentMissionIndex + 1} / 10`;
 }
 
+// ══════════════════════ MINI CHART GENERATORS ══════════════════════
+// Small inline SVGs for the Graphs level, so "reading a graph" questions
+// actually show a graph instead of just describing one in words.
+
+function svgBarChart(data) {
+  const width = 280, height = 160, padding = 30, barGap = 18;
+  const maxVal = Math.max(...data.map(d => d[1])) * 1.2;
+  const barWidth = (width - padding * 2 - barGap * (data.length - 1)) / data.length;
+  const colors = ['#e8482c', '#f4b400', '#7cb518', '#2a9d8f', '#ff8c3f'];
+  let bars = '';
+  data.forEach((d, i) => {
+    const barHeight = (d[1] / maxVal) * (height - padding * 2);
+    const x = padding + i * (barWidth + barGap);
+    const y = height - padding - barHeight;
+    bars += `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="6" fill="${colors[i % colors.length]}" />
+      <text x="${x + barWidth / 2}" y="${y - 8}" text-anchor="middle" font-size="15" font-weight="bold" fill="#3a2818">${d[1]}</text>
+      <text x="${x + barWidth / 2}" y="${height - padding + 18}" text-anchor="middle" font-size="13" fill="#3a2818">${d[0]}</text>`;
+  });
+  return `<svg viewBox="0 0 ${width} ${height}" style="width:100%;max-width:300px;height:auto;display:block;margin:0 auto">
+    <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#3a2818" stroke-width="2" />
+    ${bars}
+  </svg>`;
+}
+
+function svgLineChart(data, color) {
+  color = color || '#e8482c';
+  const width = 280, height = 160, padding = 30;
+  const values = data.map(d => d[1]);
+  const minVal = Math.min(...values) * 0.9;
+  const maxVal = Math.max(...values) * 1.1;
+  const stepX = (width - padding * 2) / (data.length - 1);
+  const points = data.map((d, i) => ({
+    x: padding + i * stepX,
+    y: height - padding - ((d[1] - minVal) / (maxVal - minVal)) * (height - padding * 2),
+    label: d[0], val: d[1]
+  }));
+  const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + p.x + ' ' + p.y).join(' ');
+  const dots = points.map(p => `<circle cx="${p.x}" cy="${p.y}" r="5" fill="${color}" />
+      <text x="${p.x}" y="${p.y - 12}" text-anchor="middle" font-size="14" font-weight="bold" fill="#3a2818">${p.val}</text>
+      <text x="${p.x}" y="${height - padding + 18}" text-anchor="middle" font-size="13" fill="#3a2818">${p.label}</text>`).join('');
+  return `<svg viewBox="0 0 ${width} ${height}" style="width:100%;max-width:300px;height:auto;display:block;margin:0 auto">
+    <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#3a2818" stroke-width="2" />
+    <path d="${pathD}" fill="none" stroke="${color}" stroke-width="3" />
+    ${dots}
+  </svg>`;
+}
+
+function svgCoordGrid(opts) {
+  opts = opts || {};
+  const size = 260, half = size / 2, range = opts.range || 6;
+  const scale = half / range;
+  const toX = x => half + x * scale;
+  const toY = y => half - y * scale;
+  let gridLines = '';
+  for (let i = -range; i <= range; i++) {
+    if (i === 0) continue;
+    gridLines += `<line x1="${toX(i)}" y1="0" x2="${toX(i)}" y2="${size}" stroke="#e6dac8" stroke-width="1"/>
+      <line x1="0" y1="${toY(i)}" x2="${size}" y2="${toY(i)}" stroke="#e6dac8" stroke-width="1"/>`;
+  }
+  let line = '';
+  if (opts.line) {
+    const l = opts.line;
+    line = `<line x1="${toX(l.x1)}" y1="${toY(l.y1)}" x2="${toX(l.x2)}" y2="${toY(l.y2)}" stroke="${l.color || '#e8482c'}" stroke-width="3"/>`;
+  }
+  const points = (opts.points || []).map(p => `<circle cx="${toX(p.x)}" cy="${toY(p.y)}" r="6" fill="${p.color || '#e8482c'}" stroke="#3a2818" stroke-width="1.5"/>
+      <text x="${toX(p.x) + 10}" y="${toY(p.y) - 8}" font-size="13" font-weight="bold" fill="#3a2818">(${p.x}, ${p.y})</text>`).join('');
+  return `<svg viewBox="0 0 ${size} ${size}" style="width:100%;max-width:240px;height:auto;display:block;margin:0 auto">
+    ${gridLines}
+    <line x1="0" y1="${half}" x2="${size}" y2="${half}" stroke="#3a2818" stroke-width="2"/>
+    <line x1="${half}" y1="0" x2="${half}" y2="${size}" stroke="#3a2818" stroke-width="2"/>
+    ${line}
+    ${points}
+  </svg>`;
+}
+
 function renderMission() {
   missionAnswered = false;
   const level = LEVELS[currentLevel];
@@ -1702,6 +1784,7 @@ function renderMission() {
     <div class="mission-card mc-${level.color}">
       <div class="mission-badge ${isBoss ? 'boss' : ''}">${badgeText}</div>
       <div class="mission-instruction">${m.instruction}</div>
+      ${m.visual ? `<div class="mission-visual">${m.visual}</div>` : ''}
       <div class="mission-problem">${m.problem}</div>
 
       <div class="answer-row">
