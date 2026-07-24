@@ -1550,7 +1550,7 @@
   <div class="home-header">
     <div class="home-title">👨‍🍳 THAI READING<br>SURVIVAL</div>
     <div class="home-subtitle">Science Explorer · Year 8</div>
-    <div class="backup-link" onclick="showScreen('backup-screen')">💾 Backup / Move Progress</div>
+    <div class="backup-link" onclick="openBackupScreen()">💾 Backup / Move Progress</div>
   </div>
 
   <div class="xp-panel">
@@ -3190,7 +3190,11 @@ async function cloudSyncOnLoad() {
   if (!bucket) {
     // First run on this device/address — create a fresh sync bucket silently.
     try {
-      const res = await fetch(KVDB_BASE, { method: 'POST' });
+      const res = await fetch(KVDB_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'email=thai-reading-survival-sync@example.com'
+      });
       if (res.ok) {
         bucket = (await res.text()).trim();
         if (bucket) localStorage.setItem(KVDB_BUCKET_KEY, bucket);
@@ -3302,6 +3306,13 @@ async function joinSyncCode() {
 }
 
 // ── BACKUP / RESTORE ──
+async function openBackupScreen() {
+  showScreen('backup-screen');
+  let bucket = null;
+  try { bucket = localStorage.getItem(KVDB_BUCKET_KEY); } catch (e) {}
+  if (!bucket) { await cloudSyncOnLoad(); } else { updateSyncStatusUI(); }
+}
+
 function generateBackupCode() {
   const box = document.getElementById('backup-export-box');
   const status = document.getElementById('backup-export-status');
