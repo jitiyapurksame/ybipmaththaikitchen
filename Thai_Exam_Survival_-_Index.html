@@ -43,6 +43,8 @@
     --m18: #ec4899;  /* visual thai – pink */
     --m19: #06b6d4;  /* speed reading – cyan */
     --m20: #eab308;  /* exam strategy – yellow */
+    --m21: #0ea5e9;  /* survival tier 4 – sky blue (harder) */
+    --m22: #dc2626;  /* survival tier 5 – deep red (hardest) */
 
     --c-cause: #fbbf24;    /* gold */
     --c-result: #38bdf8;   /* sky blue */
@@ -232,6 +234,8 @@
   .mission-card[data-m="ps1"]::before { background: var(--m15); }
   .mission-card[data-m="ps2"]::before { background: var(--m16); }
   .mission-card[data-m="ps3"]::before { background: var(--m17); }
+  .mission-card[data-m="ps4"]::before { background: var(--m21); }
+  .mission-card[data-m="ps5"]::before { background: var(--m22); }
   .mission-card[data-m="visual"]::before { background: var(--m18); }
   .mission-card[data-m="speed"]::before { background: var(--m19); }
   .mission-card[data-m="strategy"]::before { background: var(--m20); }
@@ -415,6 +419,8 @@
   .step-accent-14::before { background: var(--m15); }
   .step-accent-15::before { background: var(--m16); }
   .step-accent-16::before { background: var(--m17); }
+  .step-accent-17::before { background: var(--m21); }
+  .step-accent-18::before { background: var(--m22); }
 
   .step-label {
     display: inline-block;
@@ -658,6 +664,26 @@
   }
 
   .dq-boss .dq-stars { color: var(--purple); }
+
+  .dq-options { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .dq-option {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    text-align: left;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .dq-option:active { transform: scale(0.98); }
+  .dq-option.correct { border-color: var(--green); background: rgba(16,185,129,0.18); }
+  .dq-option.wrong { border-color: var(--red); background: rgba(239,68,68,0.18); animation: shakeTile 0.3s; }
+  .dq-option.disabled { opacity: 0.5; pointer-events: none; }
+  .dq-item.mc-item { cursor: default; }
+  .dq-item.mc-item .dq-check { cursor: pointer; }
 
   /* Draw step */
   .draw-prompt {
@@ -1412,6 +1438,16 @@
   .flip-card-thai { font-size: 1.5rem; font-weight: 800; }
   .flip-card-eng { font-size: 1.1rem; font-weight: 700; color: var(--accent2); margin-top: 10px; }
   .flip-card-example { font-size: 0.78rem; color: var(--muted); margin-top: 8px; font-style: italic; }
+  .flip-card-example .hl {
+    background: rgba(251,191,36,0.3);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 4px;
+    padding: 1px 3px;
+    font-style: normal;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .flip-card-example-eng { font-size: 0.74rem; color: var(--muted); margin-top: 3px; opacity: 0.85; }
   .flip-card-tap-hint { font-size: 0.68rem; color: var(--muted); margin-top: 14px; }
 
   .visual-know-row { display: flex; gap: 10px; }
@@ -1583,91 +1619,91 @@
 
   <div class="missions-list">
     <div class="mission-card" data-m="1" onclick="openMission(1)">
-      <div class="mission-emoji">🐦</div>
+      <div class="mission-emoji">🌙</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 001 · Hornbill</div>
-        <div class="mission-title">นกเงือก ผู้ปลูกป่า</div>
+        <div class="mission-num">Mission 001 · The Moon</div>
+        <div class="mission-title">ดวงจันทร์ บริวารของโลก</div>
         <div class="mission-skill">Practice: Main Idea · Cause & Effect</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-1">✅</div>
     </div>
     <div class="mission-card" data-m="2" onclick="openMission(2)">
-      <div class="mission-emoji">🌋</div>
+      <div class="mission-emoji">🧊</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 002 · Volcano</div>
-        <div class="mission-title">ภูเขาไฟตื่นแล้ว!</div>
+        <div class="mission-num">Mission 002 · States of Matter</div>
+        <div class="mission-title">สถานะของสสาร ของแข็ง ของเหลว แก๊ส</div>
         <div class="mission-skill">Practice: Sequence · Cause & Effect</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-2">✅</div>
     </div>
     <div class="mission-card" data-m="3" onclick="openMission(3)">
-      <div class="mission-emoji">🦋</div>
+      <div class="mission-emoji">🚗</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 003 · Butterfly</div>
-        <div class="mission-title">วงจรชีวิตผีเสื้อ</div>
-        <div class="mission-skill">Practice: Sequence · Life Cycle</div>
+        <div class="mission-num">Mission 003 · Car Safety</div>
+        <div class="mission-title">เทคโนโลยีความปลอดภัยในรถยนต์</div>
+        <div class="mission-skill">Practice: Cause & Effect · Key Facts</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-3">✅</div>
     </div>
     <div class="mission-card" data-m="4" onclick="openMission(4)">
-      <div class="mission-emoji">🪐</div>
+      <div class="mission-emoji">☄️</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 004 · Saturn</div>
-        <div class="mission-title">ดาวเสาร์ ดาวแห่งวงแหวน</div>
+        <div class="mission-num">Mission 004 · Comets & Meteors</div>
+        <div class="mission-title">ดาวหางและอุกกาบาต</div>
         <div class="mission-skill">Practice: Main Idea · Key Facts</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-4">✅</div>
     </div>
     <div class="mission-card" data-m="5" onclick="openMission(5)">
-      <div class="mission-emoji">🐘</div>
+      <div class="mission-emoji">🛞</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 005 · Asian Elephant</div>
-        <div class="mission-title">ช้างเอเชีย สัตว์ทรงปัญญา</div>
-        <div class="mission-skill">Practice: Fact vs Opinion · Details</div>
+        <div class="mission-num">Mission 005 · Tires & Friction</div>
+        <div class="mission-title">ยางรถยนต์และแรงเสียดทาน</div>
+        <div class="mission-skill">Practice: Cause & Effect · Details</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-5">✅</div>
     </div>
     <div class="mission-card" data-m="6" onclick="openMission(6)">
-      <div class="mission-emoji">🧪</div>
+      <div class="mission-emoji">🎆</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 006 · Chemistry</div>
-        <div class="mission-title">ปฏิกิริยาเคมี เมื่อสารสองชนิดพบกัน</div>
+        <div class="mission-num">Mission 006 · Firework Chemistry</div>
+        <div class="mission-title">เคมีของพลุไฟ สีสันจากปฏิกิริยา</div>
         <div class="mission-skill">Practice: Cause & Effect · Science Vocabulary</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-6">✅</div>
     </div>
     <div class="mission-card" data-m="7" onclick="openMission(7)">
-      <div class="mission-emoji">🚢</div>
+      <div class="mission-emoji">⚓</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 007 · Titanic</div>
-        <div class="mission-title">ไททานิค เรือแห่งความฝันที่จมลง</div>
-        <div class="mission-skill">Practice: Sequence · Cause & Effect</div>
+        <div class="mission-num">Mission 007 · How Ships Float</div>
+        <div class="mission-title">ทำไมเรือเหล็กขนาดใหญ่จึงลอยน้ำได้</div>
+        <div class="mission-skill">Practice: Main Idea · Cause & Effect</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-7">✅</div>
     </div>
     <div class="mission-card" data-m="8" onclick="openMission(8)">
-      <div class="mission-emoji">🕊️</div>
+      <div class="mission-emoji">🚢</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 008 · Pigeons</div>
-        <div class="mission-title">นกพิราบ นักบินผู้ยิ่งใหญ่</div>
-        <div class="mission-skill">Practice: Main Idea · Key Facts</div>
+        <div class="mission-num">Mission 008 · Life Aboard a Liner</div>
+        <div class="mission-title">ชีวิตบนเรือเดินสมุทร</div>
+        <div class="mission-skill">Practice: Compare & Contrast · Details</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-8">✅</div>
     </div>
     <div class="mission-card" data-m="9" onclick="openMission(9)">
-      <div class="mission-emoji">🟠</div>
+      <div class="mission-emoji">🍞</div>
       <div class="mission-info">
-        <div class="mission-num">Mission 009 · Jupiter</div>
-        <div class="mission-title">ดาวพฤหัสบดี ยักษ์ใหญ่แห่งระบบสุริยะ</div>
-        <div class="mission-skill">Practice: Main Idea · Key Facts</div>
+        <div class="mission-num">Mission 009 · Why Bread Rises</div>
+        <div class="mission-title">ทำไมขนมปังจึงฟูขึ้นเมื่ออบ</div>
+        <div class="mission-skill">Practice: Cause & Effect · Science Vocabulary</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-9">✅</div>
@@ -1738,34 +1774,54 @@
       <div class="mission-done" id="done-decoder">✅</div>
     </div>
     <div class="mission-card" data-m="ps1" onclick="openMission('ps1')">
-      <div class="mission-emoji">🐝</div>
+      <div class="mission-emoji">⭐</div>
       <div class="mission-info">
         <div class="mission-num">Secret Recipe · 5-Line Card</div>
-        <div class="mission-title">ผึ้งกับดอกไม้</div>
+        <div class="mission-title">ดวงดาวและอวกาศ</div>
         <div class="mission-skill">Taste Test: Who · What · Where · When · Why · How</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-ps1">✅</div>
     </div>
     <div class="mission-card" data-m="ps2" onclick="openMission('ps2')">
-      <div class="mission-emoji">🌦️</div>
+      <div class="mission-emoji">🧪</div>
       <div class="mission-info">
-        <div class="mission-num">Secret Recipe · 10-Line Card</div>
-        <div class="mission-title">ภัยแล้งในประเทศไทย</div>
+        <div class="mission-num">Secret Recipe · 8-Line Card</div>
+        <div class="mission-title">การเปลี่ยนแปลงทางเคมี</div>
         <div class="mission-skill">Taste Test: Who · What · Where · When · Why · How</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-ps2">✅</div>
     </div>
     <div class="mission-card" data-m="ps3" onclick="openMission('ps3')">
-      <div class="mission-emoji">♻️</div>
+      <div class="mission-emoji">🚗</div>
       <div class="mission-info">
-        <div class="mission-num">Secret Recipe · 15-Line Card</div>
-        <div class="mission-title">ปัญหาขยะและการรีไซเคิล</div>
+        <div class="mission-num">Secret Recipe · 10-Line Card</div>
+        <div class="mission-title">รถยนต์ทำงานอย่างไร</div>
         <div class="mission-skill">Taste Test: Who · What · Where · When · Why · How</div>
       </div>
       <div class="mission-xp">+150 XP</div>
       <div class="mission-done" id="done-ps3">✅</div>
+    </div>
+    <div class="mission-card" data-m="ps4" onclick="openMission('ps4')">
+      <div class="mission-emoji">🚢</div>
+      <div class="mission-info">
+        <div class="mission-num">Secret Recipe · 12-Line Card</div>
+        <div class="mission-title">เรือเดินสมุทรในตำนาน</div>
+        <div class="mission-skill">Taste Test: Who · What · Where · When · Why · How</div>
+      </div>
+      <div class="mission-xp">+180 XP</div>
+      <div class="mission-done" id="done-ps4">✅</div>
+    </div>
+    <div class="mission-card" data-m="ps5" onclick="openMission('ps5')">
+      <div class="mission-emoji">🍳</div>
+      <div class="mission-info">
+        <div class="mission-num">Secret Recipe · 15-Line Card</div>
+        <div class="mission-title">การทำอาหารคือการทดลองเคมี</div>
+        <div class="mission-skill">Taste Test: Who · What · Where · When · Why · How</div>
+      </div>
+      <div class="mission-xp">+180 XP</div>
+      <div class="mission-done" id="done-ps5">✅</div>
     </div>
     <div class="mission-card" data-m="visual" onclick="openVisual()">
       <div class="mission-emoji">🍱</div>
@@ -2091,643 +2147,750 @@
 const MISSIONS = {
   1: {
     title: 'Mission 001',
-    sub: 'นกเงือก ผู้ปลูกป่า',
-    emoji: '🐦',
+    sub: 'ดวงจันทร์ บริวารของโลก',
+    emoji: '🌙',
     color: 1,
-    badge: '🐦 Bird Detective',
+    badge: '🌙 Moon Watcher',
     xp: 150,
     article: {
-      title: '🐦 นกเงือก ผู้ปลูกป่าแห่งธรรมชาติ',
+      title: '🌙 ดวงจันทร์ บริวารของโลก',
       sentences: [
-        'นกเงือกเป็นนกขนาดใหญ่ที่มีจะงอยปากโค้งยาว',
-        'นกชนิดนี้พบได้ในป่าดิบชื้นของประเทศไทยและเอเชียตะวันออกเฉียงใต้',
-        'อาหารหลักของนกเงือกคือผลไม้สุก โดยเฉพาะผลของต้นไทรและต้นมะเดื่อ',
-        'เมื่อนกเงือกบินจากต้นไม้ต้นหนึ่งไปยังอีกต้น เมล็ดผลไม้จะตกลงสู่พื้น',
-        'เมล็ดเหล่านั้นจะงอกเป็นต้นไม้ใหม่ ทำให้ป่าเติบโตและขยายพื้นที่',
-        'นักวิทยาศาสตร์จึงเรียกนกเงือกว่า "วิศวกรป่า" หรือ "ผู้ปลูกป่า"',
-        'ปัจจุบัน นกเงือกหลายชนิดใกล้สูญพันธุ์เพราะการทำลายป่าและการล่า'
+        'ดวงจันทร์คือบริวารตามธรรมชาติเพียงดวงเดียวของโลก',
+        'ดวงจันทร์ไม่มีแสงในตัวเอง แต่สะท้อนแสงจากดวงอาทิตย์มายังโลก',
+        'เมื่อดวงจันทร์โคจรรอบโลก มุมของแสงที่สะท้อนจะเปลี่ยนไปเรื่อยๆ',
+        'การเปลี่ยนแปลงนี้ทำให้เราเห็นดวงจันทร์มีรูปร่างต่างกันในแต่ละคืน เรียกว่า "ข้างขึ้นข้างแรม"',
+        'ดวงจันทร์ใช้เวลาโคจรรอบโลกประมาณ 27 วัน จึงครบหนึ่งรอบ',
+        'แรงโน้มถ่วงของดวงจันทร์ยังดึงดูดน้ำทะเลบนโลก ทำให้เกิดปรากฏการณ์น้ำขึ้นน้ำลง',
+        'ดังนั้น ดวงจันทร์จึงมีอิทธิพลต่อโลกทั้งเรื่องแสงสว่างยามค่ำคืนและระดับน้ำทะเล'
       ]
     },
     vocab: [
-      { thai: 'จะงอยปาก', eng: 'beak / bill' },
-      { thai: 'ป่าดิบชื้น', eng: 'rainforest' },
-      { thai: 'ผลไม้สุก', eng: 'ripe fruit' },
-      { thai: 'เมล็ด', eng: 'seed' },
-      { thai: 'งอก', eng: 'to sprout / grow' },
-      { thai: 'ใกล้สูญพันธุ์', eng: 'endangered' },
-      { thai: 'การล่า', eng: 'hunting' },
-      { thai: 'วิศวกร', eng: 'engineer' },
+      { thai: 'บริวาร', eng: 'satellite' },
+      { thai: 'สะท้อนแสง', eng: 'to reflect light' },
+      { thai: 'โคจร', eng: 'to orbit' },
+      { thai: 'ข้างขึ้นข้างแรม', eng: 'moon phases' },
+      { thai: 'แรงโน้มถ่วง', eng: 'gravity' },
+      { thai: 'น้ำขึ้นน้ำลง', eng: 'tide' },
+      { thai: 'อิทธิพล', eng: 'influence' },
+      { thai: 'รูปร่าง', eng: 'shape' },
     ],
     highlight: [
-      { color: '#10b981', dot: '#10b981', label: '🟢 Circle the Animal', example: 'นกเงือก' },
-      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle the Food', example: 'ผลไม้สุก' },
-      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle the Place', example: 'ป่าดิบชื้น' },
-      { color: '#ef4444', dot: '#ef4444', label: '❤️ Circle the Reason/Effect', example: 'ผู้ปลูกป่า' },
+      { color: '#10b981', dot: '#10b981', label: '🟢 Circle the Object', example: 'ดวงจันทร์' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'จึง, ดังนั้น' },
+      { color: '#ef4444', dot: '#ef4444', label: '❤️ Circle the Effect', example: 'น้ำขึ้นน้ำลง' },
     ],
     questions: [
-      { stars: '⭐', text: 'What kind of animal is the hornbill?', hint: 'Look at the first sentence', boss: false },
-      { stars: '⭐⭐', text: 'What does the hornbill eat?', hint: 'Find the word "อาหาร" (food)', boss: false },
-      { stars: '⭐⭐⭐', text: 'Where does the hornbill live?', hint: 'Find the place name', boss: false },
-      { stars: '⭐⭐⭐⭐', text: 'Why is the hornbill called "ผู้ปลูกป่า" (forest planter)?', hint: 'Find the words "เมล็ด" (seed) and "งอก" (sprout)', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'If hornbills disappeared, how would the forest change? (any reasonable answer works)', hint: 'Connect: bird → seed → tree', boss: true },
+      { stars: '⭐', text: 'What is the Moon, according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ["Earth's only natural satellite", 'A small planet', 'A type of star', 'A cloud of gas'], correct: 0 },
+      { stars: '⭐⭐', text: 'Why can we see the Moon at night if it has no light of its own?', hint: 'Find the word "สะท้อนแสง" (reflect light)', boss: false, options: ['It reflects light from the Sun', 'It burns like a star', 'It glows from heat', "It makes its own light"], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'How long does the Moon take to orbit the Earth once?', hint: 'Find the number in sentence 5', boss: false, options: ['1 day', 'About 27 days', '365 days', 'About 100 days'], correct: 1 },
+      { stars: '⭐⭐⭐⭐', text: 'What causes the Moon to look like a different shape each night?', hint: 'Find "มุมของแสงที่สะท้อน" in sentence 3', boss: false, options: ['The changing angle of reflected light as it orbits', 'The Moon changing size', 'Clouds covering the Moon', 'The Moon spinning faster'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does the Moon affect the ocean, and why?', hint: 'Connect: gravity → sea water → tide', boss: true },
     ],
     connections: [
-      { emoji: '🐦', label: 'Hornbill' },
-      { emoji: '🌳', label: 'Forest' },
-      { emoji: '🍎', label: 'Fruit' },
-      { emoji: '🌱', label: 'New tree' },
-      { emoji: '⚠️', label: 'Endangered' },
-      { emoji: '🌧️', label: 'Rainforest' },
+      { emoji: '🌙', label: 'Moon' },
+      { emoji: '☀️', label: 'Sunlight' },
+      { emoji: '🌍', label: 'Earth' },
+      { emoji: '🌊', label: 'Tide' },
+      { emoji: '🔄', label: 'Orbit' },
+      { emoji: '🌗', label: 'Moon phase' },
     ],
-    pairs: [[0,2],[2,3],[0,1],[4,0]],
-    summaryExample: 'นกเงือกช่วยกระจายเมล็ดพืช ทำให้ป่าเติบโตและแผ่ขยาย'
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'ดวงจันทร์สะท้อนแสงจากดวงอาทิตย์และโคจรรอบโลก ทำให้เกิดข้างขึ้นข้างแรมและน้ำขึ้นน้ำลง'
   },
   2: {
     title: 'Mission 002',
-    sub: 'ภูเขาไฟตื่นแล้ว!',
-    emoji: '🌋',
+    sub: 'สถานะของสสาร ของแข็ง ของเหลว แก๊ส',
+    emoji: '🧊',
     color: 2,
-    badge: '🌋 Volcano Scientist',
+    badge: '🧊 Matter Scientist',
     xp: 150,
     article: {
-      title: '🌋 ภูเขาไฟตื่นแล้ว!',
+      title: '🧊 สถานะของสสาร ของแข็ง ของเหลว แก๊ส',
       sentences: [
-        'ภูเขาไฟเกิดขึ้นเมื่อหินหนืดร้อนจากใต้ผิวโลกดันตัวขึ้นมาสู่พื้นผิว',
-        'หินหนืดนี้เรียกว่า "แมกมา" และเมื่อออกมาข้างนอกแล้วจะเรียกว่า "ลาวา"',
-        'ลาวาสามารถไหลได้เร็วถึง 60 กิโลเมตรต่อชั่วโมง และมีอุณหภูมิสูงกว่า 1,000 องศาเซลเซียส',
-        'เมื่อภูเขาไฟระเบิด ฝุ่นและก๊าซจะพวยพุ่งขึ้นสู่ชั้นบรรยากาศ',
-        'ฝุ่นเหล่านี้สามารถปิดกั้นแสงอาทิตย์ ทำให้อุณหภูมิโลกลดลงชั่วคราว',
-        'ดินรอบภูเขาไฟมักอุดมสมบูรณ์มาก เพราะแร่ธาตุจากลาวาทำให้พืชเติบโตดี',
-        'นักวิทยาศาสตร์ใช้อุปกรณ์พิเศษเพื่อติดตามการสั่นสะเทือนของภูเขาไฟ'
+        'สสารบนโลกมีอยู่ 3 สถานะหลัก คือ ของแข็ง ของเหลว และแก๊ส',
+        'อนุภาคในของแข็งเรียงตัวชิดกันและไม่ค่อยเคลื่อนที่ จึงมีรูปร่างคงที่',
+        'เมื่อของแข็งได้รับความร้อน อนุภาคจะเคลื่อนที่เร็วขึ้นและเริ่มแยกออกจากกัน',
+        'น้ำแข็งจึงละลายกลายเป็นน้ำ ซึ่งเป็นของเหลวที่เปลี่ยนรูปร่างตามภาชนะ',
+        'หากให้ความร้อนกับน้ำต่อไปจนถึง 100 องศาเซลเซียส น้ำจะเดือดและกลายเป็นไอน้ำ',
+        'ไอน้ำเป็นแก๊สที่อนุภาคเคลื่อนที่อย่างอิสระและฟุ้งกระจายเต็มพื้นที่',
+        'ดังนั้น การเปลี่ยนสถานะของสสารจึงขึ้นอยู่กับพลังงานความร้อนที่ได้รับหรือสูญเสียไป'
       ]
     },
     vocab: [
-      { thai: 'หินหนืด / แมกมา', eng: 'magma (molten rock)' },
-      { thai: 'ลาวา', eng: 'lava' },
-      { thai: 'ระเบิด', eng: 'to erupt' },
-      { thai: 'บรรยากาศ', eng: 'atmosphere' },
-      { thai: 'อุณหภูมิ', eng: 'temperature' },
-      { thai: 'อุดมสมบูรณ์', eng: 'fertile / rich' },
-      { thai: 'แร่ธาตุ', eng: 'minerals' },
-      { thai: 'การสั่นสะเทือน', eng: 'vibration / tremor' },
+      { thai: 'สสาร', eng: 'matter' },
+      { thai: 'อนุภาค', eng: 'particle' },
+      { thai: 'ของแข็ง', eng: 'solid' },
+      { thai: 'ของเหลว', eng: 'liquid' },
+      { thai: 'ไอน้ำ / แก๊ส', eng: 'gas / steam' },
+      { thai: 'ละลาย', eng: 'to melt' },
+      { thai: 'เดือด', eng: 'to boil' },
+      { thai: 'พลังงานความร้อน', eng: 'heat energy' },
     ],
     highlight: [
-      { color: '#ef4444', dot: '#ef4444', label: '🔴 Circle the Cause', example: 'หินหนืดดันตัวขึ้น' },
-      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle the Effect', example: 'ลาวาไหล, ฝุ่นขึ้น' },
-      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle the Numbers', example: '60 กม./ชม., 1,000°C' },
-      { color: '#10b981', dot: '#10b981', label: '🟢 Circle Science Words', example: 'แมกมา, ลาวา' },
+      { color: '#10b981', dot: '#10b981', label: '🟢 Circle the 3 States', example: 'ของแข็ง, ของเหลว, แก๊ส' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'จึง, ดังนั้น' },
+      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle Numbers', example: '100 องศาเซลเซียส' },
     ],
     questions: [
-      { stars: '⭐', text: 'What is magma?', hint: 'Look at sentences 1-2', boss: false },
-      { stars: '⭐⭐', text: 'How hot is lava? How fast does it flow?', hint: 'Find the numbers', boss: false },
-      { stars: '⭐⭐⭐', text: 'What does volcanic dust cause?', hint: 'Find the words "ปิดกั้น" (block) and "อุณหภูมิ" (temperature)', boss: false },
-      { stars: '⭐⭐⭐⭐', text: 'Why is the soil around volcanoes so fertile?', hint: 'Look at the last sentence', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Are volcanoes dangerous or useful? — give reasons for both sides', hint: 'Think: lava = danger, soil = benefit', boss: true },
+      { stars: '⭐', text: 'What are the 3 states of matter mentioned in sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['Solid, liquid, gas', 'Hot, warm, cold', 'Ice, water, steam only', 'Rock, metal, wood'], correct: 0 },
+      { stars: '⭐⭐', text: 'Why does a solid have a fixed shape?', hint: 'Find "อนุภาคเรียงตัวชิดกัน" in sentence 2', boss: false, options: ['Its particles are packed close and barely move', 'It has no particles', 'It is always cold', 'Its particles move very fast'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What happens to ice when it receives heat?', hint: 'Find "ละลาย" in sentence 4', boss: false, options: ['It melts into water', 'It gets harder', 'It turns into a solid', 'It disappears completely'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'At what temperature does water boil, according to sentence 5?', hint: 'Find the number', boss: false, options: ['0°C', '50°C', '100°C', '200°C'], correct: 2 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why can steam spread out to fill a whole room, but ice cannot?', hint: 'Compare how the particles move in each state', boss: true },
     ],
     connections: [
-      { emoji: '🌋', label: 'Volcano' },
-      { emoji: '🔥', label: 'Lava' },
-      { emoji: '💨', label: 'Dust cloud' },
-      { emoji: '☀️', label: 'Sunlight blocked' },
-      { emoji: '🌡️', label: 'Temperature drops' },
-      { emoji: '🌾', label: 'Fertile soil' },
+      { emoji: '🧊', label: 'Ice (solid)' },
+      { emoji: '💧', label: 'Water (liquid)' },
+      { emoji: '💨', label: 'Steam (gas)' },
+      { emoji: '🔥', label: 'Heat' },
+      { emoji: '📦', label: 'Fixed shape' },
+      { emoji: '🌫️', label: 'Spreads freely' },
     ],
-    pairs: [[0,1],[0,2],[2,3],[3,4],[0,5]],
-    summaryExample: 'ภูเขาไฟระเบิดทำให้เกิดลาวาและฝุ่น แต่ดินรอบๆ ก็อุดมสมบูรณ์มาก'
+    pairs: [[0,4],[2,5],[1,3]],
+    summaryExample: 'เมื่อของแข็งได้รับความร้อน อนุภาคจะเคลื่อนที่เร็วขึ้นจนกลายเป็นของเหลว และเป็นแก๊สในที่สุด'
   },
   3: {
     title: 'Mission 003',
-    sub: 'วงจรชีวิตผีเสื้อ',
-    emoji: '🦋',
+    sub: 'เทคโนโลยีความปลอดภัยในรถยนต์',
+    emoji: '🚗',
     color: 3,
-    badge: '🦋 Metamorphosis Master',
+    badge: '🚗 Safety Engineer',
     xp: 150,
     article: {
-      title: '🦋 วงจรชีวิตผีเสื้อ สี่ขั้นตอนมหัศจรรย์',
+      title: '🚗 เทคโนโลยีความปลอดภัยในรถยนต์',
       sentences: [
-        'วงจรชีวิตของผีเสื้อมีสี่ขั้นตอน ได้แก่ ไข่ หนอน ดักแด้ และผีเสื้อ',
-        'ขั้นตอนแรก แม่ผีเสื้อวางไข่บนใบไม้ที่เหมาะสมกับการกินของลูก',
-        'ขั้นตอนที่สอง ไข่ฟักออกเป็นหนอนผีเสื้อ ซึ่งกินใบไม้อย่างต่อเนื่องเพื่อสะสมพลังงาน',
-        'ขั้นตอนที่สาม หนอนจะห่อหุ้มตัวเองด้วยใยเป็นดักแด้ และเปลี่ยนแปลงภายในอย่างสมบูรณ์',
-        'ในขั้นตอนนี้ เซลล์ทั้งหมดจะถูกสลายและสร้างใหม่เป็นตัวผีเสื้อ',
-        'ขั้นตอนสุดท้าย ผีเสื้อโตเต็มวัยออกมา กินน้ำหวานดอกไม้ และช่วยผสมเกสร',
-        'กระบวนการเปลี่ยนแปลงรูปร่างนี้เรียกว่า "การแปรสภาพ" หรือ Metamorphosis'
+        'รถยนต์สมัยใหม่มีอุปกรณ์หลายอย่างที่ช่วยปกป้องผู้โดยสารเมื่อเกิดอุบัติเหตุ',
+        'เข็มขัดนิรภัยช่วยยึดร่างกายให้ติดกับเบาะ ป้องกันไม่ให้ผู้โดยสารกระเด็นออกจากที่นั่ง',
+        'เมื่อรถชนอย่างรุนแรง เซ็นเซอร์ในรถจะสั่งให้ถุงลมนิรภัยพองตัวขึ้นภายในเสี้ยววินาที',
+        'ถุงลมนิรภัยจึงช่วยลดแรงกระแทกที่ศีรษะและหน้าอกของผู้โดยสาร',
+        'นอกจากนี้ ตัวถังรถยังถูกออกแบบให้มี "โซนยุบตัว" บริเวณด้านหน้าและด้านหลัง',
+        'โซนยุบตัวจะยุบตัวลงเมื่อชน เพื่อดูดซับแรงกระแทกก่อนที่จะถึงผู้โดยสาร',
+        'ดังนั้น เข็มขัดนิรภัย ถุงลมนิรภัย และโซนยุบตัวจึงทำงานร่วมกันเพื่อความปลอดภัยสูงสุด'
       ]
     },
     vocab: [
-      { thai: 'วงจรชีวิต', eng: 'life cycle' },
-      { thai: 'ดักแด้', eng: 'pupa / chrysalis' },
-      { thai: 'หนอนผีเสื้อ', eng: 'caterpillar' },
-      { thai: 'ฟัก', eng: 'to hatch' },
-      { thai: 'สะสมพลังงาน', eng: 'store energy' },
-      { thai: 'การแปรสภาพ', eng: 'metamorphosis' },
-      { thai: 'ผสมเกสร', eng: 'pollination' },
-      { thai: 'ใย', eng: 'silk / thread' },
+      { thai: 'เข็มขัดนิรภัย', eng: 'seatbelt' },
+      { thai: 'ถุงลมนิรภัย', eng: 'airbag' },
+      { thai: 'เซ็นเซอร์', eng: 'sensor' },
+      { thai: 'โซนยุบตัว', eng: 'crumple zone' },
+      { thai: 'ดูดซับ', eng: 'to absorb' },
+      { thai: 'แรงกระแทก', eng: 'impact force' },
+      { thai: 'อุบัติเหตุ', eng: 'accident' },
+      { thai: 'พองตัว', eng: 'to inflate' },
     ],
     highlight: [
-      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle the Sequence (1→2→3→4)', example: 'ไข่ → หนอน → ดักแด้ → ผีเสื้อ' },
-      { color: '#10b981', dot: '#10b981', label: '🟢 Circle the Action Words', example: 'วาง, ฟัก, ห่อหุ้ม, ออกมา' },
-      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Science Words', example: 'การแปรสภาพ, ผสมเกสร' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'จึง' },
+      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle Addition words', example: 'นอกจากนี้' },
+      { color: '#10b981', dot: '#10b981', label: '🟢 Circle Safety Parts', example: 'เข็มขัดนิรภัย, ถุงลมนิรภัย, โซนยุบตัว' },
     ],
     questions: [
-      { stars: '⭐', text: 'How many stages are in a butterfly\'s life cycle?', hint: 'Look at the first sentence', boss: false },
-      { stars: '⭐⭐', text: 'Put in order: pupa / egg / butterfly / caterpillar', hint: 'Check the order in the article', boss: false },
-      { stars: '⭐⭐⭐', text: 'What does the caterpillar eat? Why?', hint: 'Find the words "กิน" (eat) and "สะสม" (store)', boss: false },
-      { stars: '⭐⭐⭐⭐', text: 'What is metamorphosis? Explain in your own words', hint: 'Look at the last sentence', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'If there were no butterflies in the world, how would flowers be affected?', hint: 'Connect: butterfly → pollination → flower', boss: true },
+      { stars: '⭐', text: 'What does a seatbelt do, according to sentence 2?', hint: 'Look at sentence 2', boss: false, options: ['Holds the body against the seat', 'Cools the engine', 'Inflates like a balloon', 'Absorbs impact at the front of the car'], correct: 0 },
+      { stars: '⭐⭐', text: 'What triggers the airbag to inflate?', hint: 'Find "เซ็นเซอร์" in sentence 3', boss: false, options: ['A sensor detecting a hard crash', 'The driver pressing a button', 'The engine overheating', 'The seatbelt clicking'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'How fast does the airbag inflate after a crash?', hint: 'Find "เสี้ยววินาที" in sentence 3', boss: false, options: ['Within a split second', 'After 10 seconds', 'After 1 minute', 'The next day'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'What is the purpose of the "crumple zone"?', hint: 'Find "ดูดซับแรงกระแทก" in sentence 6', boss: false, options: ['To absorb impact force before it reaches passengers', 'To make the car lighter', 'To improve fuel economy', 'To hold the seatbelt in place'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How do all three safety features work together to protect a passenger?', hint: 'Connect: seatbelt + airbag + crumple zone', boss: true },
     ],
     connections: [
-      { emoji: '🥚', label: 'Egg' },
-      { emoji: '🐛', label: 'Caterpillar' },
-      { emoji: '🫘', label: 'Pupa' },
-      { emoji: '🦋', label: 'Butterfly' },
-      { emoji: '🌸', label: 'Flower' },
-      { emoji: '🍃', label: 'Leaf' },
+      { emoji: '🪑', label: 'Seatbelt' },
+      { emoji: '🎈', label: 'Airbag' },
+      { emoji: '📡', label: 'Sensor' },
+      { emoji: '🧱', label: 'Crumple zone' },
+      { emoji: '💥', label: 'Impact' },
+      { emoji: '🛡️', label: 'Safety' },
     ],
-    pairs: [[0,1],[1,2],[2,3],[3,4],[1,5]],
-    summaryExample: 'ผีเสื้อผ่านสี่ขั้นตอน ตั้งแต่ไข่ถึงผีเสื้อโตเต็มวัยที่ช่วยผสมเกสร'
+    pairs: [[2,1],[3,4],[0,5]],
+    summaryExample: 'เมื่อรถชน เซ็นเซอร์จะสั่งให้ถุงลมนิรภัยพองตัว และโซนยุบตัวจะดูดซับแรงกระแทกไว้ก่อนถึงผู้โดยสาร'
   },
   4: {
     title: 'Mission 004',
-    sub: 'ดาวเสาร์ ดาวแห่งวงแหวน',
-    emoji: '🪐',
+    sub: 'ดาวหางและอุกกาบาต',
+    emoji: '☄️',
     color: 4,
-    badge: '🪐 Space Explorer',
+    badge: '☄️ Comet Chaser',
     xp: 150,
     article: {
-      title: '🪐 ดาวเสาร์ ดาวแห่งวงแหวน',
+      title: '☄️ ดาวหางและอุกกาบาต',
       sentences: [
-        'ดาวเสาร์เป็นดาวเคราะห์ดวงที่หกในระบบสุริยะ และเป็นดาวเคราะห์ที่ใหญ่เป็นอันดับสองรองจากดาวพฤหัสบดี',
-        'สิ่งที่ทำให้ดาวเสาร์โดดเด่นที่สุดคือวงแหวนขนาดยักษ์ที่ล้อมรอบดาว',
-        'วงแหวนเหล่านี้ประกอบด้วยน้ำแข็งและหินขนาดต่างๆ ตั้งแต่เม็ดทรายจนถึงก้อนหินขนาดบ้าน',
-        'ดาวเสาร์มีดวงจันทร์บริวารมากกว่า 140 ดวง มากที่สุดในระบบสุริยะ',
-        'ดวงจันทร์ที่ใหญ่ที่สุดชื่อ "ไทตัน" ซึ่งมีชั้นบรรยากาศหนาและมีทะเลสาบมีเทน',
-        'ดาวเสาร์เป็นดาวเคราะห์ก๊าซ ประกอบด้วยไฮโดรเจนและฮีเลียมเป็นหลัก',
-        'นักวิทยาศาสตร์ส่งยานแคสสินีไปโคจรรอบดาวเสาร์นานถึง 13 ปีเพื่อศึกษาข้อมูล'
+        'ดาวหางเป็นก้อนน้ำแข็งและฝุ่นที่โคจรรอบดวงอาทิตย์เป็นวงรีที่ยาวมาก',
+        'เมื่อดาวหางเข้าใกล้ดวงอาทิตย์ ความร้อนจะทำให้น้ำแข็งระเหิดกลายเป็นแก๊ส',
+        'แก๊สและฝุ่นเหล่านี้จึงถูกลมสุริยะพัดออกไปด้านหลัง กลายเป็น "หาง" อันสวยงามของดาวหาง',
+        'ส่วนอุกกาบาตคือชิ้นส่วนหินหรือโลหะจากอวกาศที่ตกลงมาสู่พื้นผิวโลก',
+        'เมื่ออุกกาบาตพุ่งเข้าสู่ชั้นบรรยากาศโลกด้วยความเร็วสูง แรงเสียดทานจะทำให้มันร้อนจัดจนลุกไหม้',
+        'เราจึงเห็นแสงสว่างวาบบนท้องฟ้ายามค่ำคืน ซึ่งเรียกกันว่า "ดาวตก"',
+        'อย่างไรก็ตาม อุกกาบาตส่วนใหญ่จะไหม้หมดก่อนถึงพื้นโลก มีเพียงบางชิ้นเท่านั้นที่ตกถึงพื้น'
       ]
     },
     vocab: [
-      { thai: 'ระบบสุริยะ', eng: 'solar system' },
-      { thai: 'วงแหวน', eng: 'rings' },
-      { thai: 'น้ำแข็ง', eng: 'ice' },
-      { thai: 'ดวงจันทร์บริวาร', eng: 'moon / satellite' },
+      { thai: 'ดาวหาง', eng: 'comet' },
+      { thai: 'อุกกาบาต', eng: 'meteor' },
+      { thai: 'ระเหิด', eng: 'to sublimate' },
+      { thai: 'ลมสุริยะ', eng: 'solar wind' },
       { thai: 'ชั้นบรรยากาศ', eng: 'atmosphere' },
-      { thai: 'ดาวเคราะห์ก๊าซ', eng: 'gas giant' },
-      { thai: 'ไฮโดรเจน / ฮีเลียม', eng: 'hydrogen / helium' },
+      { thai: 'แรงเสียดทาน', eng: 'friction' },
+      { thai: 'ดาวตก', eng: 'shooting star' },
       { thai: 'โคจร', eng: 'to orbit' },
     ],
     highlight: [
-      { color: '#f97316', dot: '#f97316', label: '🟠 Circle Key Facts', example: 'ดาวที่ 6, ใหญ่อันดับ 2' },
-      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Important Numbers', example: '140 ดวง, 13 ปี' },
-      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle Special Names', example: 'ไทตัน, แคสสินี' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'จึง' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'อย่างไรก็ตาม' },
+      { color: '#10b981', dot: '#10b981', label: '🟢 Circle the Objects', example: 'ดาวหาง, อุกกาบาต' },
     ],
     questions: [
-      { stars: '⭐', text: 'Which planet number is Saturn?', hint: 'Look at the first sentence', boss: false },
-      { stars: '⭐⭐', text: 'What are Saturn\'s rings made of?', hint: 'Find the word "ประกอบด้วย" (made of)', boss: false },
-      { stars: '⭐⭐⭐', text: 'How many moons does Saturn have? What is the biggest one called?', hint: 'Find the number and the special name', boss: false },
-      { stars: '⭐⭐⭐⭐', text: 'Why did scientists send the Cassini spacecraft?', hint: 'Look at the last sentence', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'If you were a scientist, what would you most want to study about Saturn? Why?', hint: 'No wrong answer — use your own thinking!', boss: true },
+      { stars: '⭐', text: 'What is a comet made of, according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['Ice and dust', 'Solid rock only', 'Liquid metal', 'Gas and fire'], correct: 0 },
+      { stars: '⭐⭐', text: 'Why does a comet grow a "tail" when it gets close to the Sun?', hint: 'Find "ระเหิด" in sentence 2', boss: false, options: ['Heat turns its ice into gas, which trails behind it', 'It sheds its outer rock layer', 'The Sun pulls dust off it', 'It spins and flings off pieces'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What is a meteor, according to sentence 4?', hint: 'Look at sentence 4', boss: false, options: ['A piece of rock or metal falling from space', 'A small comet', 'A piece of the Moon', 'A type of star'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'Why does a meteor burn up and glow in the sky?', hint: 'Find "แรงเสียดทาน" in sentence 5', boss: false, options: ['Friction with the atmosphere heats it up', 'It explodes on its own', 'Sunlight sets it on fire', 'It collides with the Moon'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why do most meteors never actually reach the ground?', hint: 'Look at the last sentence', boss: true },
     ],
     connections: [
-      { emoji: '🪐', label: 'Saturn' },
-      { emoji: '💍', label: 'Rings' },
-      { emoji: '🧊', label: 'Ice & rocks' },
-      { emoji: '🌙', label: 'Titan moon' },
-      { emoji: '🚀', label: 'Cassini probe' },
-      { emoji: '🌫️', label: 'Atmosphere' },
+      { emoji: '☄️', label: 'Comet' },
+      { emoji: '🧊', label: 'Ice & dust' },
+      { emoji: '💫', label: 'Tail' },
+      { emoji: '🪨', label: 'Meteor' },
+      { emoji: '🔥', label: 'Friction' },
+      { emoji: '✨', label: 'Shooting star' },
     ],
-    pairs: [[0,1],[1,2],[0,3],[3,5],[0,4]],
-    summaryExample: 'ดาวเสาร์มีวงแหวนขนาดยักษ์และดวงจันทร์มากกว่า 140 ดวง ทำให้โดดเด่นที่สุดในระบบสุริยะ'
+    pairs: [[0,1],[3,4],[2,5]],
+    summaryExample: 'เมื่อดาวหางเข้าใกล้ดวงอาทิตย์ น้ำแข็งจะระเหิดกลายเป็นหาง ส่วนอุกกาบาตจะลุกไหม้เป็นดาวตกเมื่อพุ่งเข้าสู่ชั้นบรรยากาศ'
   },
   5: {
     title: 'Mission 005',
-    sub: 'ช้างเอเชีย สัตว์ทรงปัญญา',
-    emoji: '🐘',
+    sub: 'ยางรถยนต์และแรงเสียดทาน',
+    emoji: '🛞',
     color: 5,
-    badge: '🐘 Wildlife Expert',
+    badge: '🛞 Grip Master',
     xp: 150,
     article: {
-      title: '🐘 ช้างเอเชีย สัตว์ทรงปัญญาแห่งป่า',
+      title: '🛞 ยางรถยนต์และแรงเสียดทาน',
       sentences: [
-        'ช้างเอเชียเป็นสัตว์บกที่ใหญ่ที่สุดในเอเชีย สามารถมีน้ำหนักได้ถึง 5,000 กิโลกรัม',
-        'ช้างมีสมองขนาดใหญ่และมีความจำดีมาก สามารถจดจำเส้นทางและสมาชิกฝูงได้นานหลายสิบปี',
-        'ช้างอาศัยอยู่เป็นฝูง โดยมีช้างพังแก่ที่มีประสบการณ์เป็นผู้นำ',
-        'งวงของช้างทำหน้าที่ได้หลายอย่าง ทั้งหายใจ ดมกลิ่น จับอาหาร และพ่นน้ำ',
-        'ช้างกินพืชเป็นอาหาร โดยกินได้มากถึง 150 กิโลกรัมต่อวัน',
-        'ช้างช่วยรักษาระบบนิเวศโดยการทำลายต้นไม้เล็กเพื่อให้แสงแดดส่องถึงพืชด้านล่าง',
-        'ปัจจุบันช้างเอเชียถูกคุกคามจากการบุกรุกถิ่นอาศัยและการลักลอบล่างา'
+        'ยางรถยนต์เป็นส่วนเดียวของรถที่สัมผัสกับพื้นถนนโดยตรง',
+        'ผิวยางมีดอกยางเป็นร่องและลวดลายเพื่อเพิ่มแรงเสียดทานกับพื้นถนน',
+        'แรงเสียดทานคือแรงที่ต้านการเคลื่อนที่ระหว่างพื้นผิวสองอย่างที่สัมผัสกัน',
+        'เมื่อถนนเปียกฝน ร่องดอกยางจะช่วยระบายน้ำออกจากใต้ยาง',
+        'หากไม่มีร่องดอกยาง น้ำจะแทรกอยู่ระหว่างยางกับถนน ทำให้รถลื่นไถลได้ง่าย',
+        'ดังนั้น ยางที่สึกจนดอกยางเรียบจึงเป็นอันตราย เพราะแรงเสียดทานลดลงมาก',
+        'นอกจากนี้ แรงดันลมยางที่พอดียังช่วยให้ยางสัมผัสถนนได้เต็มพื้นที่และควบคุมรถได้ดีขึ้น'
       ]
     },
     vocab: [
-      { thai: 'สัตว์บก', eng: 'land animal' },
-      { thai: 'ความจำ', eng: 'memory' },
-      { thai: 'ฝูง', eng: 'herd' },
-      { thai: 'ช้างพัง', eng: 'female elephant / matriarch' },
-      { thai: 'งวง', eng: 'trunk' },
-      { thai: 'ระบบนิเวศ', eng: 'ecosystem' },
-      { thai: 'การบุกรุก', eng: 'encroachment / invasion' },
-      { thai: 'ลักลอบ', eng: 'illegally / poaching' },
+      { thai: 'ยางรถยนต์', eng: 'car tire' },
+      { thai: 'ดอกยาง', eng: 'tire tread' },
+      { thai: 'แรงเสียดทาน', eng: 'friction' },
+      { thai: 'ระบายน้ำ', eng: 'to drain water' },
+      { thai: 'ลื่นไถล', eng: 'to skid' },
+      { thai: 'สึก', eng: 'worn out' },
+      { thai: 'แรงดันลม', eng: 'air pressure' },
+      { thai: 'ควบคุม', eng: 'to control' },
     ],
     highlight: [
-      { color: '#10b981', dot: '#10b981', label: '🟢 Circle the Facts', example: '5,000 กก., 150 กก./วัน' },
-      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle the Behaviour', example: 'จดจำ, อยู่เป็นฝูง' },
-      { color: '#ef4444', dot: '#ef4444', label: '🔴 Circle the Threats', example: 'บุกรุก, ล่างา' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'จึง' },
+      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle Addition words', example: 'นอกจากนี้' },
+      { color: '#10b981', dot: '#10b981', label: '🟢 Circle Key Words', example: 'แรงเสียดทาน, ดอกยาง' },
     ],
     questions: [
-      { stars: '⭐', text: 'How much does an Asian elephant weigh?', hint: 'Find the number', boss: false },
-      { stars: '⭐⭐', text: 'What jobs does the trunk do? (at least 3)', hint: 'Look at sentence 4', boss: false },
-      { stars: '⭐⭐⭐', text: 'Who leads the elephant herd? Why?', hint: 'Find the words "ผู้นำ" (leader) and "ประสบการณ์" (experience)', boss: false },
-      { stars: '⭐⭐⭐⭐', text: 'How do elephants help protect the forest?', hint: 'Look at sentence 6', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: '"Elephants are the smartest animals in the world" — is this a fact or an opinion? Explain.', hint: 'Fact = can be proven | Opinion = a belief', boss: true },
+      { stars: '⭐', text: 'What is the only part of a car that touches the road directly?', hint: 'Look at the first sentence', boss: false, options: ['The tires', 'The engine', 'The seatbelt', 'The windshield'], correct: 0 },
+      { stars: '⭐⭐', text: 'What is friction, according to sentence 3?', hint: 'Look at sentence 3', boss: false, options: ['A force that resists motion between two touching surfaces', 'A force that pulls objects down', 'The heat made by an engine', 'The air pushing against a car'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What do the tread grooves do when the road is wet?', hint: 'Find "ระบายน้ำ" in sentence 4', boss: false, options: ['Drain water out from under the tire', 'Make the tire heavier', 'Cool down the engine', 'Increase the air pressure'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'Why is a worn-out tire with a smooth tread dangerous?', hint: 'Find "แรงเสียดทานลดลง" in sentence 6', boss: false, options: ['It has much less friction and can skid', 'It makes the car too fast', 'It uses more fuel', 'It changes the car color'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does correct tire air pressure help a driver control the car?', hint: 'Look at the last sentence', boss: true },
     ],
     connections: [
-      { emoji: '🐘', label: 'Elephant' },
-      { emoji: '🌿', label: 'Plants' },
-      { emoji: '🧠', label: 'Memory' },
-      { emoji: '👥', label: 'Herd' },
-      { emoji: '🌳', label: 'Ecosystem' },
-      { emoji: '⚠️', label: 'Threatened' },
+      { emoji: '🛞', label: 'Tire' },
+      { emoji: '🌊', label: 'Water' },
+      { emoji: '🕳️', label: 'Tread groove' },
+      { emoji: '🚗', label: 'Skid' },
+      { emoji: '💨', label: 'Air pressure' },
+      { emoji: '🛑', label: 'Control' },
     ],
-    pairs: [[0,2],[0,3],[0,1],[1,4],[0,5]],
-    summaryExample: 'ช้างเอเชียเป็นสัตว์ฉลาดที่ช่วยรักษาระบบนิเวศ แต่กำลังถูกคุกคามจากมนุษย์'
+    pairs: [[0,2],[1,3],[4,5]],
+    summaryExample: 'ดอกยางช่วยระบายน้ำและเพิ่มแรงเสียดทาน หากยางสึกหรือแรงดันลมไม่พอดี รถจะควบคุมยากขึ้น'
   },
   6: {
     title: 'Mission 006',
-    sub: 'ปฏิกิริยาเคมี เมื่อสารสองชนิดพบกัน',
-    emoji: '🧪',
+    sub: 'เคมีของพลุไฟ สีสันจากปฏิกิริยา',
+    emoji: '🎆',
     color: 6,
-    badge: '🧪 Chemistry Wizard',
+    badge: '🎆 Firework Chemist',
     xp: 150,
     article: {
-      title: '🧪 ปฏิกิริยาเคมี เมื่อสารสองชนิดพบกัน',
+      title: '🎆 เคมีของพลุไฟ สีสันจากปฏิกิริยา',
       sentences: [
-        'ปฏิกิริยาเคมีเกิดขึ้นเมื่อสารตั้งแต่สองชนิดขึ้นไปทำปฏิกิริยากันและเปลี่ยนเป็นสารใหม่',
-        'นักวิทยาศาสตร์สังเกตปฏิกิริยาเคมีได้จากสัญญาณ เช่น การเกิดฟองก๊าซ การเปลี่ยนสี หรือความร้อนที่เพิ่มขึ้น',
-        'ตัวอย่างง่ายๆ คือเมื่อผสมเบกกิ้งโซดากับน้ำส้มสายชู จะเกิดฟองฟู่ขึ้นทันที',
-        'ฟองฟู่นั้นคือก๊าซคาร์บอนไดออกไซด์ที่เกิดจากปฏิกิริยาระหว่างกรดกับเบส',
-        'นักวิทยาศาสตร์ใช้หลักการเดียวกันนี้อธิบายว่าทำไมภูเขาไฟจำลองจึงพ่นฟองออกมาได้',
-        'ปฏิกิริยาเคมีบางชนิดดูดความร้อน ทำให้ภาชนะเย็นลง ในขณะที่บางชนิดคายความร้อนออกมา',
-        'การทดลองเคมีอย่างปลอดภัยต้องมีผู้ใหญ่ดูแล และสวมแว่นตานิรภัยเสมอ'
+        'พลุไฟสร้างแสงสีสวยงามบนท้องฟ้าด้วยหลักการทางเคมี',
+        'ภายในลูกพลุมีดินปืนและสารประกอบโลหะชนิดต่างๆ ผสมกันอยู่',
+        'เมื่อลูกพลุถูกจุดไฟ ดินปืนจะระเบิดและปล่อยพลังงานความร้อนออกมาอย่างรวดเร็ว',
+        'ความร้อนนี้จึงทำให้อะตอมของโลหะได้รับพลังงานและปล่อยแสงสีต่างๆ ออกมา',
+        'ตัวอย่างเช่น สารประกอบสตรอนเซียมให้สีแดง ทองแดงให้สีฟ้า และโซเดียมให้สีเหลือง',
+        'นักเคมีจึงสามารถผสมสารประกอบโลหะต่างชนิด เพื่อสร้างพลุที่มีหลายสีในลูกเดียว',
+        'ดังนั้น สีสันของพลุไฟจึงเป็นผลมาจากปฏิกิริยาเคมีระหว่างความร้อนและธาตุโลหะ'
       ]
     },
     vocab: [
-      { thai: 'ปฏิกิริยาเคมี', eng: 'chemical reaction' },
-      { thai: 'สาร', eng: 'substance' },
-      { thai: 'ฟองก๊าซ', eng: 'gas bubbles' },
-      { thai: 'กรด', eng: 'acid' },
-      { thai: 'เบส', eng: 'base' },
-      { thai: 'ดูดความร้อน', eng: 'to absorb heat (endothermic)' },
-      { thai: 'คายความร้อน', eng: 'to release heat (exothermic)' },
-      { thai: 'แว่นตานิรภัย', eng: 'safety goggles' },
+      { thai: 'พลุไฟ', eng: 'firework' },
+      { thai: 'สารประกอบโลหะ', eng: 'metal compound' },
+      { thai: 'ดินปืน', eng: 'gunpowder' },
+      { thai: 'อะตอม', eng: 'atom' },
+      { thai: 'พลังงาน', eng: 'energy' },
+      { thai: 'สตรอนเซียม', eng: 'strontium' },
+      { thai: 'ธาตุ', eng: 'element' },
     ],
     highlight: [
-      { color: '#10b981', dot: '#10b981', label: '🟢 Circle Reaction Signs', example: 'ฟองก๊าซ, เปลี่ยนสี' },
-      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Chemical Words', example: 'กรด, เบส, คาร์บอนไดออกไซด์' },
-      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Safety Words', example: 'ผู้ใหญ่ดูแล, แว่นตานิรภัย' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'จึง, ดังนั้น' },
+      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle Example words', example: 'ตัวอย่างเช่น' },
+      { color: '#ef4444', dot: '#ef4444', label: '❤️ Circle Metal Names', example: 'สตรอนเซียม, ทองแดง, โซเดียม' },
     ],
     questions: [
-      { stars: '⭐', text: 'What is a chemical reaction?', hint: 'Look at the first sentence', boss: false },
-      { stars: '⭐⭐', text: 'What are 3 signs that a chemical reaction is happening?', hint: 'Find the word "สัญญาณ" (signs)', boss: false },
-      { stars: '⭐⭐⭐', text: 'What gas is produced when baking soda and vinegar mix?', hint: 'Find "คาร์บอนไดออกไซด์"', boss: false },
-      { stars: '⭐⭐⭐⭐', text: 'What is the difference between a reaction that absorbs heat and one that releases heat?', hint: 'Find "ดูดความร้อน" and "คายความร้อน"', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why is it important to wear safety goggles and have an adult supervise experiments?', hint: 'Think about what could go wrong', boss: true },
+      { stars: '⭐', text: 'What creates the beautiful colors in fireworks, according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['A chemical principle', 'Colored glass inside', 'Sunlight reflecting off smoke', 'Painted paper wrapping'], correct: 0 },
+      { stars: '⭐⭐', text: 'What happens when the firework is lit, according to sentence 3?', hint: 'Look at sentence 3', boss: false, options: ['The gunpowder explodes and releases heat energy', 'The metal compound melts slowly', 'The firework cools down', 'Nothing happens for a few minutes'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What color does strontium compound produce?', hint: 'Find "สตรอนเซียม" in sentence 5', boss: false, options: ['Red', 'Blue', 'Yellow', 'Green'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'Why do metal atoms release colored light?', hint: 'Find "ได้รับพลังงาน" in sentence 4', boss: false, options: ['Heat gives them energy, which they release as light', 'They reflect the fire around them', 'They are naturally glowing', 'They mix with gunpowder smoke'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How could a chemist design a firework that shows several different colors in one explosion?', hint: 'Connect: different metal compounds → different colors', boss: true },
     ],
     connections: [
-      { emoji: '🧪', label: 'Reaction' },
-      { emoji: '🫧', label: 'Bubbles' },
-      { emoji: '🧴', label: 'Baking soda + vinegar' },
-      { emoji: '💨', label: 'CO2 gas' },
-      { emoji: '🌡️', label: 'Heat change' },
-      { emoji: '🥽', label: 'Safety goggles' },
+      { emoji: '🎆', label: 'Firework' },
+      { emoji: '💥', label: 'Gunpowder' },
+      { emoji: '🔥', label: 'Heat' },
+      { emoji: '⚛️', label: 'Metal atom' },
+      { emoji: '🔴', label: 'Red (strontium)' },
+      { emoji: '🔵', label: 'Blue (copper)' },
     ],
-    pairs: [[0,1],[1,3],[2,3],[0,4],[0,5]],
-    summaryExample: 'เมื่อสารสองชนิดทำปฏิกิริยากัน จะเกิดสารใหม่ พร้อมสัญญาณ เช่น ฟองก๊าซหรือความร้อน'
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'เมื่อดินปืนระเบิด ความร้อนจะทำให้อะตอมโลหะปล่อยแสงสี เช่น สตรอนเซียมให้สีแดง ทองแดงให้สีฟ้า'
   },
   7: {
     title: 'Mission 007',
-    sub: 'ไททานิค เรือแห่งความฝันที่จมลง',
-    emoji: '🚢',
+    sub: 'ทำไมเรือเหล็กขนาดใหญ่จึงลอยน้ำได้',
+    emoji: '⚓',
     color: 7,
-    badge: '🚢 Ocean Liner Historian',
+    badge: '⚓ Buoyancy Expert',
     xp: 150,
     article: {
-      title: '🚢 ไททานิค เรือแห่งความฝันที่จมลง',
+      title: '⚓ ทำไมเรือเหล็กขนาดใหญ่จึงลอยน้ำได้',
       sentences: [
-        'เรือไททานิคเป็นเรือโดยสารที่ใหญ่และหรูหราที่สุดในยุคนั้น ออกเดินทางครั้งแรกในปี ค.ศ. 1912',
-        'ผู้สร้างเชื่อว่าไททานิคเป็นเรือที่ไม่มีวันจม เพราะมีผนังกันน้ำถึง 16 ห้อง',
-        'ในคืนวันที่ 14 เมษายน เรือชนกับภูเขาน้ำแข็งกลางมหาสมุทรแอตแลนติก',
-        'แรงกระแทกทำให้ตัวเรือฉีกขาด น้ำทะเลไหลเข้าท่วมห้องกันน้ำหลายห้องพร้อมกัน',
-        'เรือมีเรือชูชีพไม่เพียงพอสำหรับผู้โดยสารทุกคน ทำให้มีผู้เสียชีวิตมากกว่า 1,500 คน',
-        'ซากเรือไททานิคจมอยู่ใต้ทะเลลึกกว่า 3,800 เมตร และถูกค้นพบในปี ค.ศ. 1985',
-        'เหตุการณ์นี้ทำให้เกิดกฎความปลอดภัยทางทะเลใหม่ เช่น การกำหนดจำนวนเรือชูชีพให้เพียงพอ'
+        'เรือเดินสมุทรขนาดใหญ่ เช่น ไททานิก สร้างจากเหล็กหลายพันตัน แต่กลับลอยน้ำได้',
+        'หลักการนี้อธิบายได้ด้วยกฎของอาร์คิมิดีส เรื่องแรงลอยตัว',
+        'เมื่อวัตถุใดจมอยู่ในน้ำบางส่วน น้ำจะดันวัตถุนั้นขึ้นด้วยแรงเท่ากับน้ำหนักของน้ำที่ถูกแทนที่',
+        'ตัวเรือมีรูปทรงกลวงขนาดใหญ่ ทำให้เรือแทนที่น้ำในปริมาณมาก',
+        'แรงลอยตัวจากน้ำจำนวนมากนี้จึงมากพอที่จะรับน้ำหนักของตัวเรือทั้งหมดได้',
+        'อย่างไรก็ตาม หากตัวเรือได้รับความเสียหายจนน้ำไหลเข้าไปแทนที่อากาศภายใน เรือจะแทนที่น้ำได้น้อยลง',
+        'ดังนั้น แรงลอยตัวจึงลดลง และเรืออาจจมได้ในที่สุด เหมือนที่เกิดขึ้นกับเรือไททานิก'
       ]
     },
     vocab: [
-      { thai: 'เรือโดยสาร', eng: 'passenger ship' },
-      { thai: 'ผนังกันน้ำ', eng: 'watertight compartment' },
-      { thai: 'ภูเขาน้ำแข็ง', eng: 'iceberg' },
-      { thai: 'มหาสมุทรแอตแลนติก', eng: 'Atlantic Ocean' },
-      { thai: 'เรือชูชีพ', eng: 'lifeboat' },
-      { thai: 'ซากเรือ', eng: 'shipwreck' },
-      { thai: 'ค้นพบ', eng: 'to discover' },
-      { thai: 'กฎความปลอดภัย', eng: 'safety regulations' },
+      { thai: 'แรงลอยตัว', eng: 'buoyant force' },
+      { thai: 'กฎของอาร์คิมิดีส', eng: "Archimedes' principle" },
+      { thai: 'แทนที่', eng: 'to displace' },
+      { thai: 'กลวง', eng: 'hollow' },
+      { thai: 'น้ำหนัก', eng: 'weight' },
+      { thai: 'เสียหาย', eng: 'damaged' },
     ],
     highlight: [
-      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Dates & Numbers', example: '1912, 16 ห้อง, 1,500 คน' },
-      { color: '#ef4444', dot: '#ef4444', label: '🔴 Circle the Cause', example: 'ชนกับภูเขาน้ำแข็ง' },
-      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle the Effect', example: 'น้ำท่วม, เรือจม' },
-      { color: '#10b981', dot: '#10b981', label: '🟢 Circle What Changed After', example: 'กฎความปลอดภัยใหม่' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'จึง' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'อย่างไรก็ตาม' },
+      { color: '#10b981', dot: '#10b981', label: '🟢 Circle Key Science Words', example: 'แรงลอยตัว, แทนที่' },
     ],
     questions: [
-      { stars: '⭐', text: 'When did the Titanic set sail?', hint: 'Look at the first sentence', boss: false },
-      { stars: '⭐⭐', text: 'Why did people believe the Titanic could not sink?', hint: 'Find the word "ผนังกันน้ำ" (watertight compartment)', boss: false },
-      { stars: '⭐⭐⭐', text: 'What caused the Titanic to sink?', hint: 'Find "ภูเขาน้ำแข็ง" (iceberg)', boss: false },
-      { stars: '⭐⭐⭐⭐', text: 'Why did so many people die, even though the ship had some lifeboats?', hint: 'Find "ไม่เพียงพอ" (not enough)', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How did the Titanic disaster change safety rules for ships? Why does that matter?', hint: 'Look at the last sentence', boss: true },
+      { stars: '⭐', text: 'What material is a huge ocean liner like the Titanic made from, according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['Steel/iron (thousands of tons)', 'Wood', 'Plastic', 'Concrete'], correct: 0 },
+      { stars: '⭐⭐', text: "What does Archimedes' principle explain, according to sentence 2?", hint: 'Look at sentence 2', boss: false, options: ['Buoyant force', 'Air pressure', 'Gravity on land', 'Wind speed'], correct: 0 },
+      { stars: '⭐⭐⭐', text: "Why does the ship's hollow shape help it float?", hint: 'Find "แทนที่น้ำในปริมาณมาก" in sentence 4', boss: false, options: ['It displaces a large amount of water', 'It makes the ship lighter than air', 'It reduces the ship\'s weight to zero', 'It stops water from touching the hull'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'What happens to the buoyant force if water gets inside a damaged ship?', hint: 'Find sentence 6', boss: false, options: ['It decreases', 'It increases', 'It stays exactly the same', 'It disappears instantly'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does this passage explain why the Titanic eventually sank, using the idea of buoyant force?', hint: 'Connect: damage → less displaced water → less buoyant force', boss: true },
     ],
     connections: [
-      { emoji: '🚢', label: 'Titanic' },
-      { emoji: '🧊', label: 'Iceberg' },
-      { emoji: '🌊', label: 'Atlantic Ocean' },
-      { emoji: '🛟', label: 'Lifeboats' },
-      { emoji: '⚠️', label: 'Not enough lifeboats' },
-      { emoji: '📜', label: 'New safety rules' },
+      { emoji: '🚢', label: 'Ship' },
+      { emoji: '⚖️', label: 'Buoyant force' },
+      { emoji: '💧', label: 'Water displaced' },
+      { emoji: '📦', label: 'Hollow hull' },
+      { emoji: '⚠️', label: 'Damage' },
+      { emoji: '⬇️', label: 'Sinking' },
     ],
-    pairs: [[0,1],[1,2],[0,3],[3,4],[4,5]],
-    summaryExample: 'ไททานิคชนภูเขาน้ำแข็งและจมลง เพราะเรือชูชีพไม่พอ เหตุการณ์นี้ทำให้เกิดกฎความปลอดภัยใหม่'
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'เรือลอยน้ำได้เพราะแรงลอยตัวจากน้ำที่ถูกแทนที่ แต่ถ้าตัวเรือเสียหายจนแทนที่น้ำได้น้อยลง เรือก็จะจม'
   },
   8: {
     title: 'Mission 008',
-    sub: 'นกพิราบ นักบินผู้ยิ่งใหญ่',
-    emoji: '🕊️',
+    sub: 'ชีวิตบนเรือเดินสมุทร',
+    emoji: '🚢',
     color: 8,
-    badge: '🕊️ Pigeon Navigator',
+    badge: '🚢 Ocean Liner Historian',
     xp: 150,
     article: {
-      title: '🕊️ นกพิราบ นักบินผู้ยิ่งใหญ่',
+      title: '🚢 ชีวิตบนเรือเดินสมุทร',
       sentences: [
-        'นกพิราบเป็นนกที่ฉลาดและมีความสามารถพิเศษในการหาทางกลับบ้านได้อย่างแม่นยำ',
-        'นักวิทยาศาสตร์เชื่อว่านกพิราบใช้สนามแม่เหล็กโลก แสงอาทิตย์ และกลิ่น เพื่อนำทาง',
-        'ในอดีต มนุษย์ฝึกนกพิราบให้เป็น "นกพิราบสื่อสาร" ใช้ส่งจดหมายในสงครามและเหตุการณ์สำคัญ',
-        'นกพิราบสื่อสารบางตัวบินได้ไกลกว่า 1,000 กิโลเมตร และบินเร็วถึง 100 กิโลเมตรต่อชั่วโมง',
-        'นกพิราบมีความจำภาพที่ดีเยี่ยม สามารถจดจำใบหน้าคนได้นานหลายปี',
-        'ขนรอบคอของนกพิราบมีสีเหลือบรุ้ง เกิดจากโครงสร้างขนที่สะท้อนแสง ไม่ใช่จากสี',
-        'ปัจจุบันนกพิราบปรับตัวอาศัยอยู่ในเมืองใหญ่ได้ดี เพราะแต่เดิมมันคือนกหน้าผาที่คุ้นเคยกับตึกสูง'
+        'เรือเดินสมุทรในอดีต เช่น ไททานิก ไม่ได้เป็นเพียงพาหนะ แต่เป็นเหมือนเมืองลอยน้ำขนาดย่อม',
+        'ผู้โดยสารถูกแบ่งออกเป็นชั้นต่างๆ ตามราคาตั๋ว ได้แก่ ชั้นหนึ่ง ชั้นสอง และชั้นสาม',
+        'ผู้โดยสารชั้นหนึ่งพักในห้องหรูหรา และมีห้องอาหาร สระว่ายน้ำ และห้องสมุดให้ใช้บริการ',
+        'ในขณะที่ผู้โดยสารชั้นสามมักเป็นผู้อพยพที่พักในห้องรวมเรียบง่ายชั้นล่างของเรือ',
+        'เมื่อเกิดเหตุฉุกเฉิน ผู้โดยสารชั้นหนึ่งมักอยู่ใกล้ดาดฟ้าและเรือชูชีพมากกว่า',
+        'ดังนั้น โอกาสรอดชีวิตของผู้โดยสารแต่ละชั้นจึงแตกต่างกันอย่างมาก',
+        'เหตุการณ์นี้ทำให้เกิดการเรียกร้องให้ปรับปรุงความปลอดภัยอย่างเท่าเทียมกันสำหรับผู้โดยสารทุกชั้น'
       ]
     },
     vocab: [
-      { thai: 'นกพิราบสื่อสาร', eng: 'homing / carrier pigeon' },
-      { thai: 'สนามแม่เหล็กโลก', eng: "Earth's magnetic field" },
-      { thai: 'นำทาง', eng: 'to navigate' },
-      { thai: 'ความจำภาพ', eng: 'visual memory' },
-      { thai: 'ขนเหลือบรุ้ง', eng: 'iridescent feathers' },
-      { thai: 'สะท้อนแสง', eng: 'to reflect light' },
-      { thai: 'ปรับตัว', eng: 'to adapt' },
-      { thai: 'นกหน้าผา', eng: 'cliff-dwelling bird' },
+      { thai: 'เมืองลอยน้ำ', eng: 'floating city' },
+      { thai: 'ชั้นโดยสาร', eng: 'passenger class' },
+      { thai: 'ผู้อพยพ', eng: 'immigrant' },
+      { thai: 'ดาดฟ้า', eng: 'deck' },
+      { thai: 'เรือชูชีพ', eng: 'lifeboat' },
+      { thai: 'โอกาสรอดชีวิต', eng: 'survival chance' },
+      { thai: 'เท่าเทียมกัน', eng: 'equal / fair' },
     ],
     highlight: [
-      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle the Abilities', example: 'นำทาง, ความจำภาพ, บินเร็ว' },
-      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle the Numbers', example: '1,000 กม., 100 กม./ชม.' },
-      { color: '#10b981', dot: '#10b981', label: '🟢 Circle Science Words', example: 'สนามแม่เหล็กโลก, สะท้อนแสง' },
-      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle History Words', example: 'นกพิราบสื่อสาร, สงคราม' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'ดังนั้น' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'ในขณะที่' },
+      { color: '#10b981', dot: '#10b981', label: '🟢 Circle Passenger Classes', example: 'ชั้นหนึ่ง, ชั้นสอง, ชั้นสาม' },
     ],
     questions: [
-      { stars: '⭐', text: 'What special ability do pigeons have?', hint: 'Look at the first sentence', boss: false },
-      { stars: '⭐⭐', text: 'What three things do scientists think pigeons use to navigate?', hint: 'Find "สนามแม่เหล็กโลก, แสงอาทิตย์, กลิ่น"', boss: false },
-      { stars: '⭐⭐⭐', text: 'How were pigeons used in the past?', hint: 'Find "นกพิราบสื่อสาร"', boss: false },
-      { stars: '⭐⭐⭐⭐', text: "Why do the feathers on a pigeon's neck look rainbow-colored?", hint: 'Find "สะท้อนแสง" (reflect light)', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why can pigeons live so easily in cities today? Connect it to where they originally lived.', hint: 'Look at the last sentence', boss: true },
+      { stars: '⭐', text: 'What is an ocean liner compared to, according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['A small floating city', 'A flying machine', 'A floating hospital', 'A underwater tunnel'], correct: 0 },
+      { stars: '⭐⭐', text: 'How were passengers divided on the ship?', hint: 'Find "ชั้นหนึ่ง ชั้นสอง ชั้นสาม" in sentence 2', boss: false, options: ['Into first, second, and third class by ticket price', 'By age group', 'By country of birth', 'By how much luggage they had'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What facilities did first-class passengers enjoy?', hint: 'Find sentence 3', boss: false, options: ['Dining rooms, a swimming pool, and a library', 'Only a shared bunk room', 'A private lifeboat each', 'Nothing special'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'Why were third-class passengers less likely to survive an emergency?', hint: 'Find "ใกล้ดาดฟ้าและเรือชูชีพ" in sentence 5', boss: false, options: ['They were farther from the deck and lifeboats', 'They were not allowed on the ship at all', 'They did not know how to swim', 'They stayed in the engine room'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why do you think this event led people to demand equal safety for passengers of every class?', hint: 'Look at the last sentence', boss: true },
     ],
     connections: [
-      { emoji: '🕊️', label: 'Pigeon' },
-      { emoji: '🧭', label: 'Navigation' },
-      { emoji: '🧲', label: 'Magnetic field' },
-      { emoji: '✉️', label: 'Messenger' },
-      { emoji: '🏙️', label: 'City life' },
-      { emoji: '🪨', label: 'Cliffs' },
+      { emoji: '🎫', label: 'Ticket class' },
+      { emoji: '🛏️', label: 'First class' },
+      { emoji: '🧳', label: 'Third class' },
+      { emoji: '🚪', label: 'Deck' },
+      { emoji: '🛟', label: 'Lifeboat' },
+      { emoji: '⚖️', label: 'Fairness' },
     ],
-    pairs: [[0,1],[1,2],[0,3],[0,4],[4,5]],
-    summaryExample: 'นกพิราบใช้สนามแม่เหล็กโลกนำทางกลับบ้านได้แม่นยำ และเคยถูกใช้ส่งข้อความในอดีต'
+    pairs: [[1,3],[2,4],[0,5]],
+    summaryExample: 'ผู้โดยสารชั้นหนึ่งอยู่ใกล้เรือชูชีพมากกว่าชั้นสาม โอกาสรอดชีวิตจึงต่างกัน เหตุการณ์นี้ทำให้เกิดการเรียกร้องความปลอดภัยที่เท่าเทียมกัน'
   },
   9: {
     title: 'Mission 009',
-    sub: 'ดาวพฤหัสบดี ยักษ์ใหญ่แห่งระบบสุริยะ',
-    emoji: '🟠',
+    sub: 'ทำไมขนมปังจึงฟูขึ้นเมื่ออบ',
+    emoji: '🍞',
     color: 9,
-    badge: '🟠 Jupiter Explorer',
+    badge: '🍞 Fermentation Chef',
     xp: 150,
     article: {
-      title: '🟠 ดาวพฤหัสบดี ยักษ์ใหญ่แห่งระบบสุริยะ',
+      title: '🍞 ทำไมขนมปังจึงฟูขึ้นเมื่ออบ',
       sentences: [
-        'ดาวพฤหัสบดีเป็นดาวเคราะห์ที่ใหญ่ที่สุดในระบบสุริยะ ใหญ่กว่าโลกถึง 11 เท่า',
-        'จุดเด่นที่สุดของดาวพฤหัสบดีคือ "จุดแดงใหญ่" ซึ่งเป็นพายุขนาดยักษ์ที่พัดมานานกว่า 350 ปี',
-        'พายุลูกนี้มีขนาดใหญ่กว่าโลกทั้งดวง และหมุนด้วยความเร็วสูงมาก',
-        'ดาวพฤหัสบดีเป็นดาวเคราะห์ก๊าซ ไม่มีพื้นผิวแข็งให้ยืนได้เหมือนโลก',
-        'ดาวพฤหัสบดีมีดวงจันทร์บริวารมากกว่า 95 ดวง โดยดวงจันทร์ไอโอมีภูเขาไฟที่ยังคุกรุ่นอยู่',
-        'สนามแม่เหล็กของดาวพฤหัสบดีแรงกว่าโลกถึง 20,000 เท่า และแรงที่สุดในระบบสุริยะ',
-        'นักวิทยาศาสตร์ส่งยานอวกาศ เช่น จูโน ไปศึกษาดาวพฤหัสบดีเพื่อไขความลับของดาวเคราะห์ก๊าซยักษ์'
+        'ขนมปังฟูขึ้นได้เพราะสิ่งมีชีวิตขนาดเล็กที่เรียกว่ายีสต์',
+        'ยีสต์เป็นเชื้อราขนาดจิ๋วที่กินน้ำตาลในแป้งเป็นอาหาร',
+        'เมื่อยีสต์ย่อยน้ำตาล มันจะปล่อยก๊าซคาร์บอนไดออกไซด์และแอลกอฮอล์ออกมา กระบวนการนี้เรียกว่าการหมัก',
+        'ก๊าซคาร์บอนไดออกไซด์จึงถูกกักไว้ในโครงร่างโปรตีนกลูเตนของแป้ง ทำให้แป้งพองตัวขึ้น',
+        'เมื่อนำแป้งเข้าอบในเตาที่มีความร้อนสูง ก๊าซจะขยายตัวและแอลกอฮอล์จะระเหยไป',
+        'ความร้อนยังทำให้โปรตีนกลูเตนแข็งตัว เป็นการล็อกรูปทรงฟูของขนมปังไว้อย่างถาวร',
+        'ดังนั้น ขนมปังจึงเป็นทั้งผลงานของสิ่งมีชีวิต (ยีสต์) และปฏิกิริยาเคมีจากความร้อนในเวลาเดียวกัน'
       ]
     },
     vocab: [
-      { thai: 'ดาวเคราะห์ก๊าซ', eng: 'gas giant' },
-      { thai: 'จุดแดงใหญ่', eng: 'Great Red Spot' },
-      { thai: 'พายุ', eng: 'storm' },
-      { thai: 'พื้นผิวแข็ง', eng: 'solid surface' },
-      { thai: 'ดวงจันทร์บริวาร', eng: 'moon / satellite' },
-      { thai: 'ภูเขาไฟคุกรุ่น', eng: 'active volcano' },
-      { thai: 'สนามแม่เหล็ก', eng: 'magnetic field' },
-      { thai: 'ยานอวกาศ', eng: 'spacecraft' },
+      { thai: 'ยีสต์', eng: 'yeast' },
+      { thai: 'การหมัก', eng: 'fermentation' },
+      { thai: 'คาร์บอนไดออกไซด์', eng: 'carbon dioxide' },
+      { thai: 'กลูเตน', eng: 'gluten' },
+      { thai: 'พองตัว', eng: 'to expand / puff up' },
+      { thai: 'ระเหย', eng: 'to evaporate' },
+      { thai: 'แข็งตัว', eng: 'to set / solidify' },
     ],
     highlight: [
-      { color: '#f97316', dot: '#f97316', label: '🟠 Circle Key Facts', example: 'ใหญ่ที่สุด, 11 เท่า' },
-      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Numbers', example: '350 ปี, 95 ดวง, 20,000 เท่า' },
-      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle Special Names', example: 'จุดแดงใหญ่, ไอโอ, จูโน' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '🟡 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🔵 Circle Result words', example: 'จึง, ดังนั้น' },
+      { color: '#10b981', dot: '#10b981', label: '🟢 Circle Key Science Words', example: 'การหมัก, กลูเตน, คาร์บอนไดออกไซด์' },
     ],
     questions: [
-      { stars: '⭐', text: 'How much bigger is Jupiter than Earth?', hint: 'Look at the first sentence', boss: false },
-      { stars: '⭐⭐', text: 'What is the Great Red Spot?', hint: 'Find "จุดแดงใหญ่" and "พายุ"', boss: false },
-      { stars: '⭐⭐⭐', text: "Why can't you stand on the surface of Jupiter?", hint: 'Find "ดาวเคราะห์ก๊าซ" and "พื้นผิวแข็ง"', boss: false },
-      { stars: '⭐⭐⭐⭐', text: "What is special about Jupiter's moon Io?", hint: 'Find "ภูเขาไฟคุกรุ่น" (active volcano)', boss: false },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why do scientists send spacecraft like Juno to study Jupiter instead of only observing it from Earth?', hint: 'Think about what a spacecraft can do that a telescope cannot', boss: true },
+      { stars: '⭐', text: 'What tiny living thing makes bread rise, according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['Yeast', 'Bacteria', 'Mold', 'Salt'], correct: 0 },
+      { stars: '⭐⭐', text: 'What does yeast eat, according to sentence 2?', hint: 'Find "น้ำตาลในแป้ง"', boss: false, options: ['Sugar in the dough', 'Water only', 'Air', 'Salt'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What two things does yeast release during fermentation?', hint: 'Find sentence 3', boss: false, options: ['Carbon dioxide gas and alcohol', 'Oxygen and water', 'Salt and sugar', 'Heat and light'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'What traps the gas inside the dough and makes it puff up?', hint: 'Find "กลูเตน" in sentence 4', boss: false, options: ['The gluten protein structure', 'The oven walls', 'The mixing bowl', 'The yeast itself'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How is baking bread both a biology process and a chemistry process at the same time?', hint: 'Connect: yeast (living thing) + heat (chemical change)', boss: true },
     ],
     connections: [
-      { emoji: '🟠', label: 'Jupiter' },
-      { emoji: '🌀', label: 'Great Red Spot' },
-      { emoji: '🌋', label: 'Io volcano' },
-      { emoji: '🧲', label: 'Magnetic field' },
-      { emoji: '🚀', label: 'Juno spacecraft' },
-      { emoji: '💨', label: 'Gas giant' },
+      { emoji: '🦠', label: 'Yeast' },
+      { emoji: '🍬', label: 'Sugar' },
+      { emoji: '💨', label: 'CO2 gas' },
+      { emoji: '🕸️', label: 'Gluten' },
+      { emoji: '🔥', label: 'Heat' },
+      { emoji: '🍞', label: 'Bread' },
     ],
-    pairs: [[0,1],[0,2],[0,3],[0,4],[3,5]],
-    summaryExample: 'ดาวพฤหัสบดีเป็นดาวเคราะห์ก๊าซที่ใหญ่ที่สุด มีพายุจุดแดงใหญ่และดวงจันทร์กว่า 95 ดวง'
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'ยีสต์ย่อยน้ำตาลและปล่อยก๊าซคาร์บอนไดออกไซด์ ก๊าซจึงถูกกักไว้ในกลูเตนทำให้แป้งฟู และความร้อนจากเตาอบจะล็อกรูปทรงไว้'
   },
   ps1: {
     title: 'Survival · Tier 1',
-    sub: 'ผึ้งกับดอกไม้ · 5 lines',
-    emoji: '🐝',
+    sub: 'ดวงดาวและอวกาศ · 5 lines',
+    emoji: '⭐',
     color: 14,
-    badge: '🐝 Survival Tier 1',
+    badge: '⭐ Survival Tier 1',
     xp: 150,
     article: {
-      title: '🐝 ผึ้งกับดอกไม้',
+      title: '⭐ ดวงดาวและอวกาศ',
       sentences: [
-        'ผึ้งเป็นแมลงที่บินไปหาน้ำหวานจากดอกไม้ทุกวัน',
-        'เมื่อผึ้งดูดน้ำหวาน ละอองเกสรจะติดที่ขาของมัน',
-        'ผึ้งจึงพาละอองเกสรไปยังดอกไม้ดอกอื่นโดยไม่ได้ตั้งใจ',
-        'การกระทำนี้ช่วยให้ดอกไม้ผสมพันธุ์และออกผลได้',
-        'ดังนั้น ผึ้งจึงมีความสำคัญต่อการปลูกพืชและสิ่งแวดล้อมมาก'
+        'ดวงดาวบนท้องฟ้าคือดวงอาทิตย์ดวงอื่นที่อยู่ไกลจากโลกมาก',
+        'เมื่อเรามองท้องฟ้ายามค่ำคืน เราจึงเห็นดวงดาวเป็นจุดแสงเล็กๆ',
+        'ดาวเคราะห์ เช่น โลกและดาวอังคาร ไม่มีแสงในตัวเอง แต่สะท้อนแสงจากดวงอาทิตย์',
+        'ดาวเคราะห์โคจรรอบดวงอาทิตย์ ส่วนดวงจันทร์โคจรรอบดาวเคราะห์',
+        'ดังนั้น ระบบสุริยะจึงประกอบด้วยดวงอาทิตย์ ดาวเคราะห์ และดวงจันทร์ที่โคจรรอบกัน'
       ]
     },
     vocab: [
-      { thai: 'น้ำหวาน', eng: 'nectar' },
-      { thai: 'ละอองเกสร', eng: 'pollen' },
-      { thai: 'ผสมพันธุ์', eng: 'to pollinate' },
-      { thai: 'สิ่งแวดล้อม', eng: 'environment' },
-      { thai: 'แมลง', eng: 'insect' },
-      { thai: 'ตั้งใจ', eng: 'to intend' },
+      { thai: 'ดวงดาว', eng: 'star' },
+      { thai: 'ดาวเคราะห์', eng: 'planet' },
+      { thai: 'สะท้อนแสง', eng: 'to reflect light' },
+      { thai: 'โคจร', eng: 'to orbit' },
+      { thai: 'ระบบสุริยะ', eng: 'solar system' },
+      { thai: 'ดวงจันทร์', eng: 'moon' },
     ],
     highlight: [
       { color: '#fbbf24', dot: '#fbbf24', label: '⭐ Circle Cause words', example: 'เมื่อ' },
       { color: '#38bdf8', dot: '#38bdf8', label: '➜ Circle Result words', example: 'จึง, ดังนั้น' },
-      { color: '#10b981', dot: '#10b981', label: '🟢 Circle the Actor', example: 'ผึ้ง' },
-      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle the Action', example: 'ดูดน้ำหวาน' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'แต่' },
+      { color: '#a855f7', dot: '#a855f7', label: '🟣 Circle Space Words', example: 'ดาวเคราะห์, ดวงอาทิตย์' },
     ],
     questions: [
-      { stars: '👤 WHO', text: 'Who is the main character in this passage?', hint: 'Look at the first sentence', boss: false },
-      { stars: '❓ WHAT', text: 'What does the bee do every day?', hint: 'Find "บิน...หาน้ำหวาน"', boss: false },
-      { stars: '📍 WHERE', text: "Where does pollen stick on the bee's body?", hint: 'Find "ขา" (legs)', boss: false },
-      { stars: '⏰ WHEN', text: 'When does pollen stick to the bee?', hint: 'Find the word "เมื่อ"', boss: false },
-      { stars: '💡 WHY', text: 'Why are bees important to plants?', hint: 'Find "ผสมพันธุ์" in sentence 4', boss: false },
-      { stars: '⚙️ HOW · BOSS', text: 'How would flowers be affected if all the bees disappeared?', hint: 'Connect: bee → pollen → flower', boss: true },
+      { stars: '👤 WHO', text: 'What is a "ดวงดาว" (star), according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['A distant sun far from Earth', 'A piece of rock in space', "Earth's satellite", 'A type of planet'], correct: 0 },
+      { stars: '❓ WHAT', text: 'What does a planet do instead of making its own light?', hint: 'Find "สะท้อนแสง" in sentence 3', boss: false, options: ["It reflects light from the Sun", 'It absorbs all light', 'It creates its own heat', 'It stays completely dark'], correct: 0 },
+      { stars: '📍 WHERE', text: 'Where do planets travel around?', hint: 'Find "โคจรรอบดวงอาทิตย์" in sentence 4', boss: false, options: ['Around the Sun', 'Around the Moon', 'Around each other', 'Around Earth only'], correct: 0 },
+      { stars: '⏰ WHEN', text: 'When do we see stars as small points of light?', hint: 'Find the word "เมื่อ" in sentence 2', boss: false, options: ['When we look at the night sky', 'When it rains', 'When the Sun rises', 'When the Moon is full'], correct: 0 },
+      { stars: '💡 WHY', text: 'Why do planets not shine like stars do?', hint: 'Connect it back to sentence 3', boss: false, options: ['They have no light of their own', 'They are too far from Earth', 'They are too small', 'They orbit too fast'], correct: 0 },
+      { stars: '⚙️ HOW · BOSS', text: 'How would you explain the difference between a star and a planet to a friend?', hint: 'Connect: star = own light, planet = reflects light', boss: true },
     ],
     connections: [
-      { emoji: '🐝', label: 'Bee' },
-      { emoji: '🌸', label: 'Flower' },
-      { emoji: '🌾', label: 'Pollen' },
-      { emoji: '🦵', label: 'Legs' },
-      { emoji: '🌱', label: 'New fruit' },
-      { emoji: '🌍', label: 'Environment' },
+      { emoji: '⭐', label: 'Star' },
+      { emoji: '☀️', label: 'Sun' },
+      { emoji: '🪐', label: 'Planet' },
+      { emoji: '🌙', label: 'Moon' },
+      { emoji: '🔄', label: 'Orbit' },
+      { emoji: '🌌', label: 'Solar System' },
     ],
-    pairs: [[0,1],[0,2],[2,3],[1,4]],
-    summaryExample: 'ผึ้งดูดน้ำหวานจากดอกไม้ ทำให้ละอองเกสรติดขาและช่วยผสมพันธุ์ดอกไม้'
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'ดาวเคราะห์ไม่มีแสงในตัวเอง แต่สะท้อนแสงจากดวงอาทิตย์ และโคจรรอบดวงอาทิตย์เป็นระบบสุริยะ'
   },
   ps2: {
     title: 'Survival · Tier 2',
-    sub: 'ภัยแล้งในประเทศไทย · 10 lines',
-    emoji: '🌦️',
+    sub: 'การเปลี่ยนแปลงทางเคมี · 8 lines',
+    emoji: '🧪',
     color: 15,
-    badge: '🌦️ Survival Tier 2',
+    badge: '🧪 Survival Tier 2',
     xp: 150,
     article: {
-      title: '🌦️ ภัยแล้งในประเทศไทย',
+      title: '🧪 การเปลี่ยนแปลงทางเคมี',
       sentences: [
-        'ในช่วงไม่กี่ปีที่ผ่านมา ประเทศไทยประสบปัญหาภัยแล้งอย่างต่อเนื่อง',
-        'ภัยแล้งเกิดขึ้นเมื่อฝนตกน้อยกว่าปกติเป็นเวลานาน',
-        'เนื่องจากฝนไม่ตกตามฤดูกาล แม่น้ำและอ่างเก็บน้ำจึงมีปริมาณน้ำลดลง',
-        'เกษตรกรจำนวนมากขาดแคลนน้ำสำหรับการเพาะปลูกข้าวและพืชผล',
-        'ผลผลิตทางการเกษตรจึงลดลง และราคาสินค้าบางชนิดสูงขึ้น',
-        'นอกจากนี้ ภัยแล้งยังทำให้ดินแห้งแตกระแหงและปลูกพืชได้ยากขึ้น',
-        'อย่างไรก็ตาม รัฐบาลได้พยายามช่วยเหลือด้วยการขุดบ่อน้ำและแจกจ่ายน้ำ',
-        'ประชาชนบางส่วนเริ่มหันมาใช้น้ำอย่างประหยัดมากขึ้น',
-        'นักวิทยาศาสตร์แนะนำให้ปลูกพืชที่ทนแล้งเพื่อลดความเสียหาย',
-        'ดังนั้น การแก้ปัญหาภัยแล้งจึงต้องอาศัยความร่วมมือจากทุกฝ่าย'
+        'สสารทุกชนิดสามารถเปลี่ยนแปลงได้ 2 แบบ คือ การเปลี่ยนแปลงทางกายภาพและทางเคมี',
+        'การเปลี่ยนแปลงทางกายภาพ เช่น น้ำแข็งละลายเป็นน้ำ ไม่ทำให้เกิดสารใหม่',
+        'แต่การเปลี่ยนแปลงทางเคมีจะทำให้เกิดสารใหม่ที่มีสมบัติต่างจากเดิม',
+        'เมื่อเหล็กสัมผัสกับอากาศชื้นเป็นเวลานาน เหล็กจึงเกิดสนิม',
+        'สนิมเป็นสารใหม่ที่มีสีและความแข็งต่างจากเหล็กเดิม',
+        'นอกจากนี้ การเผาไหม้ก็เป็นการเปลี่ยนแปลงทางเคมีเช่นกัน',
+        'เมื่อกระดาษถูกเผา กระดาษจะกลายเป็นเถ้าและก๊าซ ซึ่งไม่สามารถเปลี่ยนกลับเป็นกระดาษได้',
+        'ดังนั้น นักวิทยาศาสตร์จึงสังเกตการเปลี่ยนสี กลิ่น หรือการเกิดฟองก๊าซ เพื่อบอกว่าเกิดปฏิกิริยาเคมีขึ้น'
       ]
     },
     vocab: [
-      { thai: 'ภัยแล้ง', eng: 'drought' },
-      { thai: 'อ่างเก็บน้ำ', eng: 'reservoir' },
-      { thai: 'เกษตรกร', eng: 'farmer' },
-      { thai: 'ผลผลิต', eng: 'yield / produce' },
-      { thai: 'ประหยัด', eng: 'to economize / save' },
-      { thai: 'ทนแล้ง', eng: 'drought-resistant' },
-      { thai: 'ความร่วมมือ', eng: 'cooperation' },
-      { thai: 'แตกระแหง', eng: 'cracked (soil)' },
+      { thai: 'สสาร', eng: 'matter' },
+      { thai: 'สมบัติ', eng: 'property' },
+      { thai: 'สนิม', eng: 'rust' },
+      { thai: 'เผาไหม้', eng: 'to burn / combustion' },
+      { thai: 'เถ้า', eng: 'ash' },
+      { thai: 'ปฏิกิริยาเคมี', eng: 'chemical reaction' },
+    ],
+    highlight: [
+      { color: '#fbbf24', dot: '#fbbf24', label: '⭐ Circle Cause words', example: 'เมื่อ' },
+      { color: '#38bdf8', dot: '#38bdf8', label: '➜ Circle Result words', example: 'จึง, ดังนั้น' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'แต่' },
+      { color: '#a855f7', dot: '#a855f7', label: '➕ Circle Addition words', example: 'นอกจากนี้' },
+    ],
+    questions: [
+      { stars: '👤 WHO', text: 'What two kinds of change can matter go through?', hint: 'Look at the first sentence', boss: false, options: ['Physical change and chemical change', 'Hot change and cold change', 'Big change and small change', 'Fast change and slow change'], correct: 0 },
+      { stars: '❓ WHAT', text: 'What happens to ice in a physical change?', hint: 'Find "น้ำแข็งละลาย" in sentence 2', boss: false, options: ['It melts into water, no new substance forms', 'It turns into a completely new substance', 'It disappears forever', 'It becomes rust'], correct: 0 },
+      { stars: '📍 WHERE', text: 'Where (on what material) does rust appear?', hint: 'Find "เหล็ก" in sentence 4', boss: false, options: ['On iron', 'On paper', 'On ice', 'On water'], correct: 0 },
+      { stars: '⏰ WHEN', text: 'When does iron start to rust?', hint: 'Find the word "เมื่อ" in sentence 4', boss: false, options: ['When it touches humid air for a long time', 'When it is heated quickly', 'When it is frozen', 'When it is painted'], correct: 0 },
+      { stars: '💡 WHY', text: 'Why is burning paper a chemical change and not a physical one?', hint: 'Find sentence 7 — it cannot change back', boss: false, options: ['The ash and gas cannot turn back into paper', 'Paper just changes shape', 'It only gets hot, nothing else', 'It is reversible like melting ice'], correct: 0 },
+      { stars: '⚙️ HOW · BOSS', text: 'How can you tell a chemical reaction happened, without seeing a brand-new object?', hint: 'Connect: color change, smell, gas bubbles (sentence 8)', boss: true },
+    ],
+    connections: [
+      { emoji: '🧊', label: 'Ice melting' },
+      { emoji: '💧', label: 'Water' },
+      { emoji: '🔩', label: 'Iron' },
+      { emoji: '🟠', label: 'Rust' },
+      { emoji: '📄', label: 'Paper' },
+      { emoji: '🔥', label: 'Ash & gas' },
+    ],
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'เมื่อเหล็กสัมผัสอากาศชื้น เหล็กจึงเกิดสนิมซึ่งเป็นสารใหม่ ต่างจากการละลายของน้ำแข็งที่เป็นการเปลี่ยนแปลงทางกายภาพ'
+  },
+  ps3: {
+    title: 'Survival · Tier 3',
+    sub: 'รถยนต์ทำงานอย่างไร · 10 lines',
+    emoji: '🚗',
+    color: 16,
+    badge: '🚗 Survival Tier 3',
+    xp: 150,
+    article: {
+      title: '🚗 รถยนต์ทำงานอย่างไร',
+      sentences: [
+        'รถยนต์เป็นยานพาหนะที่ใช้เครื่องยนต์ในการขับเคลื่อน',
+        'เครื่องยนต์ส่วนใหญ่ทำงานโดยการเผาไหม้เชื้อเพลิง เช่น น้ำมันเบนซินหรือดีเซล',
+        'เมื่อเชื้อเพลิงถูกเผาไหม้ภายในเครื่องยนต์ จะเกิดแรงดันที่ผลักลูกสูบให้เคลื่อนที่',
+        'การเคลื่อนที่ของลูกสูบจึงทำให้ล้อรถหมุนและรถเคลื่อนที่ไปข้างหน้า',
+        'นอกจากเครื่องยนต์แบบสันดาปแล้ว ปัจจุบันยังมีรถยนต์ไฟฟ้าที่ใช้มอเตอร์แทน',
+        'รถยนต์ไฟฟ้าใช้พลังงานจากแบตเตอรี่แทนการเผาไหม้เชื้อเพลิง',
+        'เนื่องจากรถยนต์ไฟฟ้าไม่มีการเผาไหม้ จึงไม่ปล่อยควันเสียออกมา',
+        'อย่างไรก็ตาม รถยนต์ไฟฟ้ายังต้องใช้เวลาชาร์จแบตเตอรี่นานกว่าการเติมน้ำมัน',
+        'เบรกของรถยนต์ทำงานโดยใช้แรงเสียดทานเพื่อทำให้ล้อหมุนช้าลงและหยุด',
+        'ดังนั้น รถยนต์จึงประกอบด้วยระบบต่างๆ ที่ทำงานร่วมกัน ทั้งเครื่องยนต์ ล้อ และเบรก'
+      ]
+    },
+    vocab: [
+      { thai: 'เครื่องยนต์', eng: 'engine' },
+      { thai: 'เชื้อเพลิง', eng: 'fuel' },
+      { thai: 'ลูกสูบ', eng: 'piston' },
+      { thai: 'มอเตอร์', eng: 'motor' },
+      { thai: 'แบตเตอรี่', eng: 'battery' },
+      { thai: 'แรงเสียดทาน', eng: 'friction' },
+      { thai: 'ควันเสีย', eng: 'exhaust fumes' },
+    ],
+    highlight: [
+      { color: '#fbbf24', dot: '#fbbf24', label: '⭐ Circle Cause words', example: 'เมื่อ, เนื่องจาก' },
+      { color: '#38bdf8', dot: '#38bdf8', label: '➜ Circle Result words', example: 'จึง, ดังนั้น' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'อย่างไรก็ตาม' },
+      { color: '#a855f7', dot: '#a855f7', label: '➕ Circle Addition words', example: 'นอกจาก...แล้ว' },
+    ],
+    questions: [
+      { stars: '👤 WHO', text: "What part of the engine gets pushed by the burning fuel?", hint: 'Find "ลูกสูบ" in sentence 3', boss: false, options: ['The piston', 'The wheel', 'The battery', 'The brake'], correct: 0 },
+      { stars: '❓ WHAT', text: 'What does an electric car use instead of an engine?', hint: 'Find "มอเตอร์" in sentence 5', boss: false, options: ['A motor', 'A bigger piston', 'More fuel', 'A stronger brake'], correct: 0 },
+      { stars: '📍 WHERE', text: 'Where does the fuel burn to create pressure?', hint: 'Find "ภายในเครื่องยนต์" in sentence 3', boss: false, options: ['Inside the engine', 'Inside the tires', 'Inside the battery', 'Inside the fuel tank cap'], correct: 0 },
+      { stars: '⏰ WHEN', text: "When does a car's wheel turn slower and stop?", hint: 'Find sentence 9 about the brake', boss: false, options: ['When the brake uses friction on the wheel', 'When the engine turns off by itself', 'When the fuel tank is full', 'When the piston stops moving forever'], correct: 0 },
+      { stars: '💡 WHY', text: "Why don't electric cars produce exhaust fumes?", hint: 'Find "ไม่มีการเผาไหม้" in sentence 7', boss: false, options: ['They have no fuel combustion', 'They move too slowly', 'They only drive short distances', 'They use less electricity'], correct: 0 },
+      { stars: '⚙️ HOW · BOSS', text: 'How is an electric car both better and worse than a fuel car, based on the passage?', hint: 'Connect sentences 7 and 8', boss: true },
+    ],
+    connections: [
+      { emoji: '⛽', label: 'Fuel' },
+      { emoji: '🔧', label: 'Piston' },
+      { emoji: '🔋', label: 'Battery' },
+      { emoji: '⚙️', label: 'Motor' },
+      { emoji: '🛞', label: 'Wheel' },
+      { emoji: '🛑', label: 'Brake' },
+    ],
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'เครื่องยนต์เผาไหม้เชื้อเพลิงเพื่อดันลูกสูบ ทำให้ล้อหมุนและรถเคลื่อนที่ ส่วนรถไฟฟ้าใช้แบตเตอรี่แทน'
+  },
+  ps4: {
+    title: 'Survival · Tier 4',
+    sub: 'เรือเดินสมุทรในตำนาน · 12 lines',
+    emoji: '🚢',
+    color: 17,
+    badge: '🚢 Survival Tier 4',
+    xp: 180,
+    article: {
+      title: '🚢 เรือเดินสมุทรในตำนาน',
+      sentences: [
+        'เรือเดินสมุทรคือเรือขนาดใหญ่ที่ใช้ขนส่งผู้โดยสารข้ามมหาสมุทร',
+        'ในช่วงต้นศตวรรษที่ 20 เรือไททานิกถูกสร้างขึ้นให้เป็นเรือที่ใหญ่และหรูหราที่สุดในยุคนั้น',
+        'ผู้สร้างเชื่อว่าเรือไททานิกแทบจะจมไม่ได้ เนื่องจากมีผนังกันน้ำหลายช่อง',
+        'อย่างไรก็ตาม ในปี 1912 เรือไททานิกชนภูเขาน้ำแข็งกลางมหาสมุทรแอตแลนติก',
+        'เมื่อตัวเรือได้รับความเสียหาย น้ำจึงไหลเข้าเรืออย่างรวดเร็ว',
+        'เรือไททานิกจมลงภายในเวลาไม่กี่ชั่วโมง และมีผู้เสียชีวิตจำนวนมาก',
+        'เหตุการณ์นี้ทำให้เกิดกฎความปลอดภัยใหม่ เช่น การมีเรือชูชีพให้เพียงพอ',
+        'เรือพี่น้องของไททานิกชื่อบริแทนนิก ถูกสร้างขึ้นให้แข็งแรงกว่าเดิม',
+        'แต่บริแทนนิกถูกใช้เป็นเรือพยาบาลในช่วงสงคราม และจมลงจากการชนกับทุ่นระเบิด',
+        'นอกจากไททานิกและบริแทนนิกแล้ว เรือ SS America ก็เป็นเรือเดินสมุทรที่มีชื่อเสียงเช่นกัน',
+        'เรือ SS America ใช้ขนส่งผู้โดยสารข้ามมหาสมุทรแอตแลนติกได้อย่างปลอดภัยหลายปี',
+        'ดังนั้น ประวัติของเรือเดินสมุทรจึงสอนให้มนุษย์เรียนรู้เรื่องความปลอดภัยและการเตรียมพร้อมรับมือกับอุบัติเหตุ'
+      ]
+    },
+    vocab: [
+      { thai: 'เรือเดินสมุทร', eng: 'ocean liner' },
+      { thai: 'ผนังกันน้ำ', eng: 'watertight wall' },
+      { thai: 'ภูเขาน้ำแข็ง', eng: 'iceberg' },
+      { thai: 'เรือชูชีพ', eng: 'lifeboat' },
+      { thai: 'เรือพยาบาล', eng: 'hospital ship' },
+      { thai: 'ทุ่นระเบิด', eng: 'mine (explosive)' },
     ],
     highlight: [
       { color: '#fbbf24', dot: '#fbbf24', label: '⭐ Circle Cause words', example: 'เนื่องจาก, เมื่อ' },
       { color: '#38bdf8', dot: '#38bdf8', label: '➜ Circle Result words', example: 'จึง, ดังนั้น' },
-      { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'อย่างไรก็ตาม' },
-      { color: '#a855f7', dot: '#a855f7', label: '➕ Circle Addition words', example: 'นอกจากนี้' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'อย่างไรก็ตาม, แต่' },
+      { color: '#a855f7', dot: '#a855f7', label: '➕ Circle Addition words', example: 'นอกจาก...แล้ว' },
     ],
     questions: [
-      { stars: '👤 WHO', text: 'Who is most affected by the drought?', hint: 'Find "เกษตรกร" in sentence 4', boss: false },
-      { stars: '❓ WHAT', text: 'What happens to farm produce during a drought?', hint: 'Find "ผลผลิต...ลดลง" in sentence 5', boss: false },
-      { stars: '📍 WHERE', text: 'Where does the water level drop?', hint: 'Find "แม่น้ำและอ่างเก็บน้ำ" in sentence 3', boss: false },
-      { stars: '⏰ WHEN', text: 'When does a drought happen?', hint: 'Find sentence 2', boss: false },
-      { stars: '💡 WHY', text: 'Why does the soil become dry and cracked?', hint: 'Connect it back to "ภัยแล้ง"', boss: false },
-      { stars: '⚙️ HOW · BOSS', text: 'How could Thailand reduce damage from future droughts?', hint: 'Look at sentences 7 and 9 for ideas', boss: true },
+      { stars: '👤 WHO', text: 'Which ship is described as the largest and most luxurious of its time?', hint: 'Find sentence 2 — "ไททานิก"', boss: false, options: ['The Titanic', 'The Britannic', 'The SS America', 'The Queen Mary'], correct: 0 },
+      { stars: '❓ WHAT', text: 'What did the builders believe about the Titanic before it sank?', hint: 'Find "แทบจะจมไม่ได้" in sentence 3', boss: false, options: ['That it was nearly unsinkable', 'That it was too small to sail', 'That it needed more lifeboats', 'That it would sink quickly'], correct: 0 },
+      { stars: '📍 WHERE', text: 'Where did the Titanic hit the iceberg?', hint: 'Find "มหาสมุทรแอตแลนติก" in sentence 4', boss: false, options: ['The Atlantic Ocean', 'The Pacific Ocean', 'The Indian Ocean', 'A harbor'], correct: 0 },
+      { stars: '⏰ WHEN', text: 'When did the Titanic sink?', hint: 'Find "ปี 1912" in sentence 4', boss: false, options: ['1912', '1898', '1945', '1920'], correct: 0 },
+      { stars: '💡 WHY', text: 'Why did the Britannic sink, according to the passage?', hint: 'Find "ชนกับทุ่นระเบิด" in sentence 9', boss: false, options: ['It struck a mine during a war', 'It hit the same iceberg as Titanic', 'It ran out of fuel', 'It collided with the SS America'], correct: 0 },
+      { stars: '⚙️ HOW · BOSS', text: 'How did the sinking of the Titanic change future ships, based on sentence 7?', hint: 'Connect: disaster → new safety rules', boss: true },
     ],
     connections: [
-      { emoji: '🌦️', label: 'Drought' },
-      { emoji: '🌾', label: 'Crops' },
-      { emoji: '💧', label: 'Water' },
-      { emoji: '🚜', label: 'Farmer' },
-      { emoji: '💰', label: 'Prices' },
-      { emoji: '🏛️', label: 'Government' },
+      { emoji: '🚢', label: 'Titanic' },
+      { emoji: '🧊', label: 'Iceberg' },
+      { emoji: '🚢', label: 'Britannic' },
+      { emoji: '💣', label: 'Mine' },
+      { emoji: '🛟', label: 'Lifeboat' },
+      { emoji: '⚠️', label: 'Safety Rules' },
     ],
-    pairs: [[0,1],[1,3],[3,4],[0,5]],
-    summaryExample: 'ภัยแล้งทำให้น้ำขาดแคลน เกษตรกรปลูกพืชได้น้อยลง รัฐบาลและประชาชนจึงต้องช่วยกันแก้ปัญหา'
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'เรือไททานิกชนภูเขาน้ำแข็งและจมลง เหตุการณ์นี้จึงทำให้เกิดกฎความปลอดภัยใหม่สำหรับเรือเดินสมุทรทุกลำ'
   },
-  ps3: {
-    title: 'Survival · Tier 3',
-    sub: 'ปัญหาขยะและการรีไซเคิล · 15 lines',
-    emoji: '♻️',
-    color: 16,
-    badge: '♻️ Survival Tier 3',
-    xp: 150,
+  ps5: {
+    title: 'Survival · Tier 5',
+    sub: 'การทำอาหารคือการทดลองเคมี · 15 lines',
+    emoji: '🍳',
+    color: 18,
+    badge: '🍳 Survival Tier 5',
+    xp: 180,
     article: {
-      title: '♻️ ปัญหาขยะและการรีไซเคิล',
+      title: '🍳 การทำอาหารคือการทดลองเคมี',
       sentences: [
-        'ทุกวันนี้ปริมาณขยะในเมืองใหญ่เพิ่มขึ้นอย่างรวดเร็ว',
-        'สาเหตุหลักมาจากการบริโภคสินค้าที่มีบรรจุภัณฑ์จำนวนมาก',
-        'ขยะพลาสติกเป็นปัญหาที่ร้ายแรงที่สุด เพราะย่อยสลายได้ยากและใช้เวลานานหลายร้อยปี',
-        'เมื่อขยะพลาสติกไหลลงสู่แม่น้ำและทะเล มันจะเป็นอันตรายต่อสัตว์น้ำ',
-        'สัตว์ทะเลบางชนิดกินพลาสติกโดยเข้าใจผิดว่าเป็นอาหาร',
-        'นอกจากขยะพลาสติกแล้ว ขยะอินทรีย์ เช่น เศษอาหาร ก็สร้างปัญหาเช่นกัน',
-        'ขยะอินทรีย์ที่เน่าเปื่อยจะปล่อยก๊าซมีเทนซึ่งเป็นสาเหตุของภาวะโลกร้อน',
-        'ดังนั้น การจัดการขยะอย่างถูกวิธีจึงมีความสำคัญมาก',
-        'วิธีแรกคือการลดการใช้ หรือที่เรียกว่า Reduce',
-        'วิธีที่สองคือการใช้ซ้ำ หรือ Reuse เช่น นำถุงผ้ากลับมาใช้อีก',
-        'วิธีที่สามคือการนำกลับมาใช้ใหม่ หรือ Recycle เช่น เปลี่ยนขวดพลาสติกเป็นเสื้อผ้า',
-        'อย่างไรก็ตาม การรีไซเคิลเพียงอย่างเดียวไม่สามารถแก้ปัญหาขยะได้ทั้งหมด',
-        'เนื่องจากขยะบางชนิดไม่สามารถนำไปรีไซเคิลได้เลย',
-        'โรงเรียนและชุมชนจึงเริ่มรณรงค์ให้แยกขยะตั้งแต่ต้นทาง',
-        'หากทุกคนช่วยกันลดและแยกขยะ ปัญหาขยะในอนาคตก็จะลดลงได้'
+        'การทำอาหารมีความคล้ายคลึงกับการทดลองทางวิทยาศาสตร์มาก',
+        'เมื่อเราผสมส่วนผสมต่างๆ เข้าด้วยกัน มักเกิดการเปลี่ยนแปลงทางเคมีขึ้น',
+        'ตัวอย่างเช่น เมื่อไข่ขาวถูกตี ฟองอากาศจะเข้าไปแทรกอยู่ในโปรตีน ทำให้ไข่ขาวฟูขึ้น',
+        'การตีไข่ขาวจึงเป็นทั้งการเปลี่ยนแปลงทางกายภาพและทางเคมีในเวลาเดียวกัน',
+        'เมื่อเราอบเค้ก ผงฟูจะทำปฏิกิริยากับความร้อนและปล่อยก๊าซคาร์บอนไดออกไซด์ออกมา',
+        'ก๊าซที่เกิดขึ้นจึงทำให้เนื้อเค้กฟูและมีรูพรุนเล็กๆ',
+        'นอกจากนี้ ความร้อนยังทำให้เกิดปฏิกิริยาที่เรียกว่า Maillard บนผิวหน้าอาหาร',
+        'ปฏิกิริยา Maillard ทำให้เกิดสีน้ำตาลและกลิ่นหอมบนผิวขนมปังหรือเนื้อย่าง',
+        'เมื่อเราใส่น้ำมะนาวลงในนม โปรตีนในนมจะจับตัวกันเป็นก้อน',
+        'ปรากฏการณ์นี้เรียกว่าการตกตะกอนของโปรตีน ซึ่งใช้ในการทำชีสได้',
+        'อย่างไรก็ตาม ไม่ใช่ทุกการเปลี่ยนแปลงในครัวจะเป็นการเปลี่ยนแปลงทางเคมี',
+        'เช่น การละลายน้ำตาลในน้ำร้อนเป็นเพียงการเปลี่ยนแปลงทางกายภาพเท่านั้น',
+        'เนื่องจากน้ำตาลยังคงเป็นน้ำตาลเหมือนเดิม เพียงแค่กระจายตัวอยู่ในน้ำ',
+        'ดังนั้น การสังเกตว่าเกิดสารใหม่ขึ้นหรือไม่ จึงเป็นวิธีแยกการเปลี่ยนแปลงทั้งสองแบบ',
+        'การเข้าใจหลักการนี้จึงช่วยให้เราทำอาหารได้อร่อยและเข้าใจวิทยาศาสตร์ไปพร้อมกัน'
       ]
     },
     vocab: [
-      { thai: 'บรรจุภัณฑ์', eng: 'packaging' },
-      { thai: 'ย่อยสลาย', eng: 'to decompose' },
-      { thai: 'ขยะอินทรีย์', eng: 'organic waste' },
-      { thai: 'ก๊าซมีเทน', eng: 'methane gas' },
-      { thai: 'ภาวะโลกร้อน', eng: 'global warming' },
-      { thai: 'รณรงค์', eng: 'to campaign' },
-      { thai: 'แยกขยะ', eng: 'to sort waste' },
+      { thai: 'ส่วนผสม', eng: 'ingredient' },
+      { thai: 'โปรตีน', eng: 'protein' },
+      { thai: 'ผงฟู', eng: 'baking powder' },
+      { thai: 'ปฏิกิริยา Maillard', eng: 'Maillard reaction' },
+      { thai: 'ตกตะกอน', eng: 'to clump / precipitate' },
+      { thai: 'ละลาย', eng: 'to dissolve' },
     ],
     highlight: [
-      { color: '#fbbf24', dot: '#fbbf24', label: '⭐ Circle Cause words', example: 'เนื่องจาก, เพราะ' },
-      { color: '#38bdf8', dot: '#38bdf8', label: '➜ Circle Result words', example: 'ดังนั้น, จึง' },
+      { color: '#fbbf24', dot: '#fbbf24', label: '⭐ Circle Cause words', example: 'เมื่อ, เนื่องจาก' },
+      { color: '#38bdf8', dot: '#38bdf8', label: '➜ Circle Result words', example: 'จึง, ดังนั้น' },
       { color: '#ef4444', dot: '#ef4444', label: '⚠️ Circle Contrast words', example: 'อย่างไรก็ตาม' },
-      { color: '#a855f7', dot: '#a855f7', label: '➕ Circle Addition/Example words', example: 'นอกจาก...แล้ว, เช่น' },
+      { color: '#a855f7', dot: '#a855f7', label: '➕ Circle Addition/Example words', example: 'นอกจากนี้, เช่น, ตัวอย่างเช่น' },
     ],
     questions: [
-      { stars: '👤 WHO', text: 'Who is responsible for helping reduce waste?', hint: 'Find sentences 14–15', boss: false },
-      { stars: '❓ WHAT', text: "What are the 3 R's mentioned in the passage?", hint: 'Find sentences 9–11', boss: false },
-      { stars: '📍 WHERE', text: 'Where does plastic waste cause danger to animals?', hint: 'Find "แม่น้ำและทะเล" in sentence 4', boss: false },
-      { stars: '⏰ WHEN', text: 'When does organic waste release methane gas?', hint: 'Find "เน่าเปื่อย" in sentence 7', boss: false },
-      { stars: '💡 WHY', text: "Why can't recycling alone solve the waste problem?", hint: 'Find sentences 12–13', boss: false },
-      { stars: '⚙️ HOW · BOSS', text: 'How could your own school reduce its waste?', hint: 'Think about Reduce, Reuse, Recycle', boss: true },
+      { stars: '👤 WHO', text: 'What happens to egg whites when they are beaten, according to sentence 3?', hint: 'Find sentence 3', boss: false, options: ['Air bubbles get trapped in the protein, making it fluffy', 'They turn into sugar', 'They melt like ice', 'They change color to brown'], correct: 0 },
+      { stars: '❓ WHAT', text: 'What gas does baking powder release when heated?', hint: 'Find "คาร์บอนไดออกไซด์" in sentence 5', boss: false, options: ['Carbon dioxide', 'Oxygen', 'Nitrogen', 'Hydrogen'], correct: 0 },
+      { stars: '📍 WHERE', text: 'Where does the Maillard reaction happen on food?', hint: 'Find "ผิวขนมปังหรือเนื้อย่าง" in sentence 8', boss: false, options: ['On the surface of bread or grilled meat', 'Deep inside a liquid', 'Only inside an egg', 'Only in sugar water'], correct: 0 },
+      { stars: '⏰ WHEN', text: 'When do milk proteins clump together, according to sentence 9?', hint: 'Find the word "เมื่อ"', boss: false, options: ['When lemon juice is added to milk', 'When milk is frozen', 'When milk is boiled for an hour', 'When milk is left in the sun'], correct: 0 },
+      { stars: '💡 WHY', text: 'Why is dissolving sugar in water only a physical change?', hint: 'Find "น้ำตาลยังคงเป็นน้ำตาลเหมือนเดิม" in sentence 13', boss: false, options: ['The sugar is still sugar, just spread through the water', 'The sugar disappears completely', 'The water turns into a new substance', 'The sugar changes into salt'], correct: 0 },
+      { stars: '⚙️ HOW · BOSS', text: 'How can you tell whether something in the kitchen is a chemical change or just a physical one?', hint: 'Connect sentences 11–14', boss: true },
     ],
     connections: [
-      { emoji: '🗑️', label: 'Waste' },
-      { emoji: '🐟', label: 'Marine life' },
-      { emoji: '🌡️', label: 'Global warming' },
-      { emoji: '♻️', label: 'Recycle' },
-      { emoji: '🏫', label: 'School' },
-      { emoji: '📉', label: 'Reduce' },
+      { emoji: '🥚', label: 'Egg white' },
+      { emoji: '🫧', label: 'Bubbles' },
+      { emoji: '🧁', label: 'Cake' },
+      { emoji: '💨', label: 'CO2 gas' },
+      { emoji: '🍞', label: 'Bread crust' },
+      { emoji: '🟤', label: 'Maillard reaction' },
     ],
-    pairs: [[0,3],[0,1],[1,2],[3,4]],
-    summaryExample: 'ขยะพลาสติกและขยะอินทรีย์ก่อปัญหาต่อสัตว์และโลก การลด ใช้ซ้ำ และรีไซเคิลจึงช่วยลดปัญหาขยะได้'
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'การตีไข่ขาวและการอบเค้กเป็นการเปลี่ยนแปลงทางเคมี แต่การละลายน้ำตาลในน้ำเป็นเพียงการเปลี่ยนแปลงทางกายภาพเท่านั้น'
   }
 };
 
@@ -2837,22 +3000,22 @@ function decoderHexToRgba(hex, alpha) {
 // from the Paragraph Survival passages, so the same words show up twice.
 
 const VISUAL_CARDS = [
-  { emoji: '⭐', thai: 'เพราะ / เนื่องจาก', eng: 'because', example: 'เพราะฝนตก ถนนจึงเปียก' },
-  { emoji: '➜', thai: 'ดังนั้น / จึง', eng: 'so / therefore', example: 'เขาไม่ได้นอน ดังนั้นเขาจึงง่วง' },
-  { emoji: '⚠️', thai: 'แต่ / อย่างไรก็ตาม', eng: 'but / however', example: 'เขาเหนื่อยมาก แต่ก็ยังยิ้ม' },
-  { emoji: '😲', thai: 'แม้ว่า / ถึงแม้', eng: 'even though', example: 'แม้ว่าจะฝนตก เขาก็ยังออกไปวิ่ง' },
-  { emoji: '🐝', thai: 'แมลง', eng: 'insect', example: 'ผึ้งเป็นแมลงที่มีประโยชน์' },
-  { emoji: '🌸', thai: 'ผสมพันธุ์', eng: 'to pollinate', example: 'ผึ้งช่วยผสมพันธุ์ดอกไม้' },
-  { emoji: '🌦️', thai: 'ภัยแล้ง', eng: 'drought', example: 'ภัยแล้งทำให้ขาดแคลนน้ำ' },
-  { emoji: '💧', thai: 'อ่างเก็บน้ำ', eng: 'reservoir', example: 'อ่างเก็บน้ำมีปริมาณน้ำลดลง' },
-  { emoji: '🚜', thai: 'เกษตรกร', eng: 'farmer', example: 'เกษตรกรขาดแคลนน้ำเพื่อการเพาะปลูก' },
-  { emoji: '📉', thai: 'ผลผลิต', eng: 'yield / produce', example: 'ผลผลิตทางการเกษตรลดลง' },
-  { emoji: '♻️', thai: 'รีไซเคิล', eng: 'to recycle', example: 'เรานำขวดพลาสติกไปรีไซเคิล' },
-  { emoji: '🗑️', thai: 'ขยะอินทรีย์', eng: 'organic waste', example: 'ขยะอินทรีย์ทำให้เกิดก๊าซมีเทน' },
-  { emoji: '🌡️', thai: 'ภาวะโลกร้อน', eng: 'global warming', example: 'ก๊าซมีเทนเป็นสาเหตุของภาวะโลกร้อน' },
-  { emoji: '🏫', thai: 'รณรงค์', eng: 'to campaign', example: 'โรงเรียนรณรงค์ให้แยกขยะ' },
-  { emoji: '❗', thai: 'ทุก / เสมอ / ไม่มีวัน', eng: 'every / always / never', example: 'ระวัง! คำเหล่านี้มักทำให้ข้อสอบผิด' },
-  { emoji: '📊', thai: 'ร้อยละ / อัตราส่วน', eng: 'percentage / ratio', example: 'ร้อยละ 20 ของนักเรียนชอบวิชานี้' },
+  { emoji: '⭐', thai: 'เพราะ / เนื่องจาก', eng: 'because', example: 'เพราะฝนตก ถนนจึงเปียก', exampleEng: 'Because it rained, the road got wet.' },
+  { emoji: '➜', thai: 'ดังนั้น / จึง', eng: 'so / therefore', example: 'เขาไม่ได้นอน ดังนั้นเขาจึงง่วง', exampleEng: "He didn't sleep, so he is sleepy." },
+  { emoji: '⚠️', thai: 'แต่ / อย่างไรก็ตาม', eng: 'but / however', example: 'เขาเหนื่อยมาก แต่ก็ยังยิ้ม', exampleEng: 'He was very tired, but he still smiled.' },
+  { emoji: '😲', thai: 'แม้ว่า / ถึงแม้', eng: 'even though', example: 'แม้ว่าจะฝนตก เขาก็ยังออกไปวิ่ง', exampleEng: 'Even though it was raining, he still went out to run.' },
+  { emoji: '🐝', thai: 'แมลง', eng: 'insect', example: 'ผึ้งเป็นแมลงที่มีประโยชน์', exampleEng: 'Bees are useful insects.' },
+  { emoji: '🌸', thai: 'ผสมพันธุ์', eng: 'to pollinate', example: 'ผึ้งช่วยผสมพันธุ์ดอกไม้', exampleEng: 'Bees help pollinate flowers.' },
+  { emoji: '🌦️', thai: 'ภัยแล้ง', eng: 'drought', example: 'ภัยแล้งทำให้ขาดแคลนน้ำ', exampleEng: 'Drought causes water shortages.' },
+  { emoji: '💧', thai: 'อ่างเก็บน้ำ', eng: 'reservoir', example: 'อ่างเก็บน้ำมีปริมาณน้ำลดลง', exampleEng: "The reservoir's water level has dropped." },
+  { emoji: '🚜', thai: 'เกษตรกร', eng: 'farmer', example: 'เกษตรกรขาดแคลนน้ำเพื่อการเพาะปลูก', exampleEng: 'Farmers lack water for growing crops.' },
+  { emoji: '📉', thai: 'ผลผลิต', eng: 'yield / produce', example: 'ผลผลิตทางการเกษตรลดลง', exampleEng: 'Agricultural yield has decreased.' },
+  { emoji: '♻️', thai: 'รีไซเคิล', eng: 'to recycle', example: 'เรานำขวดพลาสติกไปรีไซเคิล', exampleEng: 'We take plastic bottles to be recycled.' },
+  { emoji: '🗑️', thai: 'ขยะอินทรีย์', eng: 'organic waste', example: 'ขยะอินทรีย์ทำให้เกิดก๊าซมีเทน', exampleEng: 'Organic waste produces methane gas.' },
+  { emoji: '🌡️', thai: 'ภาวะโลกร้อน', eng: 'global warming', example: 'ก๊าซมีเทนเป็นสาเหตุของภาวะโลกร้อน', exampleEng: 'Methane gas is a cause of global warming.' },
+  { emoji: '🏫', thai: 'รณรงค์', eng: 'to campaign', example: 'โรงเรียนรณรงค์ให้แยกขยะ', exampleEng: 'The school campaigns for sorting waste.' },
+  { emoji: '❗', thai: 'ทุก / เสมอ / ไม่มีวัน', eng: 'every / always / never', example: 'ระวัง! คำเหล่านี้มักทำให้ข้อสอบผิด', exampleEng: 'Watch out! These words often cause exam mistakes.' },
+  { emoji: '📊', thai: 'ร้อยละ / อัตราส่วน', eng: 'percentage / ratio', example: 'ร้อยละ 20 ของนักเรียนชอบวิชานี้', exampleEng: '20 percent of students like this subject.' },
 ];
 
 // ══════════════════════ SPEED READING DATA ══════════════════════
@@ -3409,7 +3572,7 @@ function renderDoneBadges() {
   if (g15) g15.style.display = state.done['grammar15'] ? 'block' : 'none';
   const dec = document.getElementById('done-decoder');
   if (dec) dec.style.display = state.done['decoder'] ? 'block' : 'none';
-  ['ps1','ps2','ps3'].forEach(k => {
+  ['ps1','ps2','ps3','ps4','ps5'].forEach(k => {
     const el = document.getElementById(`done-${k}`);
     if (el) el.style.display = state.done[k] ? 'block' : 'none';
   });
@@ -3455,7 +3618,7 @@ function buildTrophyList() {
   list.push({ badge: '🎯 Sentence Type Detective', earned: !!state.done['grammar15'] });
   list.push({ badge: '🔗 Sentence Connector Master', earned: !!state.done['grammar2'] });
   list.push({ badge: '🧩 Chunk Master', earned: !!state.done['decoder'] });
-  ['ps1','ps2','ps3'].forEach(k => {
+  ['ps1','ps2','ps3','ps4','ps5'].forEach(k => {
     if (MISSIONS[k]) list.push({ badge: MISSIONS[k].badge, earned: !!state.done[k] });
   });
   list.push({ badge: '🖼️ Visual Vocab Ace', earned: !!state.done['visual'] });
@@ -3793,6 +3956,17 @@ function renderVisualCard() {
   `;
 }
 
+function highlightLinker(example, thaiField) {
+  const variants = thaiField.split('/').map(s => s.trim()).filter(Boolean)
+    .sort((a, b) => b.length - a.length);
+  let result = example;
+  variants.forEach(v => {
+    const esc = v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    result = result.replace(new RegExp(esc, 'g'), `<span class="hl">${v}</span>`);
+  });
+  return result;
+}
+
 function flipVisualCard() {
   if (visualFlipped) return;
   visualFlipped = true;
@@ -3801,7 +3975,8 @@ function flipVisualCard() {
     <div class="flip-card-emoji">${card.emoji}</div>
     <div class="flip-card-thai">${card.thai}</div>
     <div class="flip-card-eng">${card.eng}</div>
-    <div class="flip-card-example">${card.example}</div>
+    <div class="flip-card-example">${highlightLinker(card.example, card.thai)}</div>
+    <div class="flip-card-example-eng">${card.exampleEng}</div>
   `;
   document.getElementById('visual-know-row').style.visibility = 'visible';
 }
@@ -5101,7 +5276,18 @@ function buildDetectiveStep(m) {
     </div>
 
     <div class="detective-questions">
-      ${m.questions.map((q, i) => `
+      ${m.questions.map((q, i) => q.options ? `
+        <div class="dq-item mc-item ${q.boss ? 'dq-boss' : ''}" id="dq-item-${i}">
+          <div class="dq-check"></div>
+          <div class="dq-content">
+            <div class="dq-stars">${q.stars}</div>
+            <div class="dq-text">${q.text}</div>
+            <div class="dq-options">
+              ${q.options.map((opt, oi) => `<button type="button" class="dq-option" onclick="selectMCAnswer(this, ${i}, ${oi}, ${q.correct})">${opt}</button>`).join('')}
+            </div>
+            <div class="dq-hint" id="dq-hint-${i}" style="display:none">💡 ${q.hint}</div>
+          </div>
+        </div>` : `
         <div class="dq-item ${q.boss ? 'dq-boss' : ''}" onclick="toggleCheck(this)">
           <div class="dq-check"></div>
           <div class="dq-content">
@@ -5114,6 +5300,26 @@ function buildDetectiveStep(m) {
     <div style="flex:1"></div>
     <button class="btn-primary" onclick="nextStep()">Dish tasted! →</button>
   </div>`;
+}
+
+function selectMCAnswer(btn, qIndex, chosenIndex, correctIndex) {
+  const item = document.getElementById(`dq-item-${qIndex}`);
+  const options = item.querySelectorAll('.dq-option');
+  if (item.classList.contains('checked')) return; // already solved
+  if (chosenIndex === correctIndex) {
+    btn.classList.add('correct');
+    options.forEach(o => o.classList.add('disabled'));
+    item.classList.add('checked');
+    const check = item.querySelector('.dq-check');
+    if (check) check.textContent = '✓';
+    addXP(5);
+  } else {
+    btn.classList.remove('wrong');
+    void btn.offsetWidth; // restart animation
+    btn.classList.add('wrong', 'disabled');
+    const hint = document.getElementById(`dq-hint-${qIndex}`);
+    if (hint) hint.style.display = 'block';
+  }
 }
 
 function buildDrawStep(m) {
