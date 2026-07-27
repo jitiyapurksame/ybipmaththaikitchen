@@ -368,6 +368,15 @@
   }
   .hint-panel.open { display: block; }
 
+  /* Tiered hint scaffolding */
+  .hint-tier { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(251,191,36,0.25); }
+  .hint-tier:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .hint-tier-label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
+    color: #b9a488; margin-bottom: 4px;
+  }
+
   /* Solution reveal */
   .solution-box {
     display: none;
@@ -1434,14 +1443,34 @@ const LEVELS = {
     missions: [
       { type: 'calc', instruction: 'Simplify the ratio', problem: '4 : 8', answer: '1:2', hint: 'Divide both by 4.' },
       { type: 'calc', instruction: 'Simplify the ratio', problem: '6 : 9', answer: '2:3', hint: 'Divide both by 3.' },
-      { type: 'calc', instruction: 'Ratio 2:3, total = 20. Find the FIRST part', problem: '2:3, Total = 20, first part = ?', answer: '8', hint: 'Total parts = 5. Each part = 20÷5 = 4. First = 2×4 = 8. Draw it as a bar split into 2+3 equal boxes:' + ratioBarSVG([2,3]) },
-      { type: 'calc', instruction: 'Ratio 2:3, total = 20. Find the SECOND part', problem: '2:3, Total = 20, second part = ?', answer: '12', hint: 'Total parts = 5. Each part = 4. Second = 3×4 = 12. Same bar model:' + ratioBarSVG([2,3]) },
+      { type: 'calc', instruction: 'Ratio 2:3, total = 20. Find the FIRST part', problem: '2:3, Total = 20, first part = ?', answer: '8', hint: {
+        visual: 'Draw it as a bar split into 2+3 equal boxes:' + ratioBarSVG([2,3]),
+        setup: 'Total parts = 2 + 3 = 5. Each part = 20 ÷ 5 = 4.',
+        formula: 'First part = 2 × 4 = 8.'
+      } },
+      { type: 'calc', instruction: 'Ratio 2:3, total = 20. Find the SECOND part', problem: '2:3, Total = 20, second part = ?', answer: '12', hint: {
+        visual: 'Same bar model as before:' + ratioBarSVG([2,3]),
+        setup: 'Total parts = 5. Each part = 20 ÷ 5 = 4.',
+        formula: 'Second part = 3 × 4 = 12.'
+      } },
       { type: 'calc', instruction: 'Simplify the ratio', problem: '15 : 25', answer: '3:5', hint: 'Divide both by 5.' },
-      { type: 'calc', instruction: 'Share £40 in ratio 3:5. Find the FIRST share', problem: '3:5, Total = £40, first share = ?', answer: '15', hint: 'Total parts = 8. Each part = £5. First = 3×5 = £15. Bar model — 3 boxes vs 5 boxes:' + ratioBarSVG([3,5]) },
-      { type: 'calc', instruction: 'Share £40 in ratio 3:5. Find the SECOND share', problem: '3:5, Total = £40, second share = ?', answer: '25', hint: 'Total parts = 8. Each part = £5. Second = 5×5 = £25. Same bar model:' + ratioBarSVG([3,5]) },
+      { type: 'calc', instruction: 'Share £40 in ratio 3:5. Find the FIRST share', problem: '3:5, Total = £40, first share = ?', answer: '15', hint: {
+        visual: 'Bar model — 3 boxes vs 5 boxes:' + ratioBarSVG([3,5]),
+        setup: 'Total parts = 3 + 5 = 8. Each part = £40 ÷ 8 = £5.',
+        formula: 'First share = 3 × £5 = £15.'
+      } },
+      { type: 'calc', instruction: 'Share £40 in ratio 3:5. Find the SECOND share', problem: '3:5, Total = £40, second share = ?', answer: '25', hint: {
+        visual: 'Same bar model:' + ratioBarSVG([3,5]),
+        setup: 'Total parts = 8. Each part = £5.',
+        formula: 'Second share = 5 × £5 = £25.'
+      } },
       { type: 'calc', instruction: 'Are these ratios equivalent?', problem: '2:3  and  8:12', answer: 'yes', hint: '8÷4=2 and 12÷4=3. Yes, they are equivalent.' },
       { type: 'calc', instruction: 'Find the missing number', problem: '5 : 8 = 15 : ?', answer: '24', hint: '5×3=15, so multiply 8 by 3 too: 8×3=24.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Share in ratio 5:7, Total = 60', problem: '5:7, Total = 60', answer: '25,35', hint: 'Total parts = 12. Each part = 5. First = 25, Second = 35. Bar model — 5 boxes vs 7 boxes:' + ratioBarSVG([5,7]), solution: [
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Share in ratio 5:7, Total = 60', problem: '5:7, Total = 60', answer: '25,35', hint: {
+        visual: 'Bar model — 5 boxes vs 7 boxes:' + ratioBarSVG([5,7]),
+        setup: 'Total parts = 5 + 7 = 12. Each part = 60 ÷ 12 = 5.',
+        formula: 'First = 5 × 5 = 25. Second = 7 × 5 = 35.'
+      }, solution: [
         { action: 'Total parts', detail: '5 + 7 = 12', check: '12' },
         { action: 'Each part', detail: '60 ÷ 12 = 5', check: '5' },
         { action: 'First share', detail: '5 × 5 = 25', check: '25' },
@@ -2206,18 +2235,76 @@ function svgCoordGrid(opts) {
 
 let bossStepIndex = 0;
 let bossStepResults = [];
+let hintTiersShown = 0;
+
+// ══════════════════════ TIERED HINT SCAFFOLDING ══════════════════════
+// A mission's `hint` field can be either:
+//   - a plain string (legacy format) → treated as a single-tier hint
+//   - an object { visual, setup, formula } → up to 3 progressive tiers:
+//       visual  = a diagram/bar-model/picture nudge (revealed first)
+//       setup   = how to set up the equation/working (revealed second)
+//       formula = the key formula/identity or full working (revealed last)
+// Any tier can be omitted; only the tiers actually present are used.
+function getHintTiers(m) {
+  const h = m.hint;
+  if (!h) return [];
+  if (typeof h === 'string') {
+    return [{ label: '💡 Hint', content: h }];
+  }
+  const tiers = [];
+  if (h.visual) tiers.push({ label: '🖼️ Picture it', content: h.visual });
+  if (h.setup) tiers.push({ label: '✏️ Set it up', content: h.setup });
+  if (h.formula) tiers.push({ label: '📐 Key formula', content: h.formula });
+  return tiers;
+}
+
+function hintButtonLabel(m) {
+  const tiers = getHintTiers(m);
+  if (hintTiersShown === 0) return '💡 Need a hint?';
+  if (hintTiersShown >= tiers.length) return null; // nothing more to reveal
+  return hintTiersShown === 1 && tiers.length > 1 ? '💡 Show me more' : '💡 Show the key formula';
+}
+
+function renderHintPanel(m, hintExtra) {
+  const tiers = getHintTiers(m);
+  const shown = tiers.slice(0, hintTiersShown);
+  const blocks = shown.map(t => `
+    <div class="hint-tier">
+      <div class="hint-tier-label">${t.label}</div>
+      <div>${t.content}</div>
+    </div>`).join('');
+  return `${blocks}${hintTiersShown >= tiers.length ? hintExtra : ''}`;
+}
+
+function toggleHint() {
+  const level = LEVELS[currentLevel];
+  const m = level.missions[currentMissionIndex];
+  const tiers = getHintTiers(m);
+  const panel = document.getElementById('hint-panel');
+  if (hintTiersShown < tiers.length) hintTiersShown++;
+  panel.classList.add('open');
+  const hintExtra = m.solution ? renderSolutionBadges(m.solution) : '';
+  panel.innerHTML = renderHintPanel(m, hintExtra);
+  const btn = document.getElementById('hint-btn');
+  const nextLabel = hintButtonLabel(m);
+  if (nextLabel) {
+    btn.textContent = nextLabel;
+  } else {
+    btn.style.display = 'none';
+  }
+}
 
 function renderMission() {
   missionAnswered = false;
   bossStepIndex = 0;
   bossStepResults = [];
+  hintTiersShown = 0;
   const level = LEVELS[currentLevel];
   const m = level.missions[currentMissionIndex];
   const viewport = document.getElementById('mission-viewport');
 
   const isBoss = m.type === 'boss';
   const badgeText = isBoss ? '🔪 Chef Challenge' : `Mission ${currentMissionIndex + 1}`;
-  const hintExtra = m.solution ? renderSolutionBadges(m.solution) : '';
   const showBidmas = level.title === 'Order of Operations' || /BIDMAS|PEMDAS/i.test(m.instruction) || /BIDMAS|PEMDAS/i.test(m.hint || '');
   const showFractionHelper = /\d+\s*\/\s*\d+\s*[+\-−]\s*\d+\s*\/\s*\d+/.test(m.problem || '');
 
@@ -2241,12 +2328,12 @@ function renderMission() {
       <div class="feedback-box" id="feedback-box"></div>
 
       <div style="display:flex; gap:8px">
-        <button class="hint-btn" style="flex:1" onclick="toggleHint()">💡 Need a hint?</button>
+        <button class="hint-btn" id="hint-btn" style="flex:1" onclick="toggleHint()">💡 Need a hint?</button>
         <button class="hint-btn" style="flex:1" onclick="openWorkspace()">🧮 Working Space</button>
       </div>
       ${showBidmas ? `<button class="hint-btn" style="width:100%" onclick="openBidmasHelp()">🔢 What's BIDMAS?</button>` : ''}
       ${showFractionHelper ? `<button class="hint-btn" style="width:100%" onclick="openFractionHelper()">🍕 Fraction Helper</button>` : ''}
-      <div class="hint-panel" id="hint-panel">${m.hint}${hintExtra}</div>
+      <div class="hint-panel" id="hint-panel"></div>
 
       <div class="btn-nav-row">
         <button class="btn-secondary" onclick="prevMission()" ${currentMissionIndex === 0 ? 'disabled style="opacity:0.3;pointer-events:none"' : ''}>← Back</button>
@@ -2440,10 +2527,6 @@ function finalizeMission(isCorrect, m) {
     state.levelProgress[currentLevel] = reached;
   }
   saveState();
-}
-
-function toggleHint() {
-  document.getElementById('hint-panel').classList.toggle('open');
 }
 
 function prevMission() {
