@@ -172,6 +172,113 @@
     max-width: 320px;
     line-height: 1.5;
   }
+
+  /* ── SYNC / BACKUP CARD ── */
+  .tools {
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .tool-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 18px;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .tool-btn:active { transform: scale(0.98); }
+  .tool-status {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--muted);
+  }
+  .tool-status.synced { color: #5fd68a; }
+  .tool-status.offline { color: var(--gold); }
+
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 1100;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 22px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  .modal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .modal-desc { color: var(--muted); font-size: 0.85rem; margin-bottom: 14px; line-height: 1.4; }
+  .modal-btn {
+    display: block;
+    width: 100%;
+    background: var(--surface2, #3d281e);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .modal-btn-primary { background: linear-gradient(135deg, var(--gold), #ff8c3f); border: none; color: #2b1810; }
+  .modal-btn-danger { color: #ff6b6b; border-color: #ff6b6b; background: transparent; }
+  .modal-or { color: var(--muted); font-size: 0.75rem; margin: 8px 0; }
+  .modal-input, .modal-textarea {
+    display: block;
+    width: 100%;
+    background: #3d281e;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    color: var(--text);
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: inherit;
+  }
+  .modal-textarea { text-align: left; font-family: monospace; font-size: 0.78rem; min-height: 70px; resize: vertical; text-transform: none; letter-spacing: 0; }
+  .modal-input { letter-spacing: 2px; text-transform: uppercase; }
+  .modal-error { font-size: 0.78rem; min-height: 16px; margin-bottom: 4px; }
+  .modal-error.err { color: #ff6b6b; }
+  .modal-error.ok { color: #5fd68a; }
+  .modal-code-display {
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    word-break: break-all;
+    color: var(--gold);
+    background: #3d281e;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .modal-close { background: none; border: none; color: var(--muted); font-size: 0.85rem; margin-top: 6px; cursor: pointer; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -211,9 +318,69 @@
     </a>
   </div>
 
+  <div class="tools">
+    <div class="tool-btn" onclick="openSyncModal()">
+      <span>🔗 Family Sync</span>
+      <span class="tool-status" id="sync-status-pill">Local only</span>
+    </div>
+    <div class="tool-btn" onclick="openBackupModal()">
+      <span>💾 Backup / Restore Progress</span>
+      <span class="tool-status">both apps</span>
+    </div>
+  </div>
+
   <footer>
-    Keep this file in the same folder as the other two apps — tap a station to open it.
+    Keep this file in the same folder as the other two apps — tap a station to open it. Sync and backup for both apps are managed here.
   </footer>
+
+<!-- Sync Modal -->
+<div class="modal-overlay" id="sync-overlay">
+  <div class="modal-box">
+    <div class="modal-title">🔗 Sync Progress Across Devices</div>
+
+    <div id="sync-view-nocode">
+      <p class="modal-desc">Use the same Family Code on every device (iPad, phone, laptop) to keep both apps' progress in sync.</p>
+      <button class="modal-btn modal-btn-primary" onclick="createSyncCode()">✨ Create a New Family Code</button>
+      <div class="modal-or">or</div>
+      <input type="text" id="sync-join-input" class="modal-input" placeholder="Paste code from other device" maxlength="40">
+      <button class="modal-btn" onclick="joinSyncCode()">Join with This Code</button>
+      <div class="modal-error" id="sync-error"></div>
+    </div>
+
+    <div id="sync-view-active" style="display:none">
+      <p class="modal-desc">This device is syncing with Family Code:</p>
+      <div class="modal-code-display" id="sync-code-display">------</div>
+      <p class="modal-desc" style="font-size:0.78rem">Tap Copy Code below, then paste it into "Join with This Code" on your son's other device.</p>
+      <div class="modal-error ok" id="sync-status-line">Connected ✅</div>
+      <button class="modal-btn" onclick="copySyncCode()">📋 Copy Code</button>
+      <button class="modal-btn modal-btn-danger" onclick="disconnectSync()">Disconnect This Device</button>
+    </div>
+
+    <button class="modal-close" onclick="closeSyncModal()">Close</button>
+  </div>
+</div>
+
+<!-- Backup Modal -->
+<div class="modal-overlay" id="backup-overlay">
+  <div class="modal-box">
+    <div class="modal-title">💾 Backup / Restore</div>
+    <p class="modal-desc">Generate one code that carries BOTH apps' progress — save it somewhere safe (Notes, an email to yourself). Use it to restore progress if you move to a new web address or device.</p>
+
+    <p class="modal-desc" style="font-size:0.78rem; margin-bottom:6px;">Generate a code from progress on this device:</p>
+    <textarea class="modal-textarea" id="backup-export-box" readonly placeholder="Tap Generate Code below..."></textarea>
+    <button class="modal-btn" onclick="generateBackupCode()">Generate Code</button>
+    <button class="modal-btn" onclick="copyBackupCode()">Copy Code</button>
+    <div class="modal-error" id="backup-export-status"></div>
+
+    <div style="height:14px"></div>
+    <p class="modal-desc" style="font-size:0.78rem; margin-bottom:6px;">Restore a code you saved earlier:</p>
+    <textarea class="modal-textarea" id="backup-import-box" placeholder="Paste your saved code here..."></textarea>
+    <button class="modal-btn modal-btn-primary" onclick="restoreBackupCode()">Restore Progress</button>
+    <div class="modal-error" id="backup-import-status"></div>
+
+    <button class="modal-close" onclick="closeBackupModal()">Close</button>
+  </div>
+</div>
 
 <script>
   // Best-effort progress preview. If the browser keeps these files on
@@ -233,6 +400,210 @@
   }
   tryShowProgress('math-complete-state', 'mathProgress', 'xp');
   tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
+
+  // ══════════════════════ UNIFIED FAMILY SYNC (KVdb.io) ══════════════════════
+  // One Family Code, created or joined only here, is shared (same localStorage
+  // key, same origin) with both the Math and Thai apps. Each app quietly
+  // pushes/pulls its own progress under this one code to its own path
+  // (kvdb.io/{code}/math and kvdb.io/{code}/thai) — nothing here touches
+  // gameplay state directly, it only manages the code itself.
+  const KVDB_BASE = 'https://kvdb.io';
+  const KN_SYNC_KEY = 'kn-sync-code';
+  const LEGACY_KEYS = ['math-family-code', 'thai-sync-bucket']; // pre-consolidation codes
+  let lastSyncError = '';
+
+  function getSyncCode() {
+    let code = localStorage.getItem(KN_SYNC_KEY);
+    if (!code) {
+      for (const k of LEGACY_KEYS) {
+        const legacy = localStorage.getItem(k);
+        if (legacy) { localStorage.setItem(KN_SYNC_KEY, legacy); code = legacy; break; }
+      }
+    }
+    return code || '';
+  }
+  function setSyncCodeLocal(code) { localStorage.setItem(KN_SYNC_KEY, code); }
+  function clearSyncCodeLocal() { localStorage.removeItem(KN_SYNC_KEY); }
+
+  function placeholderEmail() {
+    const rand = Math.random().toString(36).slice(2, 10);
+    return `kitchenninjahq${rand}@gmail.com`;
+  }
+
+  async function createCloudBucket() {
+    try {
+      const body = new URLSearchParams({ email: placeholderEmail(), default_ttl: '0' });
+      const res = await fetch(KVDB_BASE, { method: 'POST', body });
+      if (!res.ok) { lastSyncError = `server responded ${res.status}`; return null; }
+      const bucketId = (await res.text()).trim();
+      return bucketId || null;
+    } catch (e) { lastSyncError = (e && e.message) ? e.message : String(e); return null; }
+  }
+
+  // Round-trip a small marker value to confirm a code actually works before
+  // ever showing it — this is what "fails to generate a code" was missing.
+  async function verifyCode(code) {
+    try {
+      const res = await fetch(`${KVDB_BASE}/${encodeURIComponent(code)}/ping`, {
+        method: 'POST', body: String(Date.now())
+      });
+      if (!res.ok) { lastSyncError = `server responded ${res.status}`; return false; }
+      const check = await fetch(`${KVDB_BASE}/${encodeURIComponent(code)}/ping`);
+      return check.ok;
+    } catch (e) { lastSyncError = (e && e.message) ? e.message : String(e); return false; }
+  }
+
+  function updateSyncPill() {
+    const pill = document.getElementById('sync-status-pill');
+    if (!pill) return;
+    const code = getSyncCode();
+    pill.classList.remove('synced', 'offline');
+    if (code) { pill.textContent = 'Connected'; pill.classList.add('synced'); }
+    else { pill.textContent = 'Local only'; }
+  }
+
+  function openSyncModal() {
+    const code = getSyncCode();
+    document.getElementById('sync-overlay').classList.add('show');
+    document.getElementById('sync-error').textContent = '';
+    if (code) {
+      document.getElementById('sync-view-nocode').style.display = 'none';
+      document.getElementById('sync-view-active').style.display = 'block';
+      document.getElementById('sync-code-display').textContent = code;
+      document.getElementById('sync-status-line').textContent = 'Connected ✅';
+    } else {
+      document.getElementById('sync-view-nocode').style.display = 'block';
+      document.getElementById('sync-view-active').style.display = 'none';
+    }
+  }
+  function closeSyncModal() { document.getElementById('sync-overlay').classList.remove('show'); }
+
+  async function createSyncCode() {
+    const errEl = document.getElementById('sync-error');
+    errEl.className = 'modal-error';
+    errEl.textContent = 'Setting up your family code…';
+    lastSyncError = '';
+    const bucketId = await createCloudBucket();
+    if (!bucketId) {
+      errEl.className = 'modal-error err';
+      errEl.textContent = `Could not connect${lastSyncError ? ' (' + lastSyncError + ')' : ''}. Check your internet connection and try again.`;
+      return;
+    }
+    let ok = await verifyCode(bucketId);
+    if (!ok) ok = await verifyCode(bucketId); // one retry before giving up
+    if (!ok) {
+      errEl.className = 'modal-error err';
+      errEl.textContent = `Created the code, but couldn't confirm it works${lastSyncError ? ' (' + lastSyncError + ')' : ''}. Check your internet connection and try again.`;
+      return;
+    }
+    setSyncCodeLocal(bucketId);
+    updateSyncPill();
+    openSyncModal();
+  }
+
+  async function joinSyncCode() {
+    const errEl = document.getElementById('sync-error');
+    const input = document.getElementById('sync-join-input');
+    const code = input.value.replace(/\s+/g, '');
+    errEl.className = 'modal-error';
+    errEl.textContent = '';
+    lastSyncError = '';
+    if (!code) { errEl.className = 'modal-error err'; errEl.textContent = 'Paste a code first.'; return; }
+    errEl.textContent = 'Connecting…';
+    const ok = await verifyCode(code);
+    if (!ok) {
+      errEl.className = 'modal-error err';
+      errEl.textContent = lastSyncError
+        ? `Could not connect (${lastSyncError}). Check your internet connection and try again.`
+        : 'Could not reach that code — double-check it, or create a new code instead.';
+      return;
+    }
+    setSyncCodeLocal(code);
+    updateSyncPill();
+    input.value = '';
+    openSyncModal();
+  }
+
+  function copySyncCode() {
+    const code = getSyncCode();
+    if (!code) return;
+    navigator.clipboard?.writeText(code).catch(() => {});
+    const line = document.getElementById('sync-status-line');
+    line.textContent = 'Copied! ✅';
+    setTimeout(() => { line.textContent = 'Connected ✅'; }, 1500);
+  }
+
+  function disconnectSync() {
+    clearSyncCodeLocal();
+    updateSyncPill();
+    openSyncModal();
+  }
+
+  updateSyncPill();
+
+  // ══════════════════════ COMBINED BACKUP / RESTORE ══════════════════════
+  function openBackupModal() { document.getElementById('backup-overlay').classList.add('show'); }
+  function closeBackupModal() { document.getElementById('backup-overlay').classList.remove('show'); }
+
+  function generateBackupCode() {
+    const box = document.getElementById('backup-export-box');
+    const status = document.getElementById('backup-export-status');
+    try {
+      const bundle = {
+        math: JSON.parse(localStorage.getItem('math-complete-state') || 'null'),
+        thai: JSON.parse(localStorage.getItem('thai-reading-state') || 'null'),
+      };
+      box.value = btoa(encodeURIComponent(JSON.stringify(bundle)));
+      status.className = 'modal-error ok';
+      status.textContent = '✓ Code ready — tap Copy Code';
+    } catch (e) {
+      status.className = 'modal-error err';
+      status.textContent = 'Could not generate a code. Try again.';
+    }
+  }
+
+  function copyBackupCode() {
+    const box = document.getElementById('backup-export-box');
+    const status = document.getElementById('backup-export-status');
+    if (!box.value) generateBackupCode();
+    box.select();
+    box.setSelectionRange(0, 999999);
+    try {
+      document.execCommand('copy');
+      status.className = 'modal-error ok';
+      status.textContent = '✓ Copied! Paste it somewhere safe.';
+    } catch (e) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(box.value).then(() => {
+          status.className = 'modal-error ok';
+          status.textContent = '✓ Copied! Paste it somewhere safe.';
+        });
+      } else {
+        status.className = 'modal-error err';
+        status.textContent = 'Select the text above and copy it manually.';
+      }
+    }
+  }
+
+  function restoreBackupCode() {
+    const box = document.getElementById('backup-import-box');
+    const status = document.getElementById('backup-import-status');
+    const code = box.value.trim();
+    if (!code) { status.className = 'modal-error err'; status.textContent = 'Paste a code first.'; return; }
+    try {
+      const bundle = JSON.parse(decodeURIComponent(atob(code)));
+      if (typeof bundle !== 'object' || bundle === null) throw new Error('bad code');
+      if (bundle.math) localStorage.setItem('math-complete-state', JSON.stringify(bundle.math));
+      if (bundle.thai) localStorage.setItem('thai-reading-state', JSON.stringify(bundle.thai));
+      status.className = 'modal-error ok';
+      status.textContent = '✓ Progress restored! Reopen an app to see it — it will sync to the cloud automatically if a Family Code is set up.';
+      tryShowProgress('math-complete-state', 'mathProgress', 'xp');
+      tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
+    } catch (e) {
+      status.className = 'modal-error err';
+      status.textContent = 'That code looks invalid — check it was copied in full.';
+    }
+  }
 </script>
 
 </body>

@@ -509,7 +509,6 @@
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.5px;
-    cursor: pointer;
   }
   .sync-badge.synced { color: var(--green); border-color: var(--green); }
   .sync-badge.offline { color: var(--gold); border-color: var(--gold2); }
@@ -555,34 +554,6 @@
   }
   .sync-btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: white; }
   .sync-btn-danger { color: var(--red); border-color: var(--red); background: transparent; }
-  .sync-or { color: var(--muted); font-size: 0.75rem; margin: 8px 0; }
-  .sync-input {
-    display: block;
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    color: var(--text);
-    font-size: 1rem;
-    text-align: center;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  .sync-error { color: var(--red); font-size: 0.78rem; min-height: 16px; margin-bottom: 4px; }
-  .sync-code-display {
-    font-family: 'Bangers', cursive;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    word-break: break-all;
-    color: var(--gold);
-    background: var(--surface2);
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-  }
-  .sync-status-line { color: var(--muted); font-size: 0.78rem; margin-bottom: 14px; }
   .sync-close { background: none; border: none; color: var(--muted); font-size: 0.85rem; margin-top: 6px; cursor: pointer; text-decoration: underline; }
   /* ── WORKING SPACE (ThHTO column tool) ── */
   .wt-desc { color: var(--muted); font-size: 0.8rem; margin-bottom: 12px; line-height: 1.4; }
@@ -696,7 +667,7 @@
   <div class="home-header">
     <div class="home-title">🔪 MATH KITCHEN NINJA</div>
     <div class="home-subtitle">Complete Edition · Year 8 · 28 Levels · 280 Recipes</div>
-    <div class="sync-badge" id="sync-badge" onclick="openSyncModal()">⚙️ Set up sync</div>
+    <div class="sync-badge" id="sync-badge">📴 Local only</div>
   </div>
 
   <div class="xp-panel">
@@ -749,33 +720,6 @@
   <button class="btn-dismiss" onclick="document.getElementById('level-up').classList.remove('show')">
     Keep going! 💪
   </button>
-</div>
-
-<!-- Sync Modal -->
-<div class="sync-overlay" id="sync-overlay">
-  <div class="sync-modal">
-    <div class="sync-modal-title">🔗 Sync Progress Across Devices</div>
-
-    <div id="sync-view-nocode">
-      <p class="sync-desc">Use the same Family Code on every device (iPad, phone, laptop) to keep progress in sync.</p>
-      <button class="sync-btn sync-btn-primary" onclick="createSyncCode()">✨ Create a New Family Code</button>
-      <div class="sync-or">or</div>
-      <input type="text" id="sync-join-input" class="sync-input" placeholder="Paste code from other device" maxlength="40">
-      <button class="sync-btn" onclick="joinSyncCode()">Join with This Code</button>
-      <div class="sync-error" id="sync-error"></div>
-    </div>
-
-    <div id="sync-view-active" style="display:none">
-      <p class="sync-desc">This device is syncing with Family Code:</p>
-      <div class="sync-code-display" id="sync-code-display">------</div>
-      <p class="sync-desc" style="font-size:0.78rem">Tap Copy Code below, then paste it into "Join with This Code" on your son's other device.</p>
-      <div class="sync-status-line" id="sync-status-line">Checking connection…</div>
-      <button class="sync-btn" onclick="copySyncCode()">📋 Copy Code</button>
-      <button class="sync-btn sync-btn-danger" onclick="disconnectSync()">Disconnect This Device</button>
-    </div>
-
-    <button class="sync-close" onclick="closeSyncModal()">Close</button>
-  </div>
 </div>
 
 <!-- Working Space (ThHTO column tool) -->
@@ -1913,24 +1857,24 @@ const RANKS = [
 ];
 
 // ══════════════════════ CLOUD SYNC (KVdb.io) ══════════════════════
-// No setup needed! The first time anyone taps "Create a New Family Code",
-// the app automatically creates a private cloud storage slot and gives
-// back a code. Paste that code into "Join with This Code" on the other
-// device and the two devices will sync from then on. No account, no API
-// key, nothing to configure.
+// Sync setup (creating/joining/disconnecting a Family Code) now lives on the
+// Kitchen Ninja HQ landing page, in one place shared by both apps. This app
+// just reads whichever code is already sitting in shared localStorage and
+// quietly pushes/pulls its own progress under that code — no UI of its own.
 const KVDB_BASE = 'https://kvdb.io';
-const SYNC_CODE_KEY = 'math-family-code';
+const KN_SYNC_KEY = 'kn-sync-code'; // shared across all apps on this site
+const LEGACY_SYNC_CODE_KEY = 'math-family-code'; // one-time migration source
 let syncPushTimer = null;
-let lastSyncError = ''; // last concrete failure reason, surfaced in the sync modal for diagnosis
+let lastSyncError = '';
 
 function getSyncCode() {
-  return localStorage.getItem(SYNC_CODE_KEY) || '';
-}
-function setSyncCodeLocal(code) {
-  localStorage.setItem(SYNC_CODE_KEY, code);
-}
-function clearSyncCodeLocal() {
-  localStorage.removeItem(SYNC_CODE_KEY);
+  let code = localStorage.getItem(KN_SYNC_KEY);
+  if (!code) {
+    // Migrate a code from before the sync consolidation, if this device had one.
+    const legacy = localStorage.getItem(LEGACY_SYNC_CODE_KEY);
+    if (legacy) { localStorage.setItem(KN_SYNC_KEY, legacy); code = legacy; }
+  }
+  return code || '';
 }
 
 // Progress only ever goes up, so merging by taking the maximum of each field
@@ -1959,8 +1903,8 @@ function mergeStates(a, b) {
 async function pullCloudState(bucketId) {
   if (!bucketId) return null;
   try {
-    const res = await fetch(`${KVDB_BASE}/${encodeURIComponent(bucketId)}/progress`);
-    if (res.status === 404) return null; // bucket exists but nothing saved yet
+    const res = await fetch(`${KVDB_BASE}/${encodeURIComponent(bucketId)}/math`);
+    if (res.status === 404) return null; // code exists but nothing saved yet for this app
     if (!res.ok) { lastSyncError = `server responded ${res.status}`; return null; }
     const text = await res.text();
     return text ? JSON.parse(text) : null;
@@ -1975,7 +1919,7 @@ async function pushCloudState(bucketId, s) {
     // request first, which some APIs don't answer correctly — causing the
     // real save to silently never happen. Plain-string bodies default to a
     // preflight-free content type, and KVdb doesn't care what it's labelled.
-    const res = await fetch(`${KVDB_BASE}/${encodeURIComponent(bucketId)}/progress`, {
+    const res = await fetch(`${KVDB_BASE}/${encodeURIComponent(bucketId)}/math`, {
       method: 'POST',
       body: JSON.stringify({
         xp: s.xp, levelProgress: s.levelProgress, levelMissionResults: s.levelMissionResults, updatedAt: Date.now()
@@ -1984,23 +1928,6 @@ async function pushCloudState(bucketId, s) {
     if (!res.ok) lastSyncError = `server responded ${res.status}`;
     return res.ok;
   } catch (e) { lastSyncError = (e && e.message) ? e.message : String(e); console.warn('Cloud push failed', e); return false; }
-}
-
-function placeholderEmail() {
-  // KVdb asks for an email so a bucket can be recovered later, but this app
-  // doesn't need bucket management, so a syntactically-valid placeholder is used.
-  const rand = Math.random().toString(36).slice(2, 10);
-  return `mathkitchenninja${rand}@gmail.com`;
-}
-
-async function createCloudBucket() {
-  try {
-    const body = new URLSearchParams({ email: placeholderEmail(), default_ttl: '0' }); // default_ttl 0 = never expires
-    const res = await fetch(KVDB_BASE, { method: 'POST', body });
-    if (!res.ok) { lastSyncError = `server responded ${res.status}`; return null; }
-    const bucketId = (await res.text()).trim();
-    return bucketId || null;
-  } catch (e) { lastSyncError = (e && e.message) ? e.message : String(e); console.warn('Bucket creation failed', e); return null; }
 }
 
 function scheduleCloudPush() {
@@ -2017,12 +1944,7 @@ function updateSyncBadge(mode) {
   badge.classList.remove('synced', 'offline');
   if (mode === 'synced') { badge.textContent = '🔗 Synced'; badge.classList.add('synced'); }
   else if (mode === 'offline') { badge.textContent = '📴 Offline'; badge.classList.add('offline'); }
-  else { badge.textContent = '⚙️ Set up sync'; }
-}
-
-function updateSyncStatusLine(text) {
-  const el = document.getElementById('sync-status-line');
-  if (el) el.textContent = text;
+  else { badge.textContent = '📴 Local only'; }
 }
 
 async function syncOnLoad() {
@@ -2035,100 +1957,8 @@ async function syncOnLoad() {
     renderXP();
     renderLevelsList();
   }
-  await pushCloudState(code, state);
-  updateSyncBadge('synced');
-}
-
-function openSyncModal() {
-  const code = getSyncCode();
-  document.getElementById('sync-overlay').classList.add('show');
-  document.getElementById('sync-error').textContent = '';
-  if (code) {
-    document.getElementById('sync-view-nocode').style.display = 'none';
-    document.getElementById('sync-view-active').style.display = 'block';
-    document.getElementById('sync-code-display').textContent = code;
-    updateSyncStatusLine('Connected ✅');
-  } else {
-    document.getElementById('sync-view-nocode').style.display = 'block';
-    document.getElementById('sync-view-active').style.display = 'none';
-  }
-}
-
-function closeSyncModal() {
-  document.getElementById('sync-overlay').classList.remove('show');
-}
-
-async function createSyncCode() {
-  const errEl = document.getElementById('sync-error');
-  errEl.textContent = 'Setting up your family code…';
-  lastSyncError = '';
-  const bucketId = await createCloudBucket();
-  if (!bucketId) {
-    errEl.textContent = `Could not connect${lastSyncError ? ' (' + lastSyncError + ')' : ''}. Check your internet connection and try again.`;
-    return;
-  }
-  // Save, then read it straight back — if the round-trip doesn't check out,
-  // retry once before ever showing the code, so we never hand out a code
-  // that looks fine but has no data behind it.
-  let saved = await pushCloudState(bucketId, state);
-  if (saved) {
-    const verify = await pullCloudState(bucketId);
-    saved = !!verify;
-  }
-  if (!saved) {
-    saved = await pushCloudState(bucketId, state);
-    if (saved) {
-      const verify = await pullCloudState(bucketId);
-      saved = !!verify;
-    }
-  }
-  if (!saved) {
-    errEl.textContent = `Created the code, but saving progress to it failed${lastSyncError ? ' (' + lastSyncError + ')' : ''}. Check your internet connection and try again.`;
-    return;
-  }
-  setSyncCodeLocal(bucketId);
-  updateSyncBadge('synced');
-  openSyncModal();
-}
-
-async function joinSyncCode() {
-  const errEl = document.getElementById('sync-error');
-  const input = document.getElementById('sync-join-input');
-  const code = input.value.replace(/\s+/g, '');
-  errEl.textContent = '';
-  lastSyncError = '';
-  if (!code) { errEl.textContent = 'Paste a code first.'; return; }
-  errEl.textContent = 'Connecting…';
-  const cloud = await pullCloudState(code);
-  if (!cloud) {
-    errEl.textContent = lastSyncError
-      ? `Could not connect (${lastSyncError}). Check your internet connection and try again.`
-      : 'No progress found for that code — double-check it, or create a new code instead.';
-    return;
-  }
-  state = mergeStates(state, cloud);
-  setSyncCodeLocal(code);
-  try { localStorage.setItem('math-complete-state', JSON.stringify(state)); } catch (e) {}
-  await pushCloudState(code, state);
-  renderXP();
-  renderLevelsList();
-  updateSyncBadge('synced');
-  input.value = '';
-  openSyncModal();
-}
-
-function copySyncCode() {
-  const code = getSyncCode();
-  if (!code) return;
-  navigator.clipboard?.writeText(code).catch(() => {});
-  updateSyncStatusLine('Copied! ✅');
-  setTimeout(() => updateSyncStatusLine('Connected ✅'), 1500);
-}
-
-function disconnectSync() {
-  clearSyncCodeLocal();
-  updateSyncBadge('off');
-  openSyncModal();
+  const ok = await pushCloudState(code, state);
+  updateSyncBadge(ok ? 'synced' : 'offline');
 }
 
 let state = { xp: 0, levelProgress: {}, levelMissionResults: {} };
