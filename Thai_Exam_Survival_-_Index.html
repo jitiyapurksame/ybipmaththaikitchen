@@ -99,6 +99,21 @@
   }
   .backup-link.synced { color: var(--green); border-color: var(--green); }
   .backup-link.offline { color: var(--accent2); border-color: rgba(232,117,44,0.4); }
+  .home-link {
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 6px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+  .home-link:active { transform: scale(0.97); }
 
   /* XP Panel */
   .xp-panel {
@@ -1551,6 +1566,7 @@
     <div class="home-title">👨‍🍳 THAI READING<br>SURVIVAL</div>
     <div class="home-subtitle">Science Explorer · Year 8</div>
     <div class="backup-link" id="sync-badge">📴 Local only</div>
+    <a class="home-link" href="index.html">🏠 HQ</a>
   </div>
 
   <div class="xp-panel">

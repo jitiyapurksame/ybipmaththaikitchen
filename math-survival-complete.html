@@ -512,6 +512,21 @@
   }
   .sync-badge.synced { color: var(--green); border-color: var(--green); }
   .sync-badge.offline { color: var(--gold); border-color: var(--gold2); }
+  .home-link {
+    display: inline-block;
+    margin-top: 8px;
+    margin-left: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+  .home-link:active { transform: scale(0.97); }
 
   .sync-overlay {
     display: none;
@@ -668,6 +683,7 @@
     <div class="home-title">🔪 MATH KITCHEN NINJA</div>
     <div class="home-subtitle">Complete Edition · Year 8 · 28 Levels · 280 Recipes</div>
     <div class="sync-badge" id="sync-badge">📴 Local only</div>
+    <a class="home-link" href="index.html">🏠 HQ</a>
   </div>
 
   <div class="xp-panel">
