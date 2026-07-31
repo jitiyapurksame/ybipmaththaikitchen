@@ -85,56 +85,21 @@
 
   .home-subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
 
-  .backup-link {
+  .home-link {
     display: inline-block;
     margin-top: 10px;
+    margin-left: 6px;
     font-size: 0.72rem;
-    color: var(--accent2);
-    background: rgba(232,117,44,0.12);
-    border: 1px solid rgba(232,117,44,0.3);
-    border-radius: 999px;
-    padding: 5px 12px;
-    cursor: pointer;
-  }
-  .backup-link:active { transform: scale(0.97); }
-
-  .backup-body { padding: 20px; display: flex; flex-direction: column; gap: 18px; }
-  .backup-section {
+    color: var(--muted);
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 16px 18px;
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
   }
-  .backup-section-title { font-family: 'Bangers', cursive; letter-spacing: 1px; color: var(--gold); font-size: 1.05rem; margin-bottom: 6px; }
-  .backup-section-sub { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
-  .backup-code-box {
-    width: 100%;
-    min-height: 70px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 12px;
-    color: var(--text);
-    font-size: 0.8rem;
-    font-family: monospace;
-    resize: vertical;
-  }
-  .backup-btn-row { display: flex; gap: 10px; margin-top: 10px; }
-  .backup-btn {
-    flex: 1;
-    background: var(--accent);
-    color: #2b1810;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-weight: 800;
-    font-size: 0.85rem;
-    cursor: pointer;
-  }
-  .backup-btn:active { transform: scale(0.97); }
-  .backup-status { font-size: 0.78rem; margin-top: 8px; min-height: 18px; }
-  .backup-status.ok { color: var(--green); }
-  .backup-status.err { color: var(--red); }
+  .home-link:active { transform: scale(0.97); }
 
   /* XP Panel */
   .xp-panel {
@@ -1586,7 +1551,7 @@
   <div class="home-header">
     <div class="home-title">👨‍🍳 THAI READING<br>SURVIVAL</div>
     <div class="home-subtitle">Science Explorer · Year 8</div>
-    <div class="backup-link" onclick="openBackupScreen()">💾 Backup / Move Progress</div>
+    <a class="home-link" href="index.html">🏠 HQ</a>
   </div>
 
   <div class="xp-panel">
@@ -1856,53 +1821,7 @@
   </div>
 </div>
 
-<!-- ══════════════════════ BACKUP / RESTORE SCREEN ══════════════════════ -->
-<div id="backup-screen" class="screen">
-  <div class="simple-header">
-    <button class="back-btn" onclick="showScreen('home')">← Back</button>
-    <div class="screen-title">💾 Backup / Move Progress</div>
-  </div>
-  <div class="backup-body">
-    <div class="backup-section">
-      <div class="backup-section-title">🔄 Cloud Sync</div>
-      <div class="backup-section-sub">This device syncs automatically in the background. To link a different web address (like after moving hosts) to the same progress, copy this device's code and paste it into "Link this device" on the other one.</div>
-      <textarea class="backup-code-box" id="sync-code-box" readonly placeholder="Sync code will appear here..."></textarea>
-      <div class="backup-btn-row">
-        <button class="backup-btn" onclick="copySyncCode()">Copy Sync Code</button>
-      </div>
-      <div class="backup-status" id="sync-copy-status"></div>
-      <div style="height:10px"></div>
-      <div class="backup-section-sub">Link this device to an existing sync code:</div>
-      <textarea class="backup-code-box" id="sync-join-box" style="min-height:44px" placeholder="Paste a sync code from the other address..."></textarea>
-      <div class="backup-btn-row">
-        <button class="backup-btn" onclick="joinSyncCode()">Link This Device</button>
-      </div>
-      <div class="backup-status" id="sync-join-status"></div>
-      <div class="backup-status" id="sync-status" style="margin-top:10px"></div>
-    </div>
 
-    <div class="backup-section">
-      <div class="backup-section-title">📤 Save a Recipe Card</div>
-      <div class="backup-section-sub">Tap "Generate Code," then copy it somewhere safe (Notes app, an email to yourself, etc). Use this when moving to a new web address.</div>
-      <textarea class="backup-code-box" id="backup-export-box" readonly placeholder="Tap Generate Code below..."></textarea>
-      <div class="backup-btn-row">
-        <button class="backup-btn" onclick="generateBackupCode()">Generate Code</button>
-        <button class="backup-btn" onclick="copyBackupCode()">Copy Code</button>
-      </div>
-      <div class="backup-status" id="backup-export-status"></div>
-    </div>
-
-    <div class="backup-section">
-      <div class="backup-section-title">📥 Load a Recipe Card</div>
-      <div class="backup-section-sub">Paste a code you saved earlier (from another web address) to bring that progress back here.</div>
-      <textarea class="backup-code-box" id="backup-import-box" placeholder="Paste your saved code here..."></textarea>
-      <div class="backup-btn-row">
-        <button class="backup-btn" onclick="restoreBackupCode()">Restore Progress</button>
-      </div>
-      <div class="backup-status" id="backup-import-status"></div>
-    </div>
-  </div>
-</div>
 
 <!-- ══════════════════════ HERO CARD SCREEN ══════════════════════ -->
 <div id="herocard-screen" class="screen">
@@ -3322,220 +3241,12 @@ async function loadState() {
   renderXP();
   renderDoneBadges();
   renderTrophyRoom();
-  cloudSyncOnLoad();
 }
 
 async function saveState() {
   const raw = JSON.stringify(state);
   try { localStorage.setItem('thai-reading-state', raw); } catch (e) {}
   try { if (window.storage) await window.storage.set('thai-reading-state', raw); } catch (e) {}
-  cloudPush();
-}
-
-// ── CLOUD SYNC (KVdb.io — no account needed) ──
-const KVDB_BASE = 'https://kvdb.io/';
-const KVDB_BUCKET_KEY = 'thai-sync-bucket';
-const KVDB_STATE_KEY = 'thai-state';
-
-function mergeStates(local, remote) {
-  if (!remote || typeof remote !== 'object') return local;
-  return {
-    ...local,
-    ...remote,
-    xp: Math.max(local.xp || 0, remote.xp || 0),
-    done: { ...(remote.done || {}), ...(local.done || {}) }
-  };
-}
-
-async function cloudSyncOnLoad() {
-  let bucket = null;
-  try { bucket = localStorage.getItem(KVDB_BUCKET_KEY); } catch (e) {}
-  if (!bucket) {
-    // First run on this device/address — create a fresh sync bucket silently.
-    try {
-      const res = await fetch(KVDB_BASE, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'email=thai-reading-survival-sync@example.com'
-      });
-      if (res.ok) {
-        bucket = (await res.text()).trim();
-        if (bucket) localStorage.setItem(KVDB_BUCKET_KEY, bucket);
-      }
-    } catch (e) { /* offline or blocked — local storage still works fine */ }
-    if (!bucket) { updateSyncStatusUI(); return; }
-    // push current state as the initial cloud copy
-    await cloudPush();
-    updateSyncStatusUI();
-    return;
-  }
-  try {
-    const res = await fetch(`${KVDB_BASE}${bucket}/${KVDB_STATE_KEY}`);
-    if (res.ok) {
-      const text = await res.text();
-      if (text) {
-        const remote = JSON.parse(text);
-        state = mergeStates(state, remote);
-        renderXP();
-        renderDoneBadges();
-        renderTrophyRoom();
-        try { localStorage.setItem('thai-reading-state', JSON.stringify(state)); } catch (e) {}
-        await cloudPush();
-      }
-    }
-  } catch (e) { /* offline or blocked — local storage still works fine */ }
-  updateSyncStatusUI();
-}
-
-async function cloudPush() {
-  let bucket = null;
-  try { bucket = localStorage.getItem(KVDB_BUCKET_KEY); } catch (e) {}
-  if (!bucket) return;
-  try {
-    await fetch(`${KVDB_BASE}${bucket}/${KVDB_STATE_KEY}`, {
-      method: 'POST',
-      body: JSON.stringify(state)
-    });
-    lastSyncOK = true;
-  } catch (e) { lastSyncOK = false; }
-  updateSyncStatusUI();
-}
-
-let lastSyncOK = null;
-
-function updateSyncStatusUI() {
-  const status = document.getElementById('sync-status');
-  const box = document.getElementById('sync-code-box');
-  if (!status) return;
-  let bucket = null;
-  try { bucket = localStorage.getItem(KVDB_BUCKET_KEY); } catch (e) {}
-  if (box) box.value = bucket || '';
-  if (!bucket) {
-    status.textContent = 'Cloud sync unavailable right now — your local Backup/Restore code below still works.';
-    status.className = 'backup-status err';
-  } else if (lastSyncOK === false) {
-    status.textContent = '⚠ Could not reach the cloud just now — will retry next time. Progress is still safe locally.';
-    status.className = 'backup-status err';
-  } else {
-    status.textContent = '✓ Cloud sync active on this device.';
-    status.className = 'backup-status ok';
-  }
-}
-
-function copySyncCode() {
-  const box = document.getElementById('sync-code-box');
-  const status = document.getElementById('sync-copy-status');
-  if (!box.value) { status.textContent = 'No sync code yet — check your connection and reopen this screen.'; status.className = 'backup-status err'; return; }
-  box.select();
-  box.setSelectionRange(0, 999999);
-  try {
-    document.execCommand('copy');
-    status.textContent = '✓ Copied! Paste it into "Link this device" on the other address.';
-    status.className = 'backup-status ok';
-  } catch (e) {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(box.value).then(() => {
-        status.textContent = '✓ Copied! Paste it into "Link this device" on the other address.';
-        status.className = 'backup-status ok';
-      });
-    } else {
-      status.textContent = 'Select the text above and copy it manually.';
-      status.className = 'backup-status err';
-    }
-  }
-}
-
-async function joinSyncCode() {
-  const input = document.getElementById('sync-join-box');
-  const status = document.getElementById('sync-join-status');
-  const code = input.value.trim();
-  if (!code) {
-    status.textContent = 'Paste a sync code first.';
-    status.className = 'backup-status err';
-    return;
-  }
-  try {
-    localStorage.setItem(KVDB_BUCKET_KEY, code);
-    status.textContent = 'Linking…';
-    status.className = 'backup-status ok';
-    await cloudSyncOnLoad();
-    status.textContent = '✓ Linked! Progress pulled in from the other device.';
-    status.className = 'backup-status ok';
-    input.value = '';
-  } catch (e) {
-    status.textContent = 'Could not link right now — check your connection and try again.';
-    status.className = 'backup-status err';
-  }
-}
-
-// ── BACKUP / RESTORE ──
-async function openBackupScreen() {
-  showScreen('backup-screen');
-  let bucket = null;
-  try { bucket = localStorage.getItem(KVDB_BUCKET_KEY); } catch (e) {}
-  if (!bucket) { await cloudSyncOnLoad(); } else { updateSyncStatusUI(); }
-}
-
-function generateBackupCode() {
-  const box = document.getElementById('backup-export-box');
-  const status = document.getElementById('backup-export-status');
-  try {
-    const code = btoa(encodeURIComponent(JSON.stringify(state)));
-    box.value = code;
-    status.textContent = '✓ Code ready — tap Copy Code';
-    status.className = 'backup-status ok';
-  } catch (e) {
-    status.textContent = 'Could not generate a code. Try again.';
-    status.className = 'backup-status err';
-  }
-}
-
-function copyBackupCode() {
-  const box = document.getElementById('backup-export-box');
-  const status = document.getElementById('backup-export-status');
-  if (!box.value) { generateBackupCode(); }
-  box.select();
-  box.setSelectionRange(0, 999999);
-  try {
-    document.execCommand('copy');
-    status.textContent = '✓ Copied! Paste it somewhere safe.';
-    status.className = 'backup-status ok';
-  } catch (e) {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(box.value).then(() => {
-        status.textContent = '✓ Copied! Paste it somewhere safe.';
-        status.className = 'backup-status ok';
-      });
-    } else {
-      status.textContent = 'Select the text above and copy it manually.';
-      status.className = 'backup-status err';
-    }
-  }
-}
-
-async function restoreBackupCode() {
-  const box = document.getElementById('backup-import-box');
-  const status = document.getElementById('backup-import-status');
-  const code = box.value.trim();
-  if (!code) {
-    status.textContent = 'Paste a code first.';
-    status.className = 'backup-status err';
-    return;
-  }
-  try {
-    const parsed = JSON.parse(decodeURIComponent(atob(code)));
-    if (typeof parsed !== 'object' || parsed === null) throw new Error('bad code');
-    state = { ...state, ...parsed };
-    await saveState();
-    renderXP();
-    renderDoneBadges();
-    renderTrophyRoom();
-    status.textContent = '✓ Progress restored!';
-    status.className = 'backup-status ok';
-  } catch (e) {
-    status.textContent = 'That code looks invalid — check it was copied in full.';
-    status.className = 'backup-status err';
-  }
 }
 
 function getLevelInfo() {
