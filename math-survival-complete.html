@@ -909,6 +909,197 @@ function percentBarSVG(pct) {
   </svg><div style="text-align:center;font-size:0.74rem;color:#b9a488;margin-top:-2px">${pct}% of the bar shaded (whole bar = 100%)</div>`;
 }
 
+function pieChartSVG(pct, label) {
+  const size = 180, cx = size / 2, cy = size / 2, r = 78;
+  const clamped = Math.max(0, Math.min(100, pct));
+  const angle = clamped / 100 * 360;
+  const rad = deg => (deg - 90) * Math.PI / 180;
+  const x1 = cx + r * Math.cos(rad(0));
+  const y1 = cy + r * Math.sin(rad(0));
+  const x2 = cx + r * Math.cos(rad(angle));
+  const y2 = cy + r * Math.sin(rad(angle));
+  const largeArc = angle > 180 ? 1 : 0;
+  let slice = '';
+  if (clamped >= 99.95) {
+    slice = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#f4b400" stroke="#d68a00" stroke-width="2"/>`;
+  } else if (clamped > 0.05) {
+    slice = `<path d="M${cx},${cy} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${largeArc} 1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="#f4b400" stroke="#d68a00" stroke-width="2"/>`;
+  }
+  return `<svg viewBox="0 0 ${size} ${size}" style="width:100%;max-width:150px;display:block;margin:8px auto">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#3a2818" stroke="#5a3d26" stroke-width="2"/>
+    ${slice}
+  </svg><div style="text-align:center;font-size:0.74rem;color:#b9a488;margin-top:-2px">${label || (clamped + '% of the circle shaded')}</div>`;
+}
+
+// ══════════════════════ ANGLE & SHAPE DIAGRAMS ══════════════════════
+const GOLD = '#f4b400', GOLDLINE = '#d68a00', RED = '#e8482c', TEAL = '#2a9d8f', BG = '#3a2818', LINE = '#5a3d26', LABEL = '#f4d9a0', MUTED = '#b9a488';
+
+function svgWrap(inner, vbW, vbH, caption, maxWidth) {
+  return `<svg viewBox="0 0 ${vbW} ${vbH}" style="width:100%;max-width:${maxWidth || 220}px;display:block;margin:8px auto">${inner}</svg>${caption ? `<div style="text-align:center;font-size:0.72rem;color:${MUTED};margin-top:-2px">${caption}</div>` : ''}`;
+}
+
+function triangleAngleSVG(a, b, c, caption) {
+  const p1 = [20, 175], p2 = [200, 175], p3 = [95, 20];
+  const inner = `
+    <polygon points="${p1.join(',')} ${p2.join(',')} ${p3.join(',')}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <text x="42" y="165" font-size="17" fill="${LABEL}" font-weight="bold">${a}</text>
+    <text x="160" y="165" font-size="17" fill="${LABEL}" font-weight="bold" text-anchor="end">${b}</text>
+    <text x="95" y="45" font-size="17" fill="${RED}" font-weight="bold" text-anchor="middle">${c}</text>`;
+  return svgWrap(inner, 220, 195, caption || 'Angles inside any triangle always add to 180°');
+}
+
+function triangleSidesSVG(s1, s2, s3, caption) {
+  const p1 = [20, 175], p2 = [200, 175], p3 = [95, 20];
+  const inner = `
+    <polygon points="${p1.join(',')} ${p2.join(',')} ${p3.join(',')}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <text x="110" y="192" font-size="16" fill="${LABEL}" font-weight="bold" text-anchor="middle">${s1}</text>
+    <text x="45" y="90" font-size="16" fill="${LABEL}" font-weight="bold" text-anchor="middle" transform="rotate(-56 45 90)">${s2}</text>
+    <text x="160" y="90" font-size="16" fill="${LABEL}" font-weight="bold" text-anchor="middle" transform="rotate(56 160 90)">${s3}</text>`;
+  return svgWrap(inner, 220, 200, caption || 'Perimeter = add up all three sides');
+}
+
+function polygonAngleSVG(n, angleLabel, caption) {
+  const cx = 100, cy = 100, r = 72;
+  const rotation = n === 4 ? 45 : (n === 6 ? 0 : -90);
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const ang = (rotation + i * 360 / n) * Math.PI / 180;
+    pts.push([(cx + r * Math.cos(ang)).toFixed(1), (cy + r * Math.sin(ang)).toFixed(1)]);
+  }
+  const poly = pts.map(p => p.join(',')).join(' ');
+  // label near the first vertex
+  const lx = (parseFloat(pts[0][0]) * 0.8 + cx * 0.2).toFixed(1);
+  const ly = (parseFloat(pts[0][1]) * 0.8 + cy * 0.2).toFixed(1);
+  const inner = `
+    <polygon points="${poly}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <circle cx="${pts[0][0]}" cy="${pts[0][1]}" r="4" fill="${RED}"/>
+    <text x="${lx}" y="${ly}" font-size="16" fill="${RED}" font-weight="bold" text-anchor="middle">${angleLabel}</text>`;
+  return svgWrap(inner, 200, 200, caption);
+}
+
+function circleAngleSVG(label, caption) {
+  const cx = 100, cy = 100, r = 70;
+  const inner = `
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${GOLD}" stroke-width="3"/>
+    <circle cx="${cx}" cy="${cy - r}" r="4" fill="${RED}"/>
+    <path d="M ${cx} ${cy - r} A ${r} ${r} 0 1 1 ${cx - 1} ${cy - r}" fill="none" stroke="${RED}" stroke-width="2.5" stroke-dasharray="6,5"/>
+    <text x="${cx}" y="${cy + 6}" font-size="20" fill="${LABEL}" font-weight="bold" text-anchor="middle">${label}</text>`;
+  return svgWrap(inner, 200, 200, caption || 'One full turn, all the way around');
+}
+
+function straightLineAngleSVG(known, unknownLabel, caption) {
+  const cx = 100, cy = 130;
+  const inner = `
+    <line x1="10" y1="${cy}" x2="190" y2="${cy}" stroke="${GOLD}" stroke-width="3"/>
+    <line x1="${cx}" y1="${cy}" x2="${cx - 55}" y2="30" stroke="${GOLD}" stroke-width="3"/>
+    <text x="45" y="115" font-size="16" fill="${LABEL}" font-weight="bold">${known}</text>
+    <text x="135" y="115" font-size="16" fill="${RED}" font-weight="bold">${unknownLabel}</text>`;
+  return svgWrap(inner, 200, 150, caption || 'Angles on a straight line always add to 180°');
+}
+
+function anglesAroundPointSVG(segments, caption) {
+  // segments: [{deg, label, color}], degrees should sum to 360
+  const cx = 100, cy = 100, r = 78;
+  let acc = -90;
+  const parts = segments.map(seg => {
+    const start = acc, end = acc + seg.deg;
+    acc = end;
+    const rad = d => (d * Math.PI) / 180;
+    const x1 = cx + r * Math.cos(rad(start)), y1 = cy + r * Math.sin(rad(start));
+    const x2 = cx + r * Math.cos(rad(end)), y2 = cy + r * Math.sin(rad(end));
+    const large = seg.deg > 180 ? 1 : 0;
+    const midAng = rad(start + seg.deg / 2);
+    const lx = cx + (r * 0.6) * Math.cos(midAng), ly = cy + (r * 0.6) * Math.sin(midAng);
+    const dash = seg.dashed ? 'stroke-dasharray="5,4"' : '';
+    return `<path d="M${cx},${cy} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${large} 1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="${seg.color}" fill-opacity="0.55" stroke="${seg.color}" stroke-width="2" ${dash}/>
+      <text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-size="15" fill="${LABEL}" font-weight="bold" text-anchor="middle">${seg.label}</text>`;
+  }).join('');
+  return svgWrap(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${BG}" stroke="${LINE}" stroke-width="1"/>${parts}`, 200, 200, caption || 'All the angles around a point add to 360°');
+}
+
+function verticalAnglesSVG(aLabel, bLabel, caption) {
+  const cx = 100, cy = 100;
+  const inner = `
+    <line x1="20" y1="40" x2="180" y2="160" stroke="${GOLD}" stroke-width="3"/>
+    <line x1="20" y1="160" x2="180" y2="40" stroke="${GOLD}" stroke-width="3"/>
+    <text x="${cx}" y="60" font-size="16" fill="${RED}" font-weight="bold" text-anchor="middle">${aLabel}</text>
+    <text x="${cx}" y="150" font-size="16" fill="${RED}" font-weight="bold" text-anchor="middle">${bLabel}</text>`;
+  return svgWrap(inner, 200, 200, caption || 'Vertically opposite angles (across the X) are always equal');
+}
+
+function parallelAnglesSVG(type, known, targetLabel, caption) {
+  const y1 = 55, y2 = 145;
+  // transversal crosses both lines
+  const inner = `
+    <line x1="15" y1="${y1}" x2="185" y2="${y1}" stroke="${GOLD}" stroke-width="3"/>
+    <line x1="15" y1="${y2}" x2="185" y2="${y2}" stroke="${GOLD}" stroke-width="3"/>
+    <line x1="40" y1="15" x2="160" y2="185" stroke="${TEAL}" stroke-width="3"/>
+    <text x="10" y="30" font-size="13" fill="${MUTED}">line 1</text>
+    <text x="10" y="205" font-size="13" fill="${MUTED}">line 2</text>
+    ${type === 'corresponding' ? `
+      <text x="120" y="45" font-size="15" fill="${LABEL}" font-weight="bold">${known}</text>
+      <text x="140" y="135" font-size="15" fill="${RED}" font-weight="bold">${targetLabel}</text>` : ''}
+    ${type === 'alternate' ? `
+      <text x="55" y="45" font-size="15" fill="${LABEL}" font-weight="bold">${known}</text>
+      <text x="140" y="135" font-size="15" fill="${RED}" font-weight="bold">${targetLabel}</text>` : ''}
+    ${type === 'co-interior' ? `
+      <text x="120" y="45" font-size="15" fill="${LABEL}" font-weight="bold">${known}</text>
+      <text x="90" y="135" font-size="15" fill="${RED}" font-weight="bold">${targetLabel}</text>` : ''}`;
+  const captions = {
+    corresponding: 'Corresponding angles (F-angles) sit in the same corner at each line — equal',
+    alternate: 'Alternate angles (Z-angles) sit on opposite sides of the middle line — equal',
+    'co-interior': 'Co-interior angles sit between the lines, same side — add to 180°'
+  };
+  return svgWrap(inner, 200, 220, caption || captions[type]);
+}
+
+function rectangleSVG(w, h, mode, caption) {
+  const bw = 150, bh = 90, x0 = 25, y0 = 40;
+  const inner = `
+    <rect x="${x0}" y="${y0}" width="${bw}" height="${bh}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <text x="${x0 + bw / 2}" y="${y0 + bh + 22}" font-size="16" fill="${LABEL}" font-weight="bold" text-anchor="middle">${w}</text>
+    <text x="${x0 - 12}" y="${y0 + bh / 2}" font-size="16" fill="${LABEL}" font-weight="bold" text-anchor="end">${h}</text>`;
+  const captions = { area: 'Area = length × width', perimeter: 'Perimeter = add up all four sides' };
+  return svgWrap(inner, 200, 160, caption || captions[mode] || '');
+}
+
+function squareSVG(side, mode, caption) {
+  const s = 100, x0 = 50, y0 = 30;
+  const inner = `
+    <rect x="${x0}" y="${y0}" width="${s}" height="${s}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <text x="${x0 + s / 2}" y="${y0 + s + 22}" font-size="16" fill="${LABEL}" font-weight="bold" text-anchor="middle">${side}</text>
+    <text x="${x0 - 12}" y="${y0 + s / 2}" font-size="16" fill="${LABEL}" font-weight="bold" text-anchor="end">${side}</text>`;
+  const captions = { area: 'Area = side × side', perimeter: 'Perimeter = 4 × side' };
+  return svgWrap(inner, 200, 170, caption || captions[mode] || '');
+}
+
+function triangleShapeSVG(base, height, caption) {
+  const p1 = [30, 160], p2 = [180, 160], p3 = [80, 25];
+  const inner = `
+    <polygon points="${p1.join(',')} ${p2.join(',')} ${p3.join(',')}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <line x1="80" y1="25" x2="80" y2="160" stroke="${TEAL}" stroke-width="2" stroke-dasharray="5,4"/>
+    <text x="105" y="180" font-size="15" fill="${LABEL}" font-weight="bold" text-anchor="middle">base = ${base}</text>
+    <text x="85" y="95" font-size="15" fill="${TEAL}" font-weight="bold">height = ${height}</text>`;
+  return svgWrap(inner, 200, 195, caption || 'Area = ½ × base × height');
+}
+
+function lShapeSVG(bigW, bigH, cutW, cutH, caption) {
+  const scale = 12, x0 = 30, y0 = 20;
+  const W = bigW * scale, H = bigH * scale, cw = cutW * scale, ch = cutH * scale;
+  // L-shape: full rectangle minus a corner notch cut from the top-right
+  const pts = [
+    [x0, y0], [x0 + W - cw, y0], [x0 + W - cw, y0 + ch], [x0 + W, y0 + ch],
+    [x0 + W, y0 + H], [x0, y0 + H]
+  ].map(p => p.join(',')).join(' ');
+  const inner = `
+    <polygon points="${pts}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <rect x="${x0 + W - cw}" y="${y0}" width="${cw}" height="${ch}" fill="none" stroke="${RED}" stroke-width="2" stroke-dasharray="5,4"/>
+    <text x="${x0 + W / 2}" y="${y0 + H + 22}" font-size="14" fill="${LABEL}" font-weight="bold" text-anchor="middle">${bigW}</text>
+    <text x="${x0 - 12}" y="${y0 + H / 2}" font-size="14" fill="${LABEL}" font-weight="bold" text-anchor="end">${bigH}</text>
+    <text x="${x0 + W - cw / 2}" y="${y0 - 8}" font-size="13" fill="${RED}" font-weight="bold" text-anchor="middle">cut ${cutW}×${cutH}</text>`;
+  return svgWrap(inner, x0 * 2 + W + 20, y0 * 2 + H + 30, caption || 'Big rectangle, minus the corner cut out', 240);
+}
+
 // ══════════════════════ WORKING SPACE (ThHTO column tool) ══════════════════════
 let wtCols = 4;
 let wtOperator = '+';
@@ -1421,16 +1612,54 @@ const LEVELS = {
     color: 3,
     emoji: '🧁',
     missions: [
-      { type: 'calc', instruction: 'Find 10% of 50', problem: '10% of 50', answer: '5', hint: 'Divide by 10: 50 ÷ 10 = 5.' + percentBarSVG(10) },
-      { type: 'calc', instruction: 'Find 25% of 80', problem: '25% of 80', answer: '20', hint: '25% = ¼. So 80 ÷ 4 = 20.' + percentBarSVG(25) },
-      { type: 'calc', instruction: 'Find 50% of 64', problem: '50% of 64', answer: '32', hint: '50% = half. So 64 ÷ 2 = 32.' + percentBarSVG(50) },
-      { type: 'calc', instruction: 'Find 15% of 200', problem: '15% of 200', answer: '30', hint: '10% = 20. 5% = 10. 15% = 20+10 = 30.' + percentBarSVG(15) },
-      { type: 'calc', instruction: 'Find 20% of 150', problem: '20% of 150', answer: '30', hint: '10% of 150 = 15. Double it: 30.' + percentBarSVG(20) },
-      { type: 'calc', instruction: 'Find 75% of 40', problem: '75% of 40', answer: '30', hint: '50% = 20. 25% = 10. 75% = 20+10 = 30.' + percentBarSVG(75) },
-      { type: 'calc', instruction: 'What % is 30 of 120?', problem: '30 out of 120 = ?%', answer: '25', hint: '30/120 = 1/4 = 25%.' },
-      { type: 'calc', instruction: 'Increase 80 by 10%', problem: '80 + 10% of 80', answer: '88', hint: '10% of 80 = 8. Then 80 + 8 = 88.' + percentBarSVG(10) },
-      { type: 'calc', instruction: 'Decrease 200 by 20%', problem: '200 − 20% of 200', answer: '160', hint: '20% of 200 = 40. Then 200 − 40 = 160.' + percentBarSVG(20) },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find the percentage', problem: '45 out of 180 = ?%', answer: '25', hint: '45/180 = 1/4 = 25%.', solution: [
+      { type: 'calc', instruction: 'Find 10% of 50', problem: '10% of 50', answer: '5', hint: {
+        visual: pieChartSVG(10),
+        setup: '10% means "10 out of every 100," or 1/10 of the whole.',
+        formula: '50 ÷ 10 = 5.'
+      } },
+      { type: 'calc', instruction: 'Find 25% of 80', problem: '25% of 80', answer: '20', hint: {
+        visual: pieChartSVG(25),
+        setup: '25% = one quarter (¼) of the whole.',
+        formula: '80 ÷ 4 = 20.'
+      } },
+      { type: 'calc', instruction: 'Find 50% of 64', problem: '50% of 64', answer: '32', hint: {
+        visual: pieChartSVG(50),
+        setup: '50% = half of the whole.',
+        formula: '64 ÷ 2 = 32.'
+      } },
+      { type: 'calc', instruction: 'Find 15% of 200', problem: '15% of 200', answer: '30', hint: {
+        visual: pieChartSVG(15),
+        setup: 'Break 15% into 10% + 5%. 10% of 200 = 20. 5% of 200 = 10.',
+        formula: '20 + 10 = 30.'
+      } },
+      { type: 'calc', instruction: 'Find 20% of 150', problem: '20% of 150', answer: '30', hint: {
+        visual: pieChartSVG(20),
+        setup: 'Find 10% first: 150 ÷ 10 = 15.',
+        formula: '20% is double 10%, so 15 × 2 = 30.'
+      } },
+      { type: 'calc', instruction: 'Find 75% of 40', problem: '75% of 40', answer: '30', hint: {
+        visual: pieChartSVG(75),
+        setup: 'Break 75% into 50% + 25%. 50% of 40 = 20. 25% of 40 = 10.',
+        formula: '20 + 10 = 30.'
+      } },
+      { type: 'calc', instruction: 'What % is 30 of 120?', problem: '30 out of 120 = ?%', answer: '25', hint: {
+        setup: 'Simplify the fraction first: 30/120.',
+        formula: '30/120 = 1/4 = 25%.' + pieChartSVG(25, 'The answer, drawn as a circle: 25%')
+      } },
+      { type: 'calc', instruction: 'Increase 80 by 10%', problem: '80 + 10% of 80', answer: '88', hint: {
+        visual: pieChartSVG(10),
+        setup: '10% of 80 = 80 ÷ 10 = 8.',
+        formula: '"Increase" means add: 80 + 8 = 88.'
+      } },
+      { type: 'calc', instruction: 'Decrease 200 by 20%', problem: '200 − 20% of 200', answer: '160', hint: {
+        visual: pieChartSVG(20),
+        setup: '20% of 200 = 200 ÷ 5 = 40.',
+        formula: '"Decrease" means subtract: 200 − 40 = 160.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find the percentage', problem: '45 out of 180 = ?%', answer: '25', hint: {
+        setup: '45/180 simplifies to 1/4.',
+        formula: '45/180 = 1/4 = 25%.' + pieChartSVG(25, 'The answer, drawn as a circle: 25%')
+      }, solution: [
         { action: 'Fraction', detail: '45 ÷ 180 = 0.25', check: '0.25|.25' },
         { action: '× 100', detail: '0.25 × 100 = 25%', check: '25' }
       ]},
@@ -1441,8 +1670,14 @@ const LEVELS = {
     color: 4,
     emoji: '🥣',
     missions: [
-      { type: 'calc', instruction: 'Simplify the ratio', problem: '4 : 8', answer: '1:2', hint: 'Divide both by 4.' },
-      { type: 'calc', instruction: 'Simplify the ratio', problem: '6 : 9', answer: '2:3', hint: 'Divide both by 3.' },
+      { type: 'calc', instruction: 'Simplify the ratio', problem: '4 : 8', answer: '1:2', hint: {
+        visual: 'Bar model for 4:8 — same shape as 1:2, just bigger pieces:' + ratioBarSVG([4,8]),
+        formula: 'Divide both by the same number: 4 ÷ 4 = 1, 8 ÷ 4 = 2.'
+      } },
+      { type: 'calc', instruction: 'Simplify the ratio', problem: '6 : 9', answer: '2:3', hint: {
+        visual: 'Bar model for 6:9:' + ratioBarSVG([6,9]),
+        formula: 'Divide both by 3: 6 ÷ 3 = 2, 9 ÷ 3 = 3.'
+      } },
       { type: 'calc', instruction: 'Ratio 2:3, total = 20. Find the FIRST part', problem: '2:3, Total = 20, first part = ?', answer: '8', hint: {
         visual: 'Draw it as a bar split into 2+3 equal boxes:' + ratioBarSVG([2,3]),
         setup: 'Total parts = 2 + 3 = 5. Each part = 20 ÷ 5 = 4.',
@@ -1453,7 +1688,10 @@ const LEVELS = {
         setup: 'Total parts = 5. Each part = 20 ÷ 5 = 4.',
         formula: 'Second part = 3 × 4 = 12.'
       } },
-      { type: 'calc', instruction: 'Simplify the ratio', problem: '15 : 25', answer: '3:5', hint: 'Divide both by 5.' },
+      { type: 'calc', instruction: 'Simplify the ratio', problem: '15 : 25', answer: '3:5', hint: {
+        visual: 'Bar model for 15:25:' + ratioBarSVG([15,25]),
+        formula: 'Divide both by 5: 15 ÷ 5 = 3, 25 ÷ 5 = 5.'
+      } },
       { type: 'calc', instruction: 'Share £40 in ratio 3:5. Find the FIRST share', problem: '3:5, Total = £40, first share = ?', answer: '15', hint: {
         visual: 'Bar model — 3 boxes vs 5 boxes:' + ratioBarSVG([3,5]),
         setup: 'Total parts = 3 + 5 = 8. Each part = £40 ÷ 8 = £5.',
@@ -1464,8 +1702,14 @@ const LEVELS = {
         setup: 'Total parts = 8. Each part = £5.',
         formula: 'Second share = 5 × £5 = £25.'
       } },
-      { type: 'calc', instruction: 'Are these ratios equivalent?', problem: '2:3  and  8:12', answer: 'yes', hint: '8÷4=2 and 12÷4=3. Yes, they are equivalent.' },
-      { type: 'calc', instruction: 'Find the missing number', problem: '5 : 8 = 15 : ?', answer: '24', hint: '5×3=15, so multiply 8 by 3 too: 8×3=24.' },
+      { type: 'calc', instruction: 'Are these ratios equivalent?', problem: '2:3  and  8:12', answer: 'yes', hint: {
+        visual: 'Same shape, different size — compare the two bars:' + ratioBarSVG([2,3]) + ratioBarSVG([8,12]),
+        formula: '8÷4=2 and 12÷4=3, so yes — they are equivalent.'
+      } },
+      { type: 'calc', instruction: 'Find the missing number', problem: '5 : 8 = 15 : ?', answer: '24', hint: {
+        visual: 'The second ratio is just a bigger version of the same bar:' + ratioBarSVG([5,8]),
+        formula: '5×3=15, so multiply 8 by 3 too: 8×3=24.'
+      } },
       { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Share in ratio 5:7, Total = 60', problem: '5:7, Total = 60', answer: '25,35', hint: {
         visual: 'Bar model — 5 boxes vs 7 boxes:' + ratioBarSVG([5,7]),
         setup: 'Total parts = 5 + 7 = 12. Each part = 60 ÷ 12 = 5.',
@@ -1483,16 +1727,46 @@ const LEVELS = {
     color: 5,
     emoji: '🍪',
     missions: [
-      { type: 'calc', instruction: 'Angles in a triangle add up to 180°. Find the missing angle', problem: 'Triangle: 60° + 70° + ? = 180°', answer: '50', hint: '60 + 70 = 130. Then 180 − 130 = 50.' },
-      { type: 'calc', instruction: 'All angles in a square are equal. What is each angle?', problem: 'Square: each angle = ?°', answer: '90', hint: 'A square has 4 right angles. 360 ÷ 4 = 90.' },
-      { type: 'calc', instruction: 'Angles in a full circle', problem: 'Full circle = ?°', answer: '360', hint: 'A full turn is always 360°.' },
-      { type: 'calc', instruction: 'Find the missing angle in this triangle', problem: 'Triangle: 90° + 45° + ? = 180°', answer: '45', hint: '90 + 45 = 135. Then 180 − 135 = 45.' },
-      { type: 'calc', instruction: 'How many sides does a hexagon have?', problem: 'Hexagon has ? sides', answer: '6', hint: 'Hex = 6 in Greek.' },
-      { type: 'calc', instruction: 'Sum of angles in a quadrilateral', problem: 'Quadrilateral angles sum = ?°', answer: '360', hint: 'Any 4-sided shape — angles always add to 360°.' },
-      { type: 'calc', instruction: 'Find the missing angle', problem: 'Triangle: 35° + 110° + ? = 180°', answer: '35', hint: '35 + 110 = 145. Then 180 − 145 = 35.' },
-      { type: 'calc', instruction: 'Interior angle of a regular hexagon', problem: 'Regular hexagon: each angle = ?°', answer: '120', hint: 'Sum = (6−2)×180 = 720. Each angle = 720÷6 = 120.' },
-      { type: 'calc', instruction: 'Sum of interior angles of a pentagon', problem: 'Pentagon: total angles = ?°', answer: '540', hint: 'Formula: (n−2)×180. So (5−2)×180 = 3×180 = 540.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find the missing angle in a polygon', problem: 'Quadrilateral: 80° + 95° + 110° + ? = 360°', answer: '75', hint: '80+95+110 = 285. Then 360−285 = 75.', solution: [
+      { type: 'calc', instruction: 'Angles in a triangle add up to 180°. Find the missing angle', problem: 'Triangle: 60° + 70° + ? = 180°', answer: '50', hint: {
+        visual: triangleAngleSVG('60°', '70°', '?'),
+        formula: '60 + 70 = 130. Then 180 − 130 = 50.'
+      } },
+      { type: 'calc', instruction: 'All angles in a square are equal. What is each angle?', problem: 'Square: each angle = ?°', answer: '90', hint: {
+        visual: polygonAngleSVG(4, '?°', 'A square has 4 equal angles'),
+        formula: 'A square has 4 right angles. 360 ÷ 4 = 90.'
+      } },
+      { type: 'calc', instruction: 'Angles in a full circle', problem: 'Full circle = ?°', answer: '360', hint: {
+        visual: circleAngleSVG('?'),
+        formula: 'A full turn is always 360°.'
+      } },
+      { type: 'calc', instruction: 'Find the missing angle in this triangle', problem: 'Triangle: 90° + 45° + ? = 180°', answer: '45', hint: {
+        visual: triangleAngleSVG('90°', '45°', '?'),
+        formula: '90 + 45 = 135. Then 180 − 135 = 45.'
+      } },
+      { type: 'calc', instruction: 'How many sides does a hexagon have?', problem: 'Hexagon has ? sides', answer: '6', hint: {
+        visual: polygonAngleSVG(6, '', 'A hexagon — count the sides'),
+        formula: 'Hex = 6 in Greek.'
+      } },
+      { type: 'calc', instruction: 'Sum of angles in a quadrilateral', problem: 'Quadrilateral angles sum = ?°', answer: '360', hint: {
+        visual: polygonAngleSVG(4, '?°', 'Any 4-sided shape'),
+        formula: 'Any 4-sided shape — angles always add to 360°.'
+      } },
+      { type: 'calc', instruction: 'Find the missing angle', problem: 'Triangle: 35° + 110° + ? = 180°', answer: '35', hint: {
+        visual: triangleAngleSVG('35°', '110°', '?'),
+        formula: '35 + 110 = 145. Then 180 − 145 = 35.'
+      } },
+      { type: 'calc', instruction: 'Interior angle of a regular hexagon', problem: 'Regular hexagon: each angle = ?°', answer: '120', hint: {
+        visual: polygonAngleSVG(6, '?°', 'A regular hexagon — all 6 angles are equal'),
+        formula: 'Sum = (6−2)×180 = 720. Each angle = 720÷6 = 120.'
+      } },
+      { type: 'calc', instruction: 'Sum of interior angles of a pentagon', problem: 'Pentagon: total angles = ?°', answer: '540', hint: {
+        visual: polygonAngleSVG(5, '', 'A pentagon has 5 sides'),
+        formula: 'Formula: (n−2)×180. So (5−2)×180 = 3×180 = 540.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find the missing angle in a polygon', problem: 'Quadrilateral: 80° + 95° + 110° + ? = 360°', answer: '75', hint: {
+        visual: polygonAngleSVG(4, '?°', 'A quadrilateral — 4 angles adding to 360°'),
+        formula: '80+95+110 = 285. Then 360−285 = 75.'
+      }, solution: [
         { action: 'Add known', detail: '80 + 95 + 110 = 285', check: '285' },
         { action: 'Subtract', detail: '360 − 285 = 75°', check: '75' }
       ]},
@@ -1503,16 +1777,46 @@ const LEVELS = {
     color: 1,
     emoji: '🧇',
     missions: [
-      { type: 'calc', instruction: 'Find the area of this rectangle', problem: 'Rectangle: 8 × 5 = ?', answer: '40', hint: 'Area = length × width = 8 × 5 = 40.' },
-      { type: 'calc', instruction: 'Find the area of this square', problem: 'Square: 9 × 9 = ?', answer: '81', hint: 'Area = side² = 9² = 81.' },
-      { type: 'calc', instruction: 'Find the area of a triangle (b=6, h=4)', problem: 'Triangle: ½ × 6 × 4 = ?', answer: '12', hint: 'Area = ½ × base × height = ½ × 6 × 4 = 12.' },
-      { type: 'calc', instruction: 'Find the perimeter of a rectangle 8×5', problem: 'Rectangle 8×5: perimeter = ?', answer: '26', hint: 'Perimeter = 2(l+w) = 2(8+5) = 2×13 = 26.' },
-      { type: 'calc', instruction: 'Find the perimeter of a square with side 7', problem: 'Square side 7: perimeter = ?', answer: '28', hint: 'Perimeter = 4 × side = 4 × 7 = 28.' },
-      { type: 'calc', instruction: 'Area of a triangle (b=10, h=6)', problem: 'Triangle: ½ × 10 × 6 = ?', answer: '30', hint: '½ × 10 × 6 = 30.' },
-      { type: 'calc', instruction: 'Rectangle area (l=12, w=3)', problem: 'Rectangle: 12 × 3 = ?', answer: '36', hint: '12 × 3 = 36.' },
-      { type: 'calc', instruction: 'Perimeter of a triangle with sides 5, 7, 9', problem: 'Triangle perimeter: 5 + 7 + 9 = ?', answer: '21', hint: 'Add all three sides.' },
-      { type: 'calc', instruction: 'Area of a rectangle (l=15, w=4)', problem: 'Rectangle: 15 × 4 = ?', answer: '60', hint: '15 × 4 = 60.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: L-shaped composite area', problem: 'L-shape: 10×6 rectangle minus 4×3 corner = ?', answer: '48', hint: 'Big area = 60. Cut out = 12. 60−12 = 48.', solution: [
+      { type: 'calc', instruction: 'Find the area of this rectangle', problem: 'Rectangle: 8 × 5 = ?', answer: '40', hint: {
+        visual: rectangleSVG(8, 5, 'area'),
+        formula: 'Area = length × width = 8 × 5 = 40.'
+      } },
+      { type: 'calc', instruction: 'Find the area of this square', problem: 'Square: 9 × 9 = ?', answer: '81', hint: {
+        visual: squareSVG(9, 'area'),
+        formula: 'Area = side² = 9² = 81.'
+      } },
+      { type: 'calc', instruction: 'Find the area of a triangle (b=6, h=4)', problem: 'Triangle: ½ × 6 × 4 = ?', answer: '12', hint: {
+        visual: triangleShapeSVG(6, 4),
+        formula: 'Area = ½ × base × height = ½ × 6 × 4 = 12.'
+      } },
+      { type: 'calc', instruction: 'Find the perimeter of a rectangle 8×5', problem: 'Rectangle 8×5: perimeter = ?', answer: '26', hint: {
+        visual: rectangleSVG(8, 5, 'perimeter'),
+        formula: 'Perimeter = 2(l+w) = 2(8+5) = 2×13 = 26.'
+      } },
+      { type: 'calc', instruction: 'Find the perimeter of a square with side 7', problem: 'Square side 7: perimeter = ?', answer: '28', hint: {
+        visual: squareSVG(7, 'perimeter'),
+        formula: 'Perimeter = 4 × side = 4 × 7 = 28.'
+      } },
+      { type: 'calc', instruction: 'Area of a triangle (b=10, h=6)', problem: 'Triangle: ½ × 10 × 6 = ?', answer: '30', hint: {
+        visual: triangleShapeSVG(10, 6),
+        formula: '½ × 10 × 6 = 30.'
+      } },
+      { type: 'calc', instruction: 'Rectangle area (l=12, w=3)', problem: 'Rectangle: 12 × 3 = ?', answer: '36', hint: {
+        visual: rectangleSVG(12, 3, 'area'),
+        formula: '12 × 3 = 36.'
+      } },
+      { type: 'calc', instruction: 'Perimeter of a triangle with sides 5, 7, 9', problem: 'Triangle perimeter: 5 + 7 + 9 = ?', answer: '21', hint: {
+        visual: triangleSidesSVG(5, 7, 9),
+        formula: 'Add all three sides.'
+      } },
+      { type: 'calc', instruction: 'Area of a rectangle (l=15, w=4)', problem: 'Rectangle: 15 × 4 = ?', answer: '60', hint: {
+        visual: rectangleSVG(15, 4, 'area'),
+        formula: '15 × 4 = 60.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: L-shaped composite area', problem: 'L-shape: 10×6 rectangle minus 4×3 corner = ?', answer: '48', hint: {
+        visual: lShapeSVG(10, 6, 4, 3),
+        formula: 'Big area = 60. Cut out = 12. 60−12 = 48.'
+      }, solution: [
         { action: 'Big rect', detail: '10 × 6 = 60', check: '60' },
         { action: 'Cut out', detail: '4 × 3 = 12', check: '12' },
         { action: 'Subtract', detail: '60 − 12 = 48', check: '48' }
@@ -1524,16 +1828,53 @@ const LEVELS = {
     color: 2,
     emoji: '🔪',
     missions: [
-      { type: 'calc', instruction: 'Angles on a straight line add to 180°. Find the missing angle', problem: 'Straight line: 90° + ? = 180°', answer: '90', hint: '180 − 90 = 90.' },
-      { type: 'calc', instruction: 'Find the missing angle on a straight line', problem: 'Straight line: 55° + ? = 180°', answer: '125', hint: '180 − 55 = 125.' },
-      { type: 'calc', instruction: 'Angles around a point add to 360°. Find the missing angle', problem: '360°: 120° + 80° + ? = 360°', answer: '160', hint: '120+80=200. 360−200=160.' },
-      { type: 'calc', instruction: 'Vertically opposite angles are equal. Find angle b', problem: 'If angle a = 65°, vertically opposite b = ?', answer: '65', hint: 'Vertically opposite angles are always equal.' },
-      { type: 'calc', instruction: 'Find the missing angle (angles on a straight line)', problem: '130° + ? = 180°', answer: '50', hint: '180 − 130 = 50.' },
-      { type: 'calc', instruction: 'Alternate angles are equal. Find the missing angle', problem: 'Parallel lines — alternate angle to 72° = ?', answer: '72', hint: 'Alternate angles (Z-angles) are equal.' },
-      { type: 'calc', instruction: 'Co-interior angles add to 180°. Find the missing angle', problem: 'Co-interior: 115° + ? = 180°', answer: '65', hint: '180 − 115 = 65.' },
-      { type: 'calc', instruction: 'Find the reflex angle if the other angle is 70°', problem: 'Reflex angle = 360° − 70° = ?', answer: '290', hint: '360 − 70 = 290.' },
-      { type: 'calc', instruction: 'Corresponding angles are equal. Find the missing angle', problem: 'Parallel lines — corresponding angle to 48° = ?', answer: '48', hint: 'Corresponding angles (F-angles) are equal.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find all missing angles', problem: 'Two parallel lines cut by a transversal. One angle = 65°. Find: co-interior = ?, alternate = ?', answer: '115,65', hint: 'Co-interior = 180−65=115. Alternate = 65.', solution: [
+      { type: 'calc', instruction: 'Angles on a straight line add to 180°. Find the missing angle', problem: 'Straight line: 90° + ? = 180°', answer: '90', hint: {
+        visual: straightLineAngleSVG('90°', '?'),
+        formula: '180 − 90 = 90.'
+      } },
+      { type: 'calc', instruction: 'Find the missing angle on a straight line', problem: 'Straight line: 55° + ? = 180°', answer: '125', hint: {
+        visual: straightLineAngleSVG('55°', '?'),
+        formula: '180 − 55 = 125.'
+      } },
+      { type: 'calc', instruction: 'Angles around a point add to 360°. Find the missing angle', problem: '360°: 120° + 80° + ? = 360°', answer: '160', hint: {
+        visual: anglesAroundPointSVG([
+          { deg: 120, label: '120°', color: TEAL },
+          { deg: 80, label: '80°', color: GOLD },
+          { deg: 160, label: '?', color: RED, dashed: true }
+        ]),
+        formula: '120+80=200. 360−200=160.'
+      } },
+      { type: 'calc', instruction: 'Vertically opposite angles are equal. Find angle b', problem: 'If angle a = 65°, vertically opposite b = ?', answer: '65', hint: {
+        visual: verticalAnglesSVG('a=65°', 'b=?'),
+        formula: 'Vertically opposite angles are always equal.'
+      } },
+      { type: 'calc', instruction: 'Find the missing angle (angles on a straight line)', problem: '130° + ? = 180°', answer: '50', hint: {
+        visual: straightLineAngleSVG('130°', '?'),
+        formula: '180 − 130 = 50.'
+      } },
+      { type: 'calc', instruction: 'Alternate angles are equal. Find the missing angle', problem: 'Parallel lines — alternate angle to 72° = ?', answer: '72', hint: {
+        visual: parallelAnglesSVG('alternate', '72°', '?'),
+        formula: 'Alternate angles (Z-angles) are equal.'
+      } },
+      { type: 'calc', instruction: 'Co-interior angles add to 180°. Find the missing angle', problem: 'Co-interior: 115° + ? = 180°', answer: '65', hint: {
+        visual: parallelAnglesSVG('co-interior', '115°', '?'),
+        formula: '180 − 115 = 65.'
+      } },
+      { type: 'calc', instruction: 'Find the reflex angle if the other angle is 70°', problem: 'Reflex angle = 360° − 70° = ?', answer: '290', hint: {
+        visual: anglesAroundPointSVG([
+          { deg: 70, label: '70°', color: TEAL },
+          { deg: 290, label: '?', color: RED, dashed: true }
+        ]),
+        formula: '360 − 70 = 290.'
+      } },
+      { type: 'calc', instruction: 'Corresponding angles are equal. Find the missing angle', problem: 'Parallel lines — corresponding angle to 48° = ?', answer: '48', hint: {
+        visual: parallelAnglesSVG('corresponding', '48°', '?'),
+        formula: 'Corresponding angles (F-angles) are equal.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find all missing angles', problem: 'Two parallel lines cut by a transversal. One angle = 65°. Find: co-interior = ?, alternate = ?', answer: '115,65', hint: {
+        visual: parallelAnglesSVG('co-interior', '65°', '?'),
+        formula: 'Co-interior = 180−65=115. Alternate = 65.'
+      }, solution: [
         { action: 'Alternate', detail: '= 65° (Z-angles equal)', check: '65' },
         { action: 'Co-interior', detail: '= 180 − 65 = 115° (adds to 180)', check: '115' }
       ]},
