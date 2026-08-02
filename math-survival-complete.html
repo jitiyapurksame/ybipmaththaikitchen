@@ -1029,22 +1029,35 @@ function verticalAnglesSVG(aLabel, bLabel, caption) {
 
 function parallelAnglesSVG(type, known, targetLabel, caption) {
   const y1 = 55, y2 = 145;
-  // transversal crosses both lines
+  const tx1 = 40, ty1 = 15, tx2 = 160, ty2 = 185; // transversal endpoints (slopes down-right)
+  const slope = (tx2 - tx1) / (ty2 - ty1); // dx per dy
+  const ix1 = tx1 + slope * (y1 - ty1); // where transversal crosses line 1
+  const ix2 = tx1 + slope * (y2 - ty1); // where transversal crosses line 2
+
+  // "known" is always placed as the interior angle at line 1: right of the transversal, below the line
+  const knownX = ix1 + 26, knownY = y1 + 28;
+
+  // where the target ("?") goes depends on how it relates to "known"
+  let targetX, targetY, anchor = 'start';
+  if (type === 'corresponding') {
+    // same corner (right side, below-the-line position) repeated at line 2 → sits below line 2
+    targetX = ix2 + 26; targetY = y2 + 28;
+  } else if (type === 'alternate') {
+    // interior angle, opposite side of the transversal → left of transversal, above line 2
+    targetX = ix2 - 26; targetY = y2 - 14; anchor = 'end';
+  } else { // co-interior
+    // interior angle, same side of the transversal → right of transversal, above line 2
+    targetX = ix2 + 18; targetY = y2 - 14;
+  }
+
   const inner = `
     <line x1="15" y1="${y1}" x2="185" y2="${y1}" stroke="${GOLD}" stroke-width="3"/>
     <line x1="15" y1="${y2}" x2="185" y2="${y2}" stroke="${GOLD}" stroke-width="3"/>
-    <line x1="40" y1="15" x2="160" y2="185" stroke="${TEAL}" stroke-width="3"/>
+    <line x1="${tx1}" y1="${ty1}" x2="${tx2}" y2="${ty2}" stroke="${TEAL}" stroke-width="3"/>
     <text x="10" y="30" font-size="13" fill="${MUTED}">line 1</text>
     <text x="10" y="205" font-size="13" fill="${MUTED}">line 2</text>
-    ${type === 'corresponding' ? `
-      <text x="120" y="45" font-size="15" fill="${LABEL}" font-weight="bold">${known}</text>
-      <text x="140" y="135" font-size="15" fill="${RED}" font-weight="bold">${targetLabel}</text>` : ''}
-    ${type === 'alternate' ? `
-      <text x="55" y="45" font-size="15" fill="${LABEL}" font-weight="bold">${known}</text>
-      <text x="140" y="135" font-size="15" fill="${RED}" font-weight="bold">${targetLabel}</text>` : ''}
-    ${type === 'co-interior' ? `
-      <text x="120" y="45" font-size="15" fill="${LABEL}" font-weight="bold">${known}</text>
-      <text x="90" y="135" font-size="15" fill="${RED}" font-weight="bold">${targetLabel}</text>` : ''}`;
+    <text x="${knownX.toFixed(1)}" y="${knownY.toFixed(1)}" font-size="15" fill="${LABEL}" font-weight="bold">${known}</text>
+    <text x="${targetX.toFixed(1)}" y="${targetY.toFixed(1)}" font-size="15" fill="${RED}" font-weight="bold" text-anchor="${anchor}">${targetLabel}</text>`;
   const captions = {
     corresponding: 'Corresponding angles (F-angles) sit in the same corner at each line — equal',
     alternate: 'Alternate angles (Z-angles) sit on opposite sides of the middle line — equal',
