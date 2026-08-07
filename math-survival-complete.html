@@ -1113,6 +1113,46 @@ function lShapeSVG(bigW, bigH, cutW, cutH, caption) {
   return svgWrap(inner, x0 * 2 + W + 20, y0 * 2 + H + 30, caption || 'Big rectangle, minus the corner cut out', 240);
 }
 
+function sequenceBarsSVG(terms, opLabels, caption) {
+  // terms: array of numbers/strings to show as bars ('?' allowed for an unknown bar, drawn short & dashed)
+  // opLabels: array (length terms.length-1) of strings shown between each pair of bars, e.g. '+4' or '×3' or '?'
+  const numericTerms = terms.map(t => (typeof t === 'number' ? t : null)).filter(v => v !== null);
+  const maxVal = Math.max(...numericTerms, 1);
+  const chartH = 110, barW = 30, gap = 16, x0 = 15, baseY = 140;
+  let bars = '', arrows = '';
+  terms.forEach((t, i) => {
+    const isUnknown = (t === '?' || t === null);
+    const val = isUnknown ? maxVal * 0.4 : t;
+    const h = Math.max(8, (val / maxVal) * chartH);
+    const x = x0 + i * (barW + gap);
+    const y = baseY - h;
+    const dash = isUnknown ? 'stroke-dasharray="4,3"' : '';
+    const fill = isUnknown ? 'none' : GOLD;
+    bars += `<rect x="${x}" y="${y.toFixed(1)}" width="${barW}" height="${h.toFixed(1)}" fill="${fill}" stroke="${isUnknown ? RED : GOLDLINE}" stroke-width="2" ${dash} rx="2"/>
+      <text x="${x + barW / 2}" y="${(y - 7).toFixed(1)}" font-size="13" fill="${isUnknown ? RED : LABEL}" font-weight="bold" text-anchor="middle">${t}</text>`;
+    if (i < terms.length - 1 && opLabels && opLabels[i]) {
+      const midX = x + barW + gap / 2;
+      arrows += `<text x="${midX.toFixed(1)}" y="${baseY + 18}" font-size="12" fill="${TEAL}" font-weight="bold" text-anchor="middle">${opLabels[i]}</text>`;
+    }
+  });
+  const vbW = x0 * 2 + terms.length * (barW + gap);
+  return svgWrap(`${bars}${arrows}<line x1="5" y1="${baseY}" x2="${vbW - 5}" y2="${baseY}" stroke="${LINE}" stroke-width="1.5"/>`, vbW, baseY + 35, caption, 280);
+}
+
+function rateScaleSVG(fromQty, fromLabel, toQty, toLabel, caption) {
+  const inner = `
+    <rect x="15" y="20" width="80" height="50" fill="${BG}" stroke="${GOLD}" stroke-width="2.5" rx="6"/>
+    <text x="55" y="42" font-size="14" fill="${LABEL}" font-weight="bold" text-anchor="middle">${fromQty}</text>
+    <text x="55" y="60" font-size="11" fill="${MUTED}" text-anchor="middle">${fromLabel}</text>
+    <path d="M100,45 L150,45" stroke="${TEAL}" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+    <text x="125" y="35" font-size="12" fill="${TEAL}" font-weight="bold" text-anchor="middle">scale</text>
+    <rect x="155" y="20" width="80" height="50" fill="${BG}" stroke="${RED}" stroke-width="2.5" stroke-dasharray="4,3" rx="6"/>
+    <text x="195" y="42" font-size="14" fill="${RED}" font-weight="bold" text-anchor="middle">${toQty}</text>
+    <text x="195" y="60" font-size="11" fill="${MUTED}" text-anchor="middle">${toLabel}</text>
+    <defs><marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${TEAL}"/></marker></defs>`;
+  return svgWrap(inner, 250, 80, caption, 260);
+}
+
 // ══════════════════════ WORKING SPACE (ThHTO column tool) ══════════════════════
 let wtCols = 4;
 let wtOperator = '+';
@@ -1943,12 +1983,24 @@ const LEVELS = {
       { type: 'step', instruction: 'CUBES Step 2 — Underline the question. Type the KEY question word.', problem: 'A train travels 240 km in 3 hours. How fast does it go?', answer: 'how fast', hint: 'The question asks "how fast" — that means find the speed.' },
       { type: 'step', instruction: 'CUBES Step 3 — Box the keywords. What operation does "how fast" suggest?', problem: 'Speed = distance ÷ time', answer: 'divide', hint: 'Speed = distance ÷ time. The word "per" or "each" usually means divide.' },
       { type: 'calc', instruction: 'Now solve: speed = 240 ÷ 3', problem: '240 ÷ 3 = ?', answer: '80', hint: '240 ÷ 3 = 80 km/h.' },
-      { type: 'calc', instruction: 'A book costs £12. Three friends share the cost equally. How much each?', problem: '£12 ÷ 3 = ?', answer: '4', hint: '12 ÷ 3 = 4.' },
-      { type: 'calc', instruction: 'A rectangle has area 48 cm². Width = 6 cm. Find the length.', problem: 'Length = 48 ÷ 6 = ?', answer: '8', hint: 'Area = l × w. So l = area ÷ width = 48 ÷ 6 = 8.' },
+      { type: 'calc', instruction: 'A book costs £12. Three friends share the cost equally. How much each?', problem: '£12 ÷ 3 = ?', answer: '4', hint: {
+        visual: ratioBarSVG([1, 1, 1]) ,
+        formula: '12 ÷ 3 = 4.'
+      } },
+      { type: 'calc', instruction: 'A rectangle has area 48 cm². Width = 6 cm. Find the length.', problem: 'Length = 48 ÷ 6 = ?', answer: '8', hint: {
+        visual: rectangleSVG('?', 6, null, 'Area = 48 cm² — width is known, length is missing'),
+        formula: 'Area = l × w. So l = area ÷ width = 48 ÷ 6 = 8.'
+      } },
       { type: 'calc', instruction: 'Tom has £50. He spends £17.50 and £12.30. How much is left?', problem: '£50 − £17.50 − £12.30 = ?', answer: '20.2', hint: '17.50 + 12.30 = 29.80. Then 50 − 29.80 = 20.20.' },
       { type: 'calc', instruction: 'A bag weighs 2.5 kg. 8 identical bags weigh how much in total?', problem: '2.5 × 8 = ?', answer: '20', hint: '2.5 × 8 = 20 kg.' },
-      { type: 'calc', instruction: '30 students. 40% walk to school. How many walk?', problem: '40% of 30 = ?', answer: '12', hint: '10% of 30 = 3. 40% = 4 × 3 = 12.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Full CUBES word problem', problem: 'A car uses 6 litres per 100km. How many litres for a 350km journey?', answer: '21', hint: '6 litres per 100km. 350 ÷ 100 = 3.5. Then 3.5 × 6 = 21.', solution: [
+      { type: 'calc', instruction: '30 students. 40% walk to school. How many walk?', problem: '40% of 30 = ?', answer: '12', hint: {
+        visual: pieChartSVG(40),
+        formula: '10% of 30 = 3. 40% = 4 × 3 = 12.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Full CUBES word problem', problem: 'A car uses 6 litres per 100km. How many litres for a 350km journey?', answer: '21', hint: {
+        visual: rateScaleSVG('100 km', '6 litres', '350 km', '? litres'),
+        formula: '6 litres per 100km. 350 ÷ 100 = 3.5. Then 3.5 × 6 = 21.'
+      }, solution: [
         { action: 'Rate', detail: '6 litres per 100 km' },
         { action: 'Ratio', detail: '350 ÷ 100 = 3.5 portions', check: '3.5' },
         { action: 'Multiply', detail: '3.5 × 6 = 21 litres', check: '21' }
@@ -1980,15 +2032,39 @@ const LEVELS = {
     color: 2,
     emoji: '🎂',
     missions: [
-      { type: 'calc', instruction: 'Arithmetic sequence — find the common difference', problem: '3, 7, 11, 15... difference = ?', answer: '4', hint: '7−3=4. Check: 11−7=4 ✓' },
-      { type: 'calc', instruction: 'Find the next term', problem: 'Arithmetic: 3, 7, 11, 15, ?', answer: '19', hint: '15 + 4 = 19.' },
-      { type: 'calc', instruction: 'Geometric sequence — find the common ratio', problem: '2, 6, 18, 54... ratio = ?', answer: '3', hint: '6÷2=3. Check: 18÷6=3 ✓' },
-      { type: 'calc', instruction: 'Find the next term in the geometric sequence', problem: '2, 6, 18, 54, ?', answer: '162', hint: '54 × 3 = 162.' },
-      { type: 'calc', instruction: 'Is this arithmetic or geometric? Type "arithmetic" or "geometric"', problem: '5, 10, 20, 40, 80', answer: 'geometric', hint: 'Each term is ×2 the previous. That\'s geometric.' },
-      { type: 'calc', instruction: 'Is this arithmetic or geometric?', problem: '100, 93, 86, 79, 72', answer: 'arithmetic', hint: 'Each term decreases by 7. That\'s arithmetic.' },
-      { type: 'calc', instruction: 'Find the 6th term of arithmetic sequence starting at 4 with difference 5', problem: 'a=4, d=5: 6th term = a + (n−1)d = ?', answer: '29', hint: '4 + (6−1)×5 = 4 + 25 = 29.' },
+      { type: 'calc', instruction: 'Arithmetic sequence — find the common difference', problem: '3, 7, 11, 15... difference = ?', answer: '4', hint: {
+        visual: sequenceBarsSVG([3, 7, 11, 15], ['?', '?', '?'], 'Arithmetic = each bar goes up by the SAME amount'),
+        formula: '7−3=4. Check: 11−7=4 ✓'
+      } },
+      { type: 'calc', instruction: 'Find the next term', problem: 'Arithmetic: 3, 7, 11, 15, ?', answer: '19', hint: {
+        visual: sequenceBarsSVG([3, 7, 11, 15, '?'], ['+4', '+4', '+4', '+4']),
+        formula: '15 + 4 = 19.'
+      } },
+      { type: 'calc', instruction: 'Geometric sequence — find the common ratio', problem: '2, 6, 18, 54... ratio = ?', answer: '3', hint: {
+        visual: sequenceBarsSVG([2, 6, 18, 54], ['?', '?', '?'], 'Geometric = each bar is MULTIPLIED by the same amount'),
+        formula: '6÷2=3. Check: 18÷6=3 ✓'
+      } },
+      { type: 'calc', instruction: 'Find the next term in the geometric sequence', problem: '2, 6, 18, 54, ?', answer: '162', hint: {
+        visual: sequenceBarsSVG([2, 6, 18, 54, '?'], ['×3', '×3', '×3', '×3']),
+        formula: '54 × 3 = 162.'
+      } },
+      { type: 'calc', instruction: 'Is this arithmetic or geometric? Type "arithmetic" or "geometric"', problem: '5, 10, 20, 40, 80', answer: 'geometric', hint: {
+        visual: sequenceBarsSVG([5, 10, 20, 40, 80], ['×2', '×2', '×2', '×2'], 'Same multiplier each time → geometric'),
+        formula: 'Each term is ×2 the previous. That\'s geometric.'
+      } },
+      { type: 'calc', instruction: 'Is this arithmetic or geometric?', problem: '100, 93, 86, 79, 72', answer: 'arithmetic', hint: {
+        visual: sequenceBarsSVG([100, 93, 86, 79, 72], ['−7', '−7', '−7', '−7'], 'Same amount subtracted each time → arithmetic'),
+        formula: 'Each term decreases by 7. That\'s arithmetic.'
+      } },
+      { type: 'calc', instruction: 'Find the 6th term of arithmetic sequence starting at 4 with difference 5', problem: 'a=4, d=5: 6th term = a + (n−1)d = ?', answer: '29', hint: {
+        visual: sequenceBarsSVG([4, 9, 14, 19, '…'], ['+5', '+5', '+5', '+5'], 'Keep adding 5 each time, all the way to the 6th term'),
+        formula: '4 + (6−1)×5 = 4 + 25 = 29.'
+      } },
       { type: 'calc', instruction: 'Find the sum of arithmetic sequence: 1 + 2 + 3 + ... + 10', problem: '1+2+3+...+10 = ?', answer: '55', hint: 'Sum = n/2 × (first+last) = 10/2 × (1+10) = 5 × 11 = 55.' },
-      { type: 'calc', instruction: 'Find the 4th term of geometric sequence: first=3, ratio=4', problem: 'a=3, r=4: 4th term = 3×4³ = ?', answer: '192', hint: '3 × 4³ = 3 × 64 = 192.' },
+      { type: 'calc', instruction: 'Find the 4th term of geometric sequence: first=3, ratio=4', problem: 'a=3, r=4: 4th term = 3×4³ = ?', answer: '192', hint: {
+        visual: sequenceBarsSVG([3, 12, 48, '?'], ['×4', '×4', '×4']),
+        formula: '3 × 4³ = 3 × 64 = 192.'
+      } },
       { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Identify and extend both types', problem: 'Sequence A: 8, 13, 18, 23... 6th term = ?\nSequence B: 1, 3, 9, 27... 5th term = ?', answer: '33,81', hint: 'A: arithmetic d=5. 8+(5×5)=33. B: geometric r=3. 27×3=81.', solution: [
         { action: 'Seq A (arith)', detail: '8 + 5×5 = 8 + 25 = 33', check: '33' },
         { action: 'Seq B (geom)', detail: '27 × 3 = 81', check: '81' }
@@ -2797,6 +2873,16 @@ function normalizeAnswer(str) {
   return str.trim().toLowerCase().replace(/\s+/g, '').replace(/−/g, '-');
 }
 
+// Parses a normalized answer string as a plain number, tolerating currency symbols,
+// thousands separators, and a trailing % sign. Returns null if it isn't purely numeric
+// (so ratios like "1:2" or expressions like "3n+2" correctly fall through untouched).
+function numericValue(str) {
+  const cleaned = str.replace(/[£$€,]/g, '').replace(/%$/, '');
+  if (cleaned === '' || cleaned === '-' || isNaN(cleaned)) return null;
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : null;
+}
+
 // Checks a user's typed value against a correct value. `correctRaw` may contain several
 // accepted forms separated by '|' (e.g. word form "add 6" and shorthand "+6"). When lenient
 // is true, a partial/substring match counts (used for 'step'/'explain' types).
@@ -2805,7 +2891,16 @@ function answerMatches(userRaw, correctRaw, lenient) {
   const correctAnswer = normalizeAnswer(correctRaw);
   const acceptable = correctAnswer.split('|');
   if (lenient) return acceptable.some(acc => userAnswer.includes(acc) || acc.includes(userAnswer));
-  return acceptable.includes(userAnswer);
+  if (acceptable.includes(userAnswer)) return true;
+  // Numeric fallback: "20.20" should count as the same answer as "20.2", "5.0" as "5", etc.
+  const userNum = numericValue(userAnswer);
+  if (userNum !== null) {
+    return acceptable.some(acc => {
+      const accNum = numericValue(acc);
+      return accNum !== null && Math.abs(accNum - userNum) < 1e-9;
+    });
+  }
+  return false;
 }
 
 function triggerSliceEffect(isBig) {
@@ -2830,9 +2925,14 @@ function checkAnswer() {
   // Allow comma-separated answers in any order for 'identify'/'classify' types
   let isCorrect = false;
   if (m.type === 'identify' || m.type === 'classify') {
+    const partsEqual = (a, b) => {
+      if (a === b) return true;
+      const an = numericValue(a), bn = numericValue(b);
+      return an !== null && bn !== null && Math.abs(an - bn) < 1e-9;
+    };
     const userParts = userAnswer.split(',').map(s => s.trim()).filter(Boolean).sort();
     const correctParts = correctAnswer.split(',').map(s => s.trim()).filter(Boolean).sort();
-    isCorrect = JSON.stringify(userParts) === JSON.stringify(correctParts);
+    isCorrect = userParts.length === correctParts.length && userParts.every((p, i) => partsEqual(p, correctParts[i]));
   } else if (m.type === 'step' || m.type === 'explain') {
     isCorrect = answerMatches(input.value, m.answer, true);
   } else {
