@@ -1,0 +1,2978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Thai Specialty Kitchen</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&family=Sarabun:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #2b1810;
+    --surface: #3d2418;
+    --surface2: #331f14;
+    --border: #5c3826;
+    --text: #fdf1e0;
+    --muted: #c9a687;
+    --accent: #e8752c;
+    --accent2: #f4a24a;
+    --gold: #f4b942;
+    --green: #10b981;
+    --red: #ef4444;
+    --purple: #a855f7;
+
+    --m1: #e8752c;
+    --m2: #a855f7;
+    --m3: #10b981;
+    --m4: #38bdf8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Nunito', 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    user-select: none;
+  }
+
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* ── HOME ── */
+  #home { background: radial-gradient(ellipse at top, #4a2c1a 0%, #2b1810 60%); }
+
+  .home-header { padding: 28px 22px 8px; text-align: center; position: relative; }
+  .hq-link {
+    position: absolute; top: 14px; left: 16px;
+    font-size: 0.7rem; font-weight: 800; color: var(--muted);
+    text-decoration: none; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 10px;
+  }
+  .hq-link:active { transform: scale(0.95); }
+
+  /* Kitchen rooms */
+  .room-card-desc { font-size: 0.72rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  .room-count-tag {
+    font-size: 0.68rem; color: var(--gold); flex-shrink: 0; text-align: center;
+    background: rgba(244,185,66,0.12); border: 1px solid rgba(244,185,66,0.3);
+    border-radius: 999px; padding: 4px 10px; white-space: nowrap;
+  }
+  .home-title {
+    font-family: 'Bangers', cursive;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #e8752c, #f4b942);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+  .home-subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 6px; letter-spacing: 0.5px; }
+
+  .xp-panel {
+    margin: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 18px;
+  }
+  .xp-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .level-badge {
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .xp-count { font-size: 0.78rem; color: var(--muted); }
+  .xp-count span { color: var(--gold); font-weight: 800; }
+  .xp-bar-bg { background: var(--border); border-radius: 999px; height: 10px; overflow: hidden; }
+  .xp-bar-fill {
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    height: 100%; border-radius: 999px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  .home-btn-row { margin: 0 20px 16px; display: flex; gap: 10px; }
+  .trophy-btn {
+    flex: 1;
+    background: linear-gradient(135deg, #5c3826, #331f14);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 12px 14px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .trophy-btn:active { transform: scale(0.97); }
+  .trophy-icon { font-size: 1.5rem; }
+  .trophy-title { font-family: 'Bangers', cursive; font-size: 0.88rem; letter-spacing: 1px; color: var(--gold); }
+  .trophy-sub { font-size: 0.66rem; color: var(--muted); margin-top: 2px; }
+
+  .missions-label {
+    padding: 0 20px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .missions-list { padding: 0 20px 30px; display: flex; flex-direction: column; gap: 12px; }
+  .mission-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .mission-card:active { transform: scale(0.98); }
+  .mission-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 18px 0 0 18px;
+  }
+  .mission-card[data-m="0"]::before { background: var(--m1); }
+  .mission-card[data-m="1"]::before { background: var(--m2); }
+  .mission-card[data-m="2"]::before { background: var(--m3); }
+  .mission-card[data-m="3"]::before { background: var(--m4); }
+
+  .mission-emoji { font-size: 2rem; flex-shrink: 0; }
+  .mission-text { flex: 1; min-width: 0; }
+  .mission-title-th { font-weight: 800; font-size: 1.02rem; }
+  .mission-title-en { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .mission-meta { font-size: 0.72rem; color: var(--accent2); margin-top: 6px; }
+  .mission-done-check {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--green); color: #fff; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; flex-shrink: 0;
+  }
+  .mission-xp-tag {
+    font-size: 0.68rem; color: var(--gold); flex-shrink: 0;
+    background: rgba(244,185,66,0.12); border: 1px solid rgba(244,185,66,0.3);
+    border-radius: 999px; padding: 4px 10px;
+  }
+
+  /* ── MISSION SCREEN ── */
+  #mission, #freedraw { background: var(--bg); }
+  .mission-header {
+    padding: 16px 18px 12px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; cursor: pointer; flex-shrink: 0; color: var(--text);
+  }
+  .back-btn:active { transform: scale(0.9); }
+  .mission-header-text { flex: 1; min-width: 0; }
+  #m-title, #freedraw-title { font-weight: 800; font-size: 1rem; }
+  #m-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  .step-dots-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; }
+  .step-dots { display: flex; gap: 6px; }
+  .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+  .step-dot.active { background: var(--gold); width: 20px; border-radius: 4px; }
+  .step-dot.done { background: var(--green); }
+  .step-indicator { font-size: 0.7rem; color: var(--muted); font-weight: 700; }
+
+  .mission-content { flex: 1; padding: 6px 18px 30px; overflow-y: auto; display: flex; flex-direction: column; }
+
+  .step-card { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+  .step-label { font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .step-title { font-family: 'Bangers', cursive; font-size: 1.3rem; letter-spacing: 1px; }
+  .step-accent-m1 .step-title { color: var(--m1); }
+  .step-accent-m2 .step-title { color: var(--m2); }
+  .step-accent-m3 .step-title { color: var(--m3); }
+  .step-accent-m4 .step-title { color: var(--m4); }
+
+  .info-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px 16px;
+  }
+  .info-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { font-size: 0.75rem; color: var(--muted); font-weight: 700; width: 100px; flex-shrink: 0; }
+  .info-value { font-size: 0.85rem; line-height: 1.5; }
+
+  .flow-node {
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 12px; padding: 12px 14px;
+  }
+  .flow-node-label { font-size: 0.7rem; color: var(--accent2); font-weight: 800; margin-bottom: 4px; }
+  .flow-node-text { font-size: 0.83rem; line-height: 1.55; }
+
+  /* Timeline (Event) */
+  .timeline { display: flex; flex-direction: column; }
+  .timeline-item { display: flex; align-items: flex-start; gap: 12px; }
+  .timeline-dot {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--surface2);
+    border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .timeline-text {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 8px 12px; font-size: 0.82rem; line-height: 1.5; flex: 1; margin-top: 2px;
+  }
+  .timeline-line { width: 2px; height: 14px; background: var(--border); margin-left: 16px; }
+
+  .scan-item {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 10px 14px; cursor: pointer; font-size: 0.82rem;
+  }
+  .scan-check {
+    width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--accent2);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 900; color: var(--bg);
+  }
+  .scan-item.checked { background: rgba(16,185,129,0.12); border-color: var(--green); }
+  .scan-item.checked .scan-check { background: var(--green); border-color: var(--green); color: #fff; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+    color: #2b1810; border: none; border-radius: 14px;
+    padding: 14px; font-weight: 800; font-size: 0.9rem; cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+  }
+  .btn-primary:active { transform: scale(0.98); }
+
+  /* Vocab flashcards */
+  .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .vocab-card { perspective: 800px; height: 116px; cursor: pointer; }
+  .vocab-card-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.5s; transform-style: preserve-3d;
+  }
+  .vocab-card.flipped .vocab-card-inner { transform: rotateY(180deg); }
+  .vocab-face {
+    position: absolute; inset: 0; backface-visibility: hidden;
+    border-radius: 12px; border: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    text-align: center; padding: 8px; font-size: 0.95rem; font-weight: 700;
+    background: var(--surface);
+  }
+  .vocab-face.back { transform: rotateY(180deg); background: rgba(244,185,66,0.1); border-color: var(--gold); font-weight: 600; font-size: 0.74rem; line-height: 1.4; }
+  .vocab-emoji { font-size: 1.7rem; }
+  .vocab-progress { font-size: 0.72rem; color: var(--muted); text-align: center; }
+
+  /* Matching game */
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .match-card {
+    background: var(--surface); border: 2px solid var(--border); border-radius: 12px;
+    padding: 12px 10px; font-size: 0.76rem; text-align: center; cursor: pointer;
+    min-height: 64px; display: flex; align-items: center; justify-content: center; line-height: 1.4;
+  }
+  .match-card.word { font-weight: 800; font-size: 0.95rem; }
+  .match-card.selected { border-color: var(--gold); background: rgba(244,185,66,0.12); }
+  .match-card.matched { border-color: var(--green); background: rgba(16,185,129,0.12); opacity: 0.55; pointer-events: none; }
+  .match-card.wrong-flash { border-color: var(--red); background: rgba(239,68,68,0.15); }
+  .match-status { text-align: center; font-size: 0.78rem; color: var(--muted); min-height: 18px; }
+
+  /* Quiz */
+  .quiz-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  .quiz-q { font-size: 0.86rem; font-weight: 700; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-opt {
+    display: block; width: 100%; text-align: left;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 10px; padding: 10px 12px; font-size: 0.8rem; margin-bottom: 8px; cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+  }
+  .quiz-opt:last-child { margin-bottom: 0; }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(16,185,129,0.15); }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(239,68,68,0.15); }
+  .quiz-opt.disabled { pointer-events: none; opacity: 0.7; }
+
+  /* Mind map drag-drop */
+  .mindmap-central {
+    text-align: center; font-family: 'Bangers', cursive; font-size: 1.05rem; letter-spacing: 1px;
+    color: var(--gold); padding: 12px; background: var(--surface2); border-radius: 14px; border: 1px dashed var(--border);
+  }
+  .mindmap-slots { display: flex; flex-direction: column; align-items: stretch; }
+  .mindmap-connector { width: 2px; height: 12px; background: var(--border); margin: 0 auto; }
+  .mindmap-slot {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .mindmap-slot.filled { border-color: var(--green); background: rgba(16,185,129,0.10); }
+  .mindmap-slot-label { font-size: 0.78rem; font-weight: 800; color: var(--accent2); }
+  .mindmap-slot-drop {
+    border: 2px dashed var(--border); border-radius: 10px; padding: 14px 10px;
+    text-align: center; font-size: 0.82rem; min-height: 40px; display: flex; align-items: center; justify-content: center;
+  }
+  .mindmap-slot.filled .mindmap-slot-drop { border-style: solid; border-color: var(--green); font-weight: 700; color: var(--text); }
+  .slot-drop-inner { color: var(--muted); }
+  .slot-drop-inner.hint-text { color: var(--gold); font-style: italic; }
+  .hint-btn {
+    align-self: flex-start; background: transparent; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 999px; padding: 4px 10px; font-size: 0.68rem; cursor: pointer; font-family: 'Nunito', sans-serif;
+  }
+  @keyframes mm-shake {
+    10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(3px); }
+    30%, 50%, 70% { transform: translateX(-5px); } 40%, 60% { transform: translateX(5px); }
+  }
+  .mindmap-slot.shake { animation: mm-shake 0.4s; }
+  .mindmap-tray {
+    display: flex; flex-wrap: wrap; gap: 8px; padding: 12px;
+    background: var(--surface2); border-radius: 14px; border: 1px solid var(--border); min-height: 50px;
+  }
+  .mindmap-chip {
+    background: var(--surface); border: 2px solid var(--gold); border-radius: 10px;
+    padding: 8px 12px; font-size: 0.8rem; font-weight: 700; cursor: grab; touch-action: none; user-select: none;
+  }
+  .mindmap-chip.chip-hidden { opacity: 0.15; pointer-events: none; }
+  .mindmap-ghost {
+    position: fixed; z-index: 999; pointer-events: none;
+    background: var(--surface); border: 2px solid var(--gold); border-radius: 10px;
+    padding: 8px 12px; font-size: 0.8rem; font-weight: 700; box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  }
+
+  /* Canvas / drawing */
+  .canvas-wrap { background: #1f130c; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; position: relative; }
+  canvas { display: block; width: 100%; touch-action: none; }
+  .canvas-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .color-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+  .color-dot.active { border-color: #fff; }
+  .canvas-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    border-radius: 10px; padding: 8px 12px; font-size: 0.75rem; cursor: pointer; font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+  }
+  .canvas-btn:active { transform: scale(0.96); }
+
+  .summary-box { background: rgba(232,117,44,0.08); border: 1px solid rgba(232,117,44,0.25); border-radius: 12px; padding: 12px 14px; font-size: 0.8rem; line-height: 1.6; }
+
+  /* Complete view */
+  .complete-view { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 30px 10px; }
+  .complete-emoji { font-size: 3.2rem; }
+  .complete-title { font-family: 'Bangers', cursive; font-size: 1.6rem; letter-spacing: 1px; color: var(--gold); }
+  .complete-badge { font-size: 0.95rem; font-weight: 800; color: var(--accent2); }
+  .complete-xp { font-size: 0.85rem; color: var(--muted); }
+  .complete-xp span { color: var(--gold); font-weight: 800; }
+
+  /* Trophy / Sketchbook screens */
+  #trophy, #sketchbook { background: var(--bg); }
+  .trophy-header { padding: 20px 18px 10px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+  .trophy-list { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .trophy-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; }
+  .trophy-item.locked { opacity: 0.4; }
+  .trophy-item-emoji { font-size: 1.8rem; }
+  .trophy-item-title { font-weight: 800; font-size: 0.88rem; }
+  .trophy-item-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  .sketchbook-grid { padding: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sketch-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; position: relative; }
+  .sketch-thumb { width: 100%; height: 120px; object-fit: cover; display: block; background: #1f130c; }
+  .sketch-meta { padding: 8px 10px; }
+  .sketch-title { font-size: 0.76rem; font-weight: 800; }
+  .sketch-date { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+  .sketch-delete {
+    position: absolute; top: 6px; right: 6px; background: rgba(43,24,16,0.85);
+    border: 1px solid var(--border); border-radius: 8px; width: 28px; height: 28px;
+    font-size: 0.85rem; color: var(--text); cursor: pointer;
+  }
+  .sketchbook-empty { grid-column: 1 / -1; text-align: center; color: var(--muted); font-size: 0.85rem; padding: 40px 20px; line-height: 1.6; }
+
+  /* ── WORD DECODER ── */
+  #decoder { background: var(--bg); }
+  .decoder-content { flex: 1; padding: 10px 18px 30px; overflow-y: auto; }
+  .priority-section { margin-bottom: 22px; }
+  .priority-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    font-family: 'Bangers', cursive; font-size: 1.05rem; letter-spacing: 1px;
+  }
+  .priority-count { font-size: 0.68rem; color: var(--muted); font-weight: 700; font-family: 'Nunito', sans-serif; letter-spacing: 0; }
+
+  .decoder-card {
+    background: var(--surface); border: 1px solid var(--border); border-left-width: 4px;
+    border-radius: 14px; margin-bottom: 10px; overflow: hidden; cursor: pointer;
+  }
+  .decoder-card.learned { opacity: 0.75; }
+  .decoder-card-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+  .decoder-thai { font-size: 1.05rem; font-weight: 800; line-height: 1.4; }
+  .decoder-simple { font-size: 0.74rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  .decoder-check { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; }
+  .decoder-check.done { background: var(--green); color: #fff; }
+  .decoder-check.todo { border: 2px solid var(--border); color: transparent; }
+  .decoder-chevron { font-size: 0.75rem; color: var(--muted); flex-shrink: 0; transition: transform 0.2s; }
+  .decoder-card.expanded .decoder-chevron { transform: rotate(180deg); }
+
+  .decoder-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
+  .decoder-card.expanded .decoder-body { display: block; }
+  .decoder-field { margin-top: 12px; }
+  .decoder-field-label { font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase; color: var(--accent2); font-weight: 800; margin-bottom: 4px; }
+  .decoder-field-value { font-size: 0.82rem; line-height: 1.55; }
+  .decoder-visual { display: flex; align-items: center; gap: 12px; background: var(--surface2); border-radius: 12px; padding: 12px; }
+  .decoder-visual-emoji { font-size: 1.8rem; flex-shrink: 0; }
+  .decoder-visual-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+  .decoder-example { background: var(--surface2); border-radius: 10px; padding: 8px 10px; font-size: 0.8rem; margin-bottom: 6px; line-height: 1.5; }
+  .decoder-example:last-child { margin-bottom: 0; }
+  .decoder-usage-box { background: rgba(232,117,44,0.08); border: 1px solid rgba(232,117,44,0.25); border-radius: 10px; padding: 10px 12px; font-size: 0.8rem; line-height: 1.55; }
+  .decoder-learn-btn {
+    margin-top: 12px; width: 100%; background: linear-gradient(135deg, var(--accent), var(--gold));
+    color: #2b1810; border: none; border-radius: 12px; padding: 11px; font-weight: 800; font-size: 0.82rem;
+    cursor: pointer; font-family: 'Nunito', sans-serif;
+  }
+  .decoder-learn-btn.done-btn { background: var(--green); color: #fff; }
+  .decoder-progress-bar { padding: 4px 20px 14px; }
+
+  /* ── PROSODY PATTERN LAB ── */
+  #lab { background: var(--bg); }
+  .lab-content { flex: 1; padding: 10px 18px 30px; overflow-y: auto; }
+  .lab-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; margin-bottom: 14px; overflow: hidden; cursor: pointer;
+  }
+  .lab-card-head { display: flex; align-items: center; gap: 12px; padding: 16px; }
+  .lab-emoji { font-size: 1.8rem; flex-shrink: 0; }
+  .lab-name-th { font-size: 1.05rem; font-weight: 800; }
+  .lab-name-en { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .lab-cracked-tag { font-size: 0.68rem; color: var(--green); font-weight: 800; flex-shrink: 0; }
+  .lab-chevron { font-size: 0.75rem; color: var(--muted); flex-shrink: 0; transition: transform 0.2s; }
+  .lab-card.expanded .lab-chevron { transform: rotate(180deg); }
+  .lab-body { display: none; padding: 0 16px 18px; border-top: 1px solid var(--border); }
+  .lab-card.expanded .lab-body { display: block; }
+
+  .lab-step { margin-top: 16px; }
+  .lab-step-label {
+    font-family: 'Bangers', cursive; font-size: 0.95rem; letter-spacing: 1px;
+    color: var(--accent2); margin-bottom: 8px;
+  }
+  .lab-step-text { font-size: 0.82rem; line-height: 1.55; margin-bottom: 10px; }
+  .lab-clue-list { list-style: none; padding: 0; margin: 0; }
+  .lab-clue-list li { font-size: 0.8rem; line-height: 1.5; background: var(--surface2); border-radius: 10px; padding: 8px 10px; margin-bottom: 6px; }
+
+  /* fingerprint blocks */
+  .fp-box { background: var(--surface2); border-radius: 12px; padding: 12px; margin-bottom: 8px; }
+  .fp-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .fp-row:last-child { margin-bottom: 0; }
+  .fp-line-label { font-size: 0.65rem; color: var(--muted); width: 52px; flex-shrink: 0; }
+  .fp-line-blocks { display: flex; gap: 8px; flex-wrap: wrap; }
+  .fp-chunk { display: flex; gap: 3px; }
+  .fp-block {
+    width: 16px; height: 16px; border-radius: 4px; background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 900; color: var(--bg); flex-shrink: 0;
+  }
+  .fp-ek { background: #ef4444; color: #fff; }
+  .fp-tho { background: #38bdf8; color: #fff; }
+  .fp-heavy { width: 20px; height: 20px; background: var(--gold); color: #2b1810; }
+  .fp-light { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  .fp-r1 { background: var(--gold); }
+  .fp-r2 { background: #2dd4bf; }
+  .fp-r1.fp-ek, .fp-r1.fp-tho, .fp-r2.fp-ek, .fp-r2.fp-tho { color: #2b1810; }
+  .fp-opt { background: transparent; border: 2px dashed var(--border); }
+  .fp-note { font-size: 0.7rem; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+
+  .lab-sample-btn {
+    display: block; width: 100%; text-align: left; background: var(--surface2);
+    border: 2px solid var(--border); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px;
+    font-family: 'Nunito', sans-serif; cursor: pointer; color: var(--text);
+  }
+  .lab-sample-thai { font-size: 0.88rem; font-weight: 700; }
+  .lab-sample-note { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+  .lab-sample-btn.correct { border-color: var(--green); background: rgba(16,185,129,0.12); }
+  .lab-sample-btn.wrong { border-color: #ef4444; background: rgba(239,68,68,0.12); }
+
+  .lab-crack-btn {
+    margin-top: 16px; width: 100%; background: linear-gradient(135deg, var(--accent), var(--gold));
+    color: #2b1810; border: none; border-radius: 12px; padding: 11px; font-weight: 800; font-size: 0.82rem;
+    cursor: pointer; font-family: 'Nunito', sans-serif;
+  }
+  .lab-crack-btn.done-btn { background: var(--green); color: #fff; }
+
+  /* Lab intro cards: Cheat Sheet + Decision Tree */
+  .lab-intro-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
+  .lab-intro-title { font-family: 'Bangers', cursive; font-size: 1.05rem; letter-spacing: 1px; color: var(--gold); margin-bottom: 4px; }
+  .lab-intro-sub { font-size: 0.72rem; color: var(--muted); margin-bottom: 12px; line-height: 1.4; }
+  .cheat-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+  .cheat-table th { text-align: left; color: var(--accent2); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 6px; border-bottom: 2px solid var(--border); }
+  .cheat-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); line-height: 1.4; vertical-align: top; }
+  .cheat-table tr:last-child td { border-bottom: none; }
+
+  .tree-step { background: var(--surface2); border-radius: 10px; padding: 10px 12px; margin-bottom: 4px; }
+  .tree-step-num { font-size: 0.65rem; color: var(--accent2); font-weight: 800; letter-spacing: 1px; }
+  .tree-step-q { font-size: 0.8rem; margin: 3px 0; line-height: 1.4; }
+  .tree-step-yes { font-size: 0.78rem; color: var(--green); font-weight: 700; }
+  .tree-arrow { text-align: center; font-size: 0.68rem; color: var(--muted); margin: 4px 0; }
+
+  .lab-memory-hook {
+    margin-top: 8px; background: rgba(244,185,66,0.1); border: 1px solid rgba(244,185,66,0.3);
+    border-radius: 10px; padding: 9px 11px; font-size: 0.78rem; line-height: 1.5; font-weight: 600;
+  }
+
+  .fp-sample-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .fp-sample-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; }
+  .lab-sample-label { font-family: 'Bangers', cursive; font-size: 1rem; color: var(--accent2); }
+  .fp-mini { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+  .fp-mini .fp-chunk { display: flex; gap: 2px; }
+  .fp-mini .fp-block { width: 10px; height: 10px; font-size: 0; }
+  .fp-mini .fp-block.fp-heavy { width: 13px; height: 13px; }
+
+  .lab-scan-checklist { background: var(--surface2); border-radius: 10px; padding: 10px 12px; margin: 10px 0; }
+  .scan-step-item { font-size: 0.78rem; line-height: 1.6; }
+
+
+</style>
+</head>
+<body>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="home" class="screen active">
+  <div class="home-header">
+    <a href="index.html" class="hq-link" title="Back to Kitchen Ninja HQ">🏠 HQ</a>
+    <div class="home-title">THAI SPECIALTY<br>KITCHEN</div>
+    <div class="home-subtitle" id="home-motto">Cook up your Thai language skills, one recipe at a time</div>
+  </div>
+
+  <div class="xp-panel">
+    <div class="xp-top">
+      <div class="level-badge">🏅 <span id="level-name">-</span></div>
+      <div class="xp-count"><span id="xp-total">0</span> XP</div>
+    </div>
+    <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-bar-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="home-btn-row">
+    <div class="trophy-btn" onclick="openTrophy()">
+      <div class="trophy-icon">🏆</div>
+      <div>
+        <div class="trophy-title">Trophy Shelf</div>
+        <div class="trophy-sub" id="trophy-sub-home">0 / 9 recipes</div>
+      </div>
+    </div>
+    <div class="trophy-btn" onclick="openSketchbook()">
+      <div class="trophy-icon">🖼️</div>
+      <div>
+        <div class="trophy-title">Recipe Journal</div>
+        <div class="trophy-sub" id="sketchbook-sub-home">0 saved</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="missions-label">Pick a kitchen room</div>
+  <div class="missions-list" id="rooms-list"></div>
+</div>
+
+<!-- ══════════ ROOM (filtered recipe list) ══════════ -->
+<div id="room" class="screen">
+  <div class="mission-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="mission-header-text">
+      <div id="room-title">-</div>
+      <div id="room-sub">-</div>
+    </div>
+  </div>
+  <div class="missions-label" id="room-label">Choose a recipe</div>
+  <div class="missions-list" id="room-missions-list" style="padding:0 20px 30px"></div>
+</div>
+
+<!-- ══════════ WORD DECODER ══════════ -->
+<div id="decoder" class="screen">
+  <div class="mission-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="mission-header-text">
+      <div id="decoder-title">-</div>
+      <div id="decoder-sub">-</div>
+    </div>
+  </div>
+  <div class="decoder-progress-bar">
+    <div class="xp-bar-bg"><div class="xp-bar-fill" id="decoder-progress-fill" style="width:0%"></div></div>
+  </div>
+  <div class="decoder-content" id="decoder-content"></div>
+</div>
+
+<!-- ══════════ PROSODY PATTERN LAB ══════════ -->
+<div id="lab" class="screen">
+  <div class="mission-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="mission-header-text">
+      <div>🔬 Prosody Pattern Lab</div>
+      <div>👀 See → 🔎 Scan → 🧠 Name it → 🎯 Exam</div>
+    </div>
+  </div>
+  <div class="decoder-progress-bar">
+    <div class="xp-bar-bg"><div class="xp-bar-fill" id="lab-progress-fill" style="width:0%"></div></div>
+  </div>
+  <div class="lab-content" id="lab-content"></div>
+</div>
+
+<!-- ══════════ MISSION ══════════ -->
+<div id="mission" class="screen">
+  <div class="mission-header">
+    <div class="back-btn" onclick="goBackFromMission()">←</div>
+    <div class="mission-header-text">
+      <div id="m-title">-</div>
+      <div id="m-sub">-</div>
+    </div>
+  </div>
+  <div class="step-dots-row">
+    <div class="step-dots" id="step-dots"></div>
+    <div class="step-indicator" id="step-indicator">-</div>
+  </div>
+  <div class="mission-content" id="mission-content"></div>
+</div>
+
+<!-- ══════════ TROPHY ══════════ -->
+<div id="trophy" class="screen">
+  <div class="trophy-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div style="font-family:'Bangers',cursive; font-size:1.2rem; letter-spacing:1px; color:var(--gold)">🏆 Trophy Shelf</div>
+  </div>
+  <div class="trophy-list" id="trophy-list"></div>
+</div>
+
+<!-- ══════════ SKETCHBOOK ══════════ -->
+<div id="sketchbook" class="screen">
+  <div class="trophy-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div style="flex:1; font-family:'Bangers',cursive; font-size:1.2rem; letter-spacing:1px; color:var(--gold)">🖼️ Sketchbook</div>
+    <button class="canvas-btn" onclick="openNewSketch()">+ New</button>
+  </div>
+  <div class="sketchbook-grid" id="sketchbook-grid"></div>
+</div>
+
+<!-- ══════════ FREE-STANDING SKETCH SCREEN ══════════ -->
+<div id="freedraw" class="screen">
+  <div class="mission-header">
+    <div class="back-btn" onclick="showScreen('sketchbook')">←</div>
+    <div class="mission-header-text">
+      <div id="freedraw-title">New Sketch</div>
+      <div style="font-size:0.72rem; color:var(--muted)">Draw anything from memory</div>
+    </div>
+  </div>
+  <div class="mission-content">
+    <div class="step-card">
+      <div class="canvas-wrap"><canvas id="freedraw-canvas" height="360"></canvas></div>
+      <div class="canvas-tools" id="freedraw-color-dots">
+        <div class="color-dot active" style="background:#f4b942" onclick="setFreeDrawPenColor('#f4b942', 0)"></div>
+        <div class="color-dot" style="background:#e8752c" onclick="setFreeDrawPenColor('#e8752c', 1)"></div>
+        <div class="color-dot" style="background:#38bdf8" onclick="setFreeDrawPenColor('#38bdf8', 2)"></div>
+        <div class="color-dot" style="background:#a855f7" onclick="setFreeDrawPenColor('#a855f7', 3)"></div>
+        <div class="color-dot" style="background:#10b981" onclick="setFreeDrawPenColor('#10b981', 4)"></div>
+        <div class="color-dot" style="background:#fdf1e0" onclick="setFreeDrawPenColor('#fdf1e0', 5)"></div>
+        <button class="canvas-btn" onclick="freeDrawCtrl.clear()">🗑️ Clear</button>
+        <button class="canvas-btn" onclick="freeDrawCtrl.download('sketch')">💾 Save Image</button>
+      </div>
+      <button class="btn-primary" id="freedraw-save-btn" onclick="saveNewSketch()">📓 Save to Sketchbook</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════ DATA ══════════════════════
+
+const LEVELS = [
+  { name: 'Kitchen Helper', xp: 0 },
+  { name: 'Line Cook', xp: 150 },
+  { name: 'Sous Chef', xp: 350 },
+  { name: 'Head Chef', xp: 600 },
+  { name: 'Master Chef', xp: 900 },
+];
+
+const MOTTOS = [
+  'Cook up your Thai skills, one recipe at a time',
+  'A pinch at a time — it still adds up to a full dish',
+  'Burnt a step? No penalty — toss it and try the recipe again',
+  'Just 1 recipe today still counts as a win in this kitchen',
+  'Learn what you "need to know" — no need to memorize the whole cookbook',
+  'Every great chef started by reading just one recipe card',
+  'Mistakes are just taste-tests that teach you the right amount',
+];
+
+const MINDMAP_CATS = [
+  { key: 'author', label: '✍️ Source' },
+  { key: 'form', label: '📝 Format' },
+  { key: 'characters', label: '👤 Who' },
+  { key: 'event', label: '📌 Key Point' },
+  { key: 'moral', label: '💡 Lesson' },
+];
+
+const PEN_COLORS = ['#f4b942', '#e8752c', '#38bdf8', '#a855f7', '#10b981', '#fdf1e0'];
+
+const ROOMS = [
+  { key: 'story', emoji: '🍜', title: 'Story Recipes', titleEn: 'Thai Literature Tales', desc: 'Full 6-course recipes — plot, characters & a lesson baked in', type: 'quest' },
+  { key: 'idiom', emoji: '🧂', title: 'Idiom Spice Rack', titleEn: 'Thai Sayings & Idioms', desc: 'Word Decoder cards — one idiom, fully decoded', type: 'decoder' },
+  { key: 'poetry', emoji: '🔬', title: 'Prosody Pattern Lab', titleEn: 'Thai Poetry — Pattern Recognition', desc: 'Spot the visual fingerprint, scan the clues, name the type', type: 'lab' },
+  { key: 'royal', emoji: '👑', title: 'Royal Words', titleEn: 'ราชาศัพท์ — Common Word → Royal Word', desc: 'Word Decoder cards — body parts, verbs & royal objects', type: 'decoder' },
+  { key: 'formal', emoji: '📋', title: 'Formal Words', titleEn: 'ภาษาทางการ — Everyday → Formal', desc: 'Word Decoder cards — essay words & thinking verbs', type: 'decoder' },
+];
+
+// ══════════ WORD DECODER DECKS ══════════
+// Each card: thai → simple → english → ภาพ (visual) → examples → usage (real-life / exam)
+// priority: 'must' | 'should' | 'bonus'
+
+const PRIORITY_INFO = {
+  must:   { label: 'Must Know',   emoji: '🔴', color: '#ef4444' },
+  should: { label: 'Should Know', emoji: '🟡', color: '#f4b942' },
+  bonus:  { label: 'Bonus',       emoji: '🟢', color: '#10b981' },
+};
+
+const DECKS = {
+  idiom: [
+    { id: 'i1', priority: 'must', thai: 'น้ำขึ้นให้รีบตัก',
+      simple: 'Grab a good chance while you have it — it won\'t stay forever.',
+      english: 'Strike while the iron is hot',
+      visual: { emoji: '🌊⏳', desc: 'Water rising, then draining away — scoop now or it\'s gone.' },
+      examples: ['ร้านลดราคาวันนี้วันเดียว ต้องรีบไปซื้อ น้ำขึ้นให้รีบตักนะ!'],
+      usage: 'Use it to push someone to act NOW on a good opportunity. A very frequently tested proverb.' },
+    { id: 'i2', priority: 'must', thai: 'จับปลาสองมือ',
+      simple: 'Trying to do two things at once and ending up failing at both.',
+      english: 'Chasing two rabbits (you catch neither)',
+      visual: { emoji: '🤲🐟🐟', desc: 'One hand reaching for two fish at once — both slip away.' },
+      examples: ['เขาทำงานสองอย่างพร้อมกันจนทำไม่สำเร็จสักอย่าง เรียกว่าจับปลาสองมือ'],
+      usage: 'Use when someone spreads themselves too thin. Common in essay-writing advice questions.' },
+    { id: 'i3', priority: 'must', thai: 'วัวหายล้อมคอก',
+      simple: 'Fixing a problem only AFTER the damage is already done.',
+      english: 'Locking the barn after the horse has bolted',
+      visual: { emoji: '🐄🚪', desc: 'Building a fence around an empty pen — the cow is already gone.' },
+      examples: ['พอของหายถึงเพิ่งติดกล้องวงจรปิด เป็นวัวหายล้อมคอก'],
+      usage: 'Use to point out "too little, too late" fixes. Common in cause-and-effect reading passages.' },
+    { id: 'i4', priority: 'must', thai: 'ช้า ๆ ได้พร้าเล่มงาม',
+      simple: 'Taking your time gets you a better result than rushing.',
+      english: 'Slow and steady wins the race',
+      visual: { emoji: '🐢🔪', desc: 'A blacksmith carefully shaping a blade slowly — it comes out beautiful.' },
+      examples: ['ค่อย ๆ ทำการบ้านทีละข้อ ช้า ๆ ได้พร้าเล่มงาม'],
+      usage: 'Use to encourage patience over rushing. A classic "value" proverb tested often.' },
+    { id: 'i5', priority: 'must', thai: 'หนีเสือปะจระเข้',
+      simple: 'Escaping one danger, only to run straight into a worse one.',
+      english: 'Out of the frying pan, into the fire',
+      visual: { emoji: '🐅➡️🐊', desc: 'Running from a tiger — straight into a crocodile\'s jaws.' },
+      examples: ['หนีปัญหาที่โรงเรียนมา ดันไปเจอปัญหาที่บ้านหนักกว่าเดิม หนีเสือปะจระเข้'],
+      usage: 'Use for "went from bad to worse" situations. Common in narrative reading passages.' },
+    { id: 'i6', priority: 'must', thai: 'ปลาหมอตายเพราะปาก',
+      simple: 'Getting into trouble because of careless words.',
+      english: 'Loose lips sink ships',
+      visual: { emoji: '🐟🗣️', desc: 'A fish caught because it kept opening its mouth.' },
+      examples: ['พูดจาไม่ระวังจนโดนเพื่อนโกรธ นี่แหละปลาหมอตายเพราะปาก'],
+      usage: 'Use to warn about speaking carelessly. Often paired with lessons about thinking before speaking.' },
+    { id: 'i7', priority: 'must', thai: 'มือไม่พายเอาเท้าราน้ำ',
+      simple: 'Not helping at all — and actually slowing everyone else down.',
+      english: 'Not lifting a finger, and getting in the way too',
+      visual: { emoji: '🚣🦶', desc: 'Someone dangling a foot in the water while everyone else paddles.' },
+      examples: ['ไม่ช่วยทำงานกลุ่มแถมยังกวนเพื่อน มือไม่พายเอาเท้าราน้ำ'],
+      usage: 'Use for someone who\'s worse than useless in teamwork. Great for group-project reading passages.' },
+    { id: 'i8', priority: 'must', thai: 'ปิดทองหลังพระ',
+      simple: 'Doing something good quietly, without needing anyone to notice.',
+      english: 'Do good by stealth',
+      visual: { emoji: '🙏✨', desc: 'Gold leaf pressed onto the BACK of a Buddha statue, unseen.' },
+      examples: ['เขาบริจาคช่วยโรงเรียนแต่ไม่ให้ใครรู้ชื่อ เป็นการปิดทองหลังพระ'],
+      usage: 'A classic "moral value" idiom testing humility and doing good without seeking credit.' },
+    { id: 'i9', priority: 'must', thai: 'ขี่ช้างจับตั๊กแตน',
+      simple: 'Using way more effort or resources than a small job actually needs.',
+      english: 'Using a sledgehammer to crack a nut',
+      visual: { emoji: '🐘🦗', desc: 'A huge elephant chasing one tiny grasshopper — total overkill.' },
+      examples: ['ซื้อเครื่องจักรราคาแพงมากแค่จะตัดกระดาษแผ่นเดียว ขี่ช้างจับตั๊กแตนไปหน่อย'],
+      usage: 'Use when effort/spending is way out of proportion to the task. Common in "which idiom fits" questions.' },
+    { id: 'i10', priority: 'must', thai: 'ตีวัวกระทบคราด',
+      simple: 'Scolding one person indirectly, so another person gets the message.',
+      english: 'Indirectly criticizing someone by scolding someone else',
+      visual: { emoji: '🐂➡️🚜', desc: 'Hitting the ox — but really aiming the message at the harrow behind it.' },
+      examples: ['ครูตำหนินักเรียนคนหนึ่งดัง ๆ ให้อีกคนที่ทำผิดเหมือนกันได้ยินด้วย ตีวัวกระทบคราด'],
+      usage: 'Use for indirect criticism aimed at someone else in the room. Common in social/behavior passages.' },
+    { id: 'i11', priority: 'must', thai: 'เข้าเมืองตาหลิ่วต้องหลิ่วตาตาม',
+      simple: 'Adapting yourself to fit in with the people or place around you.',
+      english: 'When in Rome, do as the Romans do',
+      visual: { emoji: '🏙️👁️', desc: 'Squinting one eye because everyone around you does — you go along with local ways.' },
+      examples: ['ไปอยู่บ้านญาติต้องปรับตัวตามกฎบ้านเขา เข้าเมืองตาหลิ่วต้องหลิ่วตาตาม'],
+      usage: 'Use for adjusting to a new culture, school, or group\'s customs.' },
+    { id: 'i12', priority: 'must', thai: 'กบเลือกนาย',
+      simple: 'Being so picky about your choices that you end up worse off.',
+      english: 'Keep changing your choice until you\'re left with nothing good',
+      visual: { emoji: '🐸👑', desc: 'A frog rejecting every ruler offered — until it\'s stuck with the worst one.' },
+      examples: ['เปลี่ยนงานบ่อยจนสุดท้ายไม่มีงานดี ๆ เหลือ เหมือนกบเลือกนาย'],
+      usage: 'Use for excessive pickiness that backfires. Common in decision-making passages.' },
+    { id: 'i13', priority: 'must', thai: 'คางคกขึ้นวอ',
+      simple: 'Someone humble suddenly becomes successful and starts acting arrogant.',
+      english: 'Getting big-headed after a bit of success',
+      visual: { emoji: '🐸👑', desc: 'A toad suddenly riding in a fancy royal carriage, acting superior.' },
+      examples: ['พอได้เลื่อนตำแหน่งก็เริ่มวางท่า เหมือนคางคกขึ้นวอ'],
+      usage: 'Use to criticize sudden arrogance after minor success. Common in character-study passages.' },
+    { id: 'i14', priority: 'must', thai: 'น้ำลดตอผุด',
+      simple: 'When a situation settles down, the hidden truth finally shows up.',
+      english: 'The truth surfaces once the dust settles',
+      visual: { emoji: '🌊🪵', desc: 'A tree stump hidden underwater — revealed only once the water level drops.' },
+      examples: ['พอเรื่องสงบลง ความจริงก็ค่อย ๆ ปรากฏ น้ำลดตอผุด'],
+      usage: 'Use for delayed truth or consequences catching up. Common in mystery/news-style passages.' },
+    { id: 'i15', priority: 'must', thai: 'ขิงก็รา ข่าก็แรง',
+      simple: 'Both sides are equally stubborn — neither one will back down.',
+      english: 'Two equally stubborn sides, neither budging',
+      visual: { emoji: '🌶️🌶️', desc: 'Two strong spices, equally sharp — neither is milder than the other.' },
+      examples: ['ทั้งสองฝ่ายไม่มีใครยอมใคร ขิงก็รา ข่าก็แรง'],
+      usage: 'Use for stubborn arguments or standoffs where nobody compromises.' },
+    { id: 'i16', priority: 'must', thai: 'ขมิ้นกับปูน',
+      simple: 'Two people (or things) that just do not get along at all.',
+      english: 'Like oil and water',
+      visual: { emoji: '🟡⚪', desc: 'Turmeric and lime paste — mix them and they instantly turn red/clash.' },
+      examples: ['สองคนนี้ทะเลาะกันตลอด เหมือนขมิ้นกับปูน'],
+      usage: 'Use for two people who constantly clash or can\'t cooperate.' },
+    { id: 'i17', priority: 'must', thai: 'เสียน้อยเสียยาก เสียมากเสียง่าย',
+      simple: 'Refusing to spend/lose a little now — so you end up losing a lot later.',
+      english: 'Penny wise, pound foolish',
+      visual: { emoji: '🪙➡️💰', desc: 'Refusing to pay a small coin now, then losing a whole bag of money later.' },
+      examples: ['ไม่ยอมซ่อมของเล็กน้อย สุดท้ายพังทั้งเครื่อง เสียน้อยเสียยาก เสียมากเสียง่าย'],
+      usage: 'Use for false savings that cause bigger losses later. Common in money-management passages.' },
+    { id: 'i18', priority: 'must', thai: 'ฝนตกไม่ทั่วฟ้า',
+      simple: 'Help, care, or resources don\'t reach everyone equally.',
+      english: 'Not everyone gets an equal share',
+      visual: { emoji: '🌧️🌤️', desc: 'Rain falling on one half of the sky, while the other half stays dry.' },
+      examples: ['ความช่วยเหลือไปไม่ถึงทุกคนเท่ากัน ฝนตกไม่ทั่วฟ้า'],
+      usage: 'Use for unequal distribution of help, luck, or resources.' },
+    { id: 'i19', priority: 'must', thai: 'ตักน้ำรดหัวตอ',
+      simple: 'Trying to teach or advise someone who simply won\'t listen.',
+      english: 'Talking to a brick wall',
+      visual: { emoji: '💧🪵', desc: 'Pouring water carefully onto a dead tree stump — nothing grows, no response.' },
+      examples: ['สอนเท่าไหร่ก็ไม่ฟัง เหมือนตักน้ำรดหัวตอ'],
+      usage: 'Use for advice that falls on deaf ears. Common in parent/teacher-advice passages.' },
+    { id: 'i20', priority: 'must', thai: 'เอาหูไปนาเอาตาไปไร่',
+      simple: 'Pretending you didn\'t notice or hear something.',
+      english: 'Turning a blind eye',
+      visual: { emoji: '👂🌾', desc: 'Leaving your ears in the rice field and your eyes in the farm — not "here" to notice.' },
+      examples: ['เห็นเพื่อนทำผิดแต่ทำเป็นไม่รู้ไม่เห็น เอาหูไปนาเอาตาไปไร่'],
+      usage: 'Use for deliberately ignoring wrongdoing. Common in ethics/behavior passages.' },
+    { id: 'i21', priority: 'must', thai: 'เห็นช้างขี้ ขี้ตามช้าง',
+      simple: 'Copying what someone else has or does, beyond what you can really afford.',
+      english: 'Keeping up with the Joneses',
+      visual: { emoji: '🐘💩', desc: 'A tiny animal trying to leave an elephant-sized dropping — way out of its league.' },
+      examples: ['เพื่อนซื้อของใหม่ก็อยากซื้อบ้างทั้งที่เงินไม่พอ เห็นช้างขี้ ขี้ตามช้าง'],
+      usage: 'Use to warn against overspending to match others. Common in money-choice passages.' },
+    { id: 'i22', priority: 'must', thai: 'ไก่งามเพราะขน คนงามเพราะแต่ง',
+      simple: 'Good grooming and dressing well improve how you\'re seen.',
+      english: 'Clothes make the man',
+      visual: { emoji: '🐔✨', desc: 'A plain chicken vs. one with glossy, well-groomed feathers — same chicken, better look.' },
+      examples: ['แต่งตัวดี ๆ ไปสัมภาษณ์งานนะ ไก่งามเพราะขน คนงามเพราะแต่ง'],
+      usage: 'One of the most-tested Thai proverbs — usually paired with questions about first impressions.' },
+    { id: 'i23', priority: 'must', thai: 'รำไม่ดีโทษปี่โทษกลอง',
+      simple: 'Blaming something/someone else for your own mistake.',
+      english: 'A bad workman blames his tools',
+      visual: { emoji: '💃🎶', desc: 'A dancer messing up the steps, then blaming the music instead of themselves.' },
+      examples: ['ทำข้อสอบไม่ได้แล้วโทษว่าข้อสอบยากเกินไป รำไม่ดีโทษปี่โทษกลอง'],
+      usage: 'Use for excuse-making instead of owning a mistake. Common in self-reflection passages.' },
+    { id: 'i24', priority: 'must', thai: 'หาเหาใส่หัว',
+      simple: 'Bringing trouble upon yourself, unnecessarily.',
+      english: 'Asking for trouble',
+      visual: { emoji: '🪮🐛', desc: 'Deliberately putting lice into your own hair — inviting an itch you didn\'t need.' },
+      examples: ['ไปยุ่งเรื่องคนอื่นทั้งที่ไม่เกี่ยว หาเหาใส่หัวชัด ๆ'],
+      usage: 'Use for self-inflicted problems from meddling or careless choices.' },
+    { id: 'i25', priority: 'must', thai: 'ใจเขาใจเรา',
+      simple: 'Thinking about how the other person would feel.',
+      english: 'Put yourself in someone else\'s shoes',
+      visual: { emoji: '❤️🔄❤️', desc: 'Two hearts swapping places — feeling what the other one feels.' },
+      examples: ['ก่อนจะล้อเพื่อน ลองคิดใจเขาใจเราดูก่อน'],
+      usage: 'Use for empathy-based advice. Common in friendship/kindness passages.' },
+    { id: 'i26', priority: 'must', thai: 'ทำดีได้ดี ทำชั่วได้ชั่ว',
+      simple: 'Your actions come back around to you, good or bad.',
+      english: 'You reap what you sow',
+      visual: { emoji: '🌱➡️🌳', desc: 'A small planted seed growing into exactly the kind of tree it was planted as.' },
+      examples: ['ขยันเรียนแล้วสอบได้คะแนนดี ทำดีได้ดี ทำชั่วได้ชั่ว'],
+      usage: 'A very common moral-lesson proverb — often the "answer" to a story\'s theme question.' },
+    { id: 'i27', priority: 'must', thai: 'คบคนให้ดูหน้า ซื้อผ้าให้ดูเนื้อ',
+      simple: 'Look carefully — check what\'s really underneath — before you choose.',
+      english: 'Choose carefully; don\'t judge by the surface alone',
+      visual: { emoji: '🧑‍🤝‍🧑🧵', desc: 'Checking a person\'s character closely, the same way you\'d feel the actual fabric of cloth.' },
+      examples: ['เลือกเพื่อนต้องดูนิสัยให้ดี คบคนให้ดูหน้า ซื้อผ้าให้ดูเนื้อ'],
+      usage: 'Use for careful judgment before choosing friends, products, or decisions.' },
+    { id: 'i28', priority: 'must', thai: 'กันไว้ดีกว่าแก้',
+      simple: 'Preventing a problem is better than fixing it after it happens.',
+      english: 'An ounce of prevention is worth a pound of cure',
+      visual: { emoji: '🛡️🚫', desc: 'A shield blocking trouble BEFORE it hits — instead of a bandage after.' },
+      examples: ['ล็อกประตูก่อนออกจากบ้านทุกครั้ง กันไว้ดีกว่าแก้'],
+      usage: 'Use for safety/precaution advice. A very commonly quoted proverb.' },
+    { id: 'i29', priority: 'must', thai: 'ตนเป็นที่พึ่งแห่งตน',
+      simple: 'Rely on yourself first, before depending on others.',
+      english: 'Self-reliance — help yourself first',
+      visual: { emoji: '🧍💪', desc: 'A person standing on their own two feet, not leaning on anyone.' },
+      examples: ['พยายามทำการบ้านด้วยตัวเองก่อนขอความช่วยเหลือ ตนเป็นที่พึ่งแห่งตน'],
+      usage: 'A core Buddhist-influenced value proverb — often the "moral" answer in literature passages.' },
+    { id: 'i30', priority: 'must', thai: 'ความรู้ท่วมหัวเอาตัวไม่รอด',
+      simple: 'Having lots of knowledge but not knowing how to actually use it.',
+      english: 'All that knowledge, no common sense',
+      visual: { emoji: '📚🌊', desc: 'Someone drowning in a flood of books — surrounded by knowledge, still can\'t swim.' },
+      examples: ['เก่งทฤษฎีมากแต่แก้ปัญหาจริงไม่ได้ ความรู้ท่วมหัวเอาตัวไม่รอด'],
+      usage: 'Use for "book smart but not practical" situations. Common in study-habits passages.' },
+    { id: 'i31', priority: 'should', thai: 'ไก่เห็นตีนงู งูเห็นนมไก่',
+      simple: 'Two people who each know the other\'s secrets or true nature.',
+      english: 'Each one knows the other\'s true colors',
+      visual: { emoji: '🐔🐍', desc: 'A chicken and a snake — each has secretly seen what the other really is.' },
+      examples: ['สองคนนี้รู้ความลับกันและกัน ไก่เห็นตีนงู งูเห็นนมไก่'],
+      usage: 'Use for two people who can\'t fool each other because they know too much about one another.' },
+    { id: 'i32', priority: 'should', thai: 'เกลือเป็นหนอน',
+      simple: 'Someone you trusted turns out to betray you from the inside.',
+      english: 'A snake in the grass — betrayal from within',
+      visual: { emoji: '🧂🐛', desc: 'Salt — something normally pure and preserving — somehow turning into worms.' },
+      examples: ['เพื่อนสนิทกลับไปนินทาลับหลัง เกลือเป็นหนอนแท้ ๆ'],
+      usage: 'Use for betrayal by someone close and trusted. Common in friendship/loyalty passages.' },
+    { id: 'i33', priority: 'should', thai: 'คมในฝัก',
+      simple: 'Someone smart or capable who doesn\'t show off about it.',
+      english: 'Still waters run deep',
+      visual: { emoji: '🗡️📦', desc: 'A very sharp blade, kept quietly inside its sheath — not flashed around.' },
+      examples: ['เขาเก่งมากแต่ไม่เคยอวด เป็นคนคมในฝัก'],
+      usage: 'Use to praise quiet competence. A positive-character trait proverb, often tested.' },
+    { id: 'i34', priority: 'should', thai: 'ชักใบให้เรือเสีย',
+      simple: 'Interrupting or messing up something that was already going well.',
+      english: 'Rocking the boat / throwing a wrench in the works',
+      visual: { emoji: '⛵🌀', desc: 'Yanking the sail the wrong way — sending a smoothly sailing boat off course.' },
+      examples: ['งานกำลังไปได้ดีอยู่ดี ๆ ก็มาป่วนจนพัง ชักใบให้เรือเสีย'],
+      usage: 'Use for someone who disrupts progress unnecessarily. Common in teamwork passages.' },
+    { id: 'i35', priority: 'should', thai: 'ดาบสองคม',
+      simple: 'Something that can help you or hurt you, depending on how it\'s used.',
+      english: 'A double-edged sword',
+      visual: { emoji: '⚔️', desc: 'A sword sharp on BOTH edges — swing it carelessly and it can cut you too.' },
+      examples: ['โซเชียลมีเดียมีทั้งข้อดีข้อเสีย เป็นดาบสองคม'],
+      usage: 'Use for things with both benefits and risks — technology, freedom, fame, etc. Very commonly tested.' },
+    { id: 'i36', priority: 'should', thai: 'เด็ดดอกไม้ร่วมต้น',
+      simple: 'Two people meeting or connecting because it was somehow meant to be.',
+      english: 'Fated to meet — kindred spirits by chance/fate',
+      visual: { emoji: '🌸🌸', desc: 'Two flowers picked from the very same tree — connected before they even met.' },
+      examples: ['เจอกันโดยบังเอิญแต่สนิทกันทันที คงเป็นเด็ดดอกไม้ร่วมต้น'],
+      usage: 'Use for meaningful coincidences or destined friendships/relationships.' },
+    { id: 'i37', priority: 'should', thai: 'ทองไม่รู้ร้อน',
+      simple: 'Someone who stays completely calm and unbothered, even in an urgent situation.',
+      english: 'Cool as a cucumber',
+      visual: { emoji: '🥇🔥', desc: 'A piece of gold sitting calmly in fire, seemingly unaffected while everything else reacts.' },
+      examples: ['ทุกคนตกใจแต่เขาเฉย ๆ เหมือนทองไม่รู้ร้อน'],
+      usage: 'Use for someone unusually calm or indifferent when others expect them to react.' },
+    { id: 'i38', priority: 'should', thai: 'น้ำท่วมปาก',
+      simple: 'Knowing something but not being able to speak up about it.',
+      english: 'Tongue-tied — can\'t speak up',
+      visual: { emoji: '🌊🗣️', desc: 'Water flooding up to the mouth — the words simply can\'t get out.' },
+      examples: ['รู้ความจริงแต่พูดไม่ออกเพราะเกี่ยวข้องด้วย น้ำท่วมปาก'],
+      usage: 'Use when someone can\'t speak freely because they\'re personally involved or implicated.' },
+    { id: 'i39', priority: 'should', thai: 'ปากว่าตาขยิบ',
+      simple: 'Saying one thing out loud while secretly meaning or signaling another.',
+      english: 'Saying one thing, meaning another — two-faced',
+      visual: { emoji: '👄😉', desc: 'A mouth saying "no" while an eye winks "yes" at the same time.' },
+      examples: ['ปากบอกไม่อยากได้ แต่ตาขยิบบอกอยากได้มาก ปากว่าตาขยิบชัด ๆ'],
+      usage: 'Use for insincerity — saying one thing while clearly meaning another.' },
+    { id: 'i40', priority: 'should', thai: 'ผักชีโรยหน้า',
+      simple: 'Making something look good on the surface, without fixing the real problem underneath.',
+      english: 'Papering over the cracks',
+      visual: { emoji: '🌿🍲', desc: 'A pretty sprig of coriander garnish on top of a dish that isn\'t actually cooked well.' },
+      examples: ['ทำความสะอาดแค่ตรงที่คนเห็น เป็นผักชีโรยหน้า'],
+      usage: 'Use for superficial fixes that only look good, not real solutions. Common in social-issue passages.' },
+    { id: 'i41', priority: 'should', thai: 'ไม้อ่อนดัดง่าย ไม้แก่ดัดยาก',
+      simple: 'It\'s much easier to teach and shape someone while they\'re young.',
+      english: 'Better to teach good habits while young',
+      visual: { emoji: '🌱↔️🌳', desc: 'A young sapling bending easily — an old tree trunk barely budges at all.' },
+      examples: ['สอนมารยาทตั้งแต่เด็กดีกว่า ไม้อ่อนดัดง่าย ไม้แก่ดัดยาก'],
+      usage: 'Use for the value of early education/discipline. Common in parenting/education passages.' },
+    { id: 'i42', priority: 'should', thai: 'รู้ไว้ใช่ว่า ใส่บ่าแบกหาม',
+      simple: 'Knowing extra things never becomes a burden — it doesn\'t hurt to learn more.',
+      english: 'Knowledge is never a burden to carry',
+      visual: { emoji: '🧠🪶', desc: 'A backpack full of knowledge — light as a feather, unlike a heavy physical load.' },
+      examples: ['เรียนรู้ไว้เผื่อได้ใช้สักวัน รู้ไว้ใช่ว่า ใส่บ่าแบกหาม'],
+      usage: 'Use to encourage curiosity and learning beyond what\'s strictly required.' },
+    { id: 'i43', priority: 'should', thai: 'ลูกไม้หล่นไม่ไกลต้น',
+      simple: 'Children usually turn out similar to their parents.',
+      english: 'The apple doesn\'t fall far from the tree',
+      visual: { emoji: '🍎🌳', desc: 'An apple lying right at the base of the very tree it grew from.' },
+      examples: ['ลูกเก่งดนตรีเหมือนพ่อเป๊ะ ลูกไม้หล่นไม่ไกลต้น'],
+      usage: 'Use for family resemblance in traits, talent, or personality.' },
+    { id: 'i44', priority: 'should', thai: 'สี่ตีนยังรู้พลาด นักปราชญ์ยังรู้พลั้ง',
+      simple: 'Even experts and skilled people make mistakes sometimes.',
+      english: 'Even Homer nods — everyone makes mistakes',
+      visual: { emoji: '🐴🎓', desc: 'A sure-footed horse (4 legs!) still stumbling — even a wise scholar slips up.' },
+      examples: ['ครูก็เขียนผิดได้บ้าง สี่ตีนยังรู้พลาด นักปราชญ์ยังรู้พลั้ง'],
+      usage: 'Use to be forgiving of mistakes, even from skilled or knowledgeable people.' },
+    { id: 'i45', priority: 'should', thai: 'สิบปากว่าไม่เท่าตาเห็น',
+      simple: 'Seeing something for yourself is more convincing than hearing it from many people.',
+      english: 'Seeing is believing',
+      visual: { emoji: '👥👁️', desc: 'Ten mouths talking versus just one pair of eyes actually witnessing it.' },
+      examples: ['ฟังเขาเล่ามาก็ไม่เท่าไปดูเอง สิบปากว่าไม่เท่าตาเห็น'],
+      usage: 'Use to emphasize firsthand evidence over hearsay. Common in fact-vs-rumor passages.' },
+    { id: 'i46', priority: 'should', thai: 'หว่านพืชเช่นไร ได้ผลเช่นนั้น',
+      simple: 'The kind of effort or actions you put in determines the results you get.',
+      english: 'As you sow, so shall you reap',
+      visual: { emoji: '🌾🌾', desc: 'Whatever seed you plant grows into that exact same kind of crop.' },
+      examples: ['ตั้งใจเรียนก็ได้ผลดี หว่านพืชเช่นไร ได้ผลเช่นนั้น'],
+      usage: 'A close cousin of ทำดีได้ดี ทำชั่วได้ชั่ว — same "actions have consequences" lesson, farming imagery.' },
+    { id: 'i47', priority: 'should', thai: 'หนอนบ่อนไส้',
+      simple: 'An enemy or traitor hiding within your own group, working against you secretly.',
+      english: 'A snake in the grass — an enemy from within',
+      visual: { emoji: '🐛🏠', desc: 'A worm boring quietly from the inside — damage you can\'t see happening.' },
+      examples: ['มีคนในทีมแอบให้ข้อมูลกับฝ่ายตรงข้าม เป็นหนอนบ่อนไส้'],
+      usage: 'Use for internal betrayal or a secret enemy within a group. Common in history/politics passages.' },
+    { id: 'i48', priority: 'should', thai: 'อ้อยเข้าปากช้าง',
+      simple: 'Something that\'s already lost and impossible to get back.',
+      english: 'Gone for good — no chance of getting it back',
+      visual: { emoji: '🐘🎋', desc: 'A stick of sugarcane already inside an elephant\'s mouth — there\'s no pulling it back out.' },
+      examples: ['เงินให้เขาไปแล้วคงไม่ได้คืน เหมือนอ้อยเข้าปากช้าง'],
+      usage: 'Use for something irreversibly lost — money, opportunity, or a decision already made.' },
+    { id: 'i49', priority: 'should', thai: 'เข็นครกขึ้นภูเขา',
+      simple: 'An extremely difficult, exhausting task that feels almost impossible.',
+      english: 'An uphill battle — pushing a boulder uphill',
+      visual: { emoji: '🪨⛰️', desc: 'Pushing a heavy stone mortar up a steep mountain — slow, exhausting, never-ending.' },
+      examples: ['ทำโปรเจกต์นี้คนเดียวเหนื่อยมาก เหมือนเข็นครกขึ้นภูเขา'],
+      usage: 'Use for an extremely hard and tiring task. Common in perseverance passages.' },
+    { id: 'i50', priority: 'should', thai: 'ตำน้ำพริกละลายแม่น้ำ',
+      simple: 'Putting in hard work or money on something that gives back zero result.',
+      english: 'Pouring money down the drain',
+      visual: { emoji: '🥣🌊', desc: 'Grinding chili paste in a mortar, then dumping it straight into a river.' },
+      examples: ['ลงทุนซื้อของมาขายแต่ไม่มีใครซื้อเลย ตำน้ำพริกละลายแม่น้ำ'],
+      usage: 'Use for wasted effort/money with no payoff. Common in failed-investment passages.' },
+  ],
+  royal: [
+    { id: 'r1', priority: 'must', thai: 'กิน → เสวย',
+      simple: 'Common word "eat" vs. the royal word, used only for the King/Queen.',
+      english: 'eat → the King partakes of a meal',
+      visual: { emoji: '🍚👑', desc: 'A home bowl of rice vs. a royal golden tray.' },
+      examples: ['พระบาทสมเด็จพระเจ้าอยู่หัวเสวยพระกระยาหารกลางวัน (a news report)'],
+      usage: 'The #1 most-tested ราชาศัพท์ verb. On exams, a King-related sentence always needs เสวย, never กิน.' },
+    { id: 'r2', priority: 'must', thai: 'นอน → บรรทม',
+      simple: 'Common word "sleep" vs. the royal word for the King, Queen, or senior royalty.',
+      english: 'sleep → the King retires to rest',
+      visual: { emoji: '😴👑', desc: 'A regular bed vs. an ornate royal bedchamber.' },
+      examples: ['สมเด็จพระราชินีเสด็จเข้าที่บรรทม (a news report)'],
+      usage: 'Common exam trick: a royal-context sentence with word choices — pick บรรทม, never นอน.' },
+    { id: 'r3', priority: 'must', thai: 'นั่ง → ประทับ',
+      simple: 'Common word "sit" vs. the royal word for the King/Queen sitting somewhere.',
+      english: 'sit → the King is seated',
+      visual: { emoji: '🪑👑', desc: 'An ordinary chair vs. a royal throne.' },
+      examples: ['พระองค์ประทับ ณ ที่นั่งกลางงาน (a news report)'],
+      usage: 'Watch for WHO is sitting in the sentence — royalty = ประทับ, anyone else = นั่ง.' },
+    { id: 'r4', priority: 'must', thai: 'ไป / มา → เสด็จ',
+      simple: 'One single royal word covers BOTH "go" and "come" for royalty.',
+      english: 'go/come → the King proceeds',
+      visual: { emoji: '🚶👑', desc: 'A royal procession — the same word whether arriving or leaving.' },
+      examples: ['พระองค์เสด็จเยือนโรงพยาบาล (a news report)'],
+      usage: 'เสด็จ replaces BOTH ไป and มา — don\'t look for two separate royal versions.' },
+    { id: 'r5', priority: 'must', thai: 'ดู → ทอดพระเนตร',
+      simple: 'Common word "look/see" vs. the royal phrase — literally "cast the royal gaze."',
+      english: 'look/see → the King casts his royal gaze',
+      visual: { emoji: '👀👑', desc: 'A regular pair of eyes vs. a royal eye framed in gold.' },
+      examples: ['พระองค์ทอดพระเนตรนิทรรศการศิลปะ (a news report)'],
+      usage: 'Notice the pattern: many royal words for senses start with ทอดพระ... — a handy visual cue.' },
+    { id: 'r6', priority: 'must', thai: 'ฟัง → ทรงสดับ',
+      simple: 'Common word "listen" vs. the royal word for the King/Queen listening.',
+      english: 'listen → the King attends/listens',
+      visual: { emoji: '👂👑', desc: 'An ordinary ear vs. a royal ear turned attentively toward a speaker.' },
+      examples: ['พระองค์ทรงสดับคำกราบบังคมทูล (a news report)'],
+      usage: 'Notice the pattern: ทรง + verb is a very common royal-word construction — a useful clue on exams.' },
+    { id: 'r7', priority: 'must', thai: 'พูด → ตรัส',
+      simple: 'Common word "speak" vs. the royal-only word for the King/Queen speaking.',
+      english: 'talk → the King spoke',
+      visual: { emoji: '🗣️👑', desc: 'A casual chat bubble vs. a royal decree scroll.' },
+      examples: ['พระองค์ตรัสขอบคุณประชาชน (a news report)'],
+      usage: 'Check WHO is speaking in the exam sentence — the King/Queen = ตรัส, anyone else = พูด or กล่าว.' },
+    { id: 'r8', priority: 'must', thai: 'ถาม → ตรัสถาม',
+      simple: 'Common word "ask" vs. the royal word — built from ตรัส (royal "speak") + ถาม (ask).',
+      english: 'ask → the King inquired',
+      visual: { emoji: '❓👑', desc: 'A speech bubble with a question mark, wrapped in a royal gold frame.' },
+      examples: ['พระองค์ตรัสถามถึงความเป็นอยู่ของราษฎร (a news report)'],
+      usage: 'Notice it\'s built FROM ตรัส — once you know ตรัส = royal "speak," ตรัสถาม is easy to guess.' },
+    { id: 'r9', priority: 'must', thai: 'ให้ → พระราชทาน',
+      simple: 'Common word "give" vs. the royal word for the King/Queen giving something.',
+      english: 'give → the King bestows/grants',
+      visual: { emoji: '🎁👑', desc: 'A gift handed over casually vs. one bestowed formally by royal hand.' },
+      examples: ['พระบาทสมเด็จพระเจ้าอยู่หัวพระราชทานปริญญาบัตร (a news report)'],
+      usage: 'พระราชทาน is specifically for royalty giving TO others — don\'t confuse it with ถวาย (giving TO royalty).' },
+    { id: 'r10', priority: 'must', thai: 'ตาย → สวรรคต',
+      simple: 'Common word "die" vs. the sacred word used ONLY for a King or Queen passing away.',
+      english: 'die → the sovereign has passed',
+      visual: { emoji: '🕊️👑', desc: 'A plain dove vs. a golden royal dove — same idea, far more solemn wording.' },
+      examples: ['พระบาทสมเด็จพระเจ้าอยู่หัวเสด็จสวรรคต (King/Queen only)'],
+      usage: 'NEVER use ตาย for royalty on an exam — สวรรคต is exclusively for a King/Queen.' },
+    { id: 'r11', priority: 'must', thai: 'เกิด → พระราชสมภพ',
+      simple: 'Common word "born" vs. the royal word for a King/Queen\'s birth.',
+      english: 'be born → the royal birth',
+      visual: { emoji: '👶👑', desc: 'A regular birth announcement vs. a formal royal birth proclamation.' },
+      examples: ['วันพระราชสมภพของพระองค์ตรงกับวันที่... (a news report)'],
+      usage: 'Often appears in questions about royal birthdays/anniversaries — วันพระราชสมภพ = "birthday" for royalty.' },
+    { id: 'r12', priority: 'must', thai: 'ป่วย → ประชวร',
+      simple: 'Common word "sick" vs. the royal word for the King/Queen being unwell.',
+      english: 'sick → the King is unwell',
+      visual: { emoji: '🤒👑', desc: 'A regular thermometer vs. a royal one — same illness, more formal wording.' },
+      examples: ['พระองค์ทรงพระประชวรและเข้ารับการรักษา (a news report)'],
+      usage: 'Often paired with ทรง: ทรงพระประชวร. Watch for this in health-related royal news passages.' },
+    { id: 'r13', priority: 'must', thai: 'อาบน้ำ → สรงน้ำ',
+      simple: 'Common word "bathe" vs. the royal word for the King/Queen bathing.',
+      english: 'bathe → the royal bath',
+      visual: { emoji: '🚿👑', desc: 'An everyday shower vs. a ceremonial royal bathing basin.' },
+      examples: ['พิธีสรงน้ำพระบรมศพ (a royal ceremony report)'],
+      usage: 'สรงน้ำ also appears in Songkran contexts for bathing Buddha statues/elders — a related respectful usage.' },
+    { id: 'r14', priority: 'must', thai: 'แต่งตัว → ทรงเครื่อง',
+      simple: 'Common word "get dressed" vs. the royal word for royalty dressing/being adorned.',
+      english: 'get dressed → the royal attire is put on',
+      visual: { emoji: '👕👑', desc: 'Casual clothes on a hanger vs. an ornate royal robe being carefully arranged.' },
+      examples: ['พระองค์ทรงเครื่องเต็มยศสำหรับพระราชพิธี (a news report)'],
+      usage: 'ทรง + noun is a common royal-word pattern (ทรงเครื่อง = "wearing the [royal] outfit").' },
+    { id: 'r15', priority: 'must', thai: 'เดิน → เสด็จพระราชดำเนิน',
+      simple: 'Common word "walk" vs. the longer, most formal royal word for the King/Queen walking.',
+      english: 'walk → the royal procession on foot',
+      visual: { emoji: '🚶👑', desc: 'A sidewalk stroll vs. a full royal procession with attendants.' },
+      examples: ['พระองค์เสด็จพระราชดำเนินไปทรงเปิดงาน (a news report)'],
+      usage: 'This is the LONGEST royal word in this set — a good example of "bigger occasion = longer word."' },
+    { id: 'r16', priority: 'should', thai: 'หัว → พระเศียร',
+      simple: 'Common word "head" vs. the royal word. Memory: พระ + เศียร = "Royal HEAD."',
+      english: 'head → the royal head',
+      visual: { emoji: '🗣️👑', desc: 'An ordinary head outline vs. one wearing a small royal crown.' },
+      examples: ['ทรงสวมมงกุฎบนพระเศียร (a news report)'],
+      usage: 'Body-part royal words almost always start with พระ — a strong visual pattern to remember.' },
+    { id: 'r17', priority: 'should', thai: 'ผม → พระเกศา',
+      simple: 'Common word "hair" vs. the royal word. Memory: พระ + เกศา = "Royal HAIR."',
+      english: 'hair → the royal hair',
+      visual: { emoji: '💇👑', desc: 'Regular hair vs. hair carefully styled for a royal portrait.' },
+      examples: ['ช่างทรงพระเกศาถวายก่อนพระราชพิธี (a news report)'],
+      usage: 'Pattern check: พระ + [body part] — this formula appears again and again in this category.' },
+    { id: 'r18', priority: 'should', thai: 'หน้า → พระพักตร์',
+      simple: 'Common word "face" vs. the royal word. Memory: พระ + พักตร์ = "Royal FACE."',
+      english: 'face → the royal face/countenance',
+      visual: { emoji: '😊👑', desc: 'A plain face outline vs. a formally posed royal portrait.' },
+      examples: ['ทรงมีพระพักตร์ที่แจ่มใส (a news report)'],
+      usage: 'พระพักตร์ often shows up describing expression/appearance in royal news reports.' },
+    { id: 'r19', priority: 'should', thai: 'ตา → พระเนตร',
+      simple: 'Common word "eyes" vs. the royal word. Memory: พระ + เนตร = "Royal EYES."',
+      english: 'eyes → the royal eyes',
+      visual: { emoji: '👁️👑', desc: 'A regular eye vs. one glowing gold to signal "royal."' },
+      examples: ['พระองค์ทอดพระเนตรมายังฝูงชน (a news report)'],
+      usage: 'This word also appears INSIDE the verb ทอดพระเนตร ("to see," royal) — spot the connection!' },
+    { id: 'r20', priority: 'should', thai: 'หู → พระกรรณ',
+      simple: 'Common word "ears" vs. the royal word. Memory: พระ + กรรณ = "Royal EARS."',
+      english: 'ears → the royal ears',
+      visual: { emoji: '👂👑', desc: 'A plain ear vs. one framed with a small gold accent.' },
+      examples: ['เสียงเพลงดังเข้าสู่พระกรรณ (a poetic news phrase)'],
+      usage: 'Same พระ + [body part] pattern — build the habit of spotting this formula.' },
+    { id: 'r21', priority: 'should', thai: 'จมูก → พระนาสิก',
+      simple: 'Common word "nose" vs. the royal word. Memory: พระ + นาสิก = "Royal NOSE."',
+      english: 'nose → the royal nose',
+      visual: { emoji: '👃👑', desc: 'A plain nose outline vs. one on a formally drawn royal portrait.' },
+      examples: ['พระนาสิกโด่งเป็นเอกลักษณ์ในภาพวาด (a descriptive passage)'],
+      usage: 'Less common in exam questions than the "big 5" (head, face, eyes, ears, mouth) — but still fair game.' },
+    { id: 'r22', priority: 'should', thai: 'ปาก → พระโอษฐ์',
+      simple: 'Common word "mouth" vs. the royal word. Memory: พระ + โอษฐ์ = "Royal MOUTH."',
+      english: 'mouth → the royal mouth',
+      visual: { emoji: '👄👑', desc: 'A plain mouth outline vs. one shown mid-speech in a formal portrait.' },
+      examples: ['รอยยิ้มที่พระโอษฐ์ของพระองค์ (a descriptive passage)'],
+      usage: 'พระโอษฐ์ (mouth) is a different word from ตรัส (the royal VERB "to speak") — don\'t mix them up!' },
+    { id: 'r23', priority: 'should', thai: 'ฟัน → พระทนต์',
+      simple: 'Common word "teeth" vs. the royal word. Memory: พระ + ทนต์ = "Royal TEETH."',
+      english: 'teeth → the royal teeth',
+      visual: { emoji: '🦷👑', desc: 'A plain tooth icon vs. one in a formal royal medical record.' },
+      examples: ['ทันตแพทย์ประจำพระองค์ดูแลพระทนต์ (a news report)'],
+      usage: 'A rarer exam item, but shows the same พระ + [body part] pattern once more.' },
+    { id: 'r24', priority: 'should', thai: 'ลิ้น → พระชิวหา',
+      simple: 'Common word "tongue" vs. the royal word. Memory: พระ + ชิวหา = "Royal TONGUE."',
+      english: 'tongue → the royal tongue',
+      visual: { emoji: '👅👑', desc: 'A plain tongue icon vs. one shown in a formal medical/ceremonial context.' },
+      examples: ['(rarely used outside medical/ceremonial royal contexts)'],
+      usage: 'One of the least commonly tested — good for "Bonus round" review once the big ones feel easy.' },
+    { id: 'r25', priority: 'should', thai: 'มือ → พระหัตถ์',
+      simple: 'Common word "hand" vs. the royal word. Memory: พระ + หัตถ์ = "Royal HAND."',
+      english: 'hand → the royal hand',
+      visual: { emoji: '🤚👑', desc: 'A plain hand outline vs. one holding a royal scepter.' },
+      examples: ['พระองค์ทรงยื่นพระหัตถ์ทักทายประชาชน (a news report)'],
+      usage: 'Frequently seen alongside ทรง (ทรงพระหัตถ์-related phrases) in ceremony descriptions.' },
+    { id: 'r26', priority: 'should', thai: 'แขน → พระกร',
+      simple: 'Common word "arm" vs. the royal word. Memory: พระ + กร = "Royal ARM."',
+      english: 'arm → the royal arm',
+      visual: { emoji: '💪👑', desc: 'A plain arm outline vs. one in royal ceremonial dress.' },
+      examples: ['(seen in formal descriptions of royal attire and posture)'],
+      usage: 'Careful: พระกร (arm) looks similar to other "กร" royal-word compounds — context tells them apart.' },
+    { id: 'r27', priority: 'should', thai: 'เท้า → พระบาท',
+      simple: 'Common word "foot" vs. the royal word. Memory: พระ + บาท = "Royal FOOT."',
+      english: 'foot → the royal foot',
+      visual: { emoji: '🦶👑', desc: 'A plain footprint vs. one on a royal red carpet.' },
+      examples: ['พระบาทสมเด็จพระเจ้าอยู่หัว — this royal TITLE literally contains "royal foot"!'],
+      usage: 'Huge exam clue: the King\'s formal title "พระบาทสมเด็จพระเจ้าอยู่หัว" literally starts with this word.' },
+    { id: 'r28', priority: 'should', thai: 'นิ้วมือ → พระองคุลี',
+      simple: 'Common word "finger" vs. the royal word. Memory: พระ + องคุลี = "Royal FINGER."',
+      english: 'finger → the royal finger',
+      visual: { emoji: '☝️👑', desc: 'A plain finger outline vs. one wearing a royal ring.' },
+      examples: ['(rarely used outside detailed ceremonial descriptions)'],
+      usage: 'A less-common word — save it for later review once the more frequent ones feel solid.' },
+    { id: 'r29', priority: 'should', thai: 'หัวใจ → พระหทัย',
+      simple: 'Common word "heart" vs. the royal word. Memory: พระ + หทัย = "Royal HEART."',
+      english: 'heart → the royal heart',
+      visual: { emoji: '❤️👑', desc: 'A plain heart icon vs. one inside a royal crest.' },
+      examples: ['ทรงมีพระหทัยเมตตาต่อราษฎร (a news report)'],
+      usage: 'Often used figuratively (kindness, compassion) rather than just the physical organ — watch context.' },
+    { id: 'r30', priority: 'should', thai: 'อก → พระอุระ',
+      simple: 'Common word "chest" vs. the royal word. Memory: พระ + อุระ = "Royal CHEST."',
+      english: 'chest → the royal chest',
+      visual: { emoji: '🫁👑', desc: 'A plain chest outline vs. one adorned with royal decorations/medals.' },
+      examples: ['(seen in formal descriptions of royal decorations and attire)'],
+      usage: 'A rarer word — good for later review rounds.' },
+    { id: 'r31', priority: 'should', thai: 'ท้อง → พระอุทร',
+      simple: 'Common word "stomach" vs. the royal word. Memory: พระ + อุทร = "Royal STOMACH."',
+      english: 'stomach/belly → the royal stomach',
+      visual: { emoji: '🫃👑', desc: 'A plain stomach outline vs. one in a formal medical royal record.' },
+      examples: ['(seen mainly in medical/ceremonial royal contexts)'],
+      usage: 'One of the least commonly tested body-part words — a good "Bonus round" review item.' },
+    { id: 'r32', priority: 'bonus', thai: 'บ้าน → พระราชวัง / พระตำหนัก',
+      simple: '"Home" casually vs. the royal words for a palace (grand) or residence (smaller).',
+      english: 'house → palace / royal residence',
+      visual: { emoji: '🏠👑', desc: 'A cozy house vs. a grand golden palace.' },
+      examples: ['พระราชวังเป็นที่ประทับของพระมหากษัตริย์ (a news report)'],
+      usage: 'พระตำหนัก = a smaller royal residence, พระราชวัง = a grand palace — exams may ask you to tell these apart.' },
+    { id: 'r33', priority: 'bonus', thai: 'เตียง → พระแท่น',
+      simple: 'Common word "bed" vs. the royal word for a royal bed/throne-like platform.',
+      english: 'bed → the royal bed/dais',
+      visual: { emoji: '🛏️👑', desc: 'A normal bed vs. an ornate raised royal platform.' },
+      examples: ['(seen in descriptions of royal bedchambers and ceremonial platforms)'],
+      usage: 'พระแท่น can also refer to a ceremonial platform, not just a bed — context matters.' },
+    { id: 'r34', priority: 'bonus', thai: 'เสื้อผ้า → ฉลองพระองค์',
+      simple: 'Common word "clothes" vs. the royal word for royal attire.',
+      english: 'clothes → royal attire',
+      visual: { emoji: '👕👑', desc: 'Everyday clothes on a hanger vs. an elaborate royal robe.' },
+      examples: ['ฉลองพระองค์สีเหลืองในวันพระราชพิธี (a news report)'],
+      usage: 'Notice this royal word does NOT start with พระ — it starts with ฉลองพระ, a different but recognizable pattern.' },
+    { id: 'r35', priority: 'bonus', thai: 'รองเท้า → ฉลองพระบาท',
+      simple: 'Common word "shoes" vs. the royal word, built from ฉลองพระ + บาท (royal "foot").',
+      english: 'shoes → royal footwear',
+      visual: { emoji: '👞👑', desc: 'Everyday shoes vs. ceremonial royal footwear.' },
+      examples: ['(seen in ceremonial/formal descriptions of royal attire)'],
+      usage: 'Same ฉลองพระ + [item] pattern as ฉลองพระองค์ — a matching pair worth learning together.' },
+    { id: 'r36', priority: 'bonus', thai: 'แหวน → พระธำมรงค์',
+      simple: 'Common word "ring" vs. the royal word for a royal ring.',
+      english: 'ring → the royal ring',
+      visual: { emoji: '💍👑', desc: 'A plain ring vs. an ornate royal signet ring.' },
+      examples: ['(seen in descriptions of royal regalia)'],
+      usage: 'A less commonly tested word — good for a later "Bonus round" review.' },
+    { id: 'r37', priority: 'bonus', thai: 'กระจก → พระฉาย',
+      simple: 'Common word "mirror" vs. the royal word for a royal mirror.',
+      english: 'mirror → the royal mirror',
+      visual: { emoji: '🪞👑', desc: 'A plain mirror vs. an ornate gold-framed royal mirror.' },
+      examples: ['(seen in descriptions of royal chambers)'],
+      usage: 'Object-category royal words are the least frequently tested — review these last.' },
+    { id: 'r38', priority: 'bonus', thai: 'ร่ม → พระกลด',
+      simple: 'Common word "umbrella" vs. the royal word for a ceremonial royal umbrella.',
+      english: 'umbrella → the royal ceremonial umbrella',
+      visual: { emoji: '☂️👑', desc: 'An everyday umbrella vs. a tiered gold ceremonial umbrella held over royalty.' },
+      examples: ['ผู้ถือพระกลดเดินตามขบวนเสด็จ (a news report)'],
+      usage: 'พระกลด is a distinct ceremonial object often seen in royal procession photos — a strong visual clue.' },
+    { id: 'r39', priority: 'bonus', thai: 'รถ → รถพระที่นั่ง',
+      simple: 'Common word "car" vs. the royal phrase for the royal vehicle/seat.',
+      english: 'car → the royal motorcade vehicle',
+      visual: { emoji: '🚗👑', desc: 'A regular car vs. an official royal motorcade vehicle.' },
+      examples: ['รถพระที่นั่งเคลื่อนผ่านประชาชนที่มาเฝ้ารับเสด็จ (a news report)'],
+      usage: 'Notice this royal word doesn\'t start with พระ at the front — it\'s "รถ" + "พระที่นั่ง" (royal seat).' },
+    { id: 'r40', priority: 'bonus', thai: 'จดหมาย → พระราชหัตถเลขา',
+      simple: 'Common word "letter" vs. the royal word for a letter written by the King/Queen.',
+      english: 'letter → a royal handwritten letter',
+      visual: { emoji: '✉️👑', desc: 'A regular envelope vs. an official sealed royal letter.' },
+      examples: ['(seen in historical/ceremonial contexts describing royal correspondence)'],
+      usage: 'Notice it contains พระราช (royal) + หัตถ (hand) + เลขา (writing) — "royal hand-writing," literally.' },
+    { id: 'r41', priority: 'bonus', thai: 'คำสั่ง → พระบรมราชโองการ',
+      simple: 'Common word "order/command" vs. the most formal royal word for a royal decree.',
+      english: 'order → a royal decree',
+      visual: { emoji: '📜👑', desc: 'A simple instruction note vs. an official sealed royal decree scroll.' },
+      examples: ['มีพระบรมราชโองการโปรดเกล้าฯ แต่งตั้ง... (a news report)'],
+      usage: 'One of the most formal, ceremonial royal words in this whole set — often paired with "โปรดเกล้าฯ."' },
+  ],
+  formal: [
+    { id: 'f1', priority: 'must', thai: 'วิเคราะห์',
+      simple: 'Breaking something down into parts to understand it better.',
+      english: 'Analyze',
+      visual: { emoji: '🔍🧩', desc: 'A magnifying glass breaking one big shape into its separate pieces.' },
+      examples: ['นักเรียนต้องวิเคราะห์เหตุการณ์ในเรื่องก่อนตอบคำถาม'],
+      usage: 'One of THE most common instruction words on exams: "จงวิเคราะห์..." = "Analyze the following..."' },
+    { id: 'f2', priority: 'must', thai: 'สังเคราะห์',
+      simple: 'Combining several pieces of information together to create something new.',
+      english: 'Synthesize',
+      visual: { emoji: '🧩➕✨', desc: 'Several separate puzzle pieces snapping together into one new picture.' },
+      examples: ['ครูให้สังเคราะห์ข้อมูลจากหลายแหล่งมาสรุปเป็นรายงานเดียว'],
+      usage: 'The opposite direction from วิเคราะห์ (breaking apart) — this is building UP from pieces.' },
+    { id: 'f3', priority: 'must', thai: 'ประเมิน',
+      simple: 'Judging the value, level, or quality of something.',
+      english: 'Evaluate',
+      visual: { emoji: '📊⭐', desc: 'A scale/rating dial measuring how good or how much something is worth.' },
+      examples: ['ครูประเมินผลงานนักเรียนจากความคิดสร้างสรรค์และความถูกต้อง'],
+      usage: 'Word Family (learn it as a group, not alone!): ประเมิน (evaluate) → การประเมิน (evaluation) → ผู้ประเมิน (evaluator) → ผลการประเมิน (evaluation result). English works the same way: Evaluate → Evaluation → Evaluator → Evaluation result — Thai grows new words the same way English does!' },
+    { id: 'f4', priority: 'must', thai: 'อนุมาน',
+      simple: 'Figuring something out or drawing a conclusion from the clues/information you already have.',
+      english: 'Infer',
+      visual: { emoji: '🧠🔗', desc: 'Connecting scattered clue-dots into one conclusion, like solving a mystery.' },
+      examples: ['จากน้ำเสียงในบทสนทนา เราสามารถอนุมานได้ว่าตัวละครกำลังโกรธ'],
+      usage: 'A classic reading-comprehension instruction word: "จงอนุมานว่า..." = "Infer that..." — the answer isn\'t stated directly, you have to work it out.' },
+    { id: 'f5', priority: 'must', thai: 'สรุป',
+      simple: 'Saying the main point in a short, simple way.',
+      english: 'Summarize',
+      visual: { emoji: '🎯📝', desc: 'A whole page of text funneling down into just one short sentence.' },
+      examples: ['ช่วยสรุปใจความสำคัญของย่อหน้านี้ให้หน่อย'],
+      usage: 'Extremely common exam instruction: "จงสรุป..." = "Summarize..." Practice cutting a paragraph down to 1 sentence.' },
+    { id: 'f6', priority: 'must', thai: 'ระบุ',
+      simple: 'Pointing out or stating something clearly and specifically.',
+      english: 'Identify / Specify',
+      visual: { emoji: '📌🎯', desc: 'A pin dropped precisely on ONE exact spot, not a vague general area.' },
+      examples: ['จงระบุสาเหตุหลักของปัญหาที่กล่าวถึงในบทความ'],
+      usage: 'Different from สรุป (summarize the whole thing) — ระบุ asks you to pinpoint ONE specific detail.' },
+    { id: 'f7', priority: 'must', thai: 'อธิบาย',
+      simple: 'Making something clear so someone else can understand it.',
+      english: 'Explain',
+      visual: { emoji: '📝💡', desc: 'A lightbulb turning on above someone\'s head as a concept gets explained.' },
+      examples: ['ครูอธิบายวิธีทำโจทย์อย่างละเอียดจนทุกคนเข้าใจ'],
+      usage: 'Look out for the difference: อธิบาย = HOW/WHY something works, สรุป = WHAT the main point is.' },
+    { id: 'f8', priority: 'must', thai: 'เปรียบเทียบ',
+      simple: 'Looking at two or more things to find what\'s the same and what\'s different.',
+      english: 'Compare',
+      visual: { emoji: '⚖️🔄', desc: 'A balance scale weighing two things side by side.' },
+      examples: ['จงเปรียบเทียบตัวละครสองตัวในเรื่องว่ามีนิสัยต่างกันอย่างไร'],
+      usage: 'A very common essay-question word — usually wants BOTH similarities AND differences, not just one.' },
+    { id: 'f9', priority: 'must', thai: 'แสดงความคิดเห็น',
+      simple: 'Sharing your own opinion, along with your reasons for thinking that way.',
+      english: 'Give an opinion',
+      visual: { emoji: '🗣️💭', desc: 'A speech bubble with a thought bubble attached — your view AND your reasoning.' },
+      examples: ['นักเรียนแสดงความคิดเห็นต่อประเด็นนี้พร้อมให้เหตุผลประกอบ'],
+      usage: 'Exams usually want reasons attached — "แสดงความคิดเห็นพร้อมเหตุผล" = give your opinion WITH reasons.' },
+    { id: 'f10', priority: 'must', thai: 'ข้อเท็จจริง vs ข้อคิดเห็น',
+      simple: 'ข้อเท็จจริง = something you can check/prove is true. ข้อคิดเห็น = someone\'s personal view or opinion.',
+      english: 'Fact vs. Opinion',
+      visual: { emoji: '📚🆚💭', desc: 'A checkmark on a provable fact vs. a thought bubble for a personal view.' },
+      examples: ['ข้อเท็จจริง: "ประเทศไทยมี 77 จังหวัด" / ข้อคิดเห็น: "อาหารไทยอร่อยที่สุดในโลก"'],
+      usage: 'One of the MOST common reading-comprehension question types: "ข้อใดเป็นข้อเท็จจริง/ข้อคิดเห็น?" Facts can be checked; opinions can\'t.' },
+    { id: 'f11', priority: 'should', thai: 'กิน → รับประทาน',
+      simple: 'Casual "eat" vs. the polite, formal version used in writing or with people you don\'t know well.',
+      english: 'eat → dine',
+      visual: { emoji: '🍚📋', desc: 'A home bowl of rice vs. a neatly set restaurant-style plate.' },
+      examples: ['เชิญรับประทานอาหารได้เลยค่ะ (a waiter speaking politely)'],
+      usage: 'Use รับประทาน in essays, formal letters, or speaking to someone you should be polite to.' },
+    { id: 'f12', priority: 'should', thai: 'ตาย → เสียชีวิต',
+      simple: 'Casual "die" vs. the respectful, formal word used for regular people.',
+      english: 'die → pass away',
+      visual: { emoji: '🕊️📋', desc: 'A plain dove vs. a solemn formal obituary notice.' },
+      examples: ['คุณปู่เสียชีวิตเมื่อปีที่แล้วด้วยโรคชรา'],
+      usage: 'Note: this is different from สวรรคต, which is ONLY for a King/Queen — เสียชีวิต is for everyone else, formally.' },
+    { id: 'f13', priority: 'should', thai: 'พูด → กล่าว',
+      simple: 'Casual "talk" vs. the formal word used in speeches, news, and official statements.',
+      english: 'talk → state / remark',
+      visual: { emoji: '🗣️📰', desc: 'A casual chat bubble vs. a news anchor speaking at a podium.' },
+      examples: ['นายกรัฐมนตรีกล่าวเปิดงานอย่างเป็นทางการ'],
+      usage: 'กล่าว is the go-to formal word for "said" in news reports and official announcements.' },
+    { id: 'f14', priority: 'should', thai: 'ถาม → สอบถาม',
+      simple: 'Casual "ask" vs. the polite, formal version used in official or written contexts.',
+      english: 'ask → inquire',
+      visual: { emoji: '❓📋', desc: 'A quick casual question vs. a formal inquiry form.' },
+      examples: ['หากมีข้อสงสัย กรุณาสอบถามเจ้าหน้าที่ประจำเคาน์เตอร์'],
+      usage: 'Common in formal notices, customer-service language, and official documents.' },
+    { id: 'f15', priority: 'should', thai: 'ช่วย → ให้ความช่วยเหลือ',
+      simple: 'Casual "help" vs. the fuller, more formal phrase used in official contexts.',
+      english: 'help → provide assistance',
+      visual: { emoji: '🤝📋', desc: 'A quick helping hand vs. a formal support/aid program.' },
+      examples: ['หน่วยงานให้ความช่วยเหลือผู้ประสบภัยอย่างเร่งด่วน'],
+      usage: 'Notice formal Thai often turns a short verb into a longer noun phrase — a pattern worth spotting.' },
+    { id: 'f16', priority: 'should', thai: 'ทำ → ดำเนินการ',
+      simple: 'Casual "do" vs. the formal word for taking official action on something.',
+      english: 'do → carry out / take action',
+      visual: { emoji: '🔨📋', desc: 'A simple hammer-and-tool "doing" icon vs. an official process flowchart.' },
+      examples: ['ทางบริษัทกำลังดำเนินการตรวจสอบเรื่องดังกล่าว'],
+      usage: 'One of the most common formal-report words — appears constantly in news and official statements.' },
+    { id: 'f17', priority: 'should', thai: 'ให้ → มอบ / จัดให้',
+      simple: 'Casual "give" vs. the more formal/ceremonial ways of giving something.',
+      english: 'give → present / provide',
+      visual: { emoji: '🎁📋', desc: 'Handing something over casually vs. presenting it formally on stage.' },
+      examples: ['ทางโรงเรียนมอบรางวัลให้แก่นักเรียนดีเด่น'],
+      usage: 'มอบ is used for formal presentations/awards; จัดให้ is used for formally arranging/providing something.' },
+    { id: 'f18', priority: 'should', thai: 'คิด / ดู → พิจารณา',
+      simple: 'Casual "think/look at" vs. the formal word for carefully considering something.',
+      english: 'think/consider → deliberate',
+      visual: { emoji: '🤔📋', desc: 'A quick casual thought vs. someone carefully weighing a decision.' },
+      examples: ['คณะกรรมการกำลังพิจารณาใบสมัครอย่างรอบคอบ'],
+      usage: 'Very common in official/committee contexts — "under consideration" = "อยู่ระหว่างการพิจารณา."' },
+    { id: 'f19', priority: 'should', thai: 'อยาก / ต้องการ → ประสงค์ / มีความประสงค์',
+      simple: 'Casual "want" vs. the formal phrase used in official requests or documents.',
+      english: 'want → wish / desire (formally)',
+      visual: { emoji: '🙋📋', desc: 'A casual raised hand vs. a formal written request form.' },
+      examples: ['ผู้สมัครมีความประสงค์จะเข้าศึกษาต่อในระดับปริญญาโท'],
+      usage: 'Common in formal application forms and official letters — a good phrase for essay writing too.' },
+    { id: 'f20', priority: 'should', thai: 'บอกว่า → ระบุว่า',
+      simple: 'Casual "said that" vs. the formal word for officially stating that.',
+      english: 'said that → stated that',
+      visual: { emoji: '💬📋', desc: 'A casual speech bubble vs. an official printed statement.' },
+      examples: ['รายงานระบุว่าอัตราการอ่านหนังสือของเด็กไทยเพิ่มขึ้น'],
+      usage: 'Very useful for essay writing when quoting or referencing a source: "บทความระบุว่า..."' },
+    { id: 'f21', priority: 'should', thai: 'เพราะ → เนื่องจาก',
+      simple: 'Casual "because" vs. the formal connecting word used in essays and reports.',
+      english: 'because → due to / owing to',
+      visual: { emoji: '🔗📋', desc: 'A simple casual link vs. a formal cause-and-effect connector arrow.' },
+      examples: ['โรงเรียนปิดทำการ เนื่องจากสภาพอากาศไม่เอื้ออำนวย'],
+      usage: 'One of the most useful "essay connector" words — swap เพราะ for เนื่องจาก in formal writing.' },
+    { id: 'f22', priority: 'should', thai: 'แต่ → อย่างไรก็ตาม',
+      simple: 'Casual "but" vs. the formal connecting phrase for a contrast in writing.',
+      english: 'but → however',
+      visual: { emoji: '↔️📋', desc: 'A quick casual "but" turn vs. a formal essay transition phrase.' },
+      examples: ['ยอดขายเพิ่มขึ้น อย่างไรก็ตาม กำไรกลับลดลง'],
+      usage: 'A must-know essay connector — use it to open a new sentence showing contrast, formally.' },
+    { id: 'f23', priority: 'should', thai: 'เลย → ดังนั้น',
+      simple: 'Casual "so" vs. the formal connecting word for a result/conclusion in writing.',
+      english: 'so → therefore',
+      visual: { emoji: '➡️📋', desc: 'A casual "so then" arrow vs. a formal essay conclusion arrow.' },
+      examples: ['ฝนตกหนัก ดังนั้นการแข่งขันจึงถูกเลื่อนออกไป'],
+      usage: 'Very handy for essay conclusions — "ดังนั้น" formally links a cause to its result.' },
+    { id: 'f24', priority: 'should', thai: 'ทำให้เกิด → ก่อให้เกิด',
+      simple: 'Casual "causes" vs. the formal word used in reports/essays for causing something to happen.',
+      english: 'causes → gives rise to',
+      visual: { emoji: '💥📋', desc: 'A casual falling-domino "causes" icon vs. a formal cause-effect report diagram.' },
+      examples: ['มลพิษทางอากาศก่อให้เกิดปัญหาสุขภาพในระยะยาว'],
+      usage: 'Common in formal cause-and-effect essays and news reports about issues/problems.' },
+    { id: 'f25', priority: 'bonus', thai: 'นอน → พักผ่อน / เข้านอน',
+      simple: 'Casual "sleep" vs. the slightly more formal/polite versions used in writing.',
+      english: 'sleep → rest / retire for the night',
+      visual: { emoji: '😴📋', desc: 'A casual bed vs. a polite "please rest well" phrase in a formal note.' },
+      examples: ['กรุณาพักผ่อนให้เพียงพอก่อนวันสอบ'],
+      usage: 'Common in health/advice-style formal writing.' },
+    { id: 'f26', priority: 'bonus', thai: 'บอก → แจ้ง',
+      simple: 'Casual "tell" vs. the formal word for officially informing someone.',
+      english: 'tell → notify / inform',
+      visual: { emoji: '💬📋', desc: 'A casual heads-up vs. an official notice board.' },
+      examples: ['ทางโรงเรียนแจ้งให้ผู้ปกครองทราบเรื่องการปิดเทอม'],
+      usage: 'Common in official notices and announcements — "ขอแจ้งให้ทราบว่า..." = "Please be informed that..."' },
+    { id: 'f27', priority: 'bonus', thai: 'เริ่ม → เริ่มดำเนินการ',
+      simple: 'Casual "start" vs. the formal phrase for officially starting a process.',
+      english: 'start → commence',
+      visual: { emoji: '🏁📋', desc: 'A casual starting line vs. an official project kickoff.' },
+      examples: ['โครงการจะเริ่มดำเนินการในเดือนหน้า'],
+      usage: 'Common in project/report writing — pairs naturally with ดำเนินการ (formal "do/carry out").' },
+    { id: 'f28', priority: 'bonus', thai: 'จบ → สิ้นสุด',
+      simple: 'Casual "finish/end" vs. the formal word for something officially ending.',
+      english: 'end → conclude / terminate',
+      visual: { emoji: '🏁📋', desc: 'A casual finish line vs. a formal "end of report" stamp.' },
+      examples: ['การประชุมสิ้นสุดลงเมื่อเวลา 16.00 น.'],
+      usage: 'Common in formal reports, meeting minutes, and official schedules.' },
+    { id: 'f29', priority: 'bonus', thai: 'ใช้ → ใช้ / นำมาใช้',
+      simple: 'Casual "use" vs. the slightly more formal phrase for putting something to use.',
+      english: 'use → apply / put to use',
+      visual: { emoji: '🔧📋', desc: 'A casual tool-in-hand icon vs. a formal "applied methodology" diagram.' },
+      examples: ['นักวิจัยนำวิธีการใหม่มาใช้ในการทดลอง'],
+      usage: 'Common in academic/research writing when describing methods.' },
+    { id: 'f30', priority: 'bonus', thai: 'ซื้อ → จัดซื้อ',
+      simple: 'Casual "buy" vs. the formal word for officially purchasing/procuring something.',
+      english: 'buy → procure',
+      visual: { emoji: '🛒📋', desc: 'A casual shopping bag vs. an official purchase order form.' },
+      examples: ['หน่วยงานจัดซื้ออุปกรณ์คอมพิวเตอร์ชุดใหม่'],
+      usage: 'Common in official business/government documents — "จัดซื้อจัดจ้าง" = official procurement.' },
+    { id: 'f31', priority: 'bonus', thai: 'เอา → นำ',
+      simple: 'Casual "take/get" vs. the more formal, simpler word used in writing.',
+      english: 'take → bring/carry',
+      visual: { emoji: '🤲📋', desc: 'A casual grab vs. a neat formal "carry forward" arrow.' },
+      examples: ['เขานำเอกสารมามอบให้กับคณะกรรมการ'],
+      usage: 'A very common swap in formal writing — เอา rarely appears in formal Thai text at all.' },
+    { id: 'f32', priority: 'bonus', thai: 'คุย → สนทนา',
+      simple: 'Casual "chat" vs. the more formal word for having a conversation.',
+      english: 'chat → converse',
+      visual: { emoji: '💬📋', desc: 'Two casual speech bubbles vs. a formal interview-style conversation.' },
+      examples: ['ผู้สื่อข่าวสนทนากับผู้เชี่ยวชาญเกี่ยวกับประเด็นดังกล่าว'],
+      usage: 'Common in interview/article-style formal writing.' },
+    { id: 'f33', priority: 'bonus', thai: 'เจอ → พบ',
+      simple: 'Casual "run into/find" vs. the shorter, more formal word used in reports.',
+      english: 'find/meet → encounter',
+      visual: { emoji: '🔎📋', desc: 'A casual "oh look!" moment vs. a formal discovery reported in a study.' },
+      examples: ['นักวิจัยพบข้อมูลใหม่ที่น่าสนใจในการศึกษาครั้งนี้'],
+      usage: 'Extremely common in research/report writing: "การศึกษาพบว่า..." = "The study found that..."' },
+    { id: 'f34', priority: 'bonus', thai: 'เกิดขึ้น → ปรากฏขึ้น',
+      simple: 'Casual "happens" vs. the formal word for something appearing or occurring.',
+      english: 'happens → occurs / appears',
+      visual: { emoji: '✨📋', desc: 'A casual "it happened" shrug vs. a formal event log entry.' },
+      examples: ['ปัญหานี้ปรากฏขึ้นอย่างต่อเนื่องในช่วงหลายปีที่ผ่านมา'],
+      usage: 'Common in formal reports describing trends, problems, or events over time.' },
+    { id: 'f35', priority: 'bonus', thai: 'มาก / น้อย → เป็นอย่างมาก / ในปริมาณน้อย',
+      simple: 'Casual "a lot / a little" vs. the fuller formal phrases used in reports.',
+      english: 'a lot/a little → significantly / in a small amount',
+      visual: { emoji: '📈📋', desc: 'A casual thumbs-up-sized amount vs. a precise formal measurement chart.' },
+      examples: ['ยอดขายเพิ่มขึ้นเป็นอย่างมากในไตรมาสนี้'],
+      usage: 'Formal Thai often stretches short intensifiers (มาก/น้อย) into longer descriptive phrases.' },
+  ],
+};
+
+// ══════════════════════ THAI PROSODY PATTERN RECOGNITION LAB ══════════════════════
+// 👀 เห็นหน้าตาคำประพันธ์ → 🔎 สแกนจุดสังเกต → 🧠 ระบุประเภท → 🎯 ตอบข้อสอบ
+// Teaching order: โคลง → กาพย์ → กลอน → ฉันท์ (ฉันท์ taught LAST — easiest to confuse with the others)
+// fingerprint blocks: 'n' normal syllable, 'heavy' ครุ, 'light' ลหุ, 'r1'/'r2' rhyme-linked syllables
+
+function fpBlock(t) {
+  const map = {
+    n: '<div class="fp-block"></div>',
+    ek: '<div class="fp-block fp-ek">่</div>',
+    tho: '<div class="fp-block fp-tho">้</div>',
+    heavy: '<div class="fp-block fp-heavy">●</div>',
+    light: '<div class="fp-block fp-light">˘</div>',
+    r1: '<div class="fp-block fp-r1"></div>',
+    r2: '<div class="fp-block fp-r2"></div>',
+    r1ek: '<div class="fp-block fp-r1">่</div>',
+    r1tho: '<div class="fp-block fp-r1">้</div>',
+    r2ek: '<div class="fp-block fp-r2">่</div>',
+    r2tho: '<div class="fp-block fp-r2">้</div>',
+    opt: '<div class="fp-block fp-opt"></div>',
+  };
+  return map[t] || map.n;
+}
+function fpChunk(types) { return `<div class="fp-chunk">${types.map(fpBlock).join('')}</div>`; }
+function fpLine(label, chunks) { return `<div class="fp-row"><div class="fp-line-label">${label}</div><div class="fp-line-blocks">${chunks.map(fpChunk).join('')}</div></div>`; }
+
+// ── One-Page Cheat Sheet (reference table shown at top of the Lab) ──
+const CHEAT_SHEET = [
+  { type: 'โคลง',        look: 'Number of บาท (lines) + word positions', pattern: 'โคลงสี่ = 4 บาท',            memory: '🏢 4 floors' },
+  { type: 'ร่ายสุภาพ',    look: 'Continuous flow, no fixed line count',   pattern: '~5 คำ per วรรค, chained rhyme', memory: '⛓️ never-ending chain' },
+  { type: 'กาพย์ยานี 11', look: 'Number of syllables',                    pattern: '5 + 6 = 11',                  memory: '🚗 5 seats + 6 seats' },
+  { type: 'กลอนสุภาพ',    look: 'Number of วรรค (parts)',                 pattern: '4 วรรค / ~8 syllables each',  memory: '🎵 8 × 4' },
+  { type: 'ฉันท์',        look: 'ครุ–ลหุ (heavy/light beat)',             pattern: 'a fixed ครุ/ลหุ pattern',     memory: '🥁 has a BEAT' },
+];
+
+// ── Decision Tree (preferred over rote memorizing the table) ──
+const DECISION_TREE = [
+  { step: 1, q: 'Does it have 4 วรรค, each about 8 syllables?', yes: '🟢 กลอนสุภาพ / กลอนแปด' },
+  { step: 2, q: 'If not — is it 5 + 6 = 11 syllables per line?', yes: '🟢 กาพย์ยานี 11' },
+  { step: 3, q: 'If not — does it have a 4-บาท structure with its own special rules?', yes: '🟣 โคลง' },
+  { step: 4, q: 'If not — does it flow on and on with no fixed line count, ending in "ฯลฯ" or a closing โคลงสองสุภาพ?', yes: '⛓️ ร่ายสุภาพ' },
+  { step: 5, q: 'If not — does it have a required ครุ–ลหุ (heavy/light) pattern?', yes: '🔴 ฉันท์' },
+];
+
+// ── Prosody Scan checklist — used for every Level 3 (🎯 EXAM) sample ──
+const PROSODY_SCAN_STEPS = [
+  '① Count the วรรค (parts/lines)',
+  '② Count the syllables',
+  '③ Look at how the line divides into chunks',
+  '④ Look at the rhyme',
+  '⑤ Look at ครุ–ลหุ, if it seems to apply',
+  '⑥ ANSWER',
+];
+
+// ── Shape-only samples for Level 1 (👀 LOOK) — pure pattern matching, no text/meaning ──
+const FP_SAMPLES = [
+  { type: 'khlong', label: 'A', html: fpChunk(['n', 'n', 'n', 'ek', 'n']) + fpChunk(['n', 'tho']) },
+  { type: 'rai',    label: 'B', html: fpChunk(['n', 'n', 'n', 'n', 'r1']) + fpChunk(['n', 'n', 'r1', 'n']) },
+  { type: 'kap',    label: 'C', html: fpChunk(['n', 'n', 'n', 'n', 'n']) + fpChunk(['n', 'n', 'n', 'n', 'n', 'n']) },
+  { type: 'klon',   label: 'D', html: fpChunk(['n', 'n', 'n', 'n', 'n', 'n', 'n', 'n']) },
+  { type: 'chan',   label: 'E', html: fpChunk(['heavy', 'light', 'heavy', 'light']) + fpChunk(['heavy', 'heavy', 'light']) },
+];
+
+// ── Confusion Cards — the pairs that are easiest to mix up ──
+const CONFUSION_CARDS = [
+  {
+    id: 'cc1', emoji: '🟣🆚🔵', title: 'โคลง vs กลอน',
+    prompt: 'Both types have several lines/วรรค — what\'s the real clue that tells them apart?',
+    answer: 'Don\'t just count lines. Look at the STRUCTURE and required rules: โคลง needs a fixed 4-บาท shape with its own specific rules for each บาท. กลอน is 4 วรรค of about 8 syllables, linked by a rhyme chain — no special per-line rules like โคลง has.',
+  },
+  {
+    id: 'cc2', emoji: '🟢🆚🔵', title: 'กาพย์ยานี 11 vs กลอนแปด',
+    prompt: 'Both use plain, everyday vocabulary and no forced tone marks — what separates them?',
+    answer: 'กาพย์ยานี 11 → exactly 11 syllables per line, split 5 + 6. กลอนแปด → about 8 syllables per วรรค, with 4 วรรค per stanza and a rhyme chain connecting them. Count first — the numbers give it away.',
+  },
+  {
+    id: 'cc3', emoji: '⛓️🆚🔵', title: 'ร่ายสุภาพ vs กลอน',
+    prompt: 'Both flow with a rhyme chain from one part to the next — what\'s the real clue that tells them apart?',
+    answer: 'กลอน has a FIXED shape: exactly 4 วรรค per stanza, then it stops (or restarts a new stanza). ร่าย just keeps flowing — as many วรรค as the poet needs, with no fixed stanza length — and it traditionally CLOSES the whole piece with a 2-line โคลงสองสุภาพ at the very end. If you see "ฯลฯ" (etc.) or an open-ended chain, think ร่าย.',
+  },
+];
+
+const PROSODY_LAB = [
+  {
+    id: 'khlong', order: 1, emoji: '🏢', name: 'โคลง (Khlong)', nameEn: 'Start here — Khlong Si Suphap',
+    fingerprintHtml:
+      fpLine('บาท 1', [['n', 'n', 'n', 'ek', 'n'], ['n', 'r1tho'], ['opt', 'opt']]) +
+      fpLine('บาท 2', [['n', 'ek', 'n', 'n', 'r1tho'], ['ek', 'r2tho']]) +
+      fpLine('บาท 3', [['n', 'n', 'ek', 'n', 'r1'], ['n', 'ek'], ['opt', 'opt']]) +
+      fpLine('บาท 4', [['n', 'ek', 'n', 'n', 'r2tho'], ['ek', 'tho', 'n', 'n']]),
+    memoryHook: '🏢 โคลง = 4 ชั้น — think of a 4-floor building. 4 บาท → โคลงสี่สุภาพ.',
+    fingerprintNote: '👀 Each บาท splits into 2 วรรค — a 5-คำ วรรคหน้า + a short วรรคหลัง (2 คำ, or 4 คำ on the last บาท) — with an optional 2-คำ สร้อย (dashed blocks) after บาทที่ 1 and 3. ่/้ = required ไม้เอก/ไม้โท tone marks. Matching colors = the rhyme chain linking one บาท to the next. 🧑‍🏫 Simplified — ask your teacher for the full เอก 7 / โท 4 position chart.',
+    faceDesc: 'The signal that matters most at a glance: 4 บาท (lines) total, each one splitting into a longer วรรคหน้า and a short วรรคหลัง. That shape — 4 floors, each with its own required tone marks — is โคลง\'s fingerprint.',
+    scanClues: [
+      '🏢 Count the บาท (lines): exactly 4 → strong โคลง signal',
+      '✂️ Each บาท splits into 2 วรรค: a 5-คำ วรรคหน้า + a short วรรคหลัง (2 คำ, or 4 คำ on the last บาท)',
+      '✅ Look for ่ (ไม้เอก) and ้ (ไม้โท) tone marks in fixed spots — โคลง is the only type that REQUIRES them',
+      '➕ Watch for an optional 2-คำ สร้อย tacked on after บาทที่ 1 and บาทที่ 3',
+    ],
+    examSample: '(A 4-line โคลง สี่สุภาพ excerpt would be shown here by your teacher — practice spotting the 4-บาท shape and the ่/้ tone-mark spots.)',
+    examQuiz: [
+      { q: 'What is the #1 thing to check FIRST when you suspect a poem is โคลง?', options: ['The topic of the poem', 'The number of บาท (lines) — should be 4', 'Whether it rhymes with English words', 'The color of the page'], correct: 1 },
+      { q: 'Each บาท in โคลงสี่สุภาพ splits into...', options: ['4 equal วรรค', 'A 5-คำ วรรคหน้า + a short วรรคหลัง', '11 syllables straight through', 'No วรรค at all'], correct: 1 },
+      { q: 'Which famous work uses โคลง?', options: ['นิราศภูเขาทอง', 'โคลงโลกนิติ', 'กาพย์พระไชยสุริยา', 'สามัคคีเภทคำฉันท์'], correct: 1 },
+    ],
+  },
+  {
+    id: 'rai', order: 2, emoji: '⛓️', name: 'ร่าย (Rai)', nameEn: 'Rai Suphap — the "never-ending chain" type',
+    fingerprintHtml:
+      fpLine('วรรค 1', [['n', 'n', 'n', 'n', 'r1']]) +
+      fpLine('วรรค 2', [['n', 'r1', 'r1', 'n', 'r2']]) +
+      fpLine('วรรค 3', [['n', 'r2', 'r2', 'n', 'r1']]) +
+      fpLine('วรรค 4', [['n', 'r1', 'r1', 'n', 'r2']]) +
+      fpLine('ฯลฯ', [['n']]),
+    memoryHook: '⛓️ ร่าย = a CHAIN — each วรรค\'s last syllable hooks into the next วรรค\'s 2nd/3rd syllable, on and on, with no fixed stopping point.',
+    fingerprintNote: '👀 Roughly 5 คำ per วรรค, repeating for as long as the poet needs. Matching colors = the rhyme chain: the last syllable of one วรรค must rhyme with a syllable inside the NEXT วรรค. "ฯลฯ" at the end just means "and so on" — ร่าย doesn\'t have a fixed number of วรรค. It traditionally CLOSES with a 2-line โคลงสองสุภาพ as its final stanza.',
+    faceDesc: 'No fixed line count — that\'s the giveaway. ร่าย just keeps flowing, วรรค after วรรค (about 5 คำ each), chained together by rhyme: the last syllable of one วรรค has to rhyme with a syllable near the start of the next one. It reads almost like a poem-shaped run-on sentence.',
+    scanClues: [
+      '⛓️ No fixed number of วรรค — it keeps going ("ฯลฯ" = "and so on")',
+      '🔗 Trace the chain: last syllable of one วรรค rhymes with the 2nd or 3rd syllable of the NEXT วรรค',
+      '📏 Each วรรค is about 5 คำ — similar size to โคลง\'s วรรคหน้า',
+      '🏁 Traditionally ENDS with a โคลงสองสุภาพ (a short, 2-line โคลง) as the closing stanza',
+    ],
+    examSample: 'ป่างสมเด็จพระร่วงเจ้า เผ้าแผ่นภพสุโขทัย มลักเห็นในอนาคต จึงผายพจนประภาษ เป็นอนุสาสนกถา สอนคณานรชน... (from สุภาษิตพระร่วง)',
+    examQuiz: [
+      { q: 'What is the biggest structural difference between ร่าย and the other types?', options: ['It has no rhyme at all', 'It has no fixed number of วรรค — it just keeps flowing', 'It must be exactly 4 lines', 'It never uses tone marks'], correct: 1 },
+      { q: 'In the rhyme chain, the last syllable of one วรรค must rhyme with...', options: ['Nothing — no rhyme required', 'A syllable near the start of the NEXT วรรค', 'The very first syllable of the whole poem', 'A word in a totally different poem'], correct: 1 },
+      { q: 'ร่ายสุภาพ traditionally ends with which other prosody type?', options: ['กลอนแปด', 'กาพย์ยานี 11', 'โคลงสองสุภาพ', 'ฉันท์'], correct: 2 },
+      { q: 'Which famous work is an example of ร่าย?', options: ['นิราศภูเขาทอง', 'สุภาษิตพระร่วง', 'กาพย์พระไชยสุริยา', 'โคลงโลกนิติ'], correct: 1 },
+    ],
+  },
+  {
+    id: 'kap', order: 3, emoji: '🚗', name: 'กาพย์ (Kap)', nameEn: 'Kap Yani 11 — the "5 + 6" type',
+    fingerprintHtml:
+      fpLine('บรรทัด 1', [['n', 'n', 'n', 'n', 'n'], ['n', 'n', 'n', 'n', 'n', 'n']]) +
+      fpLine('บรรทัด 2', [['n', 'n', 'n', 'n', 'n'], ['n', 'n', 'n', 'n', 'n', 'n']]),
+    memoryHook: '🚗 ยานี 11 = 5 + 6 → think of a car: 5 seats + 6 seats = 11 seats.',
+    fingerprintNote: '👀 First thing to look at: the NUMBER OF SYLLABLES per line, split into an uneven pair — 5, then 6.',
+    faceDesc: 'The number "11" is the whole story here. Each line splits into two uneven chunks: a smaller one (5 syllables), then a bigger one (6 syllables). 5 + 6 = 11 — that\'s where the name "ยานี 11" comes from.',
+    scanClues: [
+      '🔢 Count total syllables per line: 11 → strong กาพย์ยานี 11 signal',
+      '✂️ Check the split: is it uneven, 5 then 6? (not 4+4, not 8 straight through)',
+      '🙅 No required tone marks, no fancy Pali/Sanskrit words — plain, easy-to-read vocabulary',
+    ],
+    examSample: '(An excerpt from กาพย์พระไชยสุริยา would be shown here — practice counting: is it 5, then 6, per line?)',
+    examQuiz: [
+      { q: 'In กาพย์ยานี 11, how are the 11 syllables split within a line?', options: ['5 + 6', '4 + 7', '6 + 5 + 5', 'All 11 together, no split'], correct: 0 },
+      { q: '🧠 Memory Hook: "5 seats + 6 seats" is reminding you of what?', options: ['A bus schedule', '5 + 6 = 11 syllables per line', 'The poem has 11 characters', 'It takes 11 minutes to recite'], correct: 1 },
+      { q: 'Which story uses กาพย์ to teach Thai spelling?', options: ['โคลงโลกนิติ', 'กาพย์พระไชยสุริยา', 'นิราศภูเขาทอง', 'สามัคคีเภทคำฉันท์'], correct: 1 },
+    ],
+  },
+  {
+    id: 'klon', order: 4, emoji: '🎵', name: 'กลอน (Klon)', nameEn: 'Klon Paed (กลอนแปด) — the "8 × 4" type',
+    fingerprintHtml:
+      fpLine('วรรค 1', [['n', 'n', 'n', 'n', 'n', 'n', 'n', 'r1']]) +
+      fpLine('วรรค 2', [['n', 'n', 'r1', 'n', 'n', 'n', 'n', 'r2']]) +
+      fpLine('วรรค 3', [['n', 'n', 'n', 'n', 'n', 'n', 'n', 'n']]) +
+      fpLine('วรรค 4', [['n', 'n', 'n', 'n', 'n', 'n', 'n', 'r2']]),
+    memoryHook: '🎵 กลอนแปด = 4 วรรค + ~8 syllables each — think "8 × 4."',
+    fingerprintNote: '👀 First thing to look at: the NUMBER OF วรรค (parts) — 4 of them, each around 8 syllables long. 🔗 Matching colors = a rhyme link between วรรค.',
+    faceDesc: 'Count the วรรค: there should be 4, each about 8 syllables. That "8 × 4" shape is the giveaway. On top of the shape, there\'s a rhyme chain — the last syllable of one วรรค rhymes with a syllable inside the next one.',
+    scanClues: [
+      '🎵 Count the วรรค: 4 of them, each around 8 syllables — "8 × 4"',
+      '🔗 Trace the rhyme chain: last syllable of วรรค 1 → rhymes inside วรรค 2; end of วรรค 2 → rhymes with end of วรรค 4',
+      '🙅 No required tone marks, no Pali/Sanskrit vocabulary — flows like natural, easy Thai',
+    ],
+    examSample: '(An excerpt from นิราศภูเขาทอง would be shown here — practice counting: 4 วรรค, about 8 syllables each?)',
+    examQuiz: [
+      { q: 'A standard "กลอนแปด" วรรค usually has about how many syllables?', options: ['5', '8', '11', '4'], correct: 1 },
+      { q: '🧠 Memory Hook: "8 × 4" is reminding you of what?', options: ['8 poets, 4 books', '~8 syllables per วรรค, 4 วรรค total', 'The poem is 8 pages, 4 chapters', 'Nothing structural'], correct: 1 },
+      { q: 'Which famous work is written in กลอน?', options: ['โคลงโลกนิติ', 'นิราศภูเขาทอง', 'สามัคคีเภทคำฉันท์', 'กาพย์พระไชยสุริยา'], correct: 1 },
+    ],
+  },
+  {
+    id: 'chan', order: 5, emoji: '🥁', name: 'ฉันท์ (Chan)', nameEn: 'Save for last — it\'s the easiest to confuse with the others',
+    fingerprintHtml:
+      fpLine('บรรทัด 1', [['heavy', 'light', 'heavy', 'light'], ['heavy', 'heavy', 'light']]),
+
+    memoryHook: '🥁 ฉันท์ = CHANT → it has a BEAT. Listen for ครุ (heavy, ●) – ลหุ (light, ˘) like a drum rhythm.',
+    fingerprintNote: '👀 First thing to look at: does the poem have a required ครุ–ลหุ (heavy/light) pattern? ● = ครุ (heavy), ˘ = ลหุ (light). This is shown as ONE example pattern — the exact sequence varies by ฉันท์ type, so double-check your textbook.',
+    faceDesc: 'This one is taught LAST on purpose — it\'s the easiest to mix up with the others if you learn it too early. The single biggest signal: every syllable is labeled "heavy" (ครุ) or "light" (ลหุ) in a fixed, required pattern — like a drum beat written into the words themselves.',
+    scanClues: [
+      '🥁 Check for a REQUIRED ครุ–ลหุ (heavy/light) pattern — this is unique to ฉันท์',
+      '📚 Spot elevated, formal-sounding words borrowed from Pali/Sanskrit',
+      '📏 Lines tend to be longer than โคลง or กาพย์',
+    ],
+    examSample: '(An excerpt from สามัคคีเภทคำฉันท์ would be shown here — practice spotting the heavy/light beat pattern.)',
+    examQuiz: [
+      { q: 'ฉันท์ borrows its rules from which languages?', options: ['Chinese and Khmer', 'Pali and Sanskrit', 'English and French', 'Only Thai'], correct: 1 },
+      { q: '🧠 Memory Hook: ฉันท์ = CHANT reminds you that...', options: ['It must be sung on stage', 'It has a fixed BEAT (ครุ–ลหุ pattern)', 'It\'s always about music', 'It has no rules at all'], correct: 1 },
+      { q: 'Which famous work is written in ฉันท์?', options: ['โคลงโลกนิติ', 'สามัคคีเภทคำฉันท์', 'นิราศภูเขาทอง', 'สุภาษิตพระร่วง'], correct: 1 },
+    ],
+  },
+];
+
+const MISSIONS = [
+{
+  id: 0, color: 'm1', emoji: '⛵', category: 'story',
+  title: 'Nirat Phu Khao Thong', titleEn: 'Ballad of the Golden Mountain (นิราศภูเขาทอง)',
+  badge: '🌊 Traveler Who Saw Impermanence',
+  xp: 160,
+  details: {
+    author: 'Sunthorn Phu (Phra Sunthon Wohan)',
+    period: 'Reign of King Rama III (Rattanakosin era)',
+    form: 'Nirat poem (Klon Nirat) — a travel poem; each stanza ends with the word "เอย"',
+  },
+  storyMap: {
+    characters: 'Sunthorn Phu, and Phat (his son)',
+    eventSteps: [
+      { icon: '🛕', text: 'Leaves Wat Ratchasittharam by boat' },
+      { icon: '🌅', text: 'Sails past many temples and places along the river' },
+      { icon: '💭', text: "Remembers the past, from King Rama II's reign" },
+      { icon: '🙏', text: 'Arrives to pay respects at the Golden Mountain Chedi in Ayutthaya' },
+    ],
+    moral: 'The impermanence of life, how wealth and status never last, and the importance of speaking kindly ("Good words bring honor...")',
+  },
+  mindmap: {
+    author: 'Sunthorn Phu',
+    form: 'Nirat travel poem',
+    characters: 'Sunthorn Phu & his son Phat',
+    event: 'Boat trip to the Golden Mountain Chedi',
+    moral: 'Life is impermanent; words matter',
+  },
+  vocab: [
+    { word: 'กะพริบ', emoji: '👁️', meaning: 'to blink — quickly closing and opening the eyes (often misspelled "กระพริบ")' },
+    { word: 'ทรมา', emoji: '😣', meaning: 'suffering — hardship of body and mind' },
+    { word: 'ประทุม', emoji: '🪷', meaning: 'lotus flower' },
+    { word: 'อภิรมย์', emoji: '😊', meaning: 'great joy, delight' },
+  ],
+  quiz: [
+    { q: 'Who wrote Nirat Phu Khao Thong?', options: ['Sunthorn Phu', 'Prince Debadisara', 'Phra Ruang', 'Author unknown'], correct: 0 },
+    { q: 'What form of poetry is Nirat Phu Khao Thong?', options: ['Khlong Si Suphap', 'Nirat poem (Klon Nirat)', 'Kap Yani 11', 'Rai Suphap'], correct: 1 },
+    { q: 'Where was Sunthorn Phu traveling to pay respects?', options: ['The Golden Mountain Chedi in Ayutthaya', 'Doi Suthep Temple', 'The Emerald Buddha', 'Sam Roi Yot mountain'], correct: 0 },
+    { q: 'What does "ทรมา" (thoramaa) mean in this story?', options: ['Great fun', 'Suffering, hardship of body and mind', 'A long journey', 'Great joy'], correct: 1 },
+    { q: 'What is the main moral of this story?', options: ['Officials must be honest', 'Life is impermanent, and words matter', 'Choose good friends', 'Keep to moral conduct to survive danger'], correct: 1 },
+  ],
+  summaryExample: 'Sunthorn Phu sails to the Golden Mountain, remembering the past along the way. He teaches that life is impermanent and words matter a lot.',
+},
+{
+  id: 1, color: 'm2', emoji: '📖', category: 'story',
+  title: 'Klong Lokanit', titleEn: "Ode on the World's Law (โคลงโลกนิติ)",
+  badge: '📖 Sage of Sayings',
+  xp: 160,
+  details: {
+    author: 'Prince Debadisara (Somdet Phra Chao Boromwongse Thoe Krom Phraya Debadisara) — compiled and revised from older verses',
+    period: 'Reign of King Rama III (Rattanakosin era)',
+    form: 'Khlong Si Suphap (a four-line khlong verse)',
+  },
+  storyMap: {
+    characters: 'None — the poem is a collection of teachings, not a story with characters',
+    eventSteps: [
+      { icon: '⚖️', text: 'Compares good behavior with bad behavior' },
+      { icon: '🧑‍🤝‍🧑', text: 'Teaches how to choose good friends' },
+      { icon: '📖', text: 'Encourages working hard to gain knowledge' },
+      { icon: '🌱', text: 'Reflects on human nature in general' },
+    ],
+    moral: 'Choose good friends, work hard to learn, and carry yourself well in society',
+  },
+  mindmap: {
+    author: 'Prince Debadisara',
+    form: 'Khlong Si Suphap',
+    characters: 'None — sayings, no characters',
+    event: 'Proverbs on good, evil & friendship',
+    moral: 'Choose good friends; work hard to learn',
+  },
+  vocab: [
+    { word: 'นาคี', emoji: '🐍', meaning: 'a great serpent, or a naga' },
+    { word: 'เขนง', emoji: '📯', meaning: "an animal horn (used to hold gunpowder or a rifle's priming charge)" },
+    { word: 'ปะหัง', emoji: '🗺️', meaning: 'Pahang — used to mean somewhere far away or very different' },
+    { word: 'สาระพะดัก', emoji: '😖', meaning: 'trouble, or hardship' },
+  ],
+  quiz: [
+    { q: 'What form of poetry is Klong Lokanit?', options: ['Nirat poem (Klon Nirat)', 'Khlong Si Suphap', 'Kap Yani 11', 'Rai Suphap'], correct: 1 },
+    { q: 'Who compiled and revised Klong Lokanit?', options: ['Sunthorn Phu', 'Prince Debadisara', 'Phra Ruang', 'Author unknown'], correct: 1 },
+    { q: 'Does Klong Lokanit have characters telling a story?', options: ['Yes, 2 main characters', 'No — it is a collection of teachings', 'Yes, 1 main character', 'Yes, many characters'], correct: 1 },
+    { q: 'What does Klong Lokanit mainly teach?', options: ['How to fight in battle', 'Choosing good friends and working hard to learn', 'How to travel far', 'How to rule a kingdom'], correct: 1 },
+    { q: 'What does "นาคี" (naakhi) mean?', options: ['A large tree', 'A great serpent or naga', 'A tall mountain', 'A wide river'], correct: 1 },
+  ],
+  summaryExample: 'Klong Lokanit is a book of wise sayings with no characters — it teaches you to choose good friends and work hard at learning.',
+},
+{
+  id: 2, color: 'm3', emoji: '🛡️', category: 'story',
+  title: 'Supasit Phra Ruang', titleEn: "Proverbs of Phra Ruang (สุภาษิตพระร่วง)",
+  badge: '🛡️ The Careful One of Sukhothai',
+  xp: 160,
+  details: {
+    author: 'Author unknown (passed down by the public over time, traditionally credited to Phra Ruang)',
+    period: 'Sukhothai era (possibly revised again in the Rattanakosin era)',
+    form: 'Rai Suphap — an ancient verse form used for proverbs',
+  },
+  storyMap: {
+    characters: 'Phra Ruang (giving teachings to the people)',
+    eventSteps: [
+      { icon: '🏠', text: 'Teaches manners for everyday life' },
+      { icon: '🙇', text: 'How to approach and respect elders' },
+      { icon: '💼', text: 'How to work and carry yourself well' },
+      { icon: '🛡️', text: 'How to keep yourself safe from harm' },
+    ],
+    moral: 'Carefulness, gratitude, knowing the right time and place, and knowing your own limits ("When young, study; when grown, seek wealth")',
+  },
+  mindmap: {
+    author: 'Author unknown',
+    form: 'Rai Suphap (proverb verse)',
+    characters: 'Phra Ruang teaching the people',
+    event: 'Rules for daily life & safety',
+    moral: 'Be careful, grateful & know your place',
+  },
+  vocab: [
+    { word: 'อาสโมกข์', emoji: '🧘', meaning: 'liberation — or being watchful and careful with yourself' },
+    { word: 'พากเพียร', emoji: '💪', meaning: 'perseverance — trying hard without giving up' },
+    { word: 'เฉลิม', emoji: '✨', meaning: 'to add to or build up; to improve or embellish something' },
+    { word: 'ระแวด', emoji: '👀', meaning: 'to be careful, watchful' },
+  ],
+  quiz: [
+    { q: 'What era was Supasit Phra Ruang written in?', options: ['Ayutthaya', 'Sukhothai', 'Rattanakosin', 'Thonburi'], correct: 1 },
+    { q: 'What form of poetry is Supasit Phra Ruang?', options: ['Khlong Si Suphap', 'Nirat poem (Klon Nirat)', 'Rai Suphap (an ancient verse form)', 'Kap Chabang 16'], correct: 2 },
+    { q: 'Who wrote Supasit Phra Ruang?', options: ['Sunthorn Phu', 'Prince Debadisara', 'Author unknown', 'Phra Chai Suriya'], correct: 2 },
+    { q: 'What does "When young, study; when grown, seek wealth" teach?', options: ['Courage', 'Doing the right thing for your age', 'How to travel', 'How to cook'], correct: 1 },
+    { q: 'What does "พากเพียร" (phak phian) mean?', options: ['Laziness', 'Perseverance — trying hard without giving up', 'Fear', 'Rushing'], correct: 1 },
+  ],
+  summaryExample: 'Phra Ruang teaches the people to be careful, grateful, aware of the right time and place, and to know their limits at every age.',
+},
+{
+  id: 3, color: 'm4', emoji: '🌊', category: 'story',
+  title: 'Kap Phra Chai Suriya', titleEn: 'The Tale of Phra Chai Suriya (กาพย์เรื่องพระไชยสุริยา)',
+  badge: '⚓ Survivor of the Storm',
+  xp: 170,
+  details: {
+    author: 'Sunthorn Phu (Phra Sunthon Wohan)',
+    period: 'Reign of King Rama III (written in Phetchaburi as a reading primer for students)',
+    form: 'Kap Yani 11, Kap Chabang 16, and Kap Surangkanang 28 (each section follows a different Thai spelling/sound pattern, for reading practice)',
+  },
+  storyMap: {
+    characters: 'Phra Chai Suriya, Nang Sumali, and their ministers/officials',
+    eventSteps: [
+      { icon: '👑', text: 'Phra Chai Suriya rules his kingdom peacefully' },
+      { icon: '💰', text: 'Corrupt officials start cheating the people' },
+      { icon: '🌊', text: 'Disaster strikes and the city sinks' },
+      { icon: '⛵', text: 'The king and queen flee by ship' },
+      { icon: '🌪️', text: 'A storm wrecks their ship' },
+      { icon: '🌳', text: 'They survive simply in the forest, keeping their morals' },
+    ],
+    moral: "The honesty of a leader and his officials matters — and keeping to moral conduct is what helps you survive hardship",
+  },
+  mindmap: {
+    author: 'Sunthorn Phu',
+    form: '3 kinds of Kap verse',
+    characters: 'Phra Chai Suriya & Nang Sumali',
+    event: 'Kingdom sinks, storm, forest survival',
+    moral: "A leader's honesty helps everyone survive",
+  },
+  vocab: [
+    { word: 'สาโท', emoji: '🍶', meaning: 'a type of fermented rice liquor' },
+    { word: 'ศฤงคาร', emoji: '💎', meaning: 'a beloved possession, or treasured belongings' },
+    { word: 'โภคิน', emoji: '💰', meaning: 'a wealthy person' },
+    { word: 'ไกลาส', emoji: '🏔️', meaning: 'Mount Kailash — the mountain home of the god Shiva' },
+  ],
+  quiz: [
+    { q: 'Why was Kap Phra Chai Suriya written?', options: ['To record history', 'As a reading primer for students', 'As a religious teaching only', 'As a personal travel diary'], correct: 1 },
+    { q: 'How many forms of poetry are used in this story?', options: ['1, Khlong Si Suphap', '2, Klon and Rai', '3: Kap Yani, Kap Chabang, and Kap Surangkanang', '4 forms'], correct: 2 },
+    { q: "Why did disaster strike Phra Chai Suriya's kingdom?", options: ['A war broke out', 'Corrupt officials cheated the people', 'A natural disaster with no other cause', 'Enemies invaded'], correct: 1 },
+    { q: 'Who are the main characters in this story?', options: ['Sunthorn Phu and Phat', 'Phra Chai Suriya, Nang Sumali, and their officials', 'Phra Ruang and the people', 'There are no characters'], correct: 1 },
+    { q: 'What is the main moral of this story?', options: ['Being grateful to your parents', "A leader's honesty helps everyone survive hardship", 'Choosing good friends', 'Life is impermanent'], correct: 1 },
+  ],
+  summaryExample: "Corrupt officials caused the kingdom to sink. Phra Chai Suriya was shipwrecked and had to survive in the forest — the story teaches that honesty helps you survive hardship.",
+},
+
+];
+
+const STEP_NAMES = ['Recipe Card', 'Ingredients', 'Ingredient Match', 'Taste Test', 'Flavor Map', 'Plating Station'];
+const TOTAL_STEPS = STEP_NAMES.length;
+
+// ══════════════════════ STATE ══════════════════════
+
+const STORAGE_KEY = 'thaiKitchenState_v1';
+const SKETCH_KEY = 'thaiKitchenSketchbook_v1';
+let state = { xp: 0, done: MISSIONS.map(() => false), decoderLearned: {}, labCracked: {} };
+let sketches = [];
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        state.xp = parsed.xp || 0;
+        const loadedDone = parsed.done || [];
+        state.done = MISSIONS.map((m, i) => !!loadedDone[i]);
+        state.decoderLearned = (parsed.decoderLearned && typeof parsed.decoderLearned === 'object') ? parsed.decoderLearned : {};
+        state.labCracked = (parsed.labCracked && typeof parsed.labCracked === 'object') ? parsed.labCracked : {};
+      }
+    }
+  } catch (e) { /* ignore corrupt storage */ }
+  loadSketches();
+  document.getElementById('home-motto').textContent = MOTTOS[Math.floor(Math.random() * MOTTOS.length)];
+  renderHome();
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage full/unavailable */ }
+}
+
+function loadSketches() {
+  try {
+    const raw = localStorage.getItem(SKETCH_KEY);
+    sketches = raw ? JSON.parse(raw) : [];
+  } catch (e) { sketches = []; }
+}
+
+function saveSketches() {
+  try { localStorage.setItem(SKETCH_KEY, JSON.stringify(sketches)); } catch (e) { /* storage full */ }
+}
+
+function getLevelInfo() {
+  let current = LEVELS[0], next = LEVELS[1] || null;
+  for (let i = 0; i < LEVELS.length; i++) {
+    if (state.xp >= LEVELS[i].xp) current = LEVELS[i];
+    next = LEVELS[i + 1] || null;
+  }
+  return { current, next };
+}
+
+function renderXP() {
+  const { current, next } = getLevelInfo();
+  document.getElementById('level-name').textContent = current.name;
+  document.getElementById('xp-total').textContent = state.xp;
+  const span = next ? (next.xp - current.xp) : 1;
+  const progress = next ? Math.min(100, ((state.xp - current.xp) / span) * 100) : 100;
+  document.getElementById('xp-bar-fill').style.width = progress + '%';
+}
+
+function addXP(amount) {
+  state.xp += amount;
+  saveState();
+  renderXP();
+}
+
+// ══════════════════════ NAVIGATION ══════════════════════
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'home') renderHome();
+}
+
+function missionCardHtml(m) {
+  return `
+    <div class="mission-card" data-m="${m.id}" onclick="openMission(${m.id})">
+      <div class="mission-emoji">${m.emoji}</div>
+      <div class="mission-text">
+        <div class="mission-title-th">${m.title}</div>
+        <div class="mission-title-en">${m.titleEn}</div>
+        <div class="mission-meta">${m.details.form}</div>
+      </div>
+      ${state.done[m.id]
+        ? '<div class="mission-done-check">✓</div>'
+        : `<div class="mission-xp-tag">${m.xp} XP</div>`}
+    </div>`;
+}
+
+function renderHome() {
+  renderXP();
+  const doneCount = state.done.filter(Boolean).length;
+  document.getElementById('trophy-sub-home').textContent = `${doneCount} / ${MISSIONS.length} recipes`;
+  document.getElementById('sketchbook-sub-home').textContent = `${sketches.length} saved`;
+
+  const list = document.getElementById('rooms-list');
+  list.innerHTML = ROOMS.map(r => {
+    let doneInRoom, totalInRoom, tagWord;
+    if (r.type === 'decoder') {
+      const deck = DECKS[r.key] || [];
+      totalInRoom = deck.length;
+      doneInRoom = deck.filter(c => state.decoderLearned[c.id]).length;
+      tagWord = 'decoded';
+    } else if (r.type === 'lab') {
+      totalInRoom = PROSODY_LAB.length;
+      doneInRoom = PROSODY_LAB.filter(s => state.labCracked[s.id]).length;
+      tagWord = 'cracked';
+    } else {
+      const roomMissions = MISSIONS.filter(m => m.category === r.key);
+      totalInRoom = roomMissions.length;
+      doneInRoom = roomMissions.filter(m => state.done[m.id]).length;
+      tagWord = 'done';
+    }
+    return `
+    <div class="mission-card" onclick="openRoom('${r.key}')">
+      <div class="mission-emoji">${r.emoji}</div>
+      <div class="mission-text">
+        <div class="mission-title-th">${r.title}</div>
+        <div class="mission-title-en">${r.titleEn}</div>
+        <div class="room-card-desc">${r.desc}</div>
+      </div>
+      <div class="room-count-tag">${doneInRoom} / ${totalInRoom}<br>${tagWord}</div>
+    </div>`;
+  }).join('');
+}
+
+let currentRoomKey = null;
+
+function openRoom(key) {
+  currentRoomKey = key;
+  const room = ROOMS.find(r => r.key === key);
+  if (room.type === 'decoder') {
+    openDecoder(key);
+    return;
+  }
+  if (room.type === 'lab') {
+    openLab(key);
+    return;
+  }
+  const roomMissions = MISSIONS.filter(m => m.category === key);
+  document.getElementById('room-title').textContent = `${room.emoji} ${room.title}`;
+  document.getElementById('room-sub').textContent = room.titleEn;
+  document.getElementById('room-label').textContent = `${room.desc} · pick a recipe`;
+  showScreen('room');
+  const list = document.getElementById('room-missions-list');
+  list.innerHTML = roomMissions.map(missionCardHtml).join('');
+}
+
+// ══════════════════════ WORD DECODER ══════════════════════
+
+let decoderExpanded = new Set();
+
+function openDecoder(key) {
+  currentRoomKey = key;
+  decoderExpanded = new Set();
+  const room = ROOMS.find(r => r.key === key);
+  document.getElementById('decoder-title').textContent = `${room.emoji} ${room.title}`;
+  document.getElementById('decoder-sub').textContent = room.titleEn;
+  showScreen('decoder');
+  renderDecoderDeck(key);
+}
+
+function decoderCardHtml(card) {
+  const learned = !!state.decoderLearned[card.id];
+  const info = PRIORITY_INFO[card.priority];
+  const expanded = decoderExpanded.has(card.id);
+  return `
+    <div class="decoder-card ${expanded ? 'expanded' : ''} ${learned ? 'learned' : ''}" style="border-left-color:${info.color}" id="dc-${card.id}">
+      <div class="decoder-card-head" onclick="toggleDecoderCard('${card.id}')">
+        <div class="decoder-check ${learned ? 'done' : 'todo'}">${learned ? '✓' : ''}</div>
+        <div style="flex:1; min-width:0">
+          <div class="decoder-thai">${card.thai}</div>
+          <div class="decoder-simple">${card.simple}</div>
+        </div>
+        <div class="decoder-chevron">▼</div>
+      </div>
+      <div class="decoder-body">
+        <div class="decoder-field">
+          <div class="decoder-field-label">🇬🇧 English</div>
+          <div class="decoder-field-value">${card.english}</div>
+        </div>
+        <div class="decoder-field">
+          <div class="decoder-field-label">🖼️ ภาพ (Picture It)</div>
+          <div class="decoder-visual">
+            <div class="decoder-visual-emoji">${card.visual.emoji}</div>
+            <div class="decoder-visual-desc">${card.visual.desc}</div>
+          </div>
+        </div>
+        <div class="decoder-field">
+          <div class="decoder-field-label">✍️ Examples</div>
+          ${card.examples.map(ex => `<div class="decoder-example">${ex}</div>`).join('')}
+        </div>
+        <div class="decoder-field">
+          <div class="decoder-field-label">🎯 Use It in Real Life / Exams</div>
+          <div class="decoder-usage-box">${card.usage}</div>
+        </div>
+        <button class="decoder-learn-btn ${learned ? 'done-btn' : ''}" onclick="event.stopPropagation(); toggleDecoderLearned('${card.id}')">
+          ${learned ? '✓ Decoded!' : '✅ Got it — mark as decoded'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderDecoderDeck(key) {
+  const deck = DECKS[key] || [];
+  const content = document.getElementById('decoder-content');
+  const order = ['must', 'should', 'bonus'];
+  content.innerHTML = order.map(p => {
+    const cards = deck.filter(c => c.priority === p);
+    if (cards.length === 0) return '';
+    const info = PRIORITY_INFO[p];
+    const learnedCount = cards.filter(c => state.decoderLearned[c.id]).length;
+    return `
+    <div class="priority-section">
+      <div class="priority-header" style="color:${info.color}">
+        ${info.emoji} ${info.label} <span class="priority-count">${learnedCount}/${cards.length} decoded</span>
+      </div>
+      ${cards.map(decoderCardHtml).join('')}
+    </div>`;
+  }).join('');
+  updateDecoderProgress(key);
+}
+
+function toggleDecoderCard(id) {
+  if (decoderExpanded.has(id)) decoderExpanded.delete(id);
+  else decoderExpanded.add(id);
+  document.getElementById(`dc-${id}`).classList.toggle('expanded');
+}
+
+function toggleDecoderLearned(id) {
+  const wasLearned = !!state.decoderLearned[id];
+  state.decoderLearned[id] = !wasLearned;
+  saveState();
+  if (!wasLearned) addXP(8);
+  else renderXP();
+  renderDecoderDeck(currentRoomKey);
+  decoderExpanded.add(id);
+  const el = document.getElementById(`dc-${id}`);
+  if (el) el.classList.add('expanded');
+}
+
+function updateDecoderProgress(key) {
+  const deck = DECKS[key] || [];
+  const learnedCount = deck.filter(c => state.decoderLearned[c.id]).length;
+  const pct = deck.length ? Math.round((learnedCount / deck.length) * 100) : 0;
+  const fill = document.getElementById('decoder-progress-fill');
+  if (fill) fill.style.width = pct + '%';
+}
+
+// ══════════════════════ PROSODY PATTERN RECOGNITION LAB ══════════════════════
+
+let labExpanded = new Set();
+let labLevel1Answered = {};   // specimenId -> true once answered
+let labLevel2Answered = {};   // specimenId -> true once answered
+let labExamAnswered = {};     // `${specimenId}-${qi}` -> true once answered
+let confusionRevealed = new Set();
+
+const LAB_SPOT_OPTIONS = ['The story content / topic', 'The number of วรรค or syllables in the structure', 'Who wrote it', 'The characters in it'];
+const LAB_SPOT_CORRECT = 1;
+
+function openLab(key) {
+  currentRoomKey = key;
+  labExpanded = new Set();
+  showScreen('lab');
+  renderLabDeck();
+}
+
+function renderCheatSheetHtml() {
+  const rows = CHEAT_SHEET.map(r => `
+    <tr>
+      <td>${r.type}</td>
+      <td>${r.look}</td>
+      <td>${r.pattern}</td>
+      <td>${r.memory}</td>
+    </tr>`).join('');
+  return `
+    <div class="lab-intro-card">
+      <div class="lab-intro-title">⭐ One-Page Cheat Sheet</div>
+      <div class="lab-intro-sub">This is a quick reminder, not the full rulebook — each type has more detail underneath.</div>
+      <table class="cheat-table">
+        <thead><tr><th>Type</th><th>👀 Look first</th><th>🔢 Pattern</th><th>🧠 Memory</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function renderDecisionTreeHtml() {
+  const steps = DECISION_TREE.map(s => `
+    <div class="tree-step">
+      <div class="tree-step-num">STEP ${s.step}</div>
+      <div class="tree-step-q">${s.q}</div>
+      <div class="tree-step-yes">→ YES → ${s.yes}</div>
+    </div>`).join('<div class="tree-arrow">↓ if not, keep going</div>');
+  return `
+    <div class="lab-intro-card">
+      <div class="lab-intro-title">🌳 Decision Tree</div>
+      <div class="lab-intro-sub">Better than memorizing the table — ask these questions in order, and stop at the first "YES."</div>
+      ${steps}
+    </div>`;
+}
+
+function labSpecimenHtml(spec) {
+  const cracked = !!state.labCracked[spec.id];
+  const expanded = labExpanded.has(spec.id);
+
+  // LEVEL 1 — 👀 LOOK: pure shape-matching, no text or meaning
+  const l1Answered = !!labLevel1Answered[spec.id];
+  const l1Html = FP_SAMPLES.map(s => {
+    let cls = '';
+    if (l1Answered) cls = (s.type === spec.id) ? 'correct' : 'wrong';
+    return `
+      <button class="lab-sample-btn fp-sample-btn ${cls}" ${l1Answered ? 'disabled' : ''} onclick="labLevel1Answer('${spec.id}', '${s.type}')">
+        <div class="lab-sample-label">${s.label}</div>
+        <div class="fp-mini">${s.html}</div>
+      </button>`;
+  }).join('');
+
+  // LEVEL 2 — 🔎 SPOT: which clue matters most (same question every time, reinforcing the habit)
+  const l2Answered = !!labLevel2Answered[spec.id];
+  const l2Html = LAB_SPOT_OPTIONS.map((opt, i) => {
+    let cls = '';
+    if (l2Answered) cls = (i === LAB_SPOT_CORRECT) ? 'correct' : 'wrong';
+    return `<button class="quiz-opt ${cls}" ${l2Answered ? 'disabled' : ''} onclick="labLevel2Answer('${spec.id}', ${i})">${opt}</button>`;
+  }).join('');
+
+  // LEVEL 3 — 🎯 EXAM: Prosody Scan checklist + real exam-style MCQs
+  const examHtml = spec.examQuiz.map((q, qi) => `
+    <div class="quiz-item">
+      <div class="quiz-q">${qi + 1}. ${q.q}</div>
+      ${q.options.map((opt, oi) => `<button class="quiz-opt" id="lab-eq-${spec.id}-${qi}-${oi}" onclick="labExamAnswer('${spec.id}', ${qi}, ${oi}, ${q.correct})">${opt}</button>`).join('')}
+    </div>`).join('');
+
+  return `
+    <div class="lab-card ${expanded ? 'expanded' : ''}" id="lab-${spec.id}">
+      <div class="lab-card-head" onclick="toggleLabCard('${spec.id}')">
+        <div class="lab-emoji">${spec.emoji}</div>
+        <div style="flex:1; min-width:0">
+          <div class="lab-name-th">${spec.order}. ${spec.name}</div>
+          <div class="lab-name-en">${spec.nameEn}</div>
+        </div>
+        ${cracked ? '<div class="lab-cracked-tag">🔬 Cracked!</div>' : ''}
+        <div class="lab-chevron">▼</div>
+      </div>
+      <div class="lab-body">
+
+        <div class="lab-step">
+          <div class="lab-step-label">👀 เห็นหน้าตาคำประพันธ์ — See the Shape</div>
+          <div class="lab-step-text">${spec.faceDesc}</div>
+          <div class="fp-box">${spec.fingerprintHtml}</div>
+          <div class="fp-note">${spec.fingerprintNote}</div>
+          <div class="lab-memory-hook">${spec.memoryHook}</div>
+        </div>
+
+        <div class="lab-step">
+          <div class="lab-step-label">🔎 สแกนจุดสังเกต — Scan the Clues</div>
+          <ul class="lab-clue-list">${spec.scanClues.map(c => `<li>${c}</li>`).join('')}</ul>
+        </div>
+
+        <div class="lab-step">
+          <div class="lab-step-label">🧠 ระบุประเภท — LEVEL 1: 👀 LOOK</div>
+          <div class="lab-step-text">No need to read any meaning — just match the SHAPE. Which pattern (A/B/C/D) looks like ${spec.name}?</div>
+          <div class="fp-sample-grid">${l1Html}</div>
+        </div>
+
+        <div class="lab-step">
+          <div class="lab-step-label">🔎 LEVEL 2: 🔎 SPOT</div>
+          <div class="lab-step-text">What is the MOST important clue to check first — before you even read the meaning?</div>
+          ${l2Html}
+        </div>
+
+        <div class="lab-step">
+          <div class="lab-step-label">🎯 ตอบข้อสอบ — LEVEL 3: 🎯 EXAM</div>
+          <div class="lab-step-text">${spec.examSample}</div>
+          <div class="lab-scan-checklist">
+            <div class="lab-step-text" style="margin-bottom:6px"><strong>Prosody Scan — run through these in order:</strong></div>
+            ${PROSODY_SCAN_STEPS.map(s => `<div class="scan-step-item">${s}</div>`).join('')}
+          </div>
+          ${examHtml}
+        </div>
+
+        <button class="lab-crack-btn ${cracked ? 'done-btn' : ''}" onclick="event.stopPropagation(); toggleLabCracked('${spec.id}')">
+          ${cracked ? '✓ Case Cracked!' : '🔬 Mark as Cracked'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function confusionCardHtml(c) {
+  const revealed = confusionRevealed.has(c.id);
+  return `
+    <div class="lab-card ${revealed ? 'expanded' : ''}" id="cc-${c.id}">
+      <div class="lab-card-head" onclick="toggleConfusionCard('${c.id}')">
+        <div class="lab-emoji">${c.emoji}</div>
+        <div style="flex:1; min-width:0">
+          <div class="lab-name-th">⚠️ Confusion Card: ${c.title}</div>
+          <div class="lab-name-en">Tap to think it through, then reveal the answer</div>
+        </div>
+        <div class="lab-chevron">▼</div>
+      </div>
+      <div class="lab-body">
+        <div class="lab-step">
+          <div class="lab-step-text">${c.prompt}</div>
+          ${revealed
+            ? `<div class="decoder-usage-box" style="margin-top:10px">${c.answer}</div>`
+            : `<button class="lab-crack-btn" onclick="event.stopPropagation(); toggleConfusionCard('${c.id}')">🔍 Reveal the Answer</button>`}
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderLabDeck() {
+  const content = document.getElementById('lab-content');
+  content.innerHTML =
+    renderCheatSheetHtml() +
+    renderDecisionTreeHtml() +
+    PROSODY_LAB.slice().sort((a, b) => a.order - b.order).map(labSpecimenHtml).join('') +
+    '<div class="lab-intro-title" style="margin:16px 4px 8px">⚠️ Confusion Corner</div>' +
+    CONFUSION_CARDS.map(confusionCardHtml).join('');
+  updateLabProgress();
+}
+
+function toggleLabCard(id) {
+  if (labExpanded.has(id)) labExpanded.delete(id);
+  else labExpanded.add(id);
+  const el = document.getElementById(`lab-${id}`);
+  if (el) el.classList.toggle('expanded');
+}
+
+function toggleConfusionCard(id) {
+  if (confusionRevealed.has(id)) confusionRevealed.delete(id);
+  else confusionRevealed.add(id);
+  renderLabDeck();
+}
+
+function labLevel1Answer(specId, chosenType) {
+  if (labLevel1Answered[specId]) return;
+  labLevel1Answered[specId] = true;
+  if (chosenType === specId) addXP(5); else renderXP();
+  renderLabDeck();
+  labExpanded.add(specId);
+  const el = document.getElementById(`lab-${specId}`);
+  if (el) el.classList.add('expanded');
+}
+
+function labLevel2Answer(specId, chosenIndex) {
+  if (labLevel2Answered[specId]) return;
+  labLevel2Answered[specId] = true;
+  if (chosenIndex === LAB_SPOT_CORRECT) addXP(5); else renderXP();
+  renderLabDeck();
+  labExpanded.add(specId);
+  const el = document.getElementById(`lab-${specId}`);
+  if (el) el.classList.add('expanded');
+}
+
+function labExamAnswer(specId, qi, oi, correct) {
+  const key = `${specId}-${qi}`;
+  if (labExamAnswered[key]) return;
+  labExamAnswered[key] = true;
+  const spec = PROSODY_LAB.find(s => s.id === specId);
+  spec.examQuiz[qi].options.forEach((opt, i) => {
+    const btn = document.getElementById(`lab-eq-${specId}-${qi}-${i}`);
+    if (!btn) return;
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === oi) btn.classList.add('wrong');
+  });
+  if (oi === correct) addXP(5); else renderXP();
+}
+
+function toggleLabCracked(id) {
+  const was = !!state.labCracked[id];
+  state.labCracked[id] = !was;
+  saveState();
+  if (!was) addXP(20); else renderXP();
+  renderHome();
+  if (currentRoomKey) renderLabDeck();
+  labExpanded.add(id);
+  const el = document.getElementById(`lab-${id}`);
+  if (el) el.classList.add('expanded');
+}
+
+function updateLabProgress() {
+  const crackedCount = PROSODY_LAB.filter(s => state.labCracked[s.id]).length;
+  const pct = PROSODY_LAB.length ? Math.round((crackedCount / PROSODY_LAB.length) * 100) : 0;
+  const fill = document.getElementById('lab-progress-fill');
+  if (fill) fill.style.width = pct + '%';
+}
+
+function goBackFromMission() {
+  showScreen(currentRoomKey ? 'room' : 'home');
+  if (currentRoomKey) openRoom(currentRoomKey);
+}
+
+let currentMission = 0;
+let currentStep = 0;
+
+function openMission(id) {
+  currentMission = id;
+  currentStep = 0;
+  vocabFlipped = new Set();
+  matchSelected = null;
+  matchMatched = [];
+  quizAnswered = new Set();
+  const m = MISSIONS[id];
+  document.getElementById('m-title').textContent = m.title;
+  document.getElementById('m-sub').textContent = `${m.details.author} · ${m.details.form}`;
+  showScreen('mission');
+  renderStepDots();
+  renderStep();
+}
+
+function renderStepDots() {
+  const dotsEl = document.getElementById('step-dots');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < TOTAL_STEPS; i++) {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i === currentStep ? ' active' : '') + (i < currentStep ? ' done' : '');
+    dotsEl.appendChild(d);
+  }
+  document.getElementById('step-indicator').textContent = `${STEP_NAMES[currentStep]} · ${currentStep + 1}/${TOTAL_STEPS}`;
+}
+
+function renderStep() {
+  const m = MISSIONS[currentMission];
+  const content = document.getElementById('mission-content');
+  if (currentStep === 0) content.innerHTML = buildInfoStep(m);
+  else if (currentStep === 1) content.innerHTML = buildVocabStep(m);
+  else if (currentStep === 2) { matchSelected = null; matchMatched = []; content.innerHTML = buildMatchStep(m); }
+  else if (currentStep === 3) content.innerHTML = buildQuizStep(m);
+  else if (currentStep === 4) { content.innerHTML = buildMindmapStep(m); requestAnimationFrame(() => initMindmapStep(m)); }
+  else if (currentStep === 5) { content.innerHTML = buildFreeDrawStep(m); requestAnimationFrame(() => missionDrawCtrl.init((ctx, w, h) => drawTemplateForMission(ctx, w, h, m))); }
+  content.scrollTop = 0;
+  renderStepDots();
+}
+
+function nextStep() {
+  if (currentStep < TOTAL_STEPS - 1) {
+    currentStep++;
+    renderStep();
+  } else {
+    completeMission();
+  }
+}
+
+function accentClass(m) { return `step-accent-${m.color}`; }
+
+function completeMission() {
+  const m = MISSIONS[currentMission];
+  const alreadyDone = state.done[currentMission];
+  state.done[currentMission] = true;
+  saveState();
+  if (!alreadyDone) addXP(m.xp);
+
+  const content = document.getElementById('mission-content');
+  document.getElementById('step-dots').innerHTML = '';
+  document.getElementById('step-indicator').textContent = '✓ Complete!';
+
+  content.innerHTML = `
+    <div class="complete-view">
+      <div class="complete-emoji">${m.emoji}</div>
+      <div class="complete-title">Recipe Complete!</div>
+      <div class="complete-badge">${m.badge}</div>
+      <div class="complete-xp">Earned <span>${m.xp} XP</span></div>
+      <div style="font-size:0.85rem; color:var(--muted); line-height:1.6; max-width:280px">
+        You now know the background, the key ingredients, and the lesson of<br><strong style="color:var(--accent2)">${m.title}</strong>
+      </div>
+      <button class="btn-primary" style="margin-top:8px" onclick="showScreen('home')">🏠 Back to Home</button>
+    </div>`;
+}
+
+// ══════════════════════ STEP 1: INFO + TIMELINE ══════════════════════
+
+function buildInfoStep(m) {
+  const timelineHtml = m.storyMap.eventSteps.map((s, i) => `
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--${m.color})">${s.icon}</div>
+      <div class="timeline-text">${s.text}</div>
+    </div>
+    ${i < m.storyMap.eventSteps.length - 1 ? '<div class="timeline-line"></div>' : ''}
+  `).join('');
+
+  return `
+  <div class="step-card ${accentClass(m)}">
+    <div class="step-label">Step 1 · Recipe Card</div>
+    <div class="step-title">${m.emoji} ${m.title}</div>
+
+    <div class="info-box">
+      <div class="info-row"><div class="info-label">✍️ Author</div><div class="info-value">${m.details.author}</div></div>
+      <div class="info-row"><div class="info-label">📅 Period</div><div class="info-value">${m.details.period}</div></div>
+      <div class="info-row"><div class="info-label">📝 Form</div><div class="info-value">${m.details.form}</div></div>
+    </div>
+
+    <div class="step-label" style="margin-top:6px">Story Map</div>
+    <div class="flow-node"><div class="flow-node-label">👤 Characters</div><div class="flow-node-text">${m.storyMap.characters}</div></div>
+
+    <div class="step-label" style="margin-top:2px">📌 Event Timeline</div>
+    <div class="timeline">${timelineHtml}</div>
+
+    <div class="flow-node" style="border-left-color:var(--gold)"><div class="flow-node-label" style="color:var(--gold)">💡 Moral</div><div class="flow-node-text">${m.storyMap.moral}</div></div>
+
+    <div class="step-label" style="margin-top:6px">Check off once you understand</div>
+    <div id="scan-list" style="display:flex; flex-direction:column; gap:8px">
+      <div class="scan-item" onclick="toggleScan(this)"><div class="scan-check"></div><div>I know where this comes from, and what "recipe" (form) it is</div></div>
+      <div class="scan-item" onclick="toggleScan(this)"><div class="scan-check"></div><div>I know the key points, in order</div></div>
+      <div class="scan-item" onclick="toggleScan(this)"><div class="scan-check"></div><div>I know the lesson or takeaway</div></div>
+    </div>
+
+    <div style="flex:1"></div>
+    <button class="btn-primary" onclick="nextStep()">Go to Ingredients →</button>
+  </div>`;
+}
+
+function toggleScan(el) {
+  el.classList.toggle('checked');
+  if (el.classList.contains('checked')) {
+    el.querySelector('.scan-check').textContent = '✓';
+    addXP(5);
+  } else {
+    el.querySelector('.scan-check').textContent = '';
+  }
+}
+
+// ══════════════════════ STEP 2: VOCAB FLASHCARDS ══════════════════════
+
+let vocabFlipped = new Set();
+
+function buildVocabStep(m) {
+  const cards = m.vocab.map((v, i) => `
+    <div class="vocab-card" id="vc-${i}" onclick="flipVocab(${i})">
+      <div class="vocab-card-inner">
+        <div class="vocab-face front"><div class="vocab-emoji">${v.emoji}</div><div>${v.word}</div></div>
+        <div class="vocab-face back">${v.meaning}</div>
+      </div>
+    </div>`).join('');
+  return `
+  <div class="step-card ${accentClass(m)}">
+    <div class="step-label">Step 2 · Ingredients</div>
+    <div class="step-title">📚 Tap an ingredient card to reveal its flavor</div>
+    <div class="vocab-progress" id="vocab-progress">Opened 0 / ${m.vocab.length} ingredients</div>
+    <div class="vocab-grid">${cards}</div>
+    <div style="flex:1"></div>
+    <button class="btn-primary" onclick="nextStep()">Go to Ingredient Match →</button>
+  </div>`;
+}
+
+function flipVocab(i) {
+  const card = document.getElementById(`vc-${i}`);
+  card.classList.toggle('flipped');
+  if (!vocabFlipped.has(i)) {
+    vocabFlipped.add(i);
+    document.getElementById('vocab-progress').textContent = `Opened ${vocabFlipped.size} / ${MISSIONS[currentMission].vocab.length} ingredients`;
+    addXP(3);
+  }
+}
+
+// ══════════════════════ STEP 3: MATCHING GAME ══════════════════════
+
+let matchCards = [];
+let matchSelected = null;
+let matchMatched = [];
+
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildMatchStep(m) {
+  let cards = [];
+  m.vocab.forEach((v, i) => {
+    cards.push({ type: 'word', text: `${v.emoji} ${v.word}`, pair: i });
+    cards.push({ type: 'meaning', text: v.meaning, pair: i });
+  });
+  matchCards = shuffleArray(cards);
+
+  const cardsHtml = matchCards.map((c, i) => `
+    <div class="match-card ${c.type}" id="mc-${i}" onclick="matchTap(${i})">${c.text}</div>
+  `).join('');
+
+  return `
+  <div class="step-card ${accentClass(m)}">
+    <div class="step-label">Step 3 · Ingredient Match</div>
+    <div class="step-title">🧩 Tap the word and its matching meaning</div>
+    <div class="match-status" id="match-status">Tap the first card to start</div>
+    <div class="match-grid">${cardsHtml}</div>
+    <div style="flex:1"></div>
+    <button class="btn-primary" onclick="nextStep()">Go to Taste Test →</button>
+  </div>`;
+}
+
+function matchTap(i) {
+  if (matchMatched.includes(i)) return;
+  const card = document.getElementById(`mc-${i}`);
+
+  if (matchSelected === null) {
+    matchSelected = i;
+    card.classList.add('selected');
+    document.getElementById('match-status').textContent = 'Tap the card you think matches';
+  } else if (matchSelected === i) {
+    card.classList.remove('selected');
+    matchSelected = null;
+    document.getElementById('match-status').textContent = 'Tap the first card to start';
+  } else {
+    const a = matchSelected, b = i;
+    matchSelected = null;
+    document.getElementById(`mc-${a}`).classList.remove('selected');
+
+    const isPair = matchCards[a].pair === matchCards[b].pair && matchCards[a].type !== matchCards[b].type;
+    if (isPair) {
+      document.getElementById(`mc-${a}`).classList.add('matched');
+      document.getElementById(`mc-${b}`).classList.add('matched');
+      matchMatched.push(a, b);
+      addXP(8);
+      const remaining = matchCards.length - matchMatched.length;
+      document.getElementById('match-status').textContent = remaining <= 0
+        ? '🎉 All matched — great work!'
+        : `✓ Nice match! ${remaining / 2} pairs left`;
+    } else {
+      const cardA = document.getElementById(`mc-${a}`), cardB = document.getElementById(`mc-${b}`);
+      cardA.classList.add('wrong-flash'); cardB.classList.add('wrong-flash');
+      document.getElementById('match-status').textContent = "Not a match yet — try again";
+      setTimeout(() => {
+        cardA.classList.remove('wrong-flash'); cardB.classList.remove('wrong-flash');
+        document.getElementById('match-status').textContent = 'Tap the first card to start';
+      }, 700);
+    }
+  }
+}
+
+// ══════════════════════ STEP 4: QUIZ ══════════════════════
+
+let quizAnswered = new Set();
+
+function buildQuizStep(m) {
+  const items = m.quiz.map((q, qi) => `
+    <div class="quiz-item">
+      <div class="quiz-q">${qi + 1}. ${q.q}</div>
+      ${q.options.map((opt, oi) => `
+        <button class="quiz-opt" id="qopt-${qi}-${oi}" onclick="quizAnswer(${qi}, ${oi}, ${q.correct})">${opt}</button>
+      `).join('')}
+    </div>
+  `).join('');
+  return `
+  <div class="step-card ${accentClass(m)}">
+    <div class="step-label">Step 4 · Taste Test</div>
+    <div class="step-title">👅 Taste-test your knowledge</div>
+    ${items}
+    <button class="btn-primary" onclick="nextStep()">Go to Flavor Map →</button>
+  </div>`;
+}
+
+function quizAnswer(qi, oi, correct) {
+  if (quizAnswered.has(qi)) return;
+  const opts = document.querySelectorAll(`[id^="qopt-${qi}-"]`);
+  if (oi === correct) {
+    document.getElementById(`qopt-${qi}-${oi}`).classList.add('correct');
+    opts.forEach(o => o.classList.add('disabled'));
+    quizAnswered.add(qi);
+    addXP(10);
+  } else {
+    document.getElementById(`qopt-${qi}-${oi}`).classList.add('wrong', 'disabled');
+    document.getElementById(`qopt-${qi}-${correct}`).classList.add('correct');
+  }
+}
+
+// ══════════════════════ STEP 5: MIND MAP DRAG-AND-DROP ══════════════════════
+
+let currentMindmapHints = {};
+let mindmapDragState = null;
+
+function shortHint(value) {
+  const words = value.split(' ');
+  return words.length <= 3 ? value : words.slice(0, 3).join(' ') + '…';
+}
+
+function buildMindmapStep(m) {
+  const chips = shuffleArray(MINDMAP_CATS.map(c => ({ cat: c.key, value: m.mindmap[c.key] })));
+
+  const slotsHtml = MINDMAP_CATS.map((c, i) => `
+    <div class="mindmap-slot" id="slot-${c.key}" data-cat="${c.key}">
+      <div class="mindmap-slot-label">${c.label}</div>
+      <div class="mindmap-slot-drop"><span class="slot-drop-inner" id="slotinner-${c.key}">Drop card here</span></div>
+      <button class="hint-btn" id="hintbtn-${c.key}" onclick="toggleHint('${c.key}')">💡 Hint</button>
+    </div>
+    ${i < MINDMAP_CATS.length - 1 ? '<div class="mindmap-connector"></div>' : ''}
+  `).join('');
+
+  const chipsHtml = chips.map(c => `<div class="mindmap-chip" data-cat="${c.cat}">${c.value}</div>`).join('');
+
+  return `
+  <div class="step-card ${accentClass(m)}">
+    <div class="step-label">Step 5 · Flavor Map</div>
+    <div class="step-title">🧪 Mix each fact into the right flask</div>
+    <div class="mindmap-central">${m.emoji} ${m.title}</div>
+    <div class="mindmap-slots">${slotsHtml}</div>
+    <div class="match-status" id="mindmap-status">Drag a card below into the box it matches</div>
+    <div class="mindmap-tray" id="mindmap-tray">${chipsHtml}</div>
+    <div style="flex:1"></div>
+    <button class="btn-primary" onclick="nextStep()">Go to Plating Station →</button>
+  </div>`;
+}
+
+function initMindmapStep(m) {
+  currentMindmapHints = {};
+  MINDMAP_CATS.forEach(c => currentMindmapHints[c.key] = shortHint(m.mindmap[c.key]));
+  const tray = document.getElementById('mindmap-tray');
+  if (tray) tray.onpointerdown = mindmapTrayPointerDown;
+}
+
+function toggleHint(cat) {
+  const slot = document.getElementById(`slot-${cat}`);
+  if (!slot || slot.classList.contains('filled')) return;
+  const inner = document.getElementById(`slotinner-${cat}`);
+  if (inner.dataset.hintShown === '1') {
+    inner.textContent = 'Drop card here';
+    inner.classList.remove('hint-text');
+    inner.dataset.hintShown = '0';
+  } else {
+    inner.textContent = currentMindmapHints[cat];
+    inner.classList.add('hint-text');
+    inner.dataset.hintShown = '1';
+  }
+}
+
+function mindmapTrayPointerDown(e) {
+  const chip = e.target.closest('.mindmap-chip');
+  if (!chip || chip.classList.contains('chip-hidden')) return;
+  e.preventDefault();
+  const rect = chip.getBoundingClientRect();
+  const ghost = chip.cloneNode(true);
+  ghost.classList.add('mindmap-ghost');
+  ghost.style.width = rect.width + 'px';
+  ghost.style.left = rect.left + 'px';
+  ghost.style.top = rect.top + 'px';
+  document.body.appendChild(ghost);
+  chip.classList.add('chip-hidden');
+  mindmapDragState = {
+    chip, ghost, cat: chip.dataset.cat,
+    offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top,
+  };
+  window.addEventListener('pointermove', mindmapDragMove);
+  window.addEventListener('pointerup', mindmapDragEnd);
+}
+
+function mindmapDragMove(e) {
+  if (!mindmapDragState) return;
+  mindmapDragState.ghost.style.left = (e.clientX - mindmapDragState.offsetX) + 'px';
+  mindmapDragState.ghost.style.top = (e.clientY - mindmapDragState.offsetY) + 'px';
+}
+
+function mindmapDragEnd(e) {
+  if (!mindmapDragState) return;
+  window.removeEventListener('pointermove', mindmapDragMove);
+  window.removeEventListener('pointerup', mindmapDragEnd);
+  const { chip, ghost, cat } = mindmapDragState;
+  mindmapDragState = null;
+  ghost.remove();
+
+  const dropEl = document.elementFromPoint(e.clientX, e.clientY);
+  const slot = dropEl ? dropEl.closest('.mindmap-slot') : null;
+
+  if (slot && !slot.classList.contains('filled')) {
+    if (slot.dataset.cat === cat) {
+      slot.classList.add('filled');
+      document.getElementById(`slotinner-${cat}`).textContent = chip.textContent;
+      const hintBtn = document.getElementById(`hintbtn-${cat}`);
+      if (hintBtn) hintBtn.remove();
+      chip.remove();
+      addXP(10);
+      updateMindmapStatus();
+    } else {
+      slot.classList.add('shake');
+      setTimeout(() => slot.classList.remove('shake'), 400);
+      chip.classList.remove('chip-hidden');
+    }
+  } else {
+    chip.classList.remove('chip-hidden');
+  }
+}
+
+function updateMindmapStatus() {
+  const filled = document.querySelectorAll('.mindmap-slot.filled').length;
+  const statusEl = document.getElementById('mindmap-status');
+  if (!statusEl) return;
+  statusEl.textContent = filled >= MINDMAP_CATS.length
+    ? '🎉 Mind map complete — great memory!'
+    : `✓ Nice! ${MINDMAP_CATS.length - filled} boxes left`;
+}
+
+// ══════════════════════ DRAWING CONTROLLER (shared by mission draw + sketchbook) ══════════════════════
+
+function createDrawController(canvasId) {
+  let penColor = PEN_COLORS[0];
+  let drawing = false, lastX = 0, lastY = 0, templateFn = null;
+
+  function getCanvas() { return document.getElementById(canvasId); }
+  function getPos(canvas, e) {
+    const rect = canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  function init(tmplFn) {
+    templateFn = tmplFn || null;
+    const canvas = getCanvas();
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    if (templateFn) templateFn(ctx, rect.width, rect.height);
+
+    canvas.onpointerdown = e => { drawing = true; const p = getPos(canvas, e); lastX = p.x; lastY = p.y; };
+    canvas.onpointermove = e => {
+      if (!drawing) return;
+      const p = getPos(canvas, e);
+      const ctx2 = canvas.getContext('2d');
+      ctx2.strokeStyle = penColor; ctx2.lineWidth = 3; ctx2.lineCap = 'round';
+      ctx2.beginPath(); ctx2.moveTo(lastX, lastY); ctx2.lineTo(p.x, p.y); ctx2.stroke();
+      lastX = p.x; lastY = p.y;
+    };
+    canvas.onpointerup = () => drawing = false;
+    canvas.onpointerleave = () => drawing = false;
+  }
+
+  function clear() {
+    const canvas = getCanvas();
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const dpr = window.devicePixelRatio || 1;
+    ctx.scale(dpr, dpr);
+    if (templateFn) templateFn(ctx, rect.width, rect.height);
+    else ctx.clearRect(0, 0, rect.width, rect.height);
+  }
+
+  function setColor(c) { penColor = c; }
+  function download(name) {
+    const canvas = getCanvas();
+    const link = document.createElement('a');
+    link.download = `${name}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+  function getDataUrl() { return getCanvas().toDataURL('image/png'); }
+
+  return { init, clear, setColor, download, getDataUrl };
+}
+
+const missionDrawCtrl = createDrawController('mission-canvas');
+const freeDrawCtrl = createDrawController('freedraw-canvas');
+
+function drawTemplateForMission(ctx, w, h, m) {
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = 'rgba(253,241,224,0.28)';
+  ctx.font = '11px Nunito, sans-serif';
+  ctx.textAlign = 'center';
+  const cx = w / 2, cy = h / 2;
+  ctx.fillText(m.title, cx, cy);
+  ctx.strokeStyle = 'rgba(253,241,224,0.2)';
+  ctx.setLineDash([3, 4]);
+  ctx.beginPath();
+  ctx.arc(cx, cy, 34, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  const labels = ['Author', 'Form', 'Characters', 'Event', 'Moral'];
+  const radius = Math.min(w, h) * 0.42;
+  labels.forEach((lab, i) => {
+    const angle = (Math.PI * 2 * i) / labels.length - Math.PI / 2;
+    const x = cx + radius * Math.cos(angle);
+    const y = cy + radius * Math.sin(angle);
+    ctx.fillText(lab, x, y);
+  });
+}
+
+function drawBlankTemplate(ctx, w, h) {
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = 'rgba(253,241,224,0.25)';
+  ctx.font = '13px Nunito, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✏️ Draw anything you remember', w / 2, h / 2);
+}
+
+function setMissionPenColor(c, i) {
+  missionDrawCtrl.setColor(c);
+  document.querySelectorAll('#mission-color-dots .color-dot').forEach((d, di) => d.classList.toggle('active', di === i));
+}
+function setFreeDrawPenColor(c, i) {
+  freeDrawCtrl.setColor(c);
+  document.querySelectorAll('#freedraw-color-dots .color-dot').forEach((d, di) => d.classList.toggle('active', di === i));
+}
+
+function flashSaved(btn) {
+  if (!btn) return;
+  const original = btn.dataset.label || btn.textContent;
+  btn.dataset.label = original;
+  btn.textContent = '✓ Saved!';
+  setTimeout(() => { btn.textContent = original; }, 1400);
+}
+
+// ══════════════════════ STEP 6: FREE DRAW (inside a mission) ══════════════════════
+
+function buildFreeDrawStep(m) {
+  const colorDots = PEN_COLORS.map((c, i) => `<div class="color-dot ${i === 0 ? 'active' : ''}" style="background:${c}" onclick="setMissionPenColor('${c}', ${i})"></div>`).join('');
+  return `
+  <div class="step-card ${accentClass(m)}">
+    <div class="step-label">Step 6 · Plating Station</div>
+    <div class="step-title">🎨 Plate it! Draw what you remember</div>
+    <div style="font-size:0.8rem; color:var(--muted); line-height:1.5">
+      Draw the story, characters, or a scene from <strong style="color:var(--accent2)">${m.title}</strong> from memory — anything you like
+    </div>
+    <div class="canvas-wrap"><canvas id="mission-canvas" height="260"></canvas></div>
+    <div class="canvas-tools" id="mission-color-dots">
+      ${colorDots}
+      <button class="canvas-btn" onclick="missionDrawCtrl.clear()">🗑️ Clear</button>
+      <button class="canvas-btn" onclick="missionDrawCtrl.download('${m.title}')">💾 Save Image</button>
+      <button class="canvas-btn" id="mission-save-sketch-btn" onclick="saveMissionSketch('${m.title}')">📓 Save to Sketchbook</button>
+    </div>
+
+    <div class="summary-box">
+      <div style="font-weight:800; margin-bottom:6px; color:var(--accent2)">Example plating (summary) sentence:</div>
+      <div style="font-style:italic">"${m.summaryExample}"</div>
+      <div class="scan-item" onclick="toggleScan(this)" style="margin-top:12px">
+        <div class="scan-check"></div><div>✓ I drew or said my own summary of this recipe</div>
+      </div>
+    </div>
+
+    <div style="flex:1"></div>
+    <button class="btn-primary" onclick="nextStep()">🏁 Recipe Complete!</button>
+  </div>`;
+}
+
+function saveMissionSketch(missionTitle) {
+  const dataUrl = missionDrawCtrl.getDataUrl();
+  addSketch(missionTitle, dataUrl);
+  flashSaved(document.getElementById('mission-save-sketch-btn'));
+}
+
+// ══════════════════════ SKETCHBOOK ══════════════════════
+
+function addSketch(title, dataUrl) {
+  sketches.unshift({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    title, dataUrl, ts: Date.now(),
+  });
+  saveSketches();
+}
+
+function deleteSketch(id) {
+  if (!confirm('Delete this drawing? This cannot be undone.')) return;
+  sketches = sketches.filter(s => s.id !== id);
+  saveSketches();
+  renderSketchbook();
+}
+
+function formatDate(ts) {
+  const d = new Date(ts);
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' · ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+}
+
+function renderSketchbook() {
+  const grid = document.getElementById('sketchbook-grid');
+  if (sketches.length === 0) {
+    grid.innerHTML = `<div class="sketchbook-empty">No drawings saved yet.<br>Tap "+ New" to start one, or save one from a quest's Free Draw step!</div>`;
+    return;
+  }
+  grid.innerHTML = sketches.map(s => `
+    <div class="sketch-item">
+      <img src="${s.dataUrl}" class="sketch-thumb" alt="${s.title}">
+      <div class="sketch-meta">
+        <div class="sketch-title">${s.title}</div>
+        <div class="sketch-date">${formatDate(s.ts)}</div>
+      </div>
+      <button class="sketch-delete" onclick="deleteSketch('${s.id}')">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function openTrophy() {
+  showScreen('trophy');
+  const list = document.getElementById('trophy-list');
+  list.innerHTML = MISSIONS.map(m => `
+    <div class="trophy-item ${state.done[m.id] ? '' : 'locked'}">
+      <div class="trophy-item-emoji">${state.done[m.id] ? '🏆' : '🔒'}</div>
+      <div>
+        <div class="trophy-item-title">${m.badge}</div>
+        <div class="trophy-item-sub">${m.title} · ${m.xp} XP</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openSketchbook() {
+  loadSketches();
+  showScreen('sketchbook');
+  renderSketchbook();
+}
+
+function openNewSketch() {
+  showScreen('freedraw');
+  document.getElementById('freedraw-title').textContent = 'New Sketch';
+  requestAnimationFrame(() => freeDrawCtrl.init(drawBlankTemplate));
+}
+
+function saveNewSketch() {
+  const dataUrl = freeDrawCtrl.getDataUrl();
+  addSketch('Free Sketch', dataUrl);
+  openSketchbook();
+}
+
+// ══════════════════════ INIT ══════════════════════
+loadState();
+</script>
+</body>
+</html>
