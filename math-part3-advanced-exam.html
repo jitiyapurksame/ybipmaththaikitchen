@@ -1165,6 +1165,151 @@ function rateScaleSVG(fromQty, fromLabel, toQty, toLabel, caption) {
   return svgWrap(inner, 250, 80, caption, 260);
 }
 
+// ── Pythagoras: a right triangle with all three sides labeled, unknown side in red ──
+function rightTriangleSVG(aLabel, bLabel, cLabel, caption) {
+  const colorFor = s => String(s).includes('?') ? RED : LABEL;
+  const p1 = [30, 170], p2 = [170, 170], p3 = [30, 40]; // right angle at p1
+  const inner = `
+    <polygon points="${p1.join(',')} ${p2.join(',')} ${p3.join(',')}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <rect x="30" y="152" width="18" height="18" fill="none" stroke="${TEAL}" stroke-width="2"/>
+    <text x="100" y="192" font-size="16" fill="${colorFor(aLabel)}" font-weight="bold" text-anchor="middle">${aLabel}</text>
+    <text x="14" y="108" font-size="16" fill="${colorFor(bLabel)}" font-weight="bold" text-anchor="middle" transform="rotate(-90 14 108)">${bLabel}</text>
+    <text x="112" y="98" font-size="16" fill="${colorFor(cLabel)}" font-weight="bold" text-anchor="middle">${cLabel}</text>`;
+  return svgWrap(inner, 200, 200, caption || 'a² + b² = c² — c is always the longest side (opposite the right angle)');
+}
+
+// ── Transformations: a real x/y grid with the point plotted (and a mirror line for reflections) ──
+function coordinateGraphSVG(points, mirrorAxis, caption) {
+  const range = [-6, 6];
+  const size = 210;
+  const scale = size / (range[1] - range[0]);
+  const toPx = v => (v - range[0]) * scale;
+  const cx = toPx(0), cy = size - toPx(0);
+  let grid = '';
+  for (let g = range[0]; g <= range[1]; g++) {
+    const gx = toPx(g), gy = size - toPx(g);
+    grid += `<line x1="${gx}" y1="0" x2="${gx}" y2="${size}" stroke="${LINE}" stroke-width="0.5"/>
+      <line x1="0" y1="${gy}" x2="${size}" y2="${gy}" stroke="${LINE}" stroke-width="0.5"/>`;
+  }
+  const axes = `<line x1="0" y1="${cy}" x2="${size}" y2="${cy}" stroke="${GOLDLINE}" stroke-width="2"/>
+    <line x1="${cx}" y1="0" x2="${cx}" y2="${size}" stroke="${GOLDLINE}" stroke-width="2"/>`;
+  let mirror = '';
+  if (mirrorAxis === 'x') mirror = `<line x1="0" y1="${cy}" x2="${size}" y2="${cy}" stroke="${RED}" stroke-width="3" stroke-dasharray="6,4"/>`;
+  if (mirrorAxis === 'y') mirror = `<line x1="${cx}" y1="0" x2="${cx}" y2="${size}" stroke="${RED}" stroke-width="3" stroke-dasharray="6,4"/>`;
+  const dots = points.map(p => {
+    const px = toPx(p.x), py = size - toPx(p.y);
+    return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="5" fill="${p.color || GOLD}" stroke="${BG}" stroke-width="1.5"/>
+      <text x="${(px + 8).toFixed(1)}" y="${(py - 8).toFixed(1)}" font-size="13" fill="${p.color || GOLD}" font-weight="bold">${p.label || ''}</text>`;
+  }).join('');
+  return svgWrap(`<rect x="0" y="0" width="${size}" height="${size}" fill="${BG}"/>${grid}${axes}${mirror}${dots}`, size, size, caption, 230);
+}
+
+// ── Transformations: original point plus a directional vector arrow (translation) ──
+function translationVectorSVG(x, y, dx, dy, caption) {
+  const range = [-6, 6];
+  const size = 210;
+  const scale = size / (range[1] - range[0]);
+  const toPx = v => (v - range[0]) * scale;
+  const cx = toPx(0), cy = size - toPx(0);
+  let grid = '';
+  for (let g = range[0]; g <= range[1]; g++) {
+    const gx = toPx(g), gy = size - toPx(g);
+    grid += `<line x1="${gx}" y1="0" x2="${gx}" y2="${size}" stroke="${LINE}" stroke-width="0.5"/>
+      <line x1="0" y1="${gy}" x2="${size}" y2="${gy}" stroke="${LINE}" stroke-width="0.5"/>`;
+  }
+  const axes = `<line x1="0" y1="${cy}" x2="${size}" y2="${cy}" stroke="${GOLDLINE}" stroke-width="2"/>
+    <line x1="${cx}" y1="0" x2="${cx}" y2="${size}" stroke="${GOLDLINE}" stroke-width="2"/>`;
+  const px = toPx(x), py = size - toPx(y);
+  const arrowLen = 42;
+  const angle = Math.atan2(-dy, dx);
+  const ax = px + arrowLen * Math.cos(angle), ay = py + arrowLen * Math.sin(angle);
+  const arrow = `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="${RED}" stroke-width="3" marker-end="url(#tarrow)"/>
+    <defs><marker id="tarrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${RED}"/></marker></defs>
+    <text x="${(ax + 6).toFixed(1)}" y="${ay.toFixed(1)}" font-size="13" fill="${RED}" font-weight="bold">(${dx >= 0 ? '+' : ''}${dx}, ${dy >= 0 ? '+' : ''}${dy})</text>`;
+  const dot = `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="5" fill="${GOLD}" stroke="${BG}" stroke-width="1.5"/>
+    <text x="${(px + 8).toFixed(1)}" y="${(py - 8).toFixed(1)}" font-size="13" fill="${GOLD}" font-weight="bold">(${x},${y})</text>`;
+  return svgWrap(`<rect x="0" y="0" width="${size}" height="${size}" fill="${BG}"/>${grid}${axes}${dot}${arrow}`, size, size, caption, 230);
+}
+
+// ── Speed/Distance/Time: a car travelling along a distance line ──
+// ── Speed/Distance/Time: a car travelling along a distance line, broken into
+//    per-hour (or per-half-hour) segments so the rate is visible, not just stated ──
+function speedLineSVG(distance, time, speed, unit, caption) {
+  unit = unit || 'km';
+  const x0 = 20, x1 = 190, y = 95;
+  let segCount = null, segLabel = null, totalLabel, timeLabel;
+
+  function segmentsFor(t) {
+    // Returns { count, unitHours } splitting t hours into whole or half-hour chunks
+    if (Number.isInteger(t)) return { count: t, unitHours: 1 };
+    const half = t / 0.5;
+    if (Number.isInteger(half)) return { count: half, unitHours: 0.5 };
+    return null;
+  }
+
+  if (distance !== null && time !== null) {
+    // Both given — split the known distance into `time` equal per-hour chunks
+    const s = segmentsFor(time);
+    if (s && s.count >= 1 && s.count <= 8) {
+      segCount = s.count;
+      segLabel = `${+(distance / s.count).toFixed(2)} ${unit}`;
+    }
+    totalLabel = `${distance} ${unit}`;
+    timeLabel = `${time} h`;
+  } else if (distance === null && speed !== null && time !== null) {
+    // Distance unknown — each chunk is the KNOWN speed, total stays "?"
+    const s = segmentsFor(time);
+    if (s && s.count >= 1 && s.count <= 8) {
+      segCount = s.count;
+      segLabel = `${+(speed * s.unitHours).toFixed(2)} ${unit}`;
+    }
+    totalLabel = `? ${unit}`;
+    timeLabel = `${time} h`;
+  } else if (time === null && distance !== null && speed !== null) {
+    // Time unknown — chop the known distance into KNOWN-speed-sized chunks
+    const count = distance / speed;
+    if (Number.isInteger(count) && count >= 1 && count <= 8) {
+      segCount = count;
+      segLabel = `${speed} ${unit}`;
+    }
+    totalLabel = `${distance} ${unit}`;
+    timeLabel = '? h';
+  } else {
+    totalLabel = distance !== null ? `${distance} ${unit}` : `? ${unit}`;
+    timeLabel = (time !== null ? `${time} h` : '? h') + (speed !== null ? ` · speed ${speed} ${unit}/h` : '');
+  }
+
+  let segMarks = '';
+  if (segCount) {
+    const segW = (x1 - x0) / segCount;
+    for (let i = 1; i < segCount; i++) {
+      const tx = x0 + i * segW;
+      segMarks += `<line x1="${tx.toFixed(1)}" y1="${y - 6}" x2="${tx.toFixed(1)}" y2="${y + 6}" stroke="${MUTED}" stroke-width="1.5"/>`;
+    }
+    if (segLabel) {
+      for (let i = 0; i < segCount; i++) {
+        const mx = x0 + (i + 0.5) * segW;
+        segMarks += `<text x="${mx.toFixed(1)}" y="${y + 20}" font-size="10" fill="${TEAL}" font-weight="bold" text-anchor="middle">${segLabel}</text>`;
+      }
+    }
+  }
+
+  // Car sits at the start, mirrored so it faces the direction of travel (toward the red end dot)
+  const inner = `
+    <line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${GOLD}" stroke-width="3"/>
+    ${segMarks}
+    <circle cx="${x0}" cy="${y}" r="4" fill="${TEAL}"/>
+    <circle cx="${x1}" cy="${y}" r="4" fill="${RED}"/>
+    <g transform="translate(${x0},0) scale(-1,1) translate(${-x0},0)">
+      <text x="${x0}" y="${y - 45}" font-size="28" text-anchor="middle">🚗</text>
+    </g>
+    <line x1="${x0 + 12}" y1="${y - 8}" x2="${x1 - 16}" y2="${y - 8}" stroke="${TEAL}" stroke-width="2" marker-end="url(#carrow)"/>
+    <defs><marker id="carrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${TEAL}"/></marker></defs>
+    <text x="${(x0 + x1) / 2}" y="${y - 16}" font-size="14" fill="${LABEL}" font-weight="bold" text-anchor="middle">${totalLabel}</text>
+    <text x="${(x0 + x1) / 2}" y="${y + (segCount ? 38 : 24)}" font-size="13" fill="${MUTED}" text-anchor="middle">⏱️ ${timeLabel}</text>`;
+  return svgWrap(inner, 210, 150, caption, 230);
+}
+
 // ── Roots: a square/cube shown with the AREA/VOLUME known and the side marked "?" ──
 function squareAreaSVG(area, caption) {
   const s = 100, x0 = 55, y0 = 25;
@@ -1678,16 +1823,46 @@ const LEVELS = {
     color: 2,
     emoji: '🍽️',
     missions: [
-      { type: 'calc', instruction: 'Find the mean (add up, divide by how many)', problem: '4, 6, 8, 10, 12', answer: '8', hint: 'Sum=40. 40÷5=8.' },
-      { type: 'calc', instruction: 'Find the median (middle value when sorted)', problem: '3, 7, 9, 2, 5', answer: '5', hint: 'Sorted: 2,3,5,7,9. Middle value is 5.' },
-      { type: 'calc', instruction: 'Find the mode (most frequent value)', problem: '2, 3, 3, 5, 7, 3', answer: '3', hint: '3 appears three times — more than any other number.' },
-      { type: 'calc', instruction: 'Find the range (biggest − smallest)', problem: '4, 9, 15, 2, 11', answer: '13', hint: 'Biggest=15, smallest=2. 15−2=13.' },
-      { type: 'calc', instruction: 'Find the mean', problem: '10, 20, 30, 40, 50, 60', answer: '35', hint: 'Sum=210. 210÷6=35.' },
-      { type: 'calc', instruction: 'Find the median (even number of values — average the middle two)', problem: '1, 2, 3, 4', answer: '2.5', hint: 'Middle two are 2 and 3. (2+3)÷2=2.5.' },
-      { type: 'calc', instruction: 'The mean of 5 numbers is 10. Four of them are 8, 9, 11, 12. Find the fifth', problem: 'Total needed = 5×10 = 50', answer: '10', hint: 'Sum of four known = 40. Fifth = 50−40 = 10.' },
-      { type: 'calc', instruction: 'Find the range', problem: 'max = 45, min = 12', answer: '33', hint: '45−12=33.' },
-      { type: 'calc', instruction: 'Find the mean (decimal answer)', problem: '2, 3, 4, 5', answer: '3.5', hint: 'Sum=14. 14÷4=3.5.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find mean, median AND mode', problem: '5, 7, 7, 9, 12', answer: '8,7,7', hint: 'Mean: sum=40, 40÷5=8. Median: middle value=7. Mode: most frequent=7.', solution: [
+      { type: 'calc', instruction: 'Find the mean (add up, divide by how many)', problem: '4, 6, 8, 10, 12', answer: '8', hint: {
+        visual: sequenceBarsSVG([4, 6, 8, 10, 12], null, 'These blocks show the data — imagine levelling them all to one flat height'),
+        formula: 'Sum=40. 40÷5=8.'
+      } },
+      { type: 'calc', instruction: 'Find the median (middle value when sorted)', problem: '3, 7, 9, 2, 5', answer: '5', hint: {
+        visual: sequenceBarsSVG([2, 3, 5, 7, 9], null, 'Sorted smallest to largest — the middle block is the median'),
+        formula: 'Sorted: 2,3,5,7,9. Middle value is 5.'
+      } },
+      { type: 'calc', instruction: 'Find the mode (most frequent value)', problem: '2, 3, 3, 5, 7, 3', answer: '3', hint: {
+        visual: sequenceBarsSVG([2, 3, 3, 5, 7, 3], null, 'Which block height shows up more than any other?'),
+        formula: '3 appears three times — more than any other number.'
+      } },
+      { type: 'calc', instruction: 'Find the range (biggest − smallest)', problem: '4, 9, 15, 2, 11', answer: '13', hint: {
+        visual: sequenceBarsSVG([2, 4, 9, 11, 15], null, 'Sorted — range is the gap between the shortest and tallest block'),
+        formula: 'Biggest=15, smallest=2. 15−2=13.'
+      } },
+      { type: 'calc', instruction: 'Find the mean', problem: '10, 20, 30, 40, 50, 60', answer: '35', hint: {
+        visual: sequenceBarsSVG([10, 20, 30, 40, 50, 60], null, 'These blocks show the data — imagine levelling them all to one flat height'),
+        formula: 'Sum=210. 210÷6=35.'
+      } },
+      { type: 'calc', instruction: 'Find the median (even number of values — average the middle two)', problem: '1, 2, 3, 4', answer: '2.5', hint: {
+        visual: sequenceBarsSVG([1, 2, 3, 4], null, 'With an even count, the median sits between the middle two blocks'),
+        formula: 'Middle two are 2 and 3. (2+3)÷2=2.5.'
+      } },
+      { type: 'calc', instruction: 'The mean of 5 numbers is 10. Four of them are 8, 9, 11, 12. Find the fifth', problem: 'Total needed = 5×10 = 50', answer: '10', hint: {
+        visual: sequenceBarsSVG([8, 9, 11, 12, '?'], null, 'Four known blocks, one missing — together they must average to 10'),
+        formula: 'Sum of four known = 40. Fifth = 50−40 = 10.'
+      } },
+      { type: 'calc', instruction: 'Find the range', problem: 'max = 45, min = 12', answer: '33', hint: {
+        visual: sequenceBarsSVG([12, 45], ['range = ?']),
+        formula: '45−12=33.'
+      } },
+      { type: 'calc', instruction: 'Find the mean (decimal answer)', problem: '2, 3, 4, 5', answer: '3.5', hint: {
+        visual: sequenceBarsSVG([2, 3, 4, 5], null, 'These blocks show the data — imagine levelling them all to one flat height'),
+        formula: 'Sum=14. 14÷4=3.5.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find mean, median AND mode', problem: '5, 7, 7, 9, 12', answer: '8,7,7', hint: {
+        visual: sequenceBarsSVG([5, 7, 7, 9, 12], null, 'Already sorted — look at the whole shape for all three answers'),
+        formula: 'Mean: sum=40, 40÷5=8. Median: middle value=7. Mode: most frequent=7.'
+      }, solution: [
         { action: 'Mean', detail: '(5+7+7+9+12)÷5 = 40÷5 = 8', check: '8' },
         { action: 'Median', detail: 'sorted middle value = 7', check: '7' },
         { action: 'Mode', detail: 'most frequent value = 7', check: '7' }
@@ -1699,16 +1874,46 @@ const LEVELS = {
     color: 3,
     emoji: '📐',
     missions: [
-      { type: 'calc', instruction: 'Pythagoras: a² + b² = c² (c is the longest side). Find c', problem: 'a=3, b=4, c=?', answer: '5', hint: '3²+4²=9+16=25. √25=5.' },
-      { type: 'calc', instruction: 'Find the hypotenuse (longest side)', problem: 'a=6, b=8, c=?', answer: '10', hint: '6²+8²=36+64=100. √100=10.' },
-      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=5, b=12, c=?', answer: '13', hint: '5²+12²=25+144=169. √169=13.' },
-      { type: 'calc', instruction: 'Find a missing SHORT side this time — rearrange: b² = c² − a²', problem: 'c=13, a=5, b=?', answer: '12', hint: '13²−5²=169−25=144. √144=12.' },
-      { type: 'calc', instruction: 'Find the missing short side', problem: 'c=10, a=6, b=?', answer: '8', hint: '10²−6²=100−36=64. √64=8.' },
-      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=9, b=12, c=?', answer: '15', hint: '9²+12²=81+144=225. √225=15.' },
-      { type: 'calc', instruction: 'Find the missing short side', problem: 'c=25, a=7, b=?', answer: '24', hint: '25²−7²=625−49=576. √576=24.' },
-      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=8, b=15, c=?', answer: '17', hint: '8²+15²=64+225=289. √289=17.' },
-      { type: 'calc', instruction: 'Is a triangle with these three sides right-angled? Check if a²+b²=c²', problem: 'sides 5, 12, 13', answer: 'yes', hint: '5²+12²=25+144=169=13². Yes, it works!' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Real-world Pythagoras', problem: 'A 10m ladder leans against a wall. Its base is 6m from the wall. How high up the wall does it reach?', answer: '8', hint: 'ladder=hypotenuse=10. base=6. height²=10²−6²=100−36=64. height=8.', solution: [
+      { type: 'calc', instruction: 'Pythagoras: a² + b² = c² (c is the longest side). Find c', problem: 'a=3, b=4, c=?', answer: '5', hint: {
+        visual: rightTriangleSVG('a=3', 'b=4', 'c=?'),
+        formula: '3²+4²=9+16=25. √25=5.'
+      } },
+      { type: 'calc', instruction: 'Find the hypotenuse (longest side)', problem: 'a=6, b=8, c=?', answer: '10', hint: {
+        visual: rightTriangleSVG('a=6', 'b=8', 'c=?'),
+        formula: '6²+8²=36+64=100. √100=10.'
+      } },
+      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=5, b=12, c=?', answer: '13', hint: {
+        visual: rightTriangleSVG('a=5', 'b=12', 'c=?'),
+        formula: '5²+12²=25+144=169. √169=13.'
+      } },
+      { type: 'calc', instruction: 'Find a missing SHORT side this time — rearrange: b² = c² − a²', problem: 'c=13, a=5, b=?', answer: '12', hint: {
+        visual: rightTriangleSVG('a=5', 'b=?', 'c=13'),
+        formula: '13²−5²=169−25=144. √144=12.'
+      } },
+      { type: 'calc', instruction: 'Find the missing short side', problem: 'c=10, a=6, b=?', answer: '8', hint: {
+        visual: rightTriangleSVG('a=6', 'b=?', 'c=10'),
+        formula: '10²−6²=100−36=64. √64=8.'
+      } },
+      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=9, b=12, c=?', answer: '15', hint: {
+        visual: rightTriangleSVG('a=9', 'b=12', 'c=?'),
+        formula: '9²+12²=81+144=225. √225=15.'
+      } },
+      { type: 'calc', instruction: 'Find the missing short side', problem: 'c=25, a=7, b=?', answer: '24', hint: {
+        visual: rightTriangleSVG('a=7', 'b=?', 'c=25'),
+        formula: '25²−7²=625−49=576. √576=24.'
+      } },
+      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=8, b=15, c=?', answer: '17', hint: {
+        visual: rightTriangleSVG('a=8', 'b=15', 'c=?'),
+        formula: '8²+15²=64+225=289. √289=17.'
+      } },
+      { type: 'calc', instruction: 'Is a triangle with these three sides right-angled? Check if a²+b²=c²', problem: 'sides 5, 12, 13', answer: 'yes', hint: {
+        visual: rightTriangleSVG('a=5', 'b=12', 'c=13'),
+        formula: '5²+12²=25+144=169=13². Yes, it works!'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Real-world Pythagoras', problem: 'A 10m ladder leans against a wall. Its base is 6m from the wall. How high up the wall does it reach?', answer: '8', hint: {
+        visual: rightTriangleSVG('base=6', 'height=?', 'ladder=10'),
+        formula: 'ladder=hypotenuse=10. base=6. height²=10²−6²=100−36=64. height=8.'
+      }, solution: [
         { action: 'Set up', detail: 'height² = 10² − 6²' },
         { action: 'Calculate', detail: '= 100 − 36 = 64', check: '64' },
         { action: 'Square root', detail: '√64 = 8m', check: '8' }
@@ -1720,10 +1925,22 @@ const LEVELS = {
     color: 4,
     emoji: '🥞',
     missions: [
-      { type: 'calc', instruction: 'Reflect the point in the x-axis (flip the sign of the y-coordinate)', problem: 'Point (3, 4) reflected in the x-axis = ?', answer: '(3,-4)', hint: 'x stays the same, y flips sign: (3,4) → (3,−4).' },
-      { type: 'calc', instruction: 'Reflect the point in the y-axis (flip the sign of the x-coordinate)', problem: 'Point (2, 5) reflected in the y-axis = ?', answer: '(-2,5)', hint: 'y stays the same, x flips sign: (2,5) → (−2,5).' },
-      { type: 'calc', instruction: 'Translate the point by the vector (add to each coordinate)', problem: 'Point (1, 2) translated by (3, −1) = ?', answer: '(4,1)', hint: '1+3=4, 2+(−1)=1. New point: (4,1).' },
-      { type: 'calc', instruction: 'Translate the point', problem: 'Point (−2, 3) translated by (2, 2) = ?', answer: '(0,5)', hint: '−2+2=0, 3+2=5. New point: (0,5).' },
+      { type: 'calc', instruction: 'Reflect the point in the x-axis (flip the sign of the y-coordinate)', problem: 'Point (3, 4) reflected in the x-axis = ?', answer: '(3,-4)', hint: {
+        visual: coordinateGraphSVG([{ x: 3, y: 4, label: '(3,4)' }], 'x'),
+        formula: 'x stays the same, y flips sign: (3,4) → (3,−4).'
+      } },
+      { type: 'calc', instruction: 'Reflect the point in the y-axis (flip the sign of the x-coordinate)', problem: 'Point (2, 5) reflected in the y-axis = ?', answer: '(-2,5)', hint: {
+        visual: coordinateGraphSVG([{ x: 2, y: 5, label: '(2,5)' }], 'y'),
+        formula: 'y stays the same, x flips sign: (2,5) → (−2,5).'
+      } },
+      { type: 'calc', instruction: 'Translate the point by the vector (add to each coordinate)', problem: 'Point (1, 2) translated by (3, −1) = ?', answer: '(4,1)', hint: {
+        visual: translationVectorSVG(1, 2, 3, -1),
+        formula: '1+3=4, 2+(−1)=1. New point: (4,1).'
+      } },
+      { type: 'calc', instruction: 'Translate the point', problem: 'Point (−2, 3) translated by (2, 2) = ?', answer: '(0,5)', hint: {
+        visual: translationVectorSVG(-2, 3, 2, 2),
+        formula: '−2+2=0, 3+2=5. New point: (0,5).'
+      } },
       { type: 'identify', instruction: 'A shape flips over a mirror line. This transformation is called...?', problem: 'Shape flips over a line', answer: 'reflection', hint: 'Think of a mirror image.' },
       { type: 'identify', instruction: 'A shape turns around a fixed point. This transformation is called...?', problem: 'Shape turns around a point', answer: 'rotation', hint: 'Think of a clock hand turning.' },
       { type: 'identify', instruction: 'A shape slides without turning or flipping. This transformation is called...?', problem: 'Shape slides in a straight direction', answer: 'translation', hint: 'It moves, but stays facing the same way.' },
@@ -1741,16 +1958,43 @@ const LEVELS = {
     color: 5,
     emoji: '⏱️',
     missions: [
-      { type: 'calc', instruction: 'Speed = distance ÷ time', problem: 'distance=100km, time=2h', answer: '50', hint: '100 ÷ 2 = 50 km/h.' },
-      { type: 'calc', instruction: 'Distance = speed × time', problem: 'speed=60km/h, time=3h', answer: '180', hint: '60 × 3 = 180 km.' },
-      { type: 'calc', instruction: 'Time = distance ÷ speed', problem: 'distance=150km, speed=50km/h', answer: '3', hint: '150 ÷ 50 = 3 hours.' },
-      { type: 'calc', instruction: 'Find the speed', problem: 'distance=240km, time=4h', answer: '60', hint: '240 ÷ 4 = 60 km/h.' },
-      { type: 'calc', instruction: 'Find the speed', problem: 'distance=90 miles, time=1.5h', answer: '60', hint: '90 ÷ 1.5 = 60 mph.' },
-      { type: 'calc', instruction: 'Find the distance', problem: 'speed=45km/h, time=2h', answer: '90', hint: '45 × 2 = 90 km.' },
-      { type: 'calc', instruction: 'Find the time', problem: 'speed=30km/h, distance=120km', answer: '4', hint: '120 ÷ 30 = 4 hours.' },
+      { type: 'calc', instruction: 'Speed = distance ÷ time', problem: 'distance=100km, time=2h', answer: '50', hint: {
+        visual: speedLineSVG(100, 2, null, 'km'),
+        formula: '100 ÷ 2 = 50 km/h.'
+      } },
+      { type: 'calc', instruction: 'Distance = speed × time', problem: 'speed=60km/h, time=3h', answer: '180', hint: {
+        visual: speedLineSVG(null, 3, 60, 'km'),
+        formula: '60 × 3 = 180 km.'
+      } },
+      { type: 'calc', instruction: 'Time = distance ÷ speed', problem: 'distance=150km, speed=50km/h', answer: '3', hint: {
+        visual: speedLineSVG(150, null, 50, 'km'),
+        formula: '150 ÷ 50 = 3 hours.'
+      } },
+      { type: 'calc', instruction: 'Find the speed', problem: 'distance=240km, time=4h', answer: '60', hint: {
+        visual: speedLineSVG(240, 4, null, 'km'),
+        formula: '240 ÷ 4 = 60 km/h.'
+      } },
+      { type: 'calc', instruction: 'Find the speed', problem: 'distance=90 miles, time=1.5h', answer: '60', hint: {
+        visual: speedLineSVG(90, 1.5, null, 'miles'),
+        formula: '90 ÷ 1.5 = 60 mph.'
+      } },
+      { type: 'calc', instruction: 'Find the distance', problem: 'speed=45km/h, time=2h', answer: '90', hint: {
+        visual: speedLineSVG(null, 2, 45, 'km'),
+        formula: '45 × 2 = 90 km.'
+      } },
+      { type: 'calc', instruction: 'Find the time', problem: 'speed=30km/h, distance=120km', answer: '4', hint: {
+        visual: speedLineSVG(120, null, 30, 'km'),
+        formula: '120 ÷ 30 = 4 hours.'
+      } },
       { type: 'calc', instruction: 'Direct proportion: if 5 apples cost £2, find the cost of 15 apples', problem: '15 apples = 3 × 5 apples', answer: '6', hint: '3 times as many apples = 3 × £2 = £6.' },
-      { type: 'calc', instruction: 'Find the average speed for a two-part journey', problem: '100km in 2h, then 80km in 2h — total distance ÷ total time', answer: '45', hint: 'Total distance=180km. Total time=4h. 180÷4=45km/h.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Multi-part journey — find the overall average speed', problem: 'A car travels 150km in 3h, then 100km in 2h. Find the average speed for the whole journey.', answer: '50', hint: 'Total distance=250km. Total time=5h. 250÷5=50km/h.', solution: [
+      { type: 'calc', instruction: 'Find the average speed for a two-part journey', problem: '100km in 2h, then 80km in 2h — total distance ÷ total time', answer: '45', hint: {
+        visual: speedLineSVG(100, 2, null, 'km', 'Leg 1') + speedLineSVG(80, 2, null, 'km', 'Leg 2'),
+        formula: 'Total distance=180km. Total time=4h. 180÷4=45km/h.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Multi-part journey — find the overall average speed', problem: 'A car travels 150km in 3h, then 100km in 2h. Find the average speed for the whole journey.', answer: '50', hint: {
+        visual: speedLineSVG(150, 3, null, 'km', 'Leg 1') + speedLineSVG(100, 2, null, 'km', 'Leg 2'),
+        formula: 'Total distance=250km. Total time=5h. 250÷5=50km/h.'
+      }, solution: [
         { action: 'Total distance', detail: '150 + 100 = 250 km', check: '250' },
         { action: 'Total time', detail: '3 + 2 = 5 hours', check: '5' },
         { action: 'Average speed', detail: '250 ÷ 5 = 50 km/h', check: '50' }
