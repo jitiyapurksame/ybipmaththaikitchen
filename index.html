@@ -168,6 +168,7 @@
     transition: transform 0.15s ease;
   }
   .station:active { transform: scale(0.97); }
+  .station-inner:active { opacity: 0.85; }
 
   .station::before {
     content: '';
@@ -179,7 +180,7 @@
   .station.thai::before { background: linear-gradient(135deg, var(--thai-a), var(--thai-b)); }
   .station.lit::before { background: linear-gradient(135deg, var(--lit-a), var(--lit-b)); }
 
-  .station-inner { position: relative; display: flex; align-items: center; gap: 16px; }
+  .station-inner { position: relative; display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; }
 
   .station-icon {
     flex-shrink: 0;
@@ -218,6 +219,26 @@
     display: none;
   }
   .station-progress.show { display: block; }
+
+  .station-parts {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+  }
+  .station-part-chip {
+    flex: 1;
+    text-decoration: none;
+    background: rgba(0,0,0,0.22);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 6px;
+    text-align: center;
+    color: var(--text);
+  }
+  .station-part-chip:active { transform: scale(0.96); }
+  .station-part-label { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.3px; }
+  .station-part-sub { font-size: 0.6rem; color: var(--muted); margin-top: 1px; }
+  .station-part-count { font-size: 0.62rem; font-weight: 800; color: var(--gold); margin-top: 2px; display: block; }
 
   .station-arrow {
     font-size: 1.4rem;
@@ -347,17 +368,34 @@
   </header>
 
   <div class="stations">
-    <a class="station math" href="math-survival-complete.html">
-      <div class="station-inner">
+    <div class="station math">
+      <a class="station-inner" href="math-part1-foundations.html">
         <div class="station-icon">🔪</div>
         <div class="station-text">
           <div class="station-title">Math Kitchen Ninja</div>
-          <div class="station-desc">Slice through Stage 8 missions, level by level.</div>
+          <div class="station-desc">Slice through Year 8 missions, level by level.</div>
           <div class="station-progress" id="mathProgress"></div>
         </div>
         <div class="station-arrow">›</div>
+      </a>
+      <div class="station-parts">
+        <a class="station-part-chip" href="math-part1-foundations.html">
+          <div class="station-part-label">Part 1</div>
+          <div class="station-part-sub">Foundations</div>
+          <span class="station-part-count" id="mathPart1Count"></span>
+        </a>
+        <a class="station-part-chip" href="math-part2-geometry-data.html">
+          <div class="station-part-label">Part 2</div>
+          <div class="station-part-sub">Geometry & Data</div>
+          <span class="station-part-count" id="mathPart2Count"></span>
+        </a>
+        <a class="station-part-chip" href="math-part3-advanced-exam.html">
+          <div class="station-part-label">Part 3</div>
+          <div class="station-part-sub">Advanced & Exam</div>
+          <span class="station-part-count" id="mathPart3Count"></span>
+        </a>
       </div>
-    </a>
+    </div>
 
     <a class="station thai" href="Thai_Exam_Survival_-_Index.html">
       <div class="station-inner">
@@ -392,7 +430,7 @@
   </div>
 
   <footer>
-    Keep this file in the same folder as the other apps — tap a station to open it. Backup/Restore for all 3 apps is managed here.
+    Keep this file in the same folder as the other apps (the 3 Math parts + Thai + Literature) — tap a station to open it. Backup/Restore for all 3 apps is managed here.
   </footer>
 
 <!-- Backup Modal -->
@@ -481,6 +519,28 @@
   tryShowProgress('math-complete-state', 'mathProgress', 'xp');
   tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
   tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
+
+  // Per-part completion counts for the Math quick-jump chips (1-9 / 10-19 / 20-28)
+  function showPartCounts() {
+    try {
+      const raw = localStorage.getItem('math-complete-state');
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      const progress = (state && state.levelProgress) || {};
+      const ranges = [
+        { id: 'mathPart1Count', min: 1, max: 9 },
+        { id: 'mathPart2Count', min: 10, max: 19 },
+        { id: 'mathPart3Count', min: 20, max: 28 }
+      ];
+      ranges.forEach(r => {
+        let done = 0;
+        for (let i = r.min; i <= r.max; i++) if ((progress[i] || 0) >= 10) done++;
+        const el = document.getElementById(r.id);
+        if (el) el.textContent = `${done}/${r.max - r.min + 1}`;
+      });
+    } catch (e) { /* ignore */ }
+  }
+  showPartCounts();
 
   // ══════════════════════ COMBINED BACKUP / RESTORE ══════════════════════
   function openBackupModal() { document.getElementById('backup-overlay').classList.add('show'); }
