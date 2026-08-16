@@ -409,6 +409,18 @@
       </div>
     </a>
 
+    <a class="station thai" href="Thai_ReadWrite_Survival.html">
+      <div class="station-inner">
+        <div class="station-icon">🥢</div>
+        <div class="station-text">
+          <div class="station-title">Thai Read & Write Survival</div>
+          <div class="station-desc">Sound out letters and vowels like mixing ingredients — one bite at a time.</div>
+          <div class="station-progress" id="rwProgress"></div>
+        </div>
+        <div class="station-arrow">›</div>
+      </div>
+    </a>
+
     <a class="station lit" href="Thai_Specialty_Kitchen.html">
       <div class="station-inner">
         <div class="station-icon">📜</div>
@@ -425,12 +437,12 @@
   <div class="tools">
     <div class="tool-btn" onclick="openBackupModal()">
       <span>💾 Backup / Restore Progress</span>
-      <span class="tool-status">all 3 apps</span>
+      <span class="tool-status">all 4 apps</span>
     </div>
   </div>
 
   <footer>
-    Keep this file in the same folder as the other apps (the 3 Math parts + Thai + Literature) — tap a station to open it. Backup/Restore for all 3 apps is managed here.
+    Keep this file in the same folder as the other apps (the 3 Math parts + Thai Reading + Thai Read & Write + Literature) — tap a station to open it. Backup/Restore for all 4 apps is managed here.
   </footer>
 
 <!-- Backup Modal -->
@@ -518,6 +530,7 @@
   }
   tryShowProgress('math-complete-state', 'mathProgress', 'xp');
   tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
+  tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
   tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
 
   // Per-part completion counts for the Math quick-jump chips (1-9 / 10-19 / 20-28)
@@ -553,6 +566,7 @@
       const bundle = {
         math: JSON.parse(localStorage.getItem('math-complete-state') || 'null'),
         thai: JSON.parse(localStorage.getItem('thai-reading-state') || 'null'),
+        rw: JSON.parse(localStorage.getItem('thai-rw-state') || 'null'),
         lit: JSON.parse(localStorage.getItem('thaiKitchenState_v1') || 'null'),
         litSketches: JSON.parse(localStorage.getItem('thaiKitchenSketchbook_v1') || 'null'),
       };
@@ -598,12 +612,14 @@
       if (typeof bundle !== 'object' || bundle === null) throw new Error('bad code');
       if (bundle.math) localStorage.setItem('math-complete-state', JSON.stringify(bundle.math));
       if (bundle.thai) localStorage.setItem('thai-reading-state', JSON.stringify(bundle.thai));
+      if (bundle.rw) localStorage.setItem('thai-rw-state', JSON.stringify(bundle.rw));
       if (bundle.lit) localStorage.setItem('thaiKitchenState_v1', JSON.stringify(bundle.lit));
       if (bundle.litSketches) localStorage.setItem('thaiKitchenSketchbook_v1', JSON.stringify(bundle.litSketches));
       status.className = 'modal-error ok';
       status.textContent = '✓ Progress restored! Reopen an app to see it.';
       tryShowProgress('math-complete-state', 'mathProgress', 'xp');
       tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
+      tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
       tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
     } catch (e) {
       status.className = 'modal-error err';

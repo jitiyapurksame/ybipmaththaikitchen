@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Thai Read & Write Survival</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&family=Sarabun:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #201410;
+    --surface: #32211a;
+    --surface2: #291a13;
+    --border: #5a3d26;
+    --text: #fbeee0;
+    --muted: #c2a68a;
+    --gold: #f4b400;
+    --accent: #16a34a;   /* pencil green — this station's identity */
+    --accent2: #facc15;  /* notebook gold */
+
+    --m1: #16a34a;  /* World 1 — Letter & Word Lab */
+    --m2: #facc15;  /* World 2 — Reading Aloud Academy */
+    --m3: #a855f7;  /* pointer card — Prosody Pattern Lab (lives in Lit Kitchen) */
+    --m4: #38bdf8;  /* World 4 — Sentence Builder */
+    --m5: #f97316;  /* World 5 — Writing Lab */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Nunito', 'Sarabun', sans-serif;
+    background: radial-gradient(ellipse at top, #2a3a1f 0%, var(--bg) 55%, #150d0a 100%);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* ── HOME ── */
+  .home-header { padding: 28px 22px 8px; text-align: center; position: relative; }
+  .hq-link {
+    position: absolute; top: 14px; left: 16px;
+    font-size: 0.7rem; font-weight: 800; color: var(--muted);
+    text-decoration: none; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 10px;
+  }
+  .hq-link:active { transform: scale(0.95); }
+
+  .home-title {
+    font-family: 'Bangers', cursive;
+    font-size: 2.1rem;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.15;
+    margin-top: 6px;
+  }
+  .home-subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 6px; letter-spacing: 0.5px; }
+
+  .xp-panel {
+    margin: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 18px;
+  }
+  .xp-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .level-badge {
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .xp-count { font-size: 0.78rem; color: var(--muted); }
+  .xp-count span { color: var(--gold); font-weight: 800; }
+  .xp-bar-bg { background: var(--border); border-radius: 999px; height: 10px; overflow: hidden; }
+  .xp-bar-fill {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    height: 100%; border-radius: 999px; width: 0%;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  .missions-label {
+    padding: 4px 20px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .rooms-list { padding: 0 20px 24px; display: flex; flex-direction: column; gap: 12px; }
+
+  .mission-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .mission-card:active { transform: scale(0.98); }
+  .mission-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 18px 0 0 18px;
+  }
+  .mission-card[data-m="0"]::before { background: var(--m1); }
+  .mission-card[data-m="1"]::before { background: var(--m2); }
+  .mission-card[data-m="2"]::before { background: var(--m3); }
+  .mission-card[data-m="3"]::before { background: var(--m4); }
+  .mission-card[data-m="4"]::before { background: var(--m5); }
+  .mission-card.pointer { opacity: 0.88; }
+
+  .mission-emoji { font-size: 2rem; flex-shrink: 0; }
+  .mission-text { flex: 1; min-width: 0; }
+  .mission-title-th { font-weight: 800; font-size: 1.02rem; }
+  .mission-title-en { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .room-card-desc { font-size: 0.72rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  .room-count-tag {
+    font-size: 0.68rem; color: var(--gold); flex-shrink: 0; text-align: center;
+    background: rgba(244,180,0,0.12); border: 1px solid rgba(244,180,0,0.3);
+    border-radius: 999px; padding: 4px 10px; white-space: nowrap;
+  }
+  .room-count-tag.out {
+    color: var(--muted); background: rgba(168,85,247,0.10); border-color: rgba(168,85,247,0.3);
+  }
+
+  footer.hub-note {
+    margin: 8px 20px 30px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── WORLD DETAIL SCREEN ── */
+  .world-header { padding: 22px 20px 8px; position: relative; }
+  .back-link {
+    display: inline-block;
+    font-size: 0.7rem; font-weight: 800; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 10px; margin-bottom: 14px; cursor: pointer;
+  }
+  .back-link:active { transform: scale(0.95); }
+  .world-title {
+    font-family: 'Bangers', cursive; font-size: 1.5rem; letter-spacing: 1px;
+    color: var(--gold);
+  }
+  .world-sub { font-size: 0.8rem; color: var(--muted); margin-top: 6px; line-height: 1.5; max-width: 480px; }
+
+  .module-list { padding: 10px 20px 30px; display: flex; flex-direction: column; gap: 10px; }
+  .module-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px 15px; display: flex; align-items: flex-start; gap: 12px;
+  }
+  .module-idx {
+    flex: 0 0 auto; width: 24px; height: 24px; border-radius: 7px; background: var(--surface2);
+    display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: var(--muted);
+    border: 1px solid var(--border); margin-top: 2px; font-weight: 800;
+  }
+  .module-body { flex: 1; min-width: 0; }
+  .module-title { font-size: 0.92rem; font-weight: 800; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .module-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+  .soon-tag {
+    font-size: 0.6rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 7px;
+    border-radius: 999px; border: 1px solid var(--accent); color: var(--accent);
+  }
+  .verb-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .verb-chip {
+    font-size: 0.62rem; padding: 2px 8px; border-radius: 999px; background: var(--surface2);
+    color: var(--muted); border: 1px solid var(--border);
+  }
+
+  /* ── R-LEVEL CARDS (inside World 2) ── */
+  .level-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 16px; display: flex; align-items: center; gap: 14px; cursor: pointer;
+  }
+  .level-card:active { transform: scale(0.98); }
+  .level-emoji { font-size: 1.7rem; flex-shrink: 0; }
+  .level-body { flex: 1; min-width: 0; }
+  .level-title { font-weight: 800; font-size: 0.95rem; }
+  .level-desc { font-size: 0.72rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+  .level-progress-bg { background: var(--border); border-radius: 999px; height: 6px; margin-top: 8px; overflow: hidden; }
+  .level-progress-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); height: 100%; border-radius: 999px; }
+  .level-count { font-size: 0.68rem; color: var(--gold); flex-shrink: 0; text-align: center; white-space: nowrap; }
+
+  /* ── PRACTICE / CAROUSEL SCREEN ── */
+  .practice-header { padding: 22px 20px 4px; }
+  .practice-progress { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+  .practice-body { flex: 1; padding: 10px 20px 30px; display: flex; flex-direction: column; }
+
+  .practice-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 26px 20px; text-align: center; margin-top: 10px;
+  }
+  .practice-th { font-family: 'Sarabun', sans-serif; font-weight: 800; font-size: 1.9rem; line-height: 1.3; }
+  .practice-en { font-size: 0.82rem; color: var(--muted); margin-top: 8px; }
+  .item-icon { font-size: 2.6rem; margin-bottom: 10px; line-height: 1; }
+
+  .pause-line { font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 1.5rem; line-height: 2.1; text-align: center; }
+  .pause-chunk { display: inline-block; padding: 2px 6px; }
+  .pause-slash { color: var(--accent2); font-weight: 900; margin: 0 4px; }
+  .pause-slash.hidden-slash { opacity: 0; }
+
+  .passage-text { font-family: 'Sarabun', sans-serif; font-weight: 600; font-size: 1.28rem; line-height: 2.15; text-align: left; }
+  .passage-title { font-size: 0.85rem; color: var(--gold); font-weight: 800; margin-bottom: 10px; text-align: left; }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+  .pill-btn {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 999px; padding: 10px 16px; font-size: 0.8rem; font-weight: 800; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .pill-btn:active { transform: scale(0.96); }
+  .pill-btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #14260f; border: none; }
+  .pill-btn.recording { background: #ef4444; color: #fff; border: none; }
+  .pill-btn.toggled { border-color: var(--accent2); color: var(--accent2); }
+
+  .hard-word-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; justify-content: center; }
+  .hard-word-chip {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 999px;
+    padding: 6px 12px; font-size: 0.8rem; cursor: pointer; font-family: 'Sarabun', sans-serif; font-weight: 700;
+  }
+  .hard-word-chip.revealed { color: var(--accent2); border-color: var(--accent2); }
+
+  .star-row { display: flex; gap: 8px; justify-content: center; margin-top: 16px; }
+  .star-btn { font-size: 1.6rem; background: none; border: none; cursor: pointer; opacity: 0.35; }
+  .star-btn.filled { opacity: 1; }
+
+  .recorded-audio { width: 100%; margin-top: 14px; display: none; }
+
+  .practice-nav { display: flex; gap: 10px; margin-top: 22px; }
+  .practice-nav .pill-btn { flex: 1; justify-content: center; }
+
+  .rate-toggle-row { display: flex; gap: 8px; justify-content: center; margin-top: 4px; }
+
+  /* ── LETTER & WORD LAB (World 1) ── */
+  .letters-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+  .letter-tile {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px 16px; text-align: center; cursor: pointer; min-width: 78px;
+  }
+  .letter-tile:active { transform: scale(0.95); }
+  .letter-tile .ch { font-family: 'Sarabun', sans-serif; font-size: 2.4rem; font-weight: 800; }
+  .letter-tile .nm { font-size: 0.68rem; color: var(--muted); margin-top: 4px; }
+  .letter-tile .ex { font-size: 0.66rem; color: var(--accent2); margin-top: 2px; }
+
+  .quiz-prompt { font-size: 0.95rem; color: var(--text); margin-top: 4px; }
+  .quiz-prompt b { color: var(--gold); font-family: 'Sarabun', sans-serif; font-size: 1.3rem; }
+  .options-grid { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .option-btn {
+    background: var(--surface2); border: 2px solid var(--border); border-radius: 14px;
+    font-family: 'Sarabun', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text);
+    width: 68px; height: 68px; cursor: pointer;
+  }
+  .option-btn:active { transform: scale(0.94); }
+  .option-btn.correct { border-color: var(--accent); background: rgba(22,163,74,0.25); }
+  .option-btn.wrong { border-color: #ef4444; background: rgba(239,68,68,0.2); }
+
+  .word-display { font-family: 'Sarabun', sans-serif; font-size: 2.1rem; font-weight: 700; margin-top: 6px; }
+  .word-display .hl { color: var(--accent2); }
+
+  .trace-canvas-wrap { display: flex; justify-content: center; margin-top: 10px; }
+  canvas.trace-canvas {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 16px;
+    touch-action: none;
+  }
+  .quiz-feedback { font-size: 0.8rem; margin-top: 10px; min-height: 18px; color: var(--accent2); font-weight: 700; }
+
+  /* Vowel word-builder */
+  .assembly-box {
+    font-family: 'Sarabun', sans-serif; font-size: 2.2rem; font-weight: 800; min-height: 3.2rem;
+    border: 1px dashed var(--border); border-radius: 14px; margin-top: 14px; padding: 10px;
+    background: var(--surface2); letter-spacing: 1px;
+  }
+  .chip-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .part-chip {
+    background: var(--surface2); border: 2px solid var(--border); border-radius: 12px;
+    font-family: 'Sarabun', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--text);
+    padding: 10px 16px; cursor: pointer;
+  }
+  .part-chip:active { transform: scale(0.94); }
+  .part-chip.used { opacity: 0.3; pointer-events: none; }
+  .breakdown-line { font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
+
+  /* Hard Word Memory (Level 3) */
+  .blank-word-display { font-family: 'Sarabun', sans-serif; font-size: 2.3rem; font-weight: 800; margin-top: 8px; letter-spacing: 2px; }
+  .blank-word-display .blank { color: var(--gold); border-bottom: 3px solid var(--gold); padding: 0 6px; }
+  .hook-text { font-size: 0.85rem; color: var(--accent2); margin-top: 10px; line-height: 1.5; font-style: italic; }
+  .meaning-options { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+  .meaning-btn {
+    background: var(--surface2); border: 2px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; font-size: 0.88rem; color: var(--text); text-align: left; cursor: pointer;
+  }
+  .meaning-btn:active { transform: scale(0.98); }
+  .meaning-btn.correct { border-color: var(--accent); background: rgba(22,163,74,0.2); }
+  .meaning-btn.wrong { border-color: #ef4444; background: rgba(239,68,68,0.15); }
+  .type-input {
+    width: 100%; font-family: 'Sarabun', sans-serif; font-size: 1.6rem; font-weight: 700;
+    text-align: center; background: var(--surface2); border: 2px solid var(--border); border-radius: 12px;
+    padding: 14px; color: var(--text); margin-top: 16px;
+  }
+  .type-input:focus { outline: none; border-color: var(--accent2); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HOME ══════════════════ -->
+<div class="screen active" id="home">
+  <div class="home-header">
+    <a href="index.html" class="hq-link" title="Back to Kitchen Ninja HQ">🏠 HQ</a>
+    <div class="home-title">THAI READ & WRITE<br>SURVIVAL</div>
+    <div class="home-subtitle">Read it out loud. Write it down. One station at a time.</div>
+  </div>
+
+  <div class="xp-panel">
+    <div class="xp-top">
+      <div class="level-badge">🏅 <span id="levelLabel">Level 1</span></div>
+      <div class="xp-count"><span id="xpCount">0</span> XP</div>
+    </div>
+    <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBarFill"></div></div>
+  </div>
+
+  <div class="missions-label">Pick a station</div>
+  <div class="rooms-list" id="rooms-list"></div>
+
+  <footer class="hub-note">
+    Every card below except the Prosody Pattern Lab link is still a placeholder — tell me which station to build out first and I'll fill it in with real drills. World 3 (poetry/prose pattern-ID) already lives in the Literature Kitchen, so this app links out to it instead of duplicating it.
+  </footer>
+</div>
+
+<!-- ══════════════════ WORLD DETAIL (template, filled by JS) ══════════════════ -->
+<div class="screen" id="world">
+  <div class="world-header">
+    <div class="back-link" onclick="showHome()">← Back</div>
+    <div class="world-title" id="worldTitle"></div>
+    <div class="world-sub" id="worldSub"></div>
+  </div>
+  <div class="module-list" id="moduleList"></div>
+</div>
+
+<!-- ══════════════════ PRACTICE / CAROUSEL (Reading Aloud items) ══════════════════ -->
+<div class="screen" id="practice">
+  <div class="practice-header">
+    <div class="back-link" onclick="closePractice()">← Back</div>
+    <div class="world-title" id="practiceTitle" style="font-size:1.2rem;"></div>
+    <div class="practice-progress" id="practiceProgress"></div>
+  </div>
+  <div class="practice-body" id="practiceBody"></div>
+</div>
+
+<script>
+/* ══════════════════ DATA ══════════════════ */
+const ROOMS = [
+  {
+    key: 'w1', dm: '0', emoji: '🔤',
+    title: 'Letter & Word Lab', titleEn: 'World 1 — Confusable Letters & Vowels',
+    desc: 'See it, remember it, read it, type it, use it.',
+    kind: 'world',
+    modules: [
+      { t: 'Level 1 — Look-Alike Letters', d: 'ด / ต / ค / ศ / ษ / ส / ข / ช — spot-the-match, trace, listen-and-choose, tap the leading consonant in a word.', verbs: ['look','tap','trace','listen'] },
+      { t: 'Level 2 — Confusing Vowels', d: 'เ- แ- โ- ใ- ไ- ะ า ำ เ-า เ-ีย เ-ือ. Drag word-part pieces to build เ+ก+า = เกา.', verbs: ['match','tap'] },
+      { t: 'Level 3 — Hard Word Memory', d: '5 modes per word: Match (word↔meaning), Sound (audio→word), Missing Letter, Trace, Type.', verbs: ['listen','trace','type'] },
+    ]
+  },
+  {
+    key: 'w2', dm: '1', emoji: '🎤',
+    title: 'Reading Aloud Academy', titleEn: 'World 2 — Accuracy · Pause · Rhythm · Expression',
+    desc: 'The heart of the app — graduated word → phrase → sentence → passage practice.',
+    kind: 'world',
+    modules: [
+      { t: 'R1 — Words', d: 'ดวงดาว ทะเล อากาศ ธรรมชาติ — hear it, then read it aloud.', verbs: ['listen','read'] },
+      { t: 'R2 — Phrases', d: 'Short two/three-word phrases, same listen-then-read loop.', verbs: ['listen','read'] },
+      { t: 'R3 — Short Sentences', d: 'App marks natural pause points: ในเวลากลางคืน / เราสามารถ / มองเห็นดวงดาว / บนท้องฟ้าได้ชัดเจน.', verbs: ['read','tap'] },
+      { t: 'R4 — Prose Passages', d: '3–5 line passages: listen → read-along → record → tap hard words → mark pauses → star rating.', verbs: ['listen','read','record','rate'] },
+    ]
+  },
+  {
+    key: 'w3', dm: '2', emoji: '🔬',
+    title: 'Prosody Pattern Lab', titleEn: 'Poetry & Prose Pattern-ID',
+    desc: 'Already built — lives in the Literature Kitchen. Tap to open it there.',
+    kind: 'pointer',
+    href: 'Thai_Specialty_Kitchen.html'
+  },
+  {
+    key: 'w4', dm: '3', emoji: '🧩',
+    title: 'Sentence Builder', titleEn: 'World 4 — Word → Phrase → Sentence',
+    desc: 'The bridge before essay-writing.',
+    kind: 'world',
+    modules: [
+      { t: 'S1 — Arrange', d: 'Drag scattered words (ดวงดาว / นักเรียน / ศึกษา / เรื่อง) into a correct sentence.', verbs: ['match'] },
+      { t: 'S2 — Sentence Expansion', d: 'นกบิน → นกตัวเล็กบิน → ...อยู่บนท้องฟ้า → ...อย่างอิสระในยามเช้า. Watch a sentence grow.', verbs: ['look','type'] },
+      { t: 'Sentence Pattern Cards', d: 'Reusable starter templates: Opinion, Explanation, Comparison, Cause→Effect, Example, Conclusion.', verbs: ['type'] },
+    ]
+  },
+  {
+    key: 'w5', dm: '4', emoji: '📝',
+    title: 'Writing Lab', titleEn: 'World 5 — คำนำ → เนื้อหา → สรุป',
+    desc: 'A writing ladder, not a blank page.',
+    kind: 'world',
+    modules: [
+      { t: 'W1 — Fill the Blank', d: 'วันนี้ฉันรู้สึก ______ เพราะ ______', verbs: ['type'] },
+      { t: 'W2 — Sentence Starters', d: 'One topic, 3 guided starter lines to complete.', verbs: ['type'] },
+      { t: 'W3 — 3-Sentence Paragraph', d: 'Topic + starter + "ประการแรก / นอกจากนี้" connectors.', verbs: ['type'] },
+      { t: 'W4 — Paragraph Builder', d: 'Choose-the-block flow: Topic sentence → Reason 1 → Example → Reason 2 → Conclusion.', verbs: ['match','type'] },
+      { t: 'W5 — Essay / Genre Builder', d: 'Full scaffolded structures for เรียงความ, จดหมาย, อีเมล, เล่าเรื่อง, ข่าว, ประกาศ, บรรยาย, อธิบาย, แสดงความคิดเห็น, รายงาน.', verbs: ['type'] },
+    ]
+  },
+];
+
+/* ══════════════════ READING ALOUD CONTENT (World 2) ══════════════════ */
+const R_LEVELS = [
+  {
+    key: 'r1', emoji: '🔤', title: 'R1 — Words', desc: 'Hear it, then read it aloud.', xpEach: 20,
+    items: [
+      { th: 'ดวงดาว', en: 'star / stars', icon: '⭐' },
+      { th: 'ทะเล', en: 'sea', icon: '🌊' },
+      { th: 'อากาศ', en: 'air / weather', icon: '🌤️' },
+      { th: 'ธรรมชาติ', en: 'nature', icon: '🌿' },
+      { th: 'แม่น้ำ', en: 'river', icon: '🏞️' },
+      { th: 'ภูเขา', en: 'mountain', icon: '⛰️' },
+      { th: 'ท้องฟ้า', en: 'sky', icon: '☁️' },
+      { th: 'มหาสมุทร', en: 'ocean', icon: '🐳' },
+    ]
+  },
+  {
+    key: 'r2', emoji: '🧩', title: 'R2 — Phrases', desc: 'Same listen-then-read loop, one step up.', xpEach: 20,
+    items: [
+      { th: 'ดวงดาวบนท้องฟ้า', en: 'the stars in the sky', icon: '🌌' },
+      { th: 'การอนุรักษ์สิ่งแวดล้อม', en: 'environmental conservation', icon: '♻️' },
+      { th: 'สัตว์ในทะเล', en: 'animals in the sea', icon: '🐠' },
+      { th: 'ลมพัดเย็นสบาย', en: 'a cool, pleasant breeze', icon: '🍃' },
+      { th: 'ต้นไม้ใหญ่ในป่า', en: 'a big tree in the forest', icon: '🌳' },
+      { th: 'ฝนตกหนักมาก', en: 'it is raining very heavily', icon: '🌧️' },
+    ]
+  },
+  {
+    key: 'r3', emoji: '⏸️', title: 'R3 — Short Sentences', desc: 'Learn where to pause — chunk by chunk.', xpEach: 30,
+    items: [
+      { chunks: ['ตอนกลางคืน', 'เรามองเห็นดาวบนฟ้า'], en: 'At night, we see stars in the sky.', icon: '🌌' },
+      { chunks: ['ปลาหลายชนิด', 'อยู่ในทะเล'], en: 'Many kinds of fish live in the sea.', icon: '🐟' },
+      { chunks: ['เมื่อฝนตก', 'น้ำไหลลงแม่น้ำ'], en: 'When it rains, water flows into the river.', icon: '🌧️' },
+      { chunks: ['นักวิทยาศาสตร์', 'เจอดาวดวงใหม่'], en: 'Scientists found a new star.', icon: '🔭' },
+      { chunks: ['เรือไททานิค', 'จมลง', 'ในทะเล'], en: 'The Titanic sank in the sea.', icon: '🚢' },
+    ]
+  },
+  {
+    key: 'r4', emoji: '📖', title: 'R4 — Prose Passages', desc: 'Listen, read along, record, and rate yourself.', xpEach: 60,
+    items: [
+      {
+        title: 'ดวงดาวตอนกลางคืน (Stars at Night)',
+        icon: '🌠',
+        text: 'ตอนกลางคืน ท้องฟ้ามืดและมีดาวเต็มไปหมด ดาวบางดวงอยู่ไกลมาก แสงของมันเดินทางมาถึงโลกช้ามาก บางคนชอบดูดาวตอนกลางคืน',
+        hard: [{ th: 'เดินทาง', en: 'to travel' }],
+        pauses: 'ตอนกลางคืน / ท้องฟ้ามืด / และมีดาวเต็มไปหมด // ดาวบางดวง / อยู่ไกลมาก // แสงของมัน / เดินทางมาถึงโลก / ช้ามาก // บางคน / ชอบดูดาว / ตอนกลางคืน'
+      },
+      {
+        title: 'ทะเลสำคัญอย่างไร (Why the Sea Matters)',
+        icon: '🌊',
+        text: 'ทะเลกว้างใหญ่มาก มีปลาและสัตว์ทะเลอาศัยอยู่มากมาย ทะเลช่วยให้อากาศเย็นสบาย ถ้าไม่มีทะเล โลกของเราจะร้อนมาก',
+        hard: [{ th: 'อาศัยอยู่', en: 'to live / dwell' }],
+        pauses: 'ทะเล / กว้างใหญ่มาก // มีปลา / และสัตว์ทะเล / อาศัยอยู่มากมาย // ทะเล / ช่วยให้อากาศ / เย็นสบาย // ถ้าไม่มีทะเล / โลกของเรา / จะร้อนมาก'
+      },
+      {
+        title: 'เรือไททานิค (The Titanic)',
+        icon: '🚢',
+        text: 'เรือไททานิคเป็นเรือลำใหญ่มาก มันแล่นออกจากท่าเรือเมื่อนานมาแล้ว ระหว่างทางเรือชนก้อนน้ำแข็งใหญ่ แล้วเรือก็จมลงในทะเล',
+        hard: [{ th: 'ท่าเรือ', en: 'harbor / port' }],
+        pauses: 'เรือไททานิค / เป็นเรือลำใหญ่มาก // มันแล่นออกจากท่าเรือ / เมื่อนานมาแล้ว // ระหว่างทาง / เรือชนก้อนน้ำแข็งใหญ่ // แล้วเรือก็ / จมลงในทะเล'
+      },
+    ]
+  },
+];
+
+/* ══════════════════ LETTER & WORD LAB CONTENT (World 1) ══════════════════ */
+const LETTER_GROUPS = [
+  {
+    letters: [
+      { ch: 'ด', name: 'ดอ เด็ก', example: 'เด็ก', exampleMeaning: 'child' },
+      { ch: 'ต', name: 'ตอ เต่า', example: 'เต่า', exampleMeaning: 'turtle' },
+    ],
+    word: { th: 'เด็ก', en: 'child', correct: 'ด', options: ['ด', 'ต', 'ค'] },
+  },
+  {
+    letters: [
+      { ch: 'ค', name: 'คอ ควาย', example: 'ควาย', exampleMeaning: 'buffalo' },
+      { ch: 'ข', name: 'ขอ ไข่', example: 'ไข่', exampleMeaning: 'egg' },
+      { ch: 'ช', name: 'ชอ ช้าง', example: 'ช้าง', exampleMeaning: 'elephant' },
+    ],
+    word: { th: 'ช้าง', en: 'elephant', correct: 'ช', options: ['ค', 'ข', 'ช'] },
+  },
+  {
+    letters: [
+      { ch: 'ศ', name: 'สอ ศาลา', example: 'ศาลา', exampleMeaning: 'pavilion' },
+      { ch: 'ษ', name: 'สอ รือสี', example: 'ฤๅษี', exampleMeaning: 'hermit' },
+      { ch: 'ส', name: 'สอ เสือ', example: 'เสือ', exampleMeaning: 'tiger' },
+    ],
+    word: { th: 'เสือ', en: 'tiger', correct: 'ส', options: ['ศ', 'ษ', 'ส'] },
+  },
+];
+const ALL_GROUP_LETTERS = LETTER_GROUPS.flatMap(g => g.letters.map(l => l.ch));
+const STAGE_ORDER = ['look', 'trace', 'write', 'word'];
+const STAGE_META = {
+  look:  { emoji: '🖼️', label: 'Look — find the match' },
+  trace: { emoji: '✍️', label: 'Trace it' },
+  write: { emoji: '📝', label: 'Write from memory' },
+  word:  { emoji: '👆', label: 'Tap it in a word' },
+};
+
+const VOWEL_WORDS = [
+  { th: 'ปู', en: 'crab', icon: '🦀', parts: ['ป', 'ู'] },
+  { th: 'ตา', en: 'eye', icon: '👁️', parts: ['ต', 'า'] },
+  { th: 'หมา', en: 'dog', icon: '🐶', parts: ['ห', 'ม', 'า'] },
+  { th: 'แมว', en: 'cat', icon: '🐱', parts: ['แ', 'ม', 'ว'] },
+  { th: 'โต', en: 'to grow / be big', icon: '📏', parts: ['โ', 'ต'] },
+  { th: 'ใบ', en: 'leaf', icon: '🍃', parts: ['ใ', 'บ'] },
+  { th: 'ไป', en: 'to go', icon: '🚶', parts: ['ไ', 'ป'] },
+  { th: 'เตา', en: 'stove', icon: '🔥', parts: ['เ', 'ต', 'า'] },
+  { th: 'เสีย', en: 'broken / lost', icon: '💔', parts: ['เ', 'ส', 'ีย'] },
+  { th: 'เสือ', en: 'tiger', icon: '🐯', parts: ['เ', 'ส', 'ือ'] },
+];
+
+/* ══════════════════ LEVEL 3 — HARD WORD MEMORY (World 1) ══════════════════ */
+const HARD_WORDS = [
+  {
+    th: 'ประณีต', en: 'meticulous / delicate', icon: '🎨',
+    hook: 'ทำอย่างละเอียดและเรียบร้อย (done carefully and neatly)',
+    letters: ['ป', 'ร', 'ะ', 'ณ', 'ี', 'ต'],
+    blankIndex: 3, blankOptions: ['ณ', 'น', 'ญ'],
+    meaningOptions: ['meticulous / delicate', 'careless', 'extremely fast', 'very loud'],
+  },
+  {
+    th: 'อดทน', en: 'patient / to endure', icon: '💪',
+    hook: 'ทนต่อความยากลำบากโดยไม่ยอมแพ้ (enduring hardship without giving up)',
+    letters: ['อ', 'ด', 'ท', 'น'],
+    blankIndex: 1, blankOptions: ['ด', 'ต', 'ถ'],
+    meaningOptions: ['patient / to endure', 'angry', 'sleepy', 'forgetful'],
+  },
+  {
+    th: 'สังเกต', en: 'to observe / notice', icon: '🔍',
+    hook: 'มองดูอย่างตั้งใจเพื่อให้รู้รายละเอียด (looking closely to notice details)',
+    letters: ['ส', 'ั', 'ง', 'เ', 'ก', 'ต'],
+    blankIndex: 4, blankOptions: ['ก', 'ถ', 'ด'],
+    meaningOptions: ['to observe / notice', 'to forget', 'to sleep', 'to run'],
+  },
+  {
+    th: 'มุ่งมั่น', en: 'determined / dedicated', icon: '🎯',
+    hook: 'ตั้งใจทำสิ่งหนึ่งให้สำเร็จโดยไม่ท้อ (determined to finish something without giving up)',
+    letters: ['ม', 'ุ', '่', 'ง', 'ม', 'ั', '่', 'น'],
+    blankIndex: 4, blankOptions: ['ม', 'บ', 'พ'],
+    meaningOptions: ['determined / dedicated', 'lazy', 'confused', 'shy'],
+  },
+  {
+    th: 'อนุรักษ์', en: 'to conserve / preserve', icon: '🌱',
+    hook: 'รักษาสิ่งที่มีคุณค่าไว้ไม่ให้เสียหาย (protecting something valuable from harm)',
+    letters: ['อ', 'น', 'ุ', 'ร', 'ั', 'ก', 'ษ', '์'],
+    blankIndex: 3, blankOptions: ['ร', 'ล', 'ฤ'],
+    meaningOptions: ['to conserve / preserve', 'to destroy', 'to sell', 'to ignore'],
+  },
+];
+const WORD_STAGE_ORDER = ['match', 'sound', 'missing', 'trace', 'type'];
+const WORD_STAGE_META = {
+  match:   { emoji: '🧠', label: 'Match the meaning' },
+  sound:   { emoji: '🔊', label: 'Listen & choose' },
+  missing: { emoji: '🧩', label: 'Missing letter' },
+  trace:   { emoji: '✍️', label: 'Trace it' },
+  type:    { emoji: '⌨️', label: 'Type it' },
+};
+
+/* ══════════════════ STATE ══════════════════ */
+const STORE_KEY = 'thai-rw-state';
+function loadState(){
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY));
+    if(s && typeof s === 'object'){
+      s.xp = s.xp || 0;
+      s.r = s.r || { r1: {}, r2: {}, r3: {}, r4: {} };
+      s.letters = s.letters || {};
+      s.vowels = s.vowels || {};
+      s.hardWords = s.hardWords || {};
+      return s;
+    }
+  } catch(e){}
+  return { xp: 0, r: { r1: {}, r2: {}, r3: {}, r4: {} }, letters: {}, vowels: {}, hardWords: {} };
+}
+function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+let state = loadState();
+
+/* ══════════════════ TEXT-TO-SPEECH ══════════════════ */
+let thaiVoice = null, voiceChecked = false;
+function pickThaiVoice(){
+  if(!('speechSynthesis' in window)) return;
+  const voices = speechSynthesis.getVoices();
+  thaiVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('th')) || null;
+  voiceChecked = voices.length > 0;
+}
+if('speechSynthesis' in window){
+  speechSynthesis.onvoiceschanged = pickThaiVoice;
+  pickThaiVoice();
+}
+function speakThai(text, slow){
+  if(!('speechSynthesis' in window)){
+    alert('Voice playback isn\u2019t supported in this browser.');
+    return;
+  }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'th-TH';
+  if(thaiVoice) u.voice = thaiVoice;
+  u.rate = slow ? 0.65 : 0.92;
+  speechSynthesis.speak(u);
+  if(voiceChecked && !thaiVoice){
+    setTimeout(() => {
+      if(!thaiVoiceWarned){
+        thaiVoiceWarned = true;
+        console.warn('No Thai voice found on this device \u2014 check Settings > Accessibility > Spoken Content > Voices > Thai.');
+      }
+    }, 300);
+  }
+}
+let thaiVoiceWarned = false;
+
+// Speaks an array of chunks one at a time with a real silent gap between
+// them, so the pause at each "/" is an actual pause in the audio, not
+// just a printed slash. Gap length is longer at the slow rate.
+function speakThaiChunks(chunks, slow){
+  if(!('speechSynthesis' in window)){
+    alert('Voice playback isn\u2019t supported in this browser.');
+    return;
+  }
+  speechSynthesis.cancel();
+  const gapMs = slow ? 950 : 700;
+  let i = 0;
+  function playNext(){
+    if(i >= chunks.length) return;
+    const u = new SpeechSynthesisUtterance(chunks[i]);
+    u.lang = 'th-TH';
+    if(thaiVoice) u.voice = thaiVoice;
+    u.rate = slow ? 0.65 : 0.9;
+    u.onend = () => {
+      i++;
+      if(i < chunks.length) setTimeout(playNext, gapMs);
+    };
+    speechSynthesis.speak(u);
+  }
+  playNext();
+}
+
+// Plays whatever is on the current practice card, choosing chunked vs
+// single-utterance playback automatically — keeps the buttons in the
+// rendered HTML free of escaped Thai text.
+function playCurrent(slow){
+  const item = activeLevel.items[activeIndex];
+  if(activeLevel.key === 'r3'){
+    speakThaiChunks(item.chunks, slow);
+  } else if(activeLevel.key === 'r4'){
+    speakThai(item.text, slow);
+  } else {
+    speakThai(item.th, slow);
+  }
+}
+
+/* ══════════════════ RECORDING ══════════════════ */
+let mediaRecorder = null, recordedChunks = [], currentStream = null, isRecording = false;
+async function toggleRecord(btn, audioElId){
+  if(!isRecording){
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      alert('Recording isn\u2019t supported in this browser.');
+      return;
+    }
+    try {
+      currentStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch(e){
+      alert('Microphone access is needed to record. Check Settings \u203a Safari \u203a Microphone.');
+      return;
+    }
+    recordedChunks = [];
+    try {
+      mediaRecorder = new MediaRecorder(currentStream);
+    } catch(e){
+      alert('Recording isn\u2019t supported on this device.');
+      currentStream.getTracks().forEach(t => t.stop());
+      return;
+    }
+    mediaRecorder.ondataavailable = e => { if(e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+      const url = URL.createObjectURL(blob);
+      const audioEl = document.getElementById(audioElId);
+      if(audioEl){ audioEl.src = url; audioEl.style.display = 'block'; }
+      if(currentStream) currentStream.getTracks().forEach(t => t.stop());
+      currentStream = null;
+    };
+    mediaRecorder.start();
+    isRecording = true;
+    btn.textContent = '\u23f9\ufe0f Stop';
+    btn.classList.add('recording');
+  } else {
+    mediaRecorder.stop();
+    isRecording = false;
+    btn.textContent = '\ud83c\udf99\ufe0f Record';
+    btn.classList.remove('recording');
+  }
+}
+function stopAnyRecording(){
+  if(isRecording && mediaRecorder){ try { mediaRecorder.stop(); } catch(e){} isRecording = false; }
+  if(currentStream){ currentStream.getTracks().forEach(t => t.stop()); currentStream = null; }
+  speechSynthesis.cancel && speechSynthesis.cancel();
+}
+
+/* ══════════════════ RENDER ══════════════════ */
+function renderXP(){
+  document.getElementById('xpCount').textContent = state.xp;
+  document.getElementById('levelLabel').textContent = 'Level ' + (1 + Math.floor(state.xp / 500));
+  const pct = Math.min(100, ((state.xp % 500) / 500) * 100);
+  document.getElementById('xpBarFill').style.width = pct + '%';
+}
+
+function renderHome(){
+  renderXP();
+  const list = document.getElementById('rooms-list');
+  list.innerHTML = ROOMS.map(r => {
+    const tag = r.kind === 'pointer'
+      ? `<div class="room-count-tag out">opens in<br>Lit Kitchen</div>`
+      : `<div class="room-count-tag">0 / ${r.modules.length}<br>done</div>`;
+    const onclick = r.kind === 'pointer' ? `location.href='${r.href}'` : `openWorld('${r.key}')`;
+    return `
+    <div class="mission-card ${r.kind === 'pointer' ? 'pointer' : ''}" data-m="${r.dm}" onclick="${onclick}">
+      <div class="mission-emoji">${r.emoji}</div>
+      <div class="mission-text">
+        <div class="mission-title-th">${r.title}</div>
+        <div class="mission-title-en">${r.titleEn}</div>
+        <div class="room-card-desc">${r.desc}</div>
+      </div>
+      ${tag}
+    </div>`;
+  }).join('');
+}
+
+function openWorld(key){
+  const r = ROOMS.find(x => x.key === key);
+  if(!r || r.kind !== 'world') return;
+  document.getElementById('worldTitle').textContent = r.title;
+  document.getElementById('worldSub').textContent = r.titleEn + ' — ' + r.desc;
+
+  if(key === 'w2'){
+    document.getElementById('moduleList').innerHTML = R_LEVELS.map(lvl => {
+      const doneCount = Object.keys(state.r[lvl.key] || {}).length;
+      const total = lvl.items.length;
+      const pct = total ? Math.round((doneCount / total) * 100) : 0;
+      return `
+      <div class="level-card" onclick="openLevel('${lvl.key}')">
+        <div class="level-emoji">${lvl.emoji}</div>
+        <div class="level-body">
+          <div class="level-title">${lvl.title}</div>
+          <div class="level-desc">${lvl.desc}</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${pct}%"></div></div>
+        </div>
+        <div class="level-count">${doneCount}/${total}<br>done</div>
+      </div>`;
+    }).join('');
+  } else if(key === 'w1'){
+    const letterDone = LETTER_GROUPS.reduce((sum, g, gi) => sum + STAGE_ORDER.filter(s => state.letters[gi + '-' + s]).length, 0);
+    const letterTotal = LETTER_GROUPS.length * STAGE_ORDER.length;
+    const letterPct = Math.round((letterDone / letterTotal) * 100);
+    const vowelDone = Object.keys(state.vowels).length;
+    const vowelTotal = VOWEL_WORDS.length;
+    const vowelPct = Math.round((vowelDone / vowelTotal) * 100);
+    const hardDone = HARD_WORDS.reduce((sum, w, wi) => sum + WORD_STAGE_ORDER.filter(s => state.hardWords[wi + '-' + s]).length, 0);
+    const hardTotal = HARD_WORDS.length * WORD_STAGE_ORDER.length;
+    const hardPct = Math.round((hardDone / hardTotal) * 100);
+    document.getElementById('moduleList').innerHTML = `
+      <div class="level-card" onclick="openLetterLevel()">
+        <div class="level-emoji">🔤</div>
+        <div class="level-body">
+          <div class="level-title">Level 1 — Look-Alike Letters</div>
+          <div class="level-desc">ด/ต, ค/ข/ช, ศ/ษ/ส — look, trace, listen, tap it in a word.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${letterPct}%"></div></div>
+        </div>
+        <div class="level-count">${letterDone}/${letterTotal}<br>done</div>
+      </div>
+      <div class="level-card" onclick="openVowelLevel()">
+        <div class="level-emoji">🧩</div>
+        <div class="level-body">
+          <div class="level-title">Level 2 — Confusing Vowels</div>
+          <div class="level-desc">Tap the parts in order to build the word — เ + ก + า = เกา.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${vowelPct}%"></div></div>
+        </div>
+        <div class="level-count">${vowelDone}/${vowelTotal}<br>done</div>
+      </div>
+      <div class="level-card" onclick="openHardWordLevel()">
+        <div class="level-emoji">🧠</div>
+        <div class="level-body">
+          <div class="level-title">Level 3 — Hard Word Memory</div>
+          <div class="level-desc">5 modes per word: Match, Sound, Missing Letter, Trace, Type.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${hardPct}%"></div></div>
+        </div>
+        <div class="level-count">${hardDone}/${hardTotal}<br>done</div>
+      </div>`;
+  } else {
+    document.getElementById('moduleList').innerHTML = r.modules.map((m, i) => `
+      <div class="module-card">
+        <div class="module-idx">${i+1}</div>
+        <div class="module-body">
+          <div class="module-title">${m.t} <span class="soon-tag">soon</span></div>
+          <div class="module-desc">${m.d}</div>
+          <div class="verb-row">${m.verbs.map(v => `<span class="verb-chip">${v}</span>`).join('')}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  document.getElementById('home').classList.remove('active');
+  document.getElementById('world').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showHome(){
+  stopAnyRecording();
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.remove('active');
+  document.getElementById('home').classList.add('active');
+  renderHome();
+  window.scrollTo(0,0);
+}
+
+/* ══════════════════ READING-ALOUD PRACTICE ENGINE ══════════════════ */
+let activeLevel = null, activeIndex = 0, sourceWorld = 'w2';
+
+function openLevel(levelKey){
+  activeLevel = R_LEVELS.find(l => l.key === levelKey);
+  if(!activeLevel) return;
+  sourceWorld = 'w2';
+  activeIndex = 0;
+  document.getElementById('practiceTitle').textContent = activeLevel.emoji + ' ' + activeLevel.title;
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderPracticeItem();
+  window.scrollTo(0,0);
+}
+
+function closePractice(){
+  stopAnyRecording();
+  document.getElementById('practice').classList.remove('active');
+  document.getElementById('world').classList.add('active');
+  openWorld(sourceWorld || 'w2');
+}
+
+function itemDone(idx){ return !!(state.r[activeLevel.key] || {})[idx]; }
+
+function markDone(idx, rating){
+  const bucket = state.r[activeLevel.key] || (state.r[activeLevel.key] = {});
+  const alreadyDone = !!bucket[idx];
+  bucket[idx] = rating || true;
+  if(!alreadyDone) state.xp += activeLevel.xpEach;
+  saveState();
+}
+
+function renderPracticeItem(){
+  stopAnyRecording();
+  const total = activeLevel.items.length;
+  document.getElementById('practiceProgress').textContent = `Card ${activeIndex + 1} of ${total}`;
+  const item = activeLevel.items[activeIndex];
+  const body = document.getElementById('practiceBody');
+  const done = itemDone(activeIndex);
+
+  if(activeLevel.key === 'r1' || activeLevel.key === 'r2'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${item.icon || ''}</div>
+        <div class="practice-th">${item.th}</div>
+        <div class="practice-en">${item.en}</div>
+        <div class="btn-row">
+          <button class="pill-btn primary" onclick="playCurrent(false)">\ud83d\udd0a Listen</button>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn" id="recBtn" onclick="toggleRecord(this, 'recAudio')">\ud83c\udf99\ufe0f Record</button>
+        </div>
+        <audio class="recorded-audio" id="recAudio" controls></audio>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markDone(${activeIndex}, true); renderPracticeItem();">
+            ${done ? '\u2705 Marked read' : '\u2705 I read it!'}
+          </button>
+        </div>
+      </div>
+      ${practiceNavHtml(total)}
+    `;
+  } else if(activeLevel.key === 'r3'){
+    const chunksHtml = item.chunks.map((c, i) =>
+      `<span class="pause-chunk">${c}</span>${i < item.chunks.length - 1 ? '<span class="pause-slash" id="slash">/</span>' : ''}`
+    ).join('');
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${item.icon || ''}</div>
+        <div class="pause-line" id="pauseLine">${chunksHtml}</div>
+        <div class="practice-en">${item.en}</div>
+        <div class="btn-row">
+          <button class="pill-btn primary" onclick="playCurrent(false)">\ud83d\udd0a Listen</button>
+          <button class="pill-btn" onclick="playCurrent(true)">\ud83d\udc22 Slow</button>
+          <button class="pill-btn" onclick="togglePauseMarks()">\u23f8\ufe0f Hide/Show pauses</button>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn" id="recBtn" onclick="toggleRecord(this, 'recAudio')">\ud83c\udf99\ufe0f Record</button>
+        </div>
+        <audio class="recorded-audio" id="recAudio" controls></audio>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markDone(${activeIndex}, true); renderPracticeItem();">
+            ${done ? '\u2705 Marked read' : '\u2705 I read it!'}
+          </button>
+        </div>
+      </div>
+      ${practiceNavHtml(total)}
+    `;
+  } else if(activeLevel.key === 'r4'){
+    const hardHtml = item.hard.map((h, i) =>
+      `<span class="hard-word-chip" id="hw-${i}" onclick="revealHardWord(${i}, '${escJs(h.en)}')">${h.th}</span>`
+    ).join('');
+    const stars = (typeof done === 'number') ? done : 0;
+    const starsHtml = [1,2,3,4,5].map(n =>
+      `<button class="star-btn ${n <= stars ? 'filled' : ''}" onclick="rateItem(${n})">\u2b50</button>`
+    ).join('');
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${item.icon || ''}</div>
+        <div class="passage-title">${item.title}</div>
+        <div class="passage-text" id="passageText">${item.text}</div>
+        <div class="btn-row">
+          <button class="pill-btn primary" onclick="playCurrent(false)">\ud83d\udd0a Listen</button>
+          <button class="pill-btn" onclick="playCurrent(true)">\ud83d\udc22 Slow</button>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn" onclick="togglePassagePauses(this)">\u23f8\ufe0f Show pause marks</button>
+        </div>
+        <div class="hard-word-row">${hardHtml}</div>
+        <div class="btn-row">
+          <button class="pill-btn" id="recBtn" onclick="toggleRecord(this, 'recAudio')">\ud83c\udf99\ufe0f Record myself reading</button>
+        </div>
+        <audio class="recorded-audio" id="recAudio" controls></audio>
+        <div class="practice-en" style="margin-top:14px;">How did that feel? Rate yourself:</div>
+        <div class="star-row">${starsHtml}</div>
+      </div>
+      ${practiceNavHtml(total)}
+    `;
+  }
+}
+
+function practiceNavHtml(total){
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${activeIndex === 0 ? 'visibility:hidden;' : ''}" onclick="prevItem()">\u2190 Prev</button>
+      <button class="pill-btn" style="${activeIndex >= total - 1 ? 'visibility:hidden;' : ''}" onclick="nextItem()">Next \u2192</button>
+    </div>`;
+}
+
+function prevItem(){ if(activeIndex > 0){ activeIndex--; renderPracticeItem(); window.scrollTo(0,0); } }
+function nextItem(){ if(activeIndex < activeLevel.items.length - 1){ activeIndex++; renderPracticeItem(); window.scrollTo(0,0); } }
+
+function togglePauseMarks(){
+  document.querySelectorAll('#pauseLine .pause-slash').forEach(el => el.classList.toggle('hidden-slash'));
+}
+
+function togglePassagePauses(btn){
+  const el = document.getElementById('passageText');
+  const item = activeLevel.items[activeIndex];
+  const showingPauses = btn.dataset.on === '1';
+  if(showingPauses){
+    el.textContent = item.text;
+    btn.textContent = '\u23f8\ufe0f Show pause marks';
+    btn.dataset.on = '0';
+  } else {
+    el.textContent = item.pauses;
+    btn.textContent = '\u23f8\ufe0f Hide pause marks';
+    btn.dataset.on = '1';
+  }
+}
+
+function revealHardWord(i, en){
+  const el = document.getElementById('hw-' + i);
+  if(!el) return;
+  if(el.classList.contains('revealed')){
+    el.textContent = activeLevel.items[activeIndex].hard[i].th;
+    el.classList.remove('revealed');
+  } else {
+    el.textContent = en;
+    el.classList.add('revealed');
+  }
+}
+
+function rateItem(n){
+  markDone(activeIndex, n);
+  renderPracticeItem();
+}
+
+function escJs(s){ return String(s).replace(/'/g, "\\'"); }
+
+/* ══════════════════ LEVEL 1 — LOOK-ALIKE LETTERS ENGINE ══════════════════ */
+let activeGroupIdx = 0, activeStageIdx = 0;
+
+function openLetterLevel(){
+  sourceWorld = 'w1';
+  activeGroupIdx = 0;
+  activeStageIdx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83d\udd24 Look-Alike Letters';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderLetterStage();
+  window.scrollTo(0,0);
+}
+
+function letterStageKey(){ return activeGroupIdx + '-' + STAGE_ORDER[activeStageIdx]; }
+function markLetterStageDone(){
+  const key = letterStageKey();
+  if(!state.letters[key]){ state.letters[key] = true; state.xp += 25; saveState(); }
+}
+
+function renderLetterStage(){
+  stopAnyRecording();
+  const group = LETTER_GROUPS[activeGroupIdx];
+  const stage = STAGE_ORDER[activeStageIdx];
+  const totalStages = LETTER_GROUPS.length * STAGE_ORDER.length;
+  const stepNum = activeGroupIdx * STAGE_ORDER.length + activeStageIdx + 1;
+  document.getElementById('practiceProgress').textContent =
+    `Group ${activeGroupIdx + 1} of ${LETTER_GROUPS.length} \u2014 ${STAGE_META[stage].emoji} ${STAGE_META[stage].label} (${stepNum}/${totalStages})`;
+
+  const body = document.getElementById('practiceBody');
+  const done = !!state.letters[letterStageKey()];
+
+  if(stage === 'look'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="practice-en">Tap each letter to hear it, then look closely at how they differ.</div>
+        <div class="letters-row">
+          ${group.letters.map((l, i) => `
+            <div class="letter-tile" onclick="speakThai('${l.name}', false)">
+              <div class="ch">${l.ch}</div>
+              <div class="nm">${l.name}</div>
+              <div class="ex">${l.example} \u2014 ${l.exampleMeaning}</div>
+            </div>`).join('')}
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markLetterStageDone(); renderLetterStage();">
+            ${done ? '\u2705 Got it' : '\u2705 I see the difference!'}
+          </button>
+        </div>
+      </div>
+      ${letterNavHtml()}
+    `;
+  } else if(stage === 'trace'){
+    const traceLetter = group.letters[0];
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="practice-en">Trace the letter with your finger or Apple Pencil.</div>
+        <div class="trace-canvas-wrap">
+          <canvas id="traceCanvas" class="trace-canvas" width="300" height="300"></canvas>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn" onclick="speakThai('${traceLetter.name}', false)">\ud83d\udd0a Hear it</button>
+          <button class="pill-btn" onclick="clearTraceCanvas()">\ud83e\uddf9 Clear</button>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" id="traceDoneBtn" onclick="confirmTraceDone(this, 'trace')">
+            ${done ? '\u2705 Traced' : '\u2705 Done tracing!'}
+          </button>
+        </div>
+      </div>
+      ${letterNavHtml()}
+    `;
+    setTimeout(() => { setupTraceCanvas(traceLetter.ch); if(done) stampApprovalOnCanvas(); }, 0);
+  } else if(stage === 'write'){
+    const traceLetter = group.letters[0];
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="practice-en">Now write it from memory \u2014 no guide this time!</div>
+        <div class="trace-canvas-wrap">
+          <canvas id="traceCanvas" class="trace-canvas" width="300" height="300"></canvas>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn" onclick="revealWriteGuide('${traceLetter.ch}')">\ud83d\udc41\ufe0f Peek</button>
+          <button class="pill-btn" onclick="clearTraceCanvas()">\ud83e\uddf9 Clear</button>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" id="traceDoneBtn" onclick="confirmTraceDone(this, 'write')">
+            ${done ? '\u2705 Written' : '\u2705 Done writing!'}
+          </button>
+        </div>
+      </div>
+      ${letterNavHtml()}
+    `;
+    setTimeout(() => { setupTraceCanvas(traceLetter.ch, false); if(done) stampApprovalOnCanvas(); }, 0);
+  } else if(stage === 'word'){
+    const w = group.word;
+    const opts = shuffleArr(w.options);
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="practice-en">Which letter does this word start with?</div>
+        <div class="word-display">${w.th}</div>
+        <div class="practice-en">${w.en}</div>
+        <div class="btn-row">
+          <button class="pill-btn" onclick="speakThai('${w.th}', false)">\ud83d\udd0a Listen</button>
+        </div>
+        <div class="options-grid">
+          ${opts.map(ch => `<button class="option-btn" onclick="checkLetterAnswer(this, '${ch}', '${w.correct}')">${ch}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+      </div>
+      ${letterNavHtml()}
+    `;
+  }
+}
+
+function checkLetterAnswer(btn, chosen, correct){
+  const feedback = document.getElementById('quizFeedback');
+  if(chosen === correct){
+    btn.classList.add('correct');
+    if(feedback) feedback.textContent = '\u2705 Correct!';
+    markLetterStageDone();
+    document.querySelectorAll('.option-btn').forEach(b => b.onclick = null);
+  } else {
+    btn.classList.add('wrong');
+    if(feedback) feedback.textContent = 'Not quite \u2014 try another one!';
+    setTimeout(() => btn.classList.remove('wrong'), 500);
+  }
+}
+
+function letterNavHtml(){
+  const isFirst = activeGroupIdx === 0 && activeStageIdx === 0;
+  const isLast = activeGroupIdx === LETTER_GROUPS.length - 1 && activeStageIdx === STAGE_ORDER.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevLetterStage()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextLetterStage()">Next \u2192</button>
+    </div>`;
+}
+function prevLetterStage(){
+  if(activeStageIdx > 0){ activeStageIdx--; }
+  else if(activeGroupIdx > 0){ activeGroupIdx--; activeStageIdx = STAGE_ORDER.length - 1; }
+  else return;
+  renderLetterStage(); window.scrollTo(0,0);
+}
+function nextLetterStage(){
+  if(activeStageIdx < STAGE_ORDER.length - 1){ activeStageIdx++; }
+  else if(activeGroupIdx < LETTER_GROUPS.length - 1){ activeGroupIdx++; activeStageIdx = 0; }
+  else return;
+  renderLetterStage(); window.scrollTo(0,0);
+}
+
+function shuffleArr(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ── Canvas tracing (finger / Apple Pencil) ── */
+let traceCtx = null, traceDrawing = false;
+let currentTraceGuide = { text: '', fontSize: 230, showGuide: true };
+
+function setupTraceCanvas(text, showGuide, fontSize){
+  const canvas = document.getElementById('traceCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  traceCtx = ctx;
+  currentTraceGuide = { text, showGuide: showGuide !== false, fontSize: fontSize || 230 };
+  drawTraceGuide(ctx, text, currentTraceGuide.showGuide, currentTraceGuide.fontSize);
+  const pos = e => {
+    const rect = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: (t.clientX - rect.left) * (canvas.width / rect.width), y: (t.clientY - rect.top) * (canvas.height / rect.height) };
+  };
+  const start = e => { e.preventDefault(); traceDrawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+  const move = e => {
+    if(!traceDrawing) return;
+    e.preventDefault();
+    const p = pos(e);
+    ctx.strokeStyle = '#facc15';
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  };
+  const end = e => { traceDrawing = false; };
+  canvas.onpointerdown = start;
+  canvas.onpointermove = move;
+  canvas.onpointerup = end;
+  canvas.onpointerleave = end;
+  canvas.ontouchstart = start;
+  canvas.ontouchmove = move;
+  canvas.ontouchend = end;
+}
+function drawTraceGuide(ctx, text, showGuide, fontSize){
+  const w = ctx.canvas.width, h = ctx.canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#32211a';
+  ctx.fillRect(0, 0, w, h);
+  if(showGuide !== false){
+    ctx.fillStyle = 'rgba(251,238,224,0.22)';
+    ctx.font = `800 ${fontSize || 230}px Sarabun, sans-serif`;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    const m = ctx.measureText(text);
+    // Center using the glyph's *actual* drawn pixels, not generic font
+    // metrics — Thai glyphs sit unevenly in their em-box, so textAlign
+    // 'center'/'middle' alone leaves them looking off-center.
+    const hasBox = typeof m.actualBoundingBoxLeft === 'number' && (m.actualBoundingBoxLeft || m.actualBoundingBoxRight);
+    if(hasBox){
+      const textW = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+      const textH = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+      const x = (w - textW) / 2 + m.actualBoundingBoxLeft;
+      const y = (h - textH) / 2 + m.actualBoundingBoxAscent;
+      ctx.fillText(text, x, y);
+    } else {
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, w / 2, h / 2);
+    }
+  }
+}
+function clearTraceCanvas(){
+  if(traceCtx) drawTraceGuide(traceCtx, currentTraceGuide.text, currentTraceGuide.showGuide, currentTraceGuide.fontSize);
+}
+function revealWriteGuide(letter){
+  if(!traceCtx) return;
+  drawTraceGuide(traceCtx, letter, true, currentTraceGuide.fontSize);
+  setTimeout(() => { if(traceCtx) drawTraceGuide(traceCtx, letter, false, currentTraceGuide.fontSize); }, 900);
+}
+
+// Estimates a font size so a multi-character word still fits the canvas.
+function wordFontSize(word){ return Math.max(46, Math.floor(340 / word.length)); }
+
+// Confirms a trace/write stage WITHOUT wiping the canvas — stamps an
+// approval badge over the drawing so the child sees clear proof they
+// finished, instead of the drawing just disappearing on re-render.
+function confirmTraceDone(btn, kind){
+  markLetterStageDone();
+  stampApprovalOnCanvas();
+  btn.textContent = kind === 'write' ? '\u2705 Written' : '\u2705 Traced';
+  btn.classList.remove('primary');
+  btn.classList.add('toggled');
+}
+function stampApprovalOnCanvas(){
+  if(!traceCtx) return;
+  const ctx = traceCtx, w = ctx.canvas.width;
+  const cx = w - 44, cy = 44, r = 30;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#16a34a';
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#0d3d1f';
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#ffffff';
+  ctx.moveTo(cx - 13, cy + 1);
+  ctx.lineTo(cx - 4, cy + 11);
+  ctx.lineTo(cx + 15, cy - 13);
+  ctx.stroke();
+}
+
+/* ══════════════════ LEVEL 2 — VOWEL WORD BUILDER ENGINE ══════════════════ */
+let activeVowelIdx = 0, vowelAssembly = [], vowelUsedFlags = [];
+
+function openVowelLevel(){
+  sourceWorld = 'w1';
+  activeVowelIdx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83e\udde9 Confusing Vowels';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderVowelPuzzle();
+  window.scrollTo(0,0);
+}
+
+function renderVowelPuzzle(){
+  stopAnyRecording();
+  const w = VOWEL_WORDS[activeVowelIdx];
+  document.getElementById('practiceProgress').textContent = `Word ${activeVowelIdx + 1} of ${VOWEL_WORDS.length}`;
+  const done = !!state.vowels[activeVowelIdx];
+  vowelAssembly = [];
+  vowelUsedFlags = w.parts.map(() => false);
+  const shuffledIdx = shuffleArr(w.parts.map((_, i) => i));
+
+  const body = document.getElementById('practiceBody');
+  body.innerHTML = `
+    <div class="practice-card">
+      <div class="item-icon">${w.icon}</div>
+      <div class="practice-en">Build the word: <b style="color:var(--accent2)">${w.en}</b></div>
+      <div class="assembly-box" id="assemblyBox">&nbsp;</div>
+      <div class="chip-row" id="chipRow">
+        ${shuffledIdx.map(i => `<button class="part-chip" id="chip-${i}" onclick="tapVowelPart(${i})">${w.parts[i]}</button>`).join('')}
+      </div>
+      <div class="btn-row">
+        <button class="pill-btn" onclick="clearVowelAssembly()">\ud83e\uddf9 Clear</button>
+        <button class="pill-btn" onclick="speakThai('${w.th}', false)">\ud83d\udd0a Listen</button>
+      </div>
+      <div class="quiz-feedback" id="vowelFeedback">${done ? '\u2705 Solved before \u2014 build it again for practice!' : ''}</div>
+    </div>
+    ${vowelNavHtml()}
+  `;
+}
+
+function tapVowelPart(i){
+  const w = VOWEL_WORDS[activeVowelIdx];
+  if(vowelUsedFlags[i]) return;
+  vowelUsedFlags[i] = true;
+  vowelAssembly.push(w.parts[i]);
+  const chip = document.getElementById('chip-' + i);
+  if(chip) chip.classList.add('used');
+  document.getElementById('assemblyBox').textContent = vowelAssembly.join('');
+  if(vowelAssembly.length === w.parts.length){
+    const built = vowelAssembly.join('');
+    const feedback = document.getElementById('vowelFeedback');
+    if(built === w.th){
+      feedback.innerHTML = `\u2705 Correct! ${w.parts.join(' + ')} = ${w.th}`;
+      if(!state.vowels[activeVowelIdx]){ state.vowels[activeVowelIdx] = true; state.xp += 25; saveState(); }
+    } else {
+      feedback.textContent = `Not quite \u2014 that spells "${built}". Tap Clear and try again!`;
+    }
+  }
+}
+function clearVowelAssembly(){ renderVowelPuzzle(); }
+
+function vowelNavHtml(){
+  const isFirst = activeVowelIdx === 0;
+  const isLast = activeVowelIdx === VOWEL_WORDS.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevVowel()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextVowel()">Next \u2192</button>
+    </div>`;
+}
+function prevVowel(){ if(activeVowelIdx > 0){ activeVowelIdx--; renderVowelPuzzle(); window.scrollTo(0,0); } }
+function nextVowel(){ if(activeVowelIdx < VOWEL_WORDS.length - 1){ activeVowelIdx++; renderVowelPuzzle(); window.scrollTo(0,0); } }
+
+/* ══════════════════ LEVEL 3 — HARD WORD MEMORY ENGINE ══════════════════ */
+let activeWordIdx = 0, activeWordStageIdx = 0;
+
+function openHardWordLevel(){
+  sourceWorld = 'w1';
+  activeWordIdx = 0;
+  activeWordStageIdx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83e\udde0 Hard Word Memory';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderHardWordStage();
+  window.scrollTo(0,0);
+}
+
+function hardWordStageKey(){ return activeWordIdx + '-' + WORD_STAGE_ORDER[activeWordStageIdx]; }
+function markHardWordStageDone(){
+  const key = hardWordStageKey();
+  if(!state.hardWords[key]){ state.hardWords[key] = true; state.xp += 20; saveState(); }
+}
+
+function renderHardWordStage(){
+  stopAnyRecording();
+  const word = HARD_WORDS[activeWordIdx];
+  const stage = WORD_STAGE_ORDER[activeWordStageIdx];
+  const totalStages = HARD_WORDS.length * WORD_STAGE_ORDER.length;
+  const stepNum = activeWordIdx * WORD_STAGE_ORDER.length + activeWordStageIdx + 1;
+  document.getElementById('practiceProgress').textContent =
+    `Word ${activeWordIdx + 1} of ${HARD_WORDS.length} \u2014 ${WORD_STAGE_META[stage].emoji} ${WORD_STAGE_META[stage].label} (${stepNum}/${totalStages})`;
+
+  const body = document.getElementById('practiceBody');
+  const done = !!state.hardWords[hardWordStageKey()];
+
+  if(stage === 'match'){
+    const opts = shuffleArr(word.meaningOptions);
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${word.icon}</div>
+        <div class="practice-th">${word.th}</div>
+        <div class="hook-text">${word.hook}</div>
+        <div class="btn-row">
+          <button class="pill-btn" onclick="speakThai('${word.th}', false)">\ud83d\udd0a Hear it</button>
+        </div>
+        <div class="meaning-options">
+          ${opts.map(m => `<button class="meaning-btn" onclick="checkMeaningAnswer(this, '${escJs(m)}', '${escJs(word.meaningOptions[0])}')">${m}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+      </div>
+      ${hardWordNavHtml()}
+    `;
+  } else if(stage === 'sound'){
+    const distractorPool = HARD_WORDS.filter((_, i) => i !== activeWordIdx).map(w => w.th);
+    const opts = shuffleArr([word.th, ...shuffleArr(distractorPool).slice(0, 3)]);
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="practice-en">Listen, then tap the word you hear.</div>
+        <div class="btn-row">
+          <button class="pill-btn primary" onclick="speakThai('${word.th}', false)">\ud83d\udd0a Play sound</button>
+        </div>
+        <div class="options-grid">
+          ${opts.map(w => `<button class="option-btn" style="font-size:1.3rem; width:auto; height:auto; padding:14px 10px;" onclick="checkLetterAnswer(this, '${escJs(w)}', '${escJs(word.th)}')">${w}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+      </div>
+      ${hardWordNavHtml()}
+    `;
+  } else if(stage === 'missing'){
+    const opts = shuffleArr(word.blankOptions);
+    const displayChars = word.letters.map((ch, i) => i === word.blankIndex ? '<span class="blank">_</span>' : ch).join('');
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${word.icon}</div>
+        <div class="hook-text">${word.hook}</div>
+        <div class="blank-word-display">${displayChars}</div>
+        <div class="btn-row">
+          <button class="pill-btn" onclick="speakThai('${word.th}', false)">\ud83d\udd0a Hear it</button>
+        </div>
+        <div class="options-grid">
+          ${opts.map(ch => `<button class="option-btn" onclick="checkLetterAnswer(this, '${ch}', '${word.letters[word.blankIndex]}')">${ch}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+      </div>
+      ${hardWordNavHtml()}
+    `;
+  } else if(stage === 'trace'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="hook-text">${word.hook}</div>
+        <div class="trace-canvas-wrap">
+          <canvas id="traceCanvas" class="trace-canvas" width="300" height="300"></canvas>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn" onclick="speakThai('${word.th}', false)">\ud83d\udd0a Hear it</button>
+          <button class="pill-btn" onclick="clearTraceCanvas()">\ud83e\uddf9 Clear</button>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" id="traceDoneBtn" onclick="confirmTraceDone(this, 'trace')">
+            ${done ? '\u2705 Traced' : '\u2705 Done tracing!'}
+          </button>
+        </div>
+      </div>
+      ${hardWordNavHtml()}
+    `;
+    setTimeout(() => { setupTraceCanvas(word.th, true, wordFontSize(word.th)); if(done) stampApprovalOnCanvas(); }, 0);
+  } else if(stage === 'type'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${word.icon}</div>
+        <div class="hook-text">${word.hook}</div>
+        <div class="practice-en">Meaning: <b style="color:var(--accent2)">${word.en}</b></div>
+        <input type="text" id="typeInput" class="type-input" placeholder="\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e04\u0e33\u0e19\u0e35\u0e49\u2026" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <div class="btn-row">
+          <button class="pill-btn primary" onclick="checkTypeAnswer('${escJs(word.th)}')">\u2705 Check</button>
+          <button class="pill-btn" onclick="revealTypeAnswer('${escJs(word.th)}')">\ud83d\udc41\ufe0f Show answer</button>
+        </div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+      </div>
+      ${hardWordNavHtml()}
+    `;
+  }
+}
+
+function checkMeaningAnswer(btn, chosen, correct){
+  const feedback = document.getElementById('quizFeedback');
+  if(chosen === correct){
+    btn.classList.add('correct');
+    if(feedback) feedback.textContent = '\u2705 Correct!';
+    markHardWordStageDone();
+    document.querySelectorAll('.meaning-btn').forEach(b => b.onclick = null);
+  } else {
+    btn.classList.add('wrong');
+    if(feedback) feedback.textContent = 'Not quite \u2014 try another one!';
+    setTimeout(() => btn.classList.remove('wrong'), 500);
+  }
+}
+
+function checkTypeAnswer(correct){
+  const input = document.getElementById('typeInput');
+  const feedback = document.getElementById('quizFeedback');
+  const val = (input.value || '').trim();
+  if(val === correct){
+    feedback.textContent = '\u2705 Correct!';
+    markHardWordStageDone();
+  } else if(val.length === 0){
+    feedback.textContent = 'Type the word using the Thai keyboard, then tap Check.';
+  } else {
+    feedback.textContent = 'Not quite \u2014 try again, or tap Show answer.';
+  }
+}
+function revealTypeAnswer(correct){
+  const input = document.getElementById('typeInput');
+  const feedback = document.getElementById('quizFeedback');
+  input.value = correct;
+  feedback.textContent = 'That\u2019s the spelling \u2014 try typing it yourself next time!';
+  markHardWordStageDone();
+}
+
+function hardWordNavHtml(){
+  const isFirst = activeWordIdx === 0 && activeWordStageIdx === 0;
+  const isLast = activeWordIdx === HARD_WORDS.length - 1 && activeWordStageIdx === WORD_STAGE_ORDER.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevHardWordStage()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextHardWordStage()">Next \u2192</button>
+    </div>`;
+}
+function prevHardWordStage(){
+  if(activeWordStageIdx > 0){ activeWordStageIdx--; }
+  else if(activeWordIdx > 0){ activeWordIdx--; activeWordStageIdx = WORD_STAGE_ORDER.length - 1; }
+  else return;
+  renderHardWordStage(); window.scrollTo(0,0);
+}
+function nextHardWordStage(){
+  if(activeWordStageIdx < WORD_STAGE_ORDER.length - 1){ activeWordStageIdx++; }
+  else if(activeWordIdx < HARD_WORDS.length - 1){ activeWordIdx++; activeWordStageIdx = 0; }
+  else return;
+  renderHardWordStage(); window.scrollTo(0,0);
+}
+
+renderHome();
+</script>
+</body>
+</html>
