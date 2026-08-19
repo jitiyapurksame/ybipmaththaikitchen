@@ -319,6 +319,93 @@
     padding: 14px; color: var(--text); margin-top: 16px;
   }
   .type-input:focus { outline: none; border-color: var(--accent2); }
+
+  /* Sentence Builder (World 4) */
+  .pattern-template { font-family: 'Sarabun', sans-serif; font-size: 1.5rem; font-weight: 800; line-height: 1.6; margin-top: 8px; }
+  .pattern-name-badge {
+    display: inline-block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--gold); background: rgba(244,180,0,0.12); border: 1px solid rgba(244,180,0,0.3);
+    border-radius: 999px; padding: 4px 12px; margin-bottom: 10px;
+  }
+  .expansion-list { text-align: left; margin-top: 12px; }
+  .expansion-stage {
+    font-family: 'Sarabun', sans-serif; font-size: 1.15rem; padding: 10px 4px; border-bottom: 1px dashed var(--border);
+    color: var(--muted);
+  }
+  .expansion-stage:last-child { border-bottom: none; }
+  .expansion-stage.current { color: var(--accent2); font-weight: 800; font-size: 1.35rem; }
+  .expansion-stage .stage-en { display: block; font-size: 0.68rem; color: var(--muted); margin-top: 3px; font-family: 'Nunito', sans-serif; }
+
+  /* Writing Lab (World 5) */
+  .write-block { text-align: left; margin-top: 16px; }
+  .write-block-label { font-size: 0.78rem; font-weight: 800; color: var(--gold); margin-bottom: 6px; }
+  .write-block-hint { font-size: 0.72rem; color: var(--muted); margin-bottom: 6px; font-style: italic; }
+  .write-block textarea.type-input { text-align: left; font-size: 1rem; height: 64px; margin-top: 0; }
+  .fixed-opener { font-family: 'Sarabun', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text); margin-top: 8px; text-align: left; }
+
+  /* S-V-O structure chart (World 4, S1 Arrange) */
+  .structure-chart { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .structure-pill {
+    font-size: 0.72rem; font-weight: 800; padding: 5px 11px; border-radius: 999px; color: #14201a;
+  }
+  .structure-arrow { color: var(--muted); font-size: 0.9rem; }
+  .part-chip.role-chip { border-width: 2px; }
+
+  /* Opinion decision-tree (Sentence Pattern Cards) */
+  .topic-chip-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+  .topic-chip {
+    font-size: 0.75rem; font-weight: 700; padding: 7px 12px; border-radius: 999px;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--muted); cursor: pointer;
+  }
+  .topic-chip.active { border-color: var(--accent2); color: var(--accent2); background: rgba(250,204,21,0.12); }
+  .situation-box {
+    font-size: 0.82rem; color: var(--text); line-height: 1.6; text-align: left; margin-top: 14px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px;
+  }
+  .stance-row { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  .stance-btn {
+    flex: 1; max-width: 160px; padding: 14px 10px; border-radius: 14px; border: 2px solid var(--border);
+    background: var(--surface2); font-size: 0.95rem; font-weight: 800; color: var(--text); cursor: pointer;
+  }
+  .stance-btn.agree.active { border-color: var(--accent); background: rgba(22,163,74,0.18); color: var(--accent); }
+  .stance-btn.disagree.active { border-color: #ef4444; background: rgba(239,68,68,0.15); color: #f87171; }
+  .phrase-chip-col { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .phrase-chip {
+    font-family: 'Sarabun', sans-serif; font-size: 0.92rem; text-align: left; padding: 10px 12px;
+    border-radius: 10px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); cursor: pointer;
+  }
+  .phrase-chip:active { transform: scale(0.98); }
+
+  /* Sentence Expansion — category-driven growth (S2) */
+  .expand-sentence-display { font-family: 'Sarabun', sans-serif; font-size: 1.5rem; font-weight: 800; line-height: 1.7; margin-top: 8px; }
+  .expand-en-display { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+  .expand-category-box { margin-top: 20px; text-align: left; }
+  .expand-category-label {
+    display: inline-block; font-size: 0.75rem; font-weight: 800; padding: 4px 11px; border-radius: 999px; color: #14201a;
+  }
+  .expand-category-desc { font-size: 0.74rem; color: var(--muted); margin: 8px 0 12px; }
+  .expand-choice-col { display: flex; flex-direction: column; gap: 8px; }
+  .expand-choice-btn {
+    font-family: 'Sarabun', sans-serif; font-size: 0.98rem; text-align: left; padding: 11px 13px;
+    border-radius: 10px; background: var(--surface2); border: 2px solid var(--border); color: var(--text); cursor: pointer;
+  }
+  .expand-choice-btn:active { transform: scale(0.98); }
+  .expand-change-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; justify-content: center; }
+  .expand-change-link {
+    font-size: 0.68rem; color: var(--muted); text-decoration: underline; cursor: pointer; background: none; border: none;
+  }
+
+  /* Color-coded blanks on Sentence Pattern Cards */
+  .tmpl-blank { padding: 0 4px; font-weight: 900; }
+  .blank-legend { text-align: left; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .blank-legend-item {
+    display: flex; align-items: baseline; gap: 8px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px;
+  }
+  .blank-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .blank-legend-text { display: flex; flex-direction: column; }
+  .blank-legend-label { font-size: 0.78rem; font-weight: 800; }
+  .blank-legend-structure { font-size: 0.68rem; color: var(--muted); margin-top: 1px; }
 </style>
 </head>
 <body>
@@ -419,7 +506,7 @@ const ROOMS = [
     modules: [
       { t: 'W1 — Fill the Blank', d: 'วันนี้ฉันรู้สึก ______ เพราะ ______', verbs: ['type'] },
       { t: 'W2 — Sentence Starters', d: 'One topic, 3 guided starter lines to complete.', verbs: ['type'] },
-      { t: 'W3 — 3-Sentence Paragraph', d: 'Topic + starter + "ประการแรก / นอกจากนี้" connectors.', verbs: ['type'] },
+      { t: 'W3 — 3-Sentence Paragraph', d: 'Topic + starter + "ประการแรก / ประการที่สอง" connectors.', verbs: ['type'] },
       { t: 'W4 — Paragraph Builder', d: 'Choose-the-block flow: Topic sentence → Reason 1 → Example → Reason 2 → Conclusion.', verbs: ['match','type'] },
       { t: 'W5 — Essay / Genre Builder', d: 'Full scaffolded structures for เรียงความ, จดหมาย, อีเมล, เล่าเรื่อง, ข่าว, ประกาศ, บรรยาย, อธิบาย, แสดงความคิดเห็น, รายงาน.', verbs: ['type'] },
     ]
@@ -592,6 +679,237 @@ const WORD_STAGE_META = {
   type:    { emoji: '⌨️', label: 'Type it' },
 };
 
+/* ══════════════════ SENTENCE BUILDER CONTENT (World 4) ══════════════════ */
+const ARRANGE_SENTENCES = [
+  { words: ['นักเรียน', 'ศึกษา', 'เรื่อง', 'ดวงดาว'], en: 'Students study about stars.', icon: '🌟' },
+  { words: ['ปลา', 'ว่ายน้ำ', 'ใน', 'ทะเล'], en: 'Fish swim in the sea.', icon: '🐟' },
+  { words: ['เรือ', 'แล่น', 'ข้าม', 'มหาสมุทร'], en: 'The ship sails across the ocean.', icon: '🚢' },
+  { words: ['ฝน', 'ตก', 'ลงมา', 'จากฟ้า'], en: 'Rain falls down from the sky.', icon: '🌧️' },
+  { words: ['นักวิทยาศาสตร์', 'ค้นพบ', 'ดาว', 'ดวงใหม่'], en: 'Scientists discover a new star.', icon: '🔭' },
+];
+// Every sentence above is exactly Subject → Verb → Object(+detail), so one
+// shared role pattern (by position in the correct order) covers them all.
+const ARRANGE_ROLE_PATTERN = ['S', 'V', 'O', 'O'];
+const ARRANGE_ROLE_META = {
+  S: { label: 'Subject \u2014 ประธาน', color: '#38bdf8' },
+  V: { label: 'Verb \u2014 กริยา', color: '#f97316' },
+  O: { label: 'Object \u2014 กรรม', color: '#16a34a' },
+};
+
+const EXPANSION_SENTENCES = [
+  {
+    icon: '🐦', subject: 'นก', subjectEn: 'A bird', verb: 'บิน', verbEn: 'flies',
+    categories: {
+      adj: [{ word: 'ตัวเล็ก', en: 'small' }, { word: 'ตัวใหญ่', en: 'big' }, { word: 'สีแดง', en: 'red' }],
+      loc: [{ word: 'อยู่บนท้องฟ้า', en: 'in the sky' }, { word: 'อยู่เหนือทะเล', en: 'over the sea' }, { word: 'อยู่รอบต้นไม้', en: 'around the tree' }],
+      mt: [{ word: 'อย่างอิสระในยามเช้า', en: 'freely in the morning' }, { word: 'อย่างรวดเร็วตอนบ่าย', en: 'quickly in the afternoon' }, { word: 'อย่างสงบยามพลบค่ำ', en: 'peacefully at dusk' }],
+    },
+  },
+  {
+    icon: '🐠', subject: 'ปลา', subjectEn: 'A fish', verb: 'ว่ายน้ำ', verbEn: 'swims',
+    categories: {
+      adj: [{ word: 'ตัวใหญ่', en: 'big' }, { word: 'ตัวเล็ก', en: 'small' }, { word: 'สีทอง', en: 'golden' }],
+      loc: [{ word: 'ในทะเล', en: 'in the sea' }, { word: 'ในแม่น้ำ', en: 'in the river' }, { word: 'ในตู้ปลา', en: 'in the fish tank' }],
+      mt: [{ word: 'อย่างรวดเร็ว', en: 'quickly' }, { word: 'อย่างช้า ๆ', en: 'slowly' }, { word: 'อย่างสนุกสนาน', en: 'playfully' }],
+    },
+  },
+  {
+    icon: '🚢', subject: 'เรือ', subjectEn: 'A ship', verb: 'แล่น', verbEn: 'sails',
+    categories: {
+      adj: [{ word: 'ลำใหญ่', en: 'big' }, { word: 'ลำเล็ก', en: 'small' }, { word: 'ลำเก่า', en: 'old' }],
+      loc: [{ word: 'ในมหาสมุทร', en: 'in the ocean' }, { word: 'ในทะเล', en: 'in the sea' }, { word: 'ข้ามแม่น้ำ', en: 'across the river' }],
+      mt: [{ word: 'อย่างช้า ๆ', en: 'slowly' }, { word: 'อย่างมั่นคง', en: 'steadily' }, { word: 'ท่ามกลางพายุ', en: 'through a storm' }],
+    },
+  },
+];
+// Order the three growth categories are offered in, with color + a plain
+// description of what each type of word does in the sentence.
+const EXPANSION_CATEGORY_ORDER = ['adj', 'loc', 'mt'];
+const EXPANSION_CATEGORY_META = {
+  adj: { label: 'Adjective', labelTh: 'คำคุณศัพท์', desc: 'Describes the noun \u2014 what kind?', color: '#a855f7' },
+  loc: { label: 'Location', labelTh: 'สถานที่', desc: 'Says where.', color: '#38bdf8' },
+  mt:  { label: 'Manner & Time', labelTh: 'ลักษณะ / เวลา', desc: 'Says how, or when.', color: '#f97316' },
+};
+
+const PATTERN_CARDS = [
+  {
+    name: 'Opinion', th: 'ฉันคิดว่า ______ เพราะ ______', en: 'State what you think, then explain why.', icon: '💡',
+    blanks: [
+      { label: 'Opinion \u2014 ความคิดเห็น', structure: 'Subject + Verb (+ Object)', color: '#38bdf8' },
+      { label: 'Reason \u2014 เหตุผล', structure: 'Clause explaining why', color: '#f97316' },
+    ],
+  },
+  {
+    name: 'Explanation', th: 'สาเหตุที่ ______ คือ ______', en: 'Explain the reason behind something.', icon: '🔬',
+    examples: [['เรือไททานิคจม', 'เรือชนภูเขาน้ำแข็ง'], ['ท้องฟ้ามืดตอนกลางคืน', 'โลกหมุนออกจากดวงอาทิตย์']],
+    blanks: [
+      { label: 'Situation \u2014 เหตุการณ์', structure: 'Noun phrase / event', color: '#38bdf8' },
+      { label: 'Cause \u2014 สาเหตุ', structure: 'Noun phrase / Clause', color: '#f97316' },
+    ],
+  },
+  {
+    name: 'Comparison', th: '______ มีความคล้ายกับ ______ ในเรื่อง ______', en: 'Compare two things and how they\u2019re alike.', icon: '⚖️',
+    examples: [['ดวงจันทร์', 'โลก', 'เป็นทรงกลม'], ['เรือไททานิค', 'เรือเดินสมุทรลำอื่น', 'ขนาดใหญ่']],
+    blanks: [
+      { label: 'Thing A \u2014 สิ่งที่ 1', structure: 'Noun', color: '#38bdf8' },
+      { label: 'Thing B \u2014 สิ่งที่ 2', structure: 'Noun', color: '#f97316' },
+      { label: 'Shared aspect \u2014 ประเด็นที่คล้ายกัน', structure: 'Noun / Adjective', color: '#a855f7' },
+    ],
+  },
+  {
+    name: 'Cause \u2192 Effect', th: 'เมื่อ ______ จึงทำให้ ______', en: 'Show how one thing leads to another.', icon: '\u27a1\ufe0f',
+    examples: [['ฝนตกหนัก', 'น้ำท่วม'], ['ขยะพลาสติกลงทะเล', 'สัตว์ทะเลได้รับอันตราย']],
+    blanks: [
+      { label: 'Cause \u2014 สาเหตุ', structure: 'Clause (Subject + Verb)', color: '#38bdf8' },
+      { label: 'Effect \u2014 ผลลัพธ์', structure: 'Clause (Subject + Verb)', color: '#f97316' },
+    ],
+  },
+  {
+    name: 'Example', th: 'ตัวอย่างเช่น ______', en: 'Give a concrete example.', icon: '📌',
+    examples: [['ดาวพฤหัสบดีเป็นดาวเคราะห์ที่ใหญ่ที่สุด'], ['การรีไซเคิลขวดพลาสติก']],
+    blanks: [
+      { label: 'Example \u2014 ตัวอย่าง', structure: 'Noun phrase / Clause', color: '#38bdf8' },
+    ],
+  },
+  {
+    name: 'Conclusion', th: 'ดังนั้น ______', en: 'Sum up your point.', icon: '\u2705',
+    examples: [['เราจึงควรช่วยกันลดขยะพลาสติก'], ['การสำรวจอวกาศจึงมีประโยชน์ต่อมนุษย์']],
+    blanks: [
+      { label: 'Conclusion \u2014 บทสรุป', structure: 'Clause (Subject + Verb)', color: '#38bdf8' },
+    ],
+  },
+];
+
+// Situations + agree/disagree sentence starters for the Opinion pattern card,
+// so he has something concrete to react to instead of an empty prompt.
+const OPINION_SCENARIOS = [
+  {
+    topic: 'Cooking', icon: '🍳',
+    situation: 'Some people think cooking at home is healthier and more fun than eating out. Others think restaurant food saves time and tastes just as good.',
+    agree: ['ฉันเห็นด้วยว่าทำอาหารเองดีกว่า เพราะ ______', 'การทำอาหารเองทำให้ฉันรู้สึก ______'],
+    disagree: ['ฉันไม่เห็นด้วย เพราะกินที่ร้านสะดวกกว่า', 'ฉันคิดว่าร้านอาหารดีกว่าเพราะ ______'],
+  },
+  {
+    topic: 'Chemistry', icon: '🧪',
+    situation: 'Some students love doing chemistry experiments in class because they\u2019re exciting. Others find experiments confusing or a little scary.',
+    agree: ['ฉันเห็นด้วยว่าการทดลองเคมีสนุก เพราะ ______', 'สิ่งที่ฉันชอบเกี่ยวกับการทดลองคือ ______'],
+    disagree: ['ฉันไม่เห็นด้วย เพราะการทดลองทำให้ฉันรู้สึก ______', 'ฉันคิดว่าการทดลองเคมีค่อนข้างยากเพราะ ______'],
+  },
+  {
+    topic: 'Astronomy', icon: '🔭',
+    situation: 'Some people think humans should keep exploring space and sending astronauts to new planets. Others think we should spend that money solving problems on Earth first.',
+    agree: ['ฉันเห็นด้วยว่ามนุษย์ควรสำรวจอวกาศต่อไป เพราะ ______', 'อวกาศน่าสนใจเพราะ ______'],
+    disagree: ['ฉันไม่เห็นด้วย เพราะเราควรแก้ปัญหาบนโลกก่อน', 'ฉันคิดว่าเงินควรถูกใช้เพื่อ ______'],
+  },
+  {
+    topic: 'Titanic', icon: '🚢',
+    situation: 'Some people think the Titanic should have carried more lifeboats for every passenger. Others think the ship\u2019s speed and design were the bigger problem.',
+    agree: ['ฉันเห็นด้วยว่าเรือควรมีเรือชูชีพมากกว่านี้ เพราะ ______', 'ถ้ามีเรือชูชีพมากกว่านี้ ______'],
+    disagree: ['ฉันไม่เห็นด้วย เพราะปัญหาหลักคือ ______', 'ฉันคิดว่าความเร็วของเรือเป็นสาเหตุเพราะ ______'],
+  },
+  {
+    topic: 'Ocean liners', icon: '⚓',
+    situation: 'Some people think old ocean liners like the Titanic were amazing achievements for their time. Others think they were unsafe and not worth admiring.',
+    agree: ['ฉันเห็นด้วยว่าเรือเดินสมุทรสมัยก่อนน่าทึ่ง เพราะ ______', 'สิ่งที่น่าประทับใจคือ ______'],
+    disagree: ['ฉันไม่เห็นด้วย เพราะเรือสมัยก่อนไม่ปลอดภัยพอ', 'ฉันคิดว่า ______ เป็นปัญหาสำคัญ'],
+  },
+  {
+    topic: 'Environment', icon: '🌱',
+    situation: 'Some people think every student should help reduce plastic waste at school. Others think it\u2019s mainly the school\u2019s or government\u2019s job to fix.',
+    agree: ['ฉันเห็นด้วยว่านักเรียนควรช่วยลดขยะพลาสติก เพราะ ______', 'ฉันสามารถช่วยได้โดย ______'],
+    disagree: ['ฉันไม่เห็นด้วย เพราะเป็นหน้าที่ของ ______', 'ฉันคิดว่าโรงเรียนควรทำ ______ ก่อน'],
+  },
+];
+
+/* ══════════════════ WRITING LAB CONTENT (World 5) ══════════════════ */
+const FILL_BLANK_ITEMS = [
+  { th: 'วันนี้ฉันรู้สึก ______ เพราะ ______', en: 'Today I feel ___ because ___', icon: '😊' },
+  { th: 'สิ่งที่ฉันชอบเกี่ยวกับอวกาศคือ ______', en: 'What I like about space is ___', icon: '🌌' },
+  { th: 'สัตว์ที่ฉันชอบที่สุดคือ ______ เพราะ ______', en: 'My favorite animal is ___ because ___', icon: '🐦' },
+  { th: 'ถ้าฉันได้ไปทะเล ฉันอยากจะ ______', en: 'If I went to the sea, I would want to ___', icon: '🌊' },
+  { th: 'เรื่องที่น่าสนใจเกี่ยวกับเรือไททานิคคือ ______', en: 'An interesting fact about the Titanic is ___', icon: '🚢' },
+];
+
+const STARTER_TOPICS = [
+  {
+    title: 'สัตว์ที่ฉันชอบ (An animal I like)', icon: '🐦',
+    starters: ['สัตว์ที่ฉันชอบคือ ______', 'ฉันชอบสัตว์ชนิดนี้เพราะ ______', 'สิ่งที่น่าสนใจคือ ______'],
+  },
+  {
+    title: 'ดาวเคราะห์ที่ฉันอยากไป (A planet I want to visit)', icon: '🪐',
+    starters: ['ดาวเคราะห์ที่ฉันอยากไปคือ ______', 'ฉันอยากไปเพราะ ______', 'สิ่งที่ฉันอยากทำที่นั่นคือ ______'],
+  },
+  {
+    title: 'เรือไททานิค (The Titanic)', icon: '🚢',
+    starters: ['สิ่งที่ฉันรู้เกี่ยวกับเรือไททานิคคือ ______', 'สิ่งที่ทำให้ฉันประทับใจคือ ______', 'ถ้าฉันอยู่บนเรือ ฉันจะ ______'],
+  },
+];
+
+const PARAGRAPH3_TOPICS = [
+  {
+    title: 'การปลูกต้นไม้ (Planting trees)', icon: '🌳',
+    opener: 'การปลูกต้นไม้มีประโยชน์หลายประการ',
+    lines: ['ประการแรก ______', 'ประการที่สอง ______'],
+  },
+  {
+    title: 'การอนุรักษ์ทะเล (Ocean conservation)', icon: '🌊',
+    opener: 'การอนุรักษ์ทะเลมีความสำคัญมาก',
+    lines: ['ประการแรก ______', 'ประการที่สอง ______'],
+  },
+  {
+    title: 'อวกาศ (Space)', icon: '🌌',
+    opener: 'อวกาศเป็นเรื่องที่น่าสนใจมาก',
+    lines: ['ประการแรก ______', 'ประการที่สอง ______'],
+  },
+];
+
+const PARAGRAPH_BUILDER_TOPICS = [
+  {
+    title: 'ทำไมการอ่านหนังสือจึงสำคัญ (Why reading matters)', icon: '📖',
+    blocks: ['Topic sentence \u2014 ประโยคหลัก', 'Reason 1 \u2014 เหตุผลที่ 1', 'Example \u2014 ตัวอย่าง', 'Reason 2 \u2014 เหตุผลที่ 2', 'Conclusion \u2014 สรุป'],
+  },
+  {
+    title: 'ทำไมอวกาศจึงน่าสนใจ (Why space is interesting)', icon: '🌌',
+    blocks: ['Topic sentence \u2014 ประโยคหลัก', 'Reason 1 \u2014 เหตุผลที่ 1', 'Example \u2014 ตัวอย่าง', 'Reason 2 \u2014 เหตุผลที่ 2', 'Conclusion \u2014 สรุป'],
+  },
+];
+
+const ESSAY_GENRES = [
+  {
+    key: 'essay', name: 'เรียงความ (Essay)', icon: '📝',
+    blocks: [
+      { label: 'Introduction \u2014 เปิดเรื่อง', hint: 'เช่น "ปัจจุบัน... เป็นสิ่งที่มีบทบาทในชีวิตประจำวัน"' },
+      { label: 'Body 1 \u2014 ประการแรก', hint: 'ตัวอย่างเช่น ______' },
+      { label: 'Body 2 \u2014 ประการที่สอง', hint: 'ตัวอย่างเช่น ______' },
+      { label: 'Conclusion \u2014 สรุป', hint: 'ดังนั้น ______ ควร ______' },
+    ],
+  },
+  {
+    key: 'letter', name: 'จดหมาย / อีเมล (Letter / Email)', icon: '✉️',
+    blocks: [
+      { label: 'Greeting \u2014 คำขึ้นต้น', hint: 'เรียน... / สวัสดี...' },
+      { label: 'Body \u2014 เนื้อหา', hint: 'บอกจุดประสงค์ของจดหมาย' },
+      { label: 'Closing \u2014 คำลงท้าย', hint: 'ขอแสดงความนับถือ / ด้วยความคิดถึง' },
+    ],
+  },
+  {
+    key: 'narrative', name: 'เล่าเรื่อง (Narrative)', icon: '📖',
+    blocks: [
+      { label: 'Beginning \u2014 เริ่มเรื่อง', hint: 'เหตุการณ์เกิดขึ้นเมื่อไหร่ ที่ไหน' },
+      { label: 'Middle \u2014 เหตุการณ์หลัก', hint: 'เกิดอะไรขึ้นต่อไป' },
+      { label: 'End \u2014 จบเรื่อง', hint: 'เรื่องจบลงอย่างไร' },
+    ],
+  },
+  {
+    key: 'opinion', name: 'แสดงความคิดเห็น (Opinion)', icon: '⚖️',
+    blocks: [
+      { label: 'Claim \u2014 ข้อคิดเห็น', hint: 'ฉันคิดว่า ______' },
+      { label: 'Reason \u2014 เหตุผล', hint: 'เพราะ ______' },
+      { label: 'Example \u2014 ตัวอย่าง', hint: 'ตัวอย่างเช่น ______' },
+    ],
+  },
+];
+
 /* ══════════════════ STATE ══════════════════ */
 const STORE_KEY = 'thai-rw-state';
 function loadState(){
@@ -603,10 +921,19 @@ function loadState(){
       s.letters = s.letters || {};
       s.vowels = s.vowels || {};
       s.hardWords = s.hardWords || {};
+      s.s1 = s.s1 || {};
+      s.s2 = s.s2 || {};
+      s.patterns = s.patterns || {};
+      s.w1 = s.w1 || {};
+      s.w2 = s.w2 || {};
+      s.w3 = s.w3 || {};
+      s.w4 = s.w4 || {};
+      s.w5 = s.w5 || {};
+      s.writingTypes = s.writingTypes || {};
       return s;
     }
   } catch(e){}
-  return { xp: 0, r: { r1: {}, r2: {}, r3: {}, r4: {} }, letters: {}, vowels: {}, hardWords: {} };
+  return { xp: 0, r: { r1: {}, r2: {}, r3: {}, r4: {} }, letters: {}, vowels: {}, hardWords: {}, s1: {}, s2: {}, patterns: {}, w1: {}, w2: {}, w3: {}, w4: {}, w5: {}, writingTypes: {} };
 }
 function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 let state = loadState();
@@ -821,6 +1148,107 @@ function openWorld(key){
           <div class="level-progress-bg"><div class="level-progress-fill" style="width:${hardPct}%"></div></div>
         </div>
         <div class="level-count">${hardDone}/${hardTotal}<br>done</div>
+      </div>`;
+  } else if(key === 'w4'){
+    const s1Done = Object.keys(state.s1).length;
+    const s1Total = ARRANGE_SENTENCES.length;
+    const s1Pct = Math.round((s1Done / s1Total) * 100);
+    const s2Done = Object.keys(state.s2).length;
+    const s2Total = EXPANSION_SENTENCES.length;
+    const s2Pct = Math.round((s2Done / s2Total) * 100);
+    const patDone = Object.keys(state.patterns).length;
+    const patTotal = PATTERN_CARDS.length;
+    const patPct = Math.round((patDone / patTotal) * 100);
+    document.getElementById('moduleList').innerHTML = `
+      <div class="level-card" onclick="openArrangeLevel()">
+        <div class="level-emoji">🧩</div>
+        <div class="level-body">
+          <div class="level-title">S1 — Arrange</div>
+          <div class="level-desc">Tap the scattered words in order to build a correct sentence.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${s1Pct}%"></div></div>
+        </div>
+        <div class="level-count">${s1Done}/${s1Total}<br>done</div>
+      </div>
+      <div class="level-card" onclick="openExpansionLevel()">
+        <div class="level-emoji">🌱</div>
+        <div class="level-body">
+          <div class="level-title">S2 — Sentence Expansion</div>
+          <div class="level-desc">Pick the word type, then the word, to grow the sentence yourself.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${s2Pct}%"></div></div>
+        </div>
+        <div class="level-count">${s2Done}/${s2Total}<br>done</div>
+      </div>
+      <div class="level-card" onclick="openPatternLevel()">
+        <div class="level-emoji">🧠</div>
+        <div class="level-body">
+          <div class="level-title">Sentence Pattern Cards</div>
+          <div class="level-desc">Reusable starters: Opinion, Explanation, Comparison, Cause\u2192Effect, Example, Conclusion.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${patPct}%"></div></div>
+        </div>
+        <div class="level-count">${patDone}/${patTotal}<br>done</div>
+      </div>`;
+  } else if(key === 'w5'){
+    const w1Done = Object.keys(state.w1).length, w1Total = FILL_BLANK_ITEMS.length;
+    const w2Done = Object.keys(state.w2).length, w2Total = STARTER_TOPICS.length;
+    const w3Done = Object.keys(state.w3).length, w3Total = PARAGRAPH3_TOPICS.length;
+    const w4Done = Object.keys(state.w4).length, w4Total = PARAGRAPH_BUILDER_TOPICS.length;
+    const w5Done = Object.keys(state.w5).length, w5Total = ESSAY_GENRES.length;
+    const wtDone = Object.keys(state.writingTypes || {}).length, wtTotal = 10;
+    const pct = (d, t) => Math.round((d / t) * 100);
+    document.getElementById('moduleList').innerHTML = `
+      <div class="level-card" onclick="openFillBlankLevel()">
+        <div class="level-emoji">😊</div>
+        <div class="level-body">
+          <div class="level-title">W1 — Fill the Blank</div>
+          <div class="level-desc">วันนี้ฉันรู้สึก ______ เพราะ ______</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${pct(w1Done, w1Total)}%"></div></div>
+        </div>
+        <div class="level-count">${w1Done}/${w1Total}<br>done</div>
+      </div>
+      <div class="level-card" onclick="openStarterLevel()">
+        <div class="level-emoji">✍️</div>
+        <div class="level-body">
+          <div class="level-title">W2 — Sentence Starters</div>
+          <div class="level-desc">One topic, 3 guided starter lines to complete.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${pct(w2Done, w2Total)}%"></div></div>
+        </div>
+        <div class="level-count">${w2Done}/${w2Total}<br>done</div>
+      </div>
+      <div class="level-card" onclick="openParagraph3Level()">
+        <div class="level-emoji">📄</div>
+        <div class="level-body">
+          <div class="level-title">W3 — 3-Sentence Paragraph</div>
+          <div class="level-desc">Topic + starter + "ประการแรก / ประการที่สอง" connectors.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${pct(w3Done, w3Total)}%"></div></div>
+        </div>
+        <div class="level-count">${w3Done}/${w3Total}<br>done</div>
+      </div>
+      <div class="level-card" onclick="openParagraphBuilderLevel()">
+        <div class="level-emoji">🧱</div>
+        <div class="level-body">
+          <div class="level-title">W4 — Paragraph Builder</div>
+          <div class="level-desc">Topic sentence \u2192 Reason 1 \u2192 Example \u2192 Reason 2 \u2192 Conclusion.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${pct(w4Done, w4Total)}%"></div></div>
+        </div>
+        <div class="level-count">${w4Done}/${w4Total}<br>done</div>
+      </div>
+      <div class="level-card" onclick="openEssayLevel()">
+        <div class="level-emoji">📝</div>
+        <div class="level-body">
+          <div class="level-title">W5 — Essay / Genre Builder</div>
+          <div class="level-desc">Scaffolded structures: essay, letter/email, narrative, opinion.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${pct(w5Done, w5Total)}%"></div></div>
+        </div>
+        <div class="level-count">${w5Done}/${w5Total}<br>done</div>
+      </div>
+      <div class="level-card" onclick="location.href='Thai_Writing_Types_Guide.html'" style="border-left:4px solid var(--gold);">
+        <div class="level-emoji">📚</div>
+        <div class="level-body">
+          <div class="level-title">W6 — Writing Types Practice</div>
+          <div class="level-desc">10 kinds of writing \u2014 structure, linking words, then write one for real.</div>
+          <div class="level-progress-bg"><div class="level-progress-fill" style="width:${pct(wtDone, wtTotal)}%"></div></div>
+        </div>
+        <div class="level-count">${wtDone}/${wtTotal}<br>done</div>
       </div>`;
   } else {
     document.getElementById('moduleList').innerHTML = r.modules.map((m, i) => `
@@ -1535,6 +1963,591 @@ function nextHardWordStage(){
   else if(activeWordIdx < HARD_WORDS.length - 1){ activeWordIdx++; activeWordStageIdx = 0; }
   else return;
   renderHardWordStage(); window.scrollTo(0,0);
+}
+
+/* ══════════════════ S1 — ARRANGE ENGINE ══════════════════ */
+let activeArrangeIdx = 0, arrangeAssembly = [], arrangeUsedFlags = [];
+
+function openArrangeLevel(){
+  sourceWorld = 'w4';
+  activeArrangeIdx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83e\udde9 S1 \u2014 Arrange';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderArrangeItem();
+  window.scrollTo(0,0);
+}
+
+function renderArrangeItem(){
+  stopAnyRecording();
+  const item = ARRANGE_SENTENCES[activeArrangeIdx];
+  document.getElementById('practiceProgress').textContent = `Sentence ${activeArrangeIdx + 1} of ${ARRANGE_SENTENCES.length}`;
+  const done = !!state.s1[activeArrangeIdx];
+  arrangeAssembly = [];
+  arrangeUsedFlags = item.words.map(() => false);
+  const shuffledIdx = shuffleArr(item.words.map((_, i) => i));
+
+  const body = document.getElementById('practiceBody');
+  body.innerHTML = `
+    <div class="practice-card">
+      <div class="structure-chart">
+        ${['S', 'V', 'O'].map((r, idx) => `
+          <span class="structure-pill" style="background:${ARRANGE_ROLE_META[r].color}">${ARRANGE_ROLE_META[r].label}</span>
+          ${idx < 2 ? '<span class="structure-arrow">\u2192</span>' : ''}
+        `).join('')}
+      </div>
+      <div class="item-icon">${item.icon}</div>
+      <div class="practice-en">Tap the words in order to build the sentence.</div>
+      <div class="assembly-box" id="assemblyBox">&nbsp;</div>
+      <div class="chip-row" id="chipRow">
+        ${shuffledIdx.map(i => {
+          const role = ARRANGE_ROLE_PATTERN[i] || 'O';
+          const color = ARRANGE_ROLE_META[role].color;
+          return `<button class="part-chip role-chip" id="achip-${i}" style="border-color:${color}" onclick="tapArrangePart(${i})">${item.words[i]}</button>`;
+        }).join('')}
+      </div>
+      <div class="btn-row">
+        <button class="pill-btn" onclick="clearArrangeAssembly()">\ud83e\uddf9 Clear</button>
+      </div>
+      <div class="quiz-feedback" id="arrangeFeedback">${done ? '\u2705 Solved before \u2014 try it again!' : ''}</div>
+    </div>
+    ${arrangeNavHtml()}
+  `;
+}
+
+function tapArrangePart(i){
+  const item = ARRANGE_SENTENCES[activeArrangeIdx];
+  if(arrangeUsedFlags[i]) return;
+  arrangeUsedFlags[i] = true;
+  arrangeAssembly.push(i);
+  const chip = document.getElementById('achip-' + i);
+  if(chip) chip.classList.add('used');
+  document.getElementById('assemblyBox').innerHTML = arrangeAssembly.map(idx => {
+    const role = ARRANGE_ROLE_PATTERN[idx] || 'O';
+    return `<span style="color:${ARRANGE_ROLE_META[role].color}">${item.words[idx]}</span>`;
+  }).join(' ');
+  if(arrangeAssembly.length === item.words.length){
+    const built = arrangeAssembly.map(idx => item.words[idx]).join('');
+    const correct = item.words.join('');
+    const feedback = document.getElementById('arrangeFeedback');
+    if(built === correct){
+      feedback.innerHTML = `\u2705 Correct! ${item.en}`;
+      if(!state.s1[activeArrangeIdx]){ state.s1[activeArrangeIdx] = true; state.xp += 25; saveState(); }
+    } else {
+      feedback.textContent = 'Not quite the right order \u2014 tap Clear and try again!';
+    }
+  }
+}
+function clearArrangeAssembly(){ renderArrangeItem(); }
+
+function arrangeNavHtml(){
+  const isFirst = activeArrangeIdx === 0;
+  const isLast = activeArrangeIdx === ARRANGE_SENTENCES.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevArrange()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextArrange()">Next \u2192</button>
+    </div>`;
+}
+function prevArrange(){ if(activeArrangeIdx > 0){ activeArrangeIdx--; renderArrangeItem(); window.scrollTo(0,0); } }
+function nextArrange(){ if(activeArrangeIdx < ARRANGE_SENTENCES.length - 1){ activeArrangeIdx++; renderArrangeItem(); window.scrollTo(0,0); } }
+
+/* ══════════════════ S2 — SENTENCE EXPANSION ENGINE ══════════════════ */
+let activeExpansionIdx = 0, expansionChosen = [null, null, null];
+
+function openExpansionLevel(){
+  sourceWorld = 'w4';
+  activeExpansionIdx = 0;
+  expansionChosen = [null, null, null];
+  document.getElementById('practiceTitle').textContent = '\ud83c\udf31 S2 \u2014 Sentence Expansion';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderExpansionItem();
+  window.scrollTo(0,0);
+}
+
+function buildExpansionThai(item, chosen){
+  let s = item.subject;
+  if(chosen[0] != null) s += item.categories.adj[chosen[0]].word;
+  s += item.verb;
+  if(chosen[1] != null) s += item.categories.loc[chosen[1]].word;
+  if(chosen[2] != null) s += item.categories.mt[chosen[2]].word;
+  return s;
+}
+function buildExpansionEnglish(item, chosen){
+  const subj = chosen[0] != null
+    ? 'A ' + item.categories.adj[chosen[0]].en + ' ' + item.subjectEn.replace(/^A /, '')
+    : item.subjectEn;
+  const parts = [subj, item.verbEn];
+  if(chosen[1] != null) parts.push(item.categories.loc[chosen[1]].en);
+  if(chosen[2] != null) parts.push(item.categories.mt[chosen[2]].en);
+  return parts.join(' ') + '.';
+}
+function coloredExpansionHtml(item, chosen){
+  let html = `<span>${item.subject}</span>`;
+  if(chosen[0] != null) html += `<span style="color:${EXPANSION_CATEGORY_META.adj.color}">${item.categories.adj[chosen[0]].word}</span>`;
+  html += `<span>${item.verb}</span>`;
+  if(chosen[1] != null) html += `<span style="color:${EXPANSION_CATEGORY_META.loc.color}">${item.categories.loc[chosen[1]].word}</span>`;
+  if(chosen[2] != null) html += `<span style="color:${EXPANSION_CATEGORY_META.mt.color}">${item.categories.mt[chosen[2]].word}</span>`;
+  return html;
+}
+
+function renderExpansionItem(){
+  stopAnyRecording();
+  const item = EXPANSION_SENTENCES[activeExpansionIdx];
+  document.getElementById('practiceProgress').textContent = `Sentence ${activeExpansionIdx + 1} of ${EXPANSION_SENTENCES.length}`;
+  const chosen = expansionChosen;
+  const currentCatIdx = ['adj', 'loc', 'mt'].findIndex((c, i) => chosen[i] == null);
+  const done = !!state.s2[activeExpansionIdx];
+  const body = document.getElementById('practiceBody');
+
+  let categorySection = '';
+  if(currentCatIdx === -1){
+    categorySection = `
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markExpansionDone(this)">
+          ${done ? '\u2705 Fully grown!' : '\ud83c\udf89 Fully grown!'}
+        </button>
+      </div>`;
+  } else {
+    const catKey = EXPANSION_CATEGORY_ORDER[currentCatIdx];
+    const meta = EXPANSION_CATEGORY_META[catKey];
+    categorySection = `
+      <div class="expand-category-box">
+        <span class="expand-category-label" style="background:${meta.color}">\u2795 Add ${meta.label} \u2014 ${meta.labelTh}</span>
+        <div class="expand-category-desc">${meta.desc}</div>
+        <div class="expand-choice-col">
+          ${item.categories[catKey].map((c, i) => `<button class="expand-choice-btn" style="border-color:${meta.color}" onclick="chooseExpansion(${currentCatIdx}, ${i})">${c.word} <span style="color:var(--muted); font-size:0.78rem;">(${c.en})</span></button>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  const changeLinks = ['adj', 'loc', 'mt'].map((catKey, i) => {
+    if(chosen[i] == null) return '';
+    const meta = EXPANSION_CATEGORY_META[catKey];
+    return `<button class="expand-change-link" style="color:${meta.color}" onclick="changeExpansion(${i})">\u21ba change ${meta.label.toLowerCase()}</button>`;
+  }).filter(Boolean).join('');
+
+  body.innerHTML = `
+    <div class="practice-card">
+      <div class="item-icon">${item.icon}</div>
+      <div class="expand-sentence-display">${coloredExpansionHtml(item, chosen)}</div>
+      <div class="expand-en-display">${buildExpansionEnglish(item, chosen)}</div>
+      <div class="btn-row">
+        <button class="pill-btn" onclick="speakThai('${escJs(buildExpansionThai(item, chosen))}', false)">\ud83d\udd0a Listen</button>
+      </div>
+      ${changeLinks ? `<div class="expand-change-row">${changeLinks}</div>` : ''}
+      ${categorySection}
+    </div>
+    ${expansionNavHtml()}
+  `;
+}
+
+function chooseExpansion(catIdx, choiceIdx){
+  expansionChosen[catIdx] = choiceIdx;
+  renderExpansionItem();
+}
+function changeExpansion(catIdx){
+  expansionChosen[catIdx] = null;
+  renderExpansionItem();
+}
+function markExpansionDone(btn){
+  if(!state.s2[activeExpansionIdx]){ state.s2[activeExpansionIdx] = true; state.xp += 30; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Fully grown!'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+
+function expansionNavHtml(){
+  const isFirst = activeExpansionIdx === 0;
+  const isLast = activeExpansionIdx === EXPANSION_SENTENCES.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevExpansion()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextExpansion()">Next \u2192</button>
+    </div>`;
+}
+function prevExpansion(){
+  if(activeExpansionIdx > 0){ activeExpansionIdx--; expansionChosen = [null, null, null]; renderExpansionItem(); window.scrollTo(0,0); }
+}
+function nextExpansion(){
+  if(activeExpansionIdx < EXPANSION_SENTENCES.length - 1){ activeExpansionIdx++; expansionChosen = [null, null, null]; renderExpansionItem(); window.scrollTo(0,0); }
+}
+
+/* ══════════════════ SENTENCE PATTERN CARDS ENGINE ══════════════════ */
+let activePatternIdx = 0;
+let activeOpinionTopicIdx = 2, activeOpinionStance = null; // default topic: Astronomy
+
+function openPatternLevel(){
+  sourceWorld = 'w4';
+  activePatternIdx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83e\udde0 Sentence Pattern Cards';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderPatternCard();
+  window.scrollTo(0,0);
+}
+
+// Splits a template on "______" and wraps each blank in a colored span
+// matching that blank's role (from card.blanks), so the pattern text
+// itself shows which slot is which before the child even reads the legend.
+// Colors any "______" inside a sample phrase to match a given blank's
+// role color, so the pill itself previews which color he should be
+// continuing in when he keeps typing past it.
+function colorizeBlank(text, color){
+  return text.split('______').join(`<span class="tmpl-blank" style="color:${color}; border-bottom:3px solid ${color}">______</span>`);
+}
+
+// Rebuilds a full example sentence from the card's fixed template text +
+// one value per blank, coloring each filled-in value to match that
+// blank's role color from the legend (same color language throughout).
+function buildColoredExampleHtml(card, values){
+  const segments = card.th.split('______');
+  let html = '';
+  segments.forEach((seg, i) => {
+    html += seg;
+    if(i < values.length){
+      const color = (card.blanks && card.blanks[i]) ? card.blanks[i].color : 'var(--accent2)';
+      html += `<span style="color:${color}; font-weight:800;">${values[i]}</span>`;
+    }
+  });
+  return html;
+}
+function buildPlainExample(card, values){
+  const segments = card.th.split('______');
+  let text = '';
+  segments.forEach((seg, i) => {
+    text += seg;
+    if(i < values.length) text += values[i];
+  });
+  return text;
+}
+
+function renderTemplateBlanks(card){
+  const segments = card.th.split('______');
+  let html = '';
+  segments.forEach((seg, i) => {
+    html += seg;
+    if(i < segments.length - 1){
+      const b = card.blanks && card.blanks[i];
+      html += b
+        ? `<span class="tmpl-blank" style="color:${b.color}; border-bottom:3px solid ${b.color}">______</span>`
+        : '______';
+    }
+  });
+  return html;
+}
+function blankLegendHtml(card){
+  if(!card.blanks) return '';
+  return `<div class="blank-legend">${card.blanks.map(b => `
+    <div class="blank-legend-item">
+      <span class="blank-legend-dot" style="background:${b.color}"></span>
+      <span class="blank-legend-text">
+        <span class="blank-legend-label" style="color:${b.color}">${b.label}</span>
+        <span class="blank-legend-structure">${b.structure}</span>
+      </span>
+    </div>`).join('')}</div>`;
+}
+
+function renderPatternCard(){
+  stopAnyRecording();
+  const card = PATTERN_CARDS[activePatternIdx];
+  document.getElementById('practiceProgress').textContent = `Pattern ${activePatternIdx + 1} of ${PATTERN_CARDS.length}`;
+  const done = !!state.patterns[activePatternIdx];
+  const body = document.getElementById('practiceBody');
+
+  if(card.name === 'Opinion'){
+    const scenario = OPINION_SCENARIOS[activeOpinionTopicIdx];
+    const stancePhrases = activeOpinionStance === 'agree' ? scenario.agree
+                         : activeOpinionStance === 'disagree' ? scenario.disagree
+                         : null;
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${card.icon}</div>
+        <div class="pattern-name-badge">${card.name}</div>
+        <div class="pattern-template">${renderTemplateBlanks(card)}</div>
+        ${blankLegendHtml(card)}
+        <div class="practice-en" style="margin-top:6px;">${card.en}</div>
+
+        <div class="topic-chip-row">
+          ${OPINION_SCENARIOS.map((s, i) => `<button class="topic-chip ${i === activeOpinionTopicIdx ? 'active' : ''}" onclick="selectOpinionTopic(${i})">${s.icon} ${s.topic}</button>`).join('')}
+        </div>
+        <div class="situation-box">${scenario.situation}</div>
+
+        <div class="practice-en" style="margin-top:14px;">Do you agree or disagree?</div>
+        <div class="stance-row">
+          <button class="stance-btn agree ${activeOpinionStance === 'agree' ? 'active' : ''}" onclick="chooseOpinionStance('agree')">\ud83d\udc4d Agree</button>
+          <button class="stance-btn disagree ${activeOpinionStance === 'disagree' ? 'active' : ''}" onclick="chooseOpinionStance('disagree')">\ud83d\udc4e Disagree</button>
+        </div>
+        ${stancePhrases ? `
+          <div class="phrase-chip-col">
+            ${stancePhrases.map(p => `<button class="phrase-chip" onclick="insertOpinionPhrase('${escJs(p)}')">${colorizeBlank(p, card.blanks[1].color)}</button>`).join('')}
+          </div>` : ''}
+
+        <textarea id="patternInput" class="type-input" style="height:80px; font-size:1.1rem; margin-top:16px;" placeholder="Tap a phrase above, or write your own\u2026"></textarea>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markPatternTried(this)">
+            ${done ? '\u2705 Tried it' : '\u2705 I tried it!'}
+          </button>
+        </div>
+      </div>
+      ${patternNavHtml()}
+    `;
+    return;
+  }
+
+  body.innerHTML = `
+    <div class="practice-card">
+      <div class="item-icon">${card.icon}</div>
+      <div class="pattern-name-badge">${card.name}</div>
+      <div class="pattern-template">${renderTemplateBlanks(card)}</div>
+      ${blankLegendHtml(card)}
+      <div class="practice-en" style="margin-top:10px;">${card.en}</div>
+      <div class="btn-row">
+        <button class="pill-btn" onclick="speakThai('${escJs(card.th.replace(/______/g, ''))}', false)">\ud83d\udd0a Listen</button>
+      </div>
+      ${card.examples ? `
+        <div class="practice-en" style="margin-top:14px;">Need an idea? Tap one to use it, or write your own:</div>
+        <div class="phrase-chip-col">
+          ${card.examples.map(vals => `<button class="phrase-chip" onclick="insertOpinionPhrase('${escJs(buildPlainExample(card, vals))}')">${buildColoredExampleHtml(card, vals)}</button>`).join('')}
+        </div>` : ''}
+      <textarea id="patternInput" class="type-input" style="height:80px; font-size:1.1rem; margin-top:14px;" placeholder="Try writing your own sentence with this pattern\u2026"></textarea>
+      <div class="btn-row">
+        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markPatternTried(this)">
+          ${done ? '\u2705 Tried it' : '\u2705 I tried it!'}
+        </button>
+      </div>
+    </div>
+    ${patternNavHtml()}
+  `;
+}
+
+function selectOpinionTopic(i){ activeOpinionTopicIdx = i; activeOpinionStance = null; renderPatternCard(); }
+function chooseOpinionStance(stance){ activeOpinionStance = stance; renderPatternCard(); }
+function insertOpinionPhrase(phrase){
+  const input = document.getElementById('patternInput');
+  if(!input) return;
+  input.value = input.value ? input.value + ' ' + phrase : phrase;
+  input.focus();
+}
+
+function markPatternTried(btn){
+  if(!state.patterns[activePatternIdx]){ state.patterns[activePatternIdx] = true; state.xp += 25; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+
+function patternNavHtml(){
+  const isFirst = activePatternIdx === 0;
+  const isLast = activePatternIdx === PATTERN_CARDS.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevPattern()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextPattern()">Next \u2192</button>
+    </div>`;
+}
+function prevPattern(){ if(activePatternIdx > 0){ activePatternIdx--; renderPatternCard(); window.scrollTo(0,0); } }
+function nextPattern(){ if(activePatternIdx < PATTERN_CARDS.length - 1){ activePatternIdx++; renderPatternCard(); window.scrollTo(0,0); } }
+
+/* ══════════════════ W1 — FILL THE BLANK ENGINE ══════════════════ */
+let activeFillIdx = 0;
+function openFillBlankLevel(){
+  sourceWorld = 'w5'; activeFillIdx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83d\ude0a W1 \u2014 Fill the Blank';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderFillBlank();
+  window.scrollTo(0,0);
+}
+function renderFillBlank(){
+  stopAnyRecording();
+  const item = FILL_BLANK_ITEMS[activeFillIdx];
+  document.getElementById('practiceProgress').textContent = `Prompt ${activeFillIdx + 1} of ${FILL_BLANK_ITEMS.length}`;
+  const done = !!state.w1[activeFillIdx];
+  document.getElementById('practiceBody').innerHTML = `
+    <div class="practice-card">
+      <div class="item-icon">${item.icon}</div>
+      <div class="pattern-template">${item.th}</div>
+      <div class="practice-en" style="margin-top:8px;">${item.en}</div>
+      <div class="btn-row">
+        <button class="pill-btn" onclick="speakThai('${escJs(item.th.replace(/______/g, ''))}', false)">\ud83d\udd0a Listen</button>
+      </div>
+      <textarea id="w1Input" class="type-input" style="height:80px; font-size:1.1rem;" placeholder="Write your sentence here\u2026"></textarea>
+      <div class="btn-row">
+        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW1Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+      </div>
+    </div>
+    ${simpleNavHtml(activeFillIdx, FILL_BLANK_ITEMS.length, 'prevFill', 'nextFill')}
+  `;
+}
+function markW1Tried(btn){
+  if(!state.w1[activeFillIdx]){ state.w1[activeFillIdx] = true; state.xp += 20; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+function prevFill(){ if(activeFillIdx > 0){ activeFillIdx--; renderFillBlank(); window.scrollTo(0,0); } }
+function nextFill(){ if(activeFillIdx < FILL_BLANK_ITEMS.length - 1){ activeFillIdx++; renderFillBlank(); window.scrollTo(0,0); } }
+
+/* ══════════════════ W2 — SENTENCE STARTERS ENGINE ══════════════════ */
+let activeStarterIdx = 0;
+function openStarterLevel(){
+  sourceWorld = 'w5'; activeStarterIdx = 0;
+  document.getElementById('practiceTitle').textContent = '\u270d\ufe0f W2 \u2014 Sentence Starters';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderStarterTopic();
+  window.scrollTo(0,0);
+}
+function renderStarterTopic(){
+  stopAnyRecording();
+  const topic = STARTER_TOPICS[activeStarterIdx];
+  document.getElementById('practiceProgress').textContent = `Topic ${activeStarterIdx + 1} of ${STARTER_TOPICS.length}`;
+  const done = !!state.w2[activeStarterIdx];
+  document.getElementById('practiceBody').innerHTML = `
+    <div class="practice-card">
+      <div class="item-icon">${topic.icon}</div>
+      <div class="pattern-name-badge">${topic.title}</div>
+      ${topic.starters.map((s, i) => `
+        <div class="write-block">
+          <div class="write-block-label">${s}</div>
+          <textarea class="type-input" placeholder="\u2026"></textarea>
+        </div>`).join('')}
+      <div class="btn-row">
+        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW2Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+      </div>
+    </div>
+    ${simpleNavHtml(activeStarterIdx, STARTER_TOPICS.length, 'prevStarter', 'nextStarter')}
+  `;
+}
+function markW2Tried(btn){
+  if(!state.w2[activeStarterIdx]){ state.w2[activeStarterIdx] = true; state.xp += 30; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+function prevStarter(){ if(activeStarterIdx > 0){ activeStarterIdx--; renderStarterTopic(); window.scrollTo(0,0); } }
+function nextStarter(){ if(activeStarterIdx < STARTER_TOPICS.length - 1){ activeStarterIdx++; renderStarterTopic(); window.scrollTo(0,0); } }
+
+/* ══════════════════ W3 — 3-SENTENCE PARAGRAPH ENGINE ══════════════════ */
+let activeP3Idx = 0;
+function openParagraph3Level(){
+  sourceWorld = 'w5'; activeP3Idx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83d\udcc4 W3 \u2014 3-Sentence Paragraph';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderParagraph3();
+  window.scrollTo(0,0);
+}
+function renderParagraph3(){
+  stopAnyRecording();
+  const topic = PARAGRAPH3_TOPICS[activeP3Idx];
+  document.getElementById('practiceProgress').textContent = `Topic ${activeP3Idx + 1} of ${PARAGRAPH3_TOPICS.length}`;
+  const done = !!state.w3[activeP3Idx];
+  document.getElementById('practiceBody').innerHTML = `
+    <div class="practice-card">
+      <div class="item-icon">${topic.icon}</div>
+      <div class="pattern-name-badge">${topic.title}</div>
+      <div class="fixed-opener">${topic.opener}</div>
+      ${topic.lines.map(s => `
+        <div class="write-block">
+          <div class="write-block-label">${s}</div>
+          <textarea class="type-input" placeholder="\u2026"></textarea>
+        </div>`).join('')}
+      <div class="btn-row">
+        <button class="pill-btn" onclick="speakThai(document.querySelector('.fixed-opener').textContent, false)">\ud83d\udd0a Listen to opener</button>
+      </div>
+      <div class="btn-row">
+        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW3Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+      </div>
+    </div>
+    ${simpleNavHtml(activeP3Idx, PARAGRAPH3_TOPICS.length, 'prevP3', 'nextP3')}
+  `;
+}
+function markW3Tried(btn){
+  if(!state.w3[activeP3Idx]){ state.w3[activeP3Idx] = true; state.xp += 35; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+function prevP3(){ if(activeP3Idx > 0){ activeP3Idx--; renderParagraph3(); window.scrollTo(0,0); } }
+function nextP3(){ if(activeP3Idx < PARAGRAPH3_TOPICS.length - 1){ activeP3Idx++; renderParagraph3(); window.scrollTo(0,0); } }
+
+/* ══════════════════ W4 — PARAGRAPH BUILDER ENGINE ══════════════════ */
+let activeP4Idx = 0;
+function openParagraphBuilderLevel(){
+  sourceWorld = 'w5'; activeP4Idx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83e\uddf1 W4 \u2014 Paragraph Builder';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderParagraphBuilder();
+  window.scrollTo(0,0);
+}
+function renderParagraphBuilder(){
+  stopAnyRecording();
+  const topic = PARAGRAPH_BUILDER_TOPICS[activeP4Idx];
+  document.getElementById('practiceProgress').textContent = `Topic ${activeP4Idx + 1} of ${PARAGRAPH_BUILDER_TOPICS.length}`;
+  const done = !!state.w4[activeP4Idx];
+  document.getElementById('practiceBody').innerHTML = `
+    <div class="practice-card">
+      <div class="item-icon">${topic.icon}</div>
+      <div class="pattern-name-badge">${topic.title}</div>
+      ${topic.blocks.map((b, i) => `
+        <div class="write-block">
+          <div class="write-block-label">${i + 1}. ${b}</div>
+          <textarea class="type-input" placeholder="\u2026"></textarea>
+        </div>`).join('')}
+      <div class="btn-row">
+        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW4Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+      </div>
+    </div>
+    ${simpleNavHtml(activeP4Idx, PARAGRAPH_BUILDER_TOPICS.length, 'prevP4', 'nextP4')}
+  `;
+}
+function markW4Tried(btn){
+  if(!state.w4[activeP4Idx]){ state.w4[activeP4Idx] = true; state.xp += 45; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+function prevP4(){ if(activeP4Idx > 0){ activeP4Idx--; renderParagraphBuilder(); window.scrollTo(0,0); } }
+function nextP4(){ if(activeP4Idx < PARAGRAPH_BUILDER_TOPICS.length - 1){ activeP4Idx++; renderParagraphBuilder(); window.scrollTo(0,0); } }
+
+/* ══════════════════ W5 — ESSAY / GENRE BUILDER ENGINE ══════════════════ */
+let activeGenreIdx = 0;
+function openEssayLevel(){
+  sourceWorld = 'w5'; activeGenreIdx = 0;
+  document.getElementById('practiceTitle').textContent = '\ud83d\udcdd W5 \u2014 Essay / Genre Builder';
+  document.getElementById('world').classList.remove('active');
+  document.getElementById('practice').classList.add('active');
+  renderEssayGenre();
+  window.scrollTo(0,0);
+}
+function renderEssayGenre(){
+  stopAnyRecording();
+  const genre = ESSAY_GENRES[activeGenreIdx];
+  document.getElementById('practiceProgress').textContent = `Genre ${activeGenreIdx + 1} of ${ESSAY_GENRES.length}`;
+  const done = !!state.w5[activeGenreIdx];
+  document.getElementById('practiceBody').innerHTML = `
+    <div class="practice-card">
+      <div class="item-icon">${genre.icon}</div>
+      <div class="pattern-name-badge">${genre.name}</div>
+      ${genre.blocks.map(b => `
+        <div class="write-block">
+          <div class="write-block-label">${b.label}</div>
+          <div class="write-block-hint">${b.hint}</div>
+          <textarea class="type-input" placeholder="\u2026"></textarea>
+        </div>`).join('')}
+      <div class="btn-row">
+        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW5Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+      </div>
+    </div>
+    ${simpleNavHtml(activeGenreIdx, ESSAY_GENRES.length, 'prevGenre', 'nextGenre')}
+  `;
+}
+function markW5Tried(btn){
+  if(!state.w5[activeGenreIdx]){ state.w5[activeGenreIdx] = true; state.xp += 50; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+function prevGenre(){ if(activeGenreIdx > 0){ activeGenreIdx--; renderEssayGenre(); window.scrollTo(0,0); } }
+function nextGenre(){ if(activeGenreIdx < ESSAY_GENRES.length - 1){ activeGenreIdx++; renderEssayGenre(); window.scrollTo(0,0); } }
+
+/* Shared simple Prev/Next nav for single-index carousels */
+function simpleNavHtml(idx, total, prevFn, nextFn){
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${idx === 0 ? 'visibility:hidden;' : ''}" onclick="${prevFn}()">\u2190 Prev</button>
+      <button class="pill-btn" style="${idx >= total - 1 ? 'visibility:hidden;' : ''}" onclick="${nextFn}()">Next \u2192</button>
+    </div>`;
 }
 
 renderHome();

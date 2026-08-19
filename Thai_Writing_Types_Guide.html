@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Thai Writing Types Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&family=Sarabun:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #201410; --surface: #32211a; --surface2: #291a13; --border: #5a3d26;
+    --text: #fbeee0; --muted: #c2a68a; --gold: #f4b400;
+    --accent: #16a34a; --accent2: #facc15;
+    --c1: #38bdf8; /* stage 1 — setup */
+    --c2: #f97316; /* stage 2 — main content */
+    --c3: #a855f7; /* stage 3 — detail */
+    --c4: #16a34a; /* stage 4 — wrap-up */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Nunito', 'Sarabun', sans-serif;
+    background: radial-gradient(ellipse at top, #2a3a1f 0%, var(--bg) 55%, #150d0a 100%);
+    color: var(--text); min-height: 100vh; overflow-x: hidden;
+    -webkit-user-select: none; user-select: none;
+  }
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  .home-header { padding: 26px 22px 8px; text-align: center; position: relative; }
+  .hq-link {
+    position: absolute; top: 14px; left: 16px; font-size: 0.7rem; font-weight: 800; color: var(--muted);
+    text-decoration: none; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 10px;
+  }
+  .hq-link:active { transform: scale(0.95); }
+  .home-title {
+    font-family: 'Bangers', cursive; font-size: 1.9rem; letter-spacing: 1.5px;
+    background: linear-gradient(135deg, var(--accent2), var(--c2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    line-height: 1.15; margin-top: 6px;
+  }
+  .home-subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 6px; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+  .type-grid { padding: 18px 20px 30px; display: flex; flex-direction: column; gap: 10px; }
+  .type-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+  }
+  .type-card:active { transform: scale(0.98); }
+  .type-emoji { font-size: 1.7rem; flex-shrink: 0; }
+  .type-body { flex: 1; min-width: 0; }
+  .type-name-th { font-weight: 800; font-size: 0.98rem; font-family: 'Sarabun', sans-serif; }
+  .type-name-en { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
+  .type-purpose-teaser { font-size: 0.72rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  .type-chev { color: var(--muted); font-size: 1.1rem; }
+
+  /* Detail screen */
+  .detail-header { padding: 22px 20px 6px; }
+  .back-link {
+    display: inline-block; font-size: 0.7rem; font-weight: 800; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+    padding: 5px 10px; margin-bottom: 14px; cursor: pointer;
+  }
+  .back-link:active { transform: scale(0.95); }
+  .detail-title-row { display: flex; align-items: center; gap: 10px; }
+  .detail-emoji { font-size: 2rem; }
+  .detail-title-th { font-family: 'Sarabun', sans-serif; font-weight: 800; font-size: 1.3rem; }
+  .detail-title-en { font-size: 0.78rem; color: var(--muted); }
+
+  .detail-body { padding: 6px 20px 34px; }
+  .purpose-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px 16px; margin-top: 14px; font-size: 0.86rem; line-height: 1.55;
+  }
+  .purpose-label { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+
+  .section-label {
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 22px 0 10px;
+  }
+
+  .flow-chart { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .flow-box {
+    width: 100%; max-width: 420px; border-radius: 14px; padding: 12px 16px; color: #14201a;
+    text-align: left;
+  }
+  .flow-box-th { font-family: 'Sarabun', sans-serif; font-weight: 800; font-size: 0.98rem; }
+  .flow-box-en { font-size: 0.7rem; opacity: 0.85; margin-top: 2px; }
+  .flow-arrow { font-size: 1.3rem; color: var(--muted); line-height: 1; margin: 2px 0; }
+
+  .linking-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .linking-chip {
+    font-family: 'Sarabun', sans-serif; font-size: 0.85rem; font-weight: 800; padding: 7px 13px;
+    border-radius: 999px; border: 2px solid; background: var(--surface2); cursor: pointer;
+  }
+  .linking-chip:active { transform: scale(0.96); }
+
+  /* Practice section */
+  .practice-hint { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; }
+  .write-block { text-align: left; margin-top: 14px; }
+  .write-block-label { font-size: 0.8rem; font-weight: 800; margin-bottom: 6px; }
+  .type-input {
+    width: 100%; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 600;
+    background: var(--surface2); border: 2px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; color: var(--text); resize: vertical; height: 64px;
+  }
+  .type-input:focus { outline: none; border-color: var(--accent2); }
+  .pill-btn {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 999px; padding: 10px 16px; font-size: 0.8rem; font-weight: 800; cursor: pointer;
+  }
+  .pill-btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #14260f; border: none; }
+  .pill-btn.toggled { border-color: var(--accent2); color: var(--accent2); }
+  .pill-btn:active { transform: scale(0.96); }
+  .type-done-badge { color: var(--accent); font-size: 0.9rem; margin-left: 6px; }
+  .home-progress {
+    font-size: 0.75rem; color: var(--gold); font-weight: 800; text-align: center; margin-top: 10px;
+  }
+  .sample-line {
+    font-family: 'Sarabun', sans-serif; font-size: 0.98rem; font-weight: 700;
+    background: var(--surface2); border-radius: 10px; padding: 8px 12px; margin-bottom: 8px;
+  }
+  .sample-en { font-size: 0.68rem; color: var(--muted); font-weight: 600; margin-top: 2px; font-family: 'Nunito', sans-serif; }
+  .starter-chip {
+    display: inline-block; font-family: 'Sarabun', sans-serif; font-size: 0.8rem; font-weight: 800;
+    padding: 5px 11px; border-radius: 999px; border: 1.5px dashed; background: var(--surface2); cursor: pointer; margin-bottom: 8px;
+  }
+  .starter-chip:active { transform: scale(0.96); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HOME ══════════════════ -->
+<div class="screen active" id="home">
+  <div class="home-header">
+    <a href="Thai_ReadWrite_Survival.html" class="hq-link" title="Back to Writing Lab">\u2190 Writing Lab</a>
+    <div class="home-title">WRITING TYPES<br>GUIDE</div>
+    <div class="home-subtitle">Every kind of writing has its own job and its own shape. Learn the structure, then write one for real.</div>
+    <div class="home-progress" id="homeProgress"></div>
+  </div>
+  <div class="type-grid" id="typeGrid"></div>
+</div>
+
+<!-- ══════════════════ DETAIL ══════════════════ -->
+<div class="screen" id="detail">
+  <div class="detail-header">
+    <div class="back-link" onclick="showHome()">\u2190 Back</div>
+    <div class="detail-title-row">
+      <div class="detail-emoji" id="detailEmoji"></div>
+      <div>
+        <div class="detail-title-th" id="detailNameTh"></div>
+        <div class="detail-title-en" id="detailNameEn"></div>
+      </div>
+    </div>
+  </div>
+  <div class="detail-body">
+    <div class="purpose-box">
+      <div class="purpose-label">Purpose</div>
+      <div id="detailPurpose"></div>
+    </div>
+
+    <div class="section-label">Structure</div>
+    <div class="flow-chart" id="flowChart"></div>
+
+    <div class="section-label">Linking Words \u2014 tap to hear</div>
+    <div class="linking-row" id="linkingRow"></div>
+
+    <div id="practiceSection"></div>
+  </div>
+</div>
+
+<script>
+const STAGE_COLORS = ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)'];
+
+// Shares the same localStorage key as Thai_ReadWrite_Survival.html so XP
+// and progress stay unified across the whole app. Only touches the xp
+// and writingTypes fields — everything else in the blob passes through
+// untouched on save.
+const STORE_KEY = 'thai-rw-state';
+function loadState(){
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY));
+    if(s && typeof s === 'object'){
+      s.xp = s.xp || 0;
+      s.writingTypes = s.writingTypes || {};
+      return s;
+    }
+  } catch(e){}
+  return { xp: 0, writingTypes: {} };
+}
+function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+let state = loadState();
+
+const WRITING_TYPES = [
+  {
+    key: 'journal', emoji: '\ud83d\udcd4', nameTh: 'บันทึกประจำวัน', nameEn: 'Journal Writing',
+    purpose: 'Reflect on your own day and feelings \u2014 written for yourself, not to convince anyone.',
+    flow: [
+      { th: 'วันที่ & ความรู้สึก', en: 'Date & feeling', sample: 'วันนี้ฉันรู้สึกตื่นเต้น', sampleEn: 'Today I feel excited', starter: 'วันนี้ฉันรู้สึก' },
+      { th: 'เหตุการณ์ที่เกิดขึ้น', en: 'What happened', sample: 'เพราะฉันได้อ่านเรื่องเกี่ยวกับอวกาศ', sampleEn: 'because I read about space', starter: 'เพราะ' },
+      { th: 'ข้อคิด / ความรู้สึกท้ายวัน', en: 'Reflection', sample: 'ทำให้ฉันอยากเรียนรู้เพิ่มเติม', sampleEn: 'it makes me want to learn more', starter: 'ทำให้ฉันคิดว่า' },
+    ],
+    linking: [
+      { th: 'วันนี้', stage: 0 }, { th: 'รู้สึกว่า', stage: 0 },
+      { th: 'เพราะ', stage: 1 }, { th: 'ทำให้ฉันคิดว่า', stage: 2 },
+    ],
+  },
+  {
+    key: 'opinion', emoji: '\u2696\ufe0f', nameTh: 'แสดงความคิดเห็น', nameEn: 'Opinion Essay',
+    purpose: 'State what you think about something, and convince the reader why you think it.',
+    flow: [
+      { th: 'ความคิดเห็น (Claim)', en: 'Your claim', sample: 'ฉันคิดว่ามนุษย์ควรสำรวจอวกาศต่อไป', sampleEn: 'I think humans should keep exploring space', starter: 'ฉันคิดว่า' },
+      { th: 'เหตุผล (Reason)', en: 'Why you think so', sample: 'เพราะเราจะได้เรียนรู้สิ่งใหม่ ๆ', sampleEn: 'because we get to learn new things', starter: 'เพราะ' },
+      { th: 'ตัวอย่าง (Example)', en: 'A concrete example', sample: 'ตัวอย่างเช่น การค้นพบดาวเคราะห์ดวงใหม่', sampleEn: 'for example, discovering a new planet', starter: 'ตัวอย่างเช่น' },
+      { th: 'สรุป (Conclusion)', en: 'Wrap it up', sample: 'ดังนั้นการสำรวจอวกาศจึงสำคัญ', sampleEn: 'so exploring space matters', starter: 'ดังนั้น' },
+    ],
+    linking: [
+      { th: 'ฉันคิดว่า', stage: 0 }, { th: 'เพราะ', stage: 1 },
+      { th: 'ตัวอย่างเช่น', stage: 2 }, { th: 'ดังนั้น', stage: 3 },
+    ],
+  },
+  {
+    key: 'explain', emoji: '\ud83d\udd2c', nameTh: 'อธิบายเหตุและผล', nameEn: 'Explanation / Cause \u2192 Effect',
+    purpose: 'Explain why something happens, one step at a time.',
+    flow: [
+      { th: 'สถานการณ์ (Situation)', en: 'What\u2019s going on', sample: 'ทะเลมีขยะพลาสติกมากขึ้น', sampleEn: 'there is more plastic waste in the sea', starter: 'เมื่อ' },
+      { th: 'สาเหตุ (Cause)', en: 'Why it happens', sample: 'เพราะคนทิ้งขยะลงทะเล', sampleEn: 'because people throw trash into the sea', starter: 'เพราะ' },
+      { th: 'ผลลัพธ์ (Effect)', en: 'What results from it', sample: 'จึงทำให้สัตว์ทะเลได้รับอันตราย', sampleEn: 'so sea animals get hurt', starter: 'จึงทำให้' },
+      { th: 'ทางแก้ (Solution) \u2014 optional', en: 'How to fix it', sample: 'ดังนั้นเราควรช่วยกันลดขยะพลาสติก', sampleEn: 'so we should help reduce plastic waste', starter: 'ดังนั้นเราควร' },
+    ],
+    linking: [
+      { th: 'เมื่อ', stage: 0 }, { th: 'เพราะ', stage: 1 },
+      { th: 'จึงทำให้', stage: 2 }, { th: 'ส่งผลให้', stage: 3 },
+    ],
+  },
+  {
+    key: 'narrative', emoji: '\ud83d\udcd6', nameTh: 'เล่าเรื่อง', nameEn: 'Narrative',
+    purpose: 'Tell a story \u2014 what happened, in the order it happened.',
+    flow: [
+      { th: 'เริ่มเรื่อง (Beginning)', en: 'Set the scene', sample: 'ในตอนแรกฉันไปดูพิพิธภัณฑ์เรือไททานิค', sampleEn: 'at first I went to see the Titanic museum', starter: 'ในตอนแรก' },
+      { th: 'เหตุการณ์หลัก (Middle)', en: 'The main events', sample: 'จากนั้นฉันได้เห็นของจริงจากเรือ', sampleEn: 'then I saw real items from the ship', starter: 'จากนั้น' },
+      { th: 'จบเรื่อง (End)', en: 'How it ends', sample: 'ในที่สุดฉันก็เข้าใจเรื่องราวของเรือมากขึ้น', sampleEn: 'in the end I understood the ship\u2019s story better', starter: 'ในที่สุด' },
+    ],
+    linking: [
+      { th: 'ในตอนแรก', stage: 0 }, { th: 'จากนั้น', stage: 1 }, { th: 'ในที่สุด', stage: 2 },
+    ],
+  },
+  {
+    key: 'letter', emoji: '\u2709\ufe0f', nameTh: 'จดหมาย / อีเมล', nameEn: 'Letter / Email',
+    purpose: 'Communicate a message to a specific person.',
+    flow: [
+      { th: 'คำขึ้นต้น (Greeting)', en: 'Open the letter', sample: 'เรียน คุณครูที่เคารพ', sampleEn: 'Dear respected teacher', starter: 'เรียน' },
+      { th: 'เนื้อหา (Body / Purpose)', en: 'Say what you need to say', sample: 'จุดประสงค์ของจดหมายนี้คือ อยากขอคำแนะนำเรื่องการอ่านภาษาไทย', sampleEn: 'the purpose of this letter is to ask for advice on reading Thai', starter: 'จุดประสงค์ของจดหมายนี้คือ' },
+      { th: 'คำลงท้าย (Closing)', en: 'End politely', sample: 'ขอแสดงความนับถือ', sampleEn: 'Sincerely', starter: 'ขอแสดงความนับถือ' },
+    ],
+    linking: [
+      { th: 'เรียน... / สวัสดี...', stage: 0 },
+      { th: 'จุดประสงค์ของจดหมายนี้คือ', stage: 1 },
+      { th: 'ขอแสดงความนับถือ', stage: 2 },
+    ],
+  },
+  {
+    key: 'descriptive', emoji: '\ud83d\udcad', nameTh: 'บรรยาย', nameEn: 'Descriptive Writing',
+    purpose: 'Paint a picture with words \u2014 use what you see, hear, smell, or feel.',
+    flow: [
+      { th: 'สิ่งที่บรรยาย (Subject)', en: 'What you\u2019re describing', sample: 'ท้องฟ้ายามค่ำคืน', sampleEn: 'the night sky', starter: '' },
+      { th: 'รายละเอียดทางประสาทสัมผัส (Senses)', en: 'Sensory details', sample: 'มีลักษณะเต็มไปด้วยดวงดาวระยิบระยับ', sampleEn: 'full of twinkling stars', starter: 'มีลักษณะ' },
+      { th: 'ความรู้สึกโดยรวม (Overall feeling)', en: 'The impression it leaves', sample: 'ทำให้รู้สึกสงบและมหัศจรรย์', sampleEn: 'it makes me feel calm and amazed', starter: 'ทำให้รู้สึก' },
+    ],
+    linking: [
+      { th: 'มีลักษณะ', stage: 0 }, { th: 'ดูเหมือน', stage: 1 }, { th: 'ทำให้รู้สึก', stage: 2 },
+    ],
+  },
+  {
+    key: 'report', emoji: '\ud83d\udcca', nameTh: 'รายงาน', nameEn: 'Report',
+    purpose: 'Present the facts you found, then what they mean.',
+    flow: [
+      { th: 'ข้อมูล (Information)', en: 'The facts you found', sample: 'จากข้อมูลพบว่ามหาสมุทรปกคลุมพื้นผิวโลกกว่า 70%', sampleEn: 'data shows the ocean covers over 70% of Earth', starter: 'จากข้อมูลพบว่า' },
+      { th: 'สรุป (Conclusion)', en: 'What it means', sample: 'สรุปได้ว่ามหาสมุทรมีความสำคัญต่อโลกมาก', sampleEn: 'in conclusion, the ocean is very important to Earth', starter: 'สรุปได้ว่า' },
+    ],
+    linking: [
+      { th: 'จากข้อมูลพบว่า', stage: 0 }, { th: 'สรุปได้ว่า', stage: 1 },
+    ],
+  },
+  {
+    key: 'news', emoji: '\ud83d\udcf0', nameTh: 'ข่าว', nameEn: 'News Writing',
+    purpose: 'Tell readers what happened \u2014 the most important part first.',
+    flow: [
+      { th: 'พาดหัว (Headline)', en: 'The headline', sample: 'นักวิทยาศาสตร์ค้นพบดาวเคราะห์ดวงใหม่', sampleEn: 'Scientists discover a new planet', starter: '' },
+      { th: 'ใคร ทำอะไร ที่ไหน เมื่อไหร่', en: 'Who / what / when / where', sample: 'เมื่อวันที่ 1 มกราคม นักดาราศาสตร์รายงานการค้นพบที่หอดูดาว', sampleEn: 'on January 1st, astronomers reported the discovery at the observatory', starter: 'เมื่อวันที่' },
+      { th: 'รายละเอียดเพิ่มเติม (Details)', en: 'More details', sample: 'นักวิจัยกล่าวว่าดาวเคราะห์ดวงนี้อาจมีน้ำ', sampleEn: 'researchers say the planet may have water', starter: 'กล่าวว่า' },
+    ],
+    linking: [
+      { th: 'เมื่อวันที่', stage: 0 }, { th: 'ณ', stage: 1 }, { th: 'กล่าวว่า', stage: 2 },
+    ],
+  },
+  {
+    key: 'announcement', emoji: '\ud83d\udce2', nameTh: 'ประกาศ', nameEn: 'Announcement',
+    purpose: 'Let people know something important is happening.',
+    flow: [
+      { th: 'จุดประสงค์ (Purpose)', en: 'What this is about', sample: 'ขอประกาศให้ทราบว่าโรงเรียนจะจัดกิจกรรมดูดาว', sampleEn: 'this is to announce the school will hold a stargazing event', starter: 'ขอประกาศให้ทราบว่า' },
+      { th: 'ข้อมูลสำคัญ (Key info)', en: 'Date / time / place', sample: 'ในวันเสาร์ที่ 10 ณ สนามโรงเรียน', sampleEn: 'on Saturday the 10th, at the school field', starter: 'ในวันที่' },
+    ],
+    linking: [
+      { th: 'ขอประกาศให้ทราบว่า', stage: 0 }, { th: 'ในวันที่ / ณ', stage: 1 },
+    ],
+  },
+  {
+    key: 'essay', emoji: '\ud83d\udcdd', nameTh: 'เรียงความ', nameEn: 'Full Essay',
+    purpose: 'Develop your point across several paragraphs \u2014 introduction, body, and conclusion.',
+    flow: [
+      { th: 'คำนำ (Introduction)', en: 'Open the topic', sample: 'ปัจจุบันปัญหาขยะพลาสติกในทะเลเพิ่มขึ้นอย่างรวดเร็ว', sampleEn: 'today, plastic waste in the sea is increasing rapidly', starter: 'ปัจจุบัน' },
+      { th: 'เนื้อหา 1 (Body 1)', en: 'First point', sample: 'ประการแรก ขยะพลาสติกทำให้สัตว์ทะเลตาย', sampleEn: 'firstly, plastic waste kills sea animals', starter: 'ประการแรก' },
+      { th: 'เนื้อหา 2 (Body 2)', en: 'Second point', sample: 'ประการที่สอง ขยะพลาสติกทำให้น้ำทะเลสกปรก', sampleEn: 'secondly, plastic waste makes the seawater dirty', starter: 'ประการที่สอง' },
+      { th: 'สรุป (Conclusion)', en: 'Wrap it up', sample: 'ดังนั้นทุกคนควรช่วยกันลดการใช้พลาสติก', sampleEn: 'so everyone should help reduce plastic use', starter: 'ดังนั้น' },
+    ],
+    linking: [
+      { th: 'ปัจจุบัน', stage: 0 }, { th: 'ประการแรก', stage: 1 },
+      { th: 'ประการที่สอง', stage: 2 }, { th: 'ดังนั้น', stage: 3 },
+    ],
+  },
+];
+
+function renderHome(){
+  const doneCount = Object.keys(state.writingTypes).length;
+  document.getElementById('homeProgress').textContent = `${doneCount} / ${WRITING_TYPES.length} types practiced \u00b7 ${state.xp} XP`;
+  const grid = document.getElementById('typeGrid');
+  grid.innerHTML = WRITING_TYPES.map(t => {
+    const done = !!state.writingTypes[t.key];
+    return `
+    <div class="type-card" onclick="openType('${t.key}')">
+      <div class="type-emoji">${t.emoji}</div>
+      <div class="type-body">
+        <div class="type-name-th">${t.nameTh}</div>
+        <div class="type-name-en">${t.nameEn}</div>
+        <div class="type-purpose-teaser">${t.purpose}</div>
+      </div>
+      <div class="type-chev">${done ? '<span class="type-done-badge">\u2705</span>' : '\u203a'}</div>
+    </div>`;
+  }).join('');
+}
+
+function openType(key){
+  const t = WRITING_TYPES.find(x => x.key === key);
+  if(!t) return;
+  document.getElementById('detailEmoji').textContent = t.emoji;
+  document.getElementById('detailNameTh').textContent = t.nameTh;
+  document.getElementById('detailNameEn').textContent = t.nameEn;
+  document.getElementById('detailPurpose').textContent = t.purpose;
+
+  document.getElementById('flowChart').innerHTML = t.flow.map((f, i) => `
+    ${i > 0 ? '<div class="flow-arrow">\u2193</div>' : ''}
+    <div class="flow-box" style="background:${STAGE_COLORS[i % STAGE_COLORS.length]}">
+      <div class="flow-box-th">${f.th}</div>
+      <div class="flow-box-en">${f.en}</div>
+    </div>`).join('');
+
+  document.getElementById('linkingRow').innerHTML = t.linking.map(l => {
+    const color = STAGE_COLORS[l.stage % STAGE_COLORS.length];
+    return `<button class="linking-chip" style="border-color:${color}; color:${color}" onclick="speakThai('${l.th.replace(/'/g, "\\'")}')">${l.th}</button>`;
+  }).join('');
+
+  const done = !!state.writingTypes[t.key];
+  document.getElementById('practiceSection').innerHTML = `
+    <div class="section-label">\u270d\ufe0f Your Turn \u2014 Write One</div>
+    <div class="practice-hint">Use the linking words above if you get stuck. One line per box is fine.</div>
+    ${t.flow.map((f, i) => {
+      const color = STAGE_COLORS[i % STAGE_COLORS.length];
+      return `
+      <div class="write-block">
+        <div class="write-block-label" style="color:${color}">${i + 1}. ${f.th} <span style="color:var(--muted); font-weight:600;">(${f.en})</span></div>
+        ${f.sample ? `
+          <div class="sample-line" style="color:${color}">
+            ${f.sample}
+            <div class="sample-en">${f.sampleEn || ''}</div>
+          </div>` : ''}
+        ${f.starter ? `<button class="starter-chip" style="border-color:${color}; color:${color}" onclick="insertStarter(${i}, '${f.starter.replace(/'/g, "\\'")}')">${f.starter}\u2026</button>` : ''}
+        <textarea class="type-input" id="wtBlock-${i}" placeholder="\u2026"></textarea>
+      </div>`;
+    }).join('')}
+    <div class="btn-row" style="margin-top:16px; display:flex; justify-content:center;">
+      <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markTypeTried('${t.key}', this)">
+        ${done ? '\u2705 Practiced' : '\u2705 I tried it!'}
+      </button>
+    </div>
+  `;
+
+  document.getElementById('home').classList.remove('active');
+  document.getElementById('detail').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function markTypeTried(key, btn){
+  if(!state.writingTypes[key]){ state.writingTypes[key] = true; state.xp += 40; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Practiced'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+function insertStarter(idx, text){
+  const box = document.getElementById('wtBlock-' + idx);
+  if(!box) return;
+  if(box.value.trim().length === 0){
+    box.value = text;
+  } else if(!box.value.startsWith(text)){
+    box.value = text + box.value;
+  }
+  box.focus();
+  box.setSelectionRange(box.value.length, box.value.length);
+}
+
+function showHome(){
+  document.getElementById('detail').classList.remove('active');
+  document.getElementById('home').classList.add('active');
+  renderHome();
+  window.scrollTo(0,0);
+}
+
+let thaiVoice = null;
+if('speechSynthesis' in window){
+  const pick = () => {
+    const voices = speechSynthesis.getVoices();
+    thaiVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('th')) || null;
+  };
+  speechSynthesis.onvoiceschanged = pick;
+  pick();
+}
+function speakThai(text){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'th-TH';
+  if(thaiVoice) u.voice = thaiVoice;
+  u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+
+renderHome();
+</script>
+</body>
+</html>
