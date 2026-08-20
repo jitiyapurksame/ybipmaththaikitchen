@@ -823,25 +823,63 @@ const OPINION_SCENARIOS = [
 
 /* ══════════════════ WRITING LAB CONTENT (World 5) ══════════════════ */
 const FILL_BLANK_ITEMS = [
-  { th: 'วันนี้ฉันรู้สึก ______ เพราะ ______', en: 'Today I feel ___ because ___', icon: '😊' },
-  { th: 'สิ่งที่ฉันชอบเกี่ยวกับอวกาศคือ ______', en: 'What I like about space is ___', icon: '🌌' },
-  { th: 'สัตว์ที่ฉันชอบที่สุดคือ ______ เพราะ ______', en: 'My favorite animal is ___ because ___', icon: '🐦' },
-  { th: 'ถ้าฉันได้ไปทะเล ฉันอยากจะ ______', en: 'If I went to the sea, I would want to ___', icon: '🌊' },
-  { th: 'เรื่องที่น่าสนใจเกี่ยวกับเรือไททานิคคือ ______', en: 'An interesting fact about the Titanic is ___', icon: '🚢' },
+  {
+    th: 'วันนี้ฉันรู้สึก ______ เพราะ ______', en: 'Today I feel ___ because ___', icon: '😊',
+    blanks: [
+      { label: 'Feeling', structure: 'Adjective', color: '#38bdf8' },
+      { label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316' },
+    ],
+    sampleValues: ['ดีใจ', 'ได้เรียนรู้เรื่องดวงดาว'],
+  },
+  {
+    th: 'สิ่งที่ฉันชอบเกี่ยวกับอวกาศคือ ______', en: 'What I like about space is ___', icon: '🌌',
+    blanks: [{ label: 'Liked aspect', structure: 'Noun phrase', color: '#38bdf8' }],
+    sampleValues: ['ดวงดาวมากมาย'],
+  },
+  {
+    th: 'สัตว์ที่ฉันชอบที่สุดคือ ______ เพราะ ______', en: 'My favorite animal is ___ because ___', icon: '🐦',
+    blanks: [
+      { label: 'Animal', structure: 'Noun', color: '#38bdf8' },
+      { label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316' },
+    ],
+    sampleValues: ['เสือ', 'มันแข็งแรงและสวยงาม'],
+  },
+  {
+    th: 'ถ้าฉันได้ไปทะเล ฉันอยากจะ ______', en: 'If I went to the sea, I would want to ___', icon: '🌊',
+    blanks: [{ label: 'What you\u2019d do', structure: 'Verb phrase', color: '#38bdf8' }],
+    sampleValues: ['ว่ายน้ำและดูปลา'],
+  },
+  {
+    th: 'เรื่องที่น่าสนใจเกี่ยวกับเรือไททานิคคือ ______', en: 'An interesting fact about the Titanic is ___', icon: '🚢',
+    blanks: [{ label: 'Interesting fact', structure: 'Noun phrase / Clause', color: '#38bdf8' }],
+    sampleValues: ['มันจมในการเดินทางครั้งแรก'],
+  },
 ];
 
 const STARTER_TOPICS = [
   {
     title: 'สัตว์ที่ฉันชอบ (An animal I like)', icon: '🐦',
-    starters: ['สัตว์ที่ฉันชอบคือ ______', 'ฉันชอบสัตว์ชนิดนี้เพราะ ______', 'สิ่งที่น่าสนใจคือ ______'],
+    starters: [
+      { th: 'สัตว์ที่ฉันชอบคือ ______', label: 'Animal', structure: 'Noun', color: '#38bdf8', sample: 'นก' },
+      { th: 'ฉันชอบสัตว์ชนิดนี้เพราะ ______', label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316', sample: 'มันบินได้และร้องเพลงเพราะ' },
+      { th: 'สิ่งที่น่าสนใจคือ ______', label: 'Interesting fact', structure: 'Noun phrase / Clause', color: '#a855f7', sample: 'มันสามารถอพยพไปได้ไกลมาก' },
+    ],
   },
   {
     title: 'ดาวเคราะห์ที่ฉันอยากไป (A planet I want to visit)', icon: '🪐',
-    starters: ['ดาวเคราะห์ที่ฉันอยากไปคือ ______', 'ฉันอยากไปเพราะ ______', 'สิ่งที่ฉันอยากทำที่นั่นคือ ______'],
+    starters: [
+      { th: 'ดาวเคราะห์ที่ฉันอยากไปคือ ______', label: 'Planet', structure: 'Noun', color: '#38bdf8', sample: 'ดาวอังคาร' },
+      { th: 'ฉันอยากไปเพราะ ______', label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316', sample: 'มันมีสีแดงสวยงามและน่าสำรวจ' },
+      { th: 'สิ่งที่ฉันอยากทำที่นั่นคือ ______', label: 'Activity', structure: 'Verb phrase', color: '#a855f7', sample: 'สำรวจพื้นผิวและถ่ายรูป' },
+    ],
   },
   {
     title: 'เรือไททานิค (The Titanic)', icon: '🚢',
-    starters: ['สิ่งที่ฉันรู้เกี่ยวกับเรือไททานิคคือ ______', 'สิ่งที่ทำให้ฉันประทับใจคือ ______', 'ถ้าฉันอยู่บนเรือ ฉันจะ ______'],
+    starters: [
+      { th: 'สิ่งที่ฉันรู้เกี่ยวกับเรือไททานิคคือ ______', label: 'Fact', structure: 'Noun phrase / Clause', color: '#38bdf8', sample: 'มันเป็นเรือที่ใหญ่ที่สุดในยุคนั้น' },
+      { th: 'สิ่งที่ทำให้ฉันประทับใจคือ ______', label: 'Impression', structure: 'Noun phrase / Clause', color: '#f97316', sample: 'ความยิ่งใหญ่ของการออกแบบเรือ' },
+      { th: 'ถ้าฉันอยู่บนเรือ ฉันจะ ______', label: 'Action', structure: 'Verb phrase', color: '#a855f7', sample: 'หาที่ปลอดภัยและช่วยเหลือคนอื่น' },
+    ],
   },
 ];
 
@@ -2364,12 +2402,18 @@ function renderFillBlank(){
   document.getElementById('practiceBody').innerHTML = `
     <div class="practice-card">
       <div class="item-icon">${item.icon}</div>
-      <div class="pattern-template">${item.th}</div>
+      <div class="pattern-template">${renderTemplateBlanks(item)}</div>
+      ${blankLegendHtml(item)}
       <div class="practice-en" style="margin-top:8px;">${item.en}</div>
       <div class="btn-row">
         <button class="pill-btn" onclick="speakThai('${escJs(item.th.replace(/______/g, ''))}', false)">\ud83d\udd0a Listen</button>
       </div>
-      <textarea id="w1Input" class="type-input" style="height:80px; font-size:1.1rem;" placeholder="Write your sentence here\u2026"></textarea>
+      ${item.sampleValues ? `
+        <div class="practice-en" style="margin-top:14px;">Example \u2014 tap to use it:</div>
+        <div class="phrase-chip-col">
+          <button class="phrase-chip" onclick="insertOpinionPhrase('${escJs(buildPlainExample(item, item.sampleValues))}')">${buildColoredExampleHtml(item, item.sampleValues)}</button>
+        </div>` : ''}
+      <textarea id="w1Input" class="type-input" style="height:80px; font-size:1.1rem; margin-top:14px;" placeholder="Write your sentence here\u2026"></textarea>
       <div class="btn-row">
         <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW1Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
       </div>
@@ -2405,8 +2449,10 @@ function renderStarterTopic(){
       <div class="pattern-name-badge">${topic.title}</div>
       ${topic.starters.map((s, i) => `
         <div class="write-block">
-          <div class="write-block-label">${s}</div>
-          <textarea class="type-input" placeholder="\u2026"></textarea>
+          <div class="write-block-label" style="color:${s.color}">${renderTemplateBlanks({ th: s.th, blanks: [s] })}</div>
+          <div class="blank-legend-structure" style="margin-bottom:6px;">${s.label} \u2014 ${s.structure}</div>
+          <button class="phrase-chip" style="margin-bottom:8px;" onclick="insertW2Sample(${i}, '${escJs(s.sample)}')"><span style="color:${s.color}">${s.sample}</span></button>
+          <textarea class="type-input" id="w2ta-${i}" placeholder="\u2026"></textarea>
         </div>`).join('')}
       <div class="btn-row">
         <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW2Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
@@ -2414,6 +2460,12 @@ function renderStarterTopic(){
     </div>
     ${simpleNavHtml(activeStarterIdx, STARTER_TOPICS.length, 'prevStarter', 'nextStarter')}
   `;
+}
+function insertW2Sample(i, sample){
+  const box = document.getElementById('w2ta-' + i);
+  if(!box) return;
+  box.value = sample;
+  box.focus();
 }
 function markW2Tried(btn){
   if(!state.w2[activeStarterIdx]){ state.w2[activeStarterIdx] = true; state.xp += 30; saveState(); }
