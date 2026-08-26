@@ -579,10 +579,23 @@
   <div class="missions-list" id="room-missions-list" style="padding:0 20px 30px"></div>
 </div>
 
+<!-- ══════════ WORD DECODER — THEME PICKER ══════════ -->
+<div id="decoder-themes" class="screen">
+  <div class="mission-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="mission-header-text">
+      <div id="decoder-themes-title">-</div>
+      <div id="decoder-themes-sub">-</div>
+    </div>
+  </div>
+  <div class="missions-label">Pick a smaller batch to tackle</div>
+  <div class="missions-list" id="decoder-themes-list" style="padding:0 20px 30px"></div>
+</div>
+
 <!-- ══════════ WORD DECODER ══════════ -->
 <div id="decoder" class="screen">
   <div class="mission-header">
-    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div class="back-btn" onclick="goBackFromDecoder()">←</div>
     <div class="mission-header-text">
       <div id="decoder-title">-</div>
       <div id="decoder-sub">-</div>
@@ -1485,6 +1498,75 @@ const DECKS = {
   ],
 };
 
+// ══════════════════════ WORD DECODER THEME GROUPS ══════════════════════
+// Splits each big deck into smaller topic-based batches so a full 30-50
+// card deck isn't dumped on the son all at once.
+
+const THEME_DEFS = {
+  idiom: [
+    { key: 'animal',  emoji: '🐘', label: 'Animal Idioms' },
+    { key: 'body',    emoji: '🖐️', label: 'Body-Part Idioms' },
+    { key: 'water',   emoji: '💧', label: 'Water & Weather Idioms' },
+    { key: 'food',    emoji: '🌾', label: 'Food & Plant Idioms' },
+    { key: 'tool',    emoji: '🔨', label: 'Tool & Object Idioms' },
+    { key: 'wisdom',  emoji: '💭', label: 'Life Wisdom Idioms' },
+  ],
+  royal: [
+    { key: 'verbs',   emoji: '🗣️', label: 'Royal Verbs & Actions' },
+    { key: 'body',    emoji: '🖐️', label: 'Royal Body Parts' },
+    { key: 'objects', emoji: '👑', label: 'Royal Objects & Places' },
+  ],
+  formal: [
+    { key: 'thinking',   emoji: '🧠', label: 'Thinking & Essay Words' },
+    { key: 'verbs',      emoji: '🍽️', label: 'Everyday Verbs → Formal' },
+    { key: 'connectors', emoji: '🔗', label: 'Writing Connectors' },
+    { key: 'upgrades',   emoji: '⬆️', label: 'More Formal Upgrades' },
+  ],
+};
+
+const CARD_THEMES = {
+  // ── idiom: animal ──
+  i2:'animal', i3:'animal', i5:'animal', i6:'animal', i9:'animal', i10:'animal',
+  i12:'animal', i13:'animal', i21:'animal', i22:'animal', i31:'animal', i32:'animal',
+  i44:'animal', i47:'animal', i48:'animal',
+  // ── idiom: body ──
+  i7:'body', i11:'body', i20:'body', i24:'body', i25:'body', i27:'body',
+  i30:'body', i39:'body', i42:'body', i45:'body',
+  // ── idiom: water & weather ──
+  i1:'water', i14:'water', i18:'water', i19:'water', i38:'water', i50:'water',
+  // ── idiom: food & plant ──
+  i15:'food', i16:'food', i36:'food', i40:'food', i41:'food', i43:'food', i46:'food',
+  // ── idiom: tool & object ──
+  i4:'tool', i23:'tool', i33:'tool', i34:'tool', i35:'tool', i37:'tool', i49:'tool',
+  // ── idiom: life wisdom (no strong physical image) ──
+  i8:'wisdom', i17:'wisdom', i26:'wisdom', i28:'wisdom', i29:'wisdom',
+
+  // ── royal: verbs & actions (r1-r15) ──
+  r1:'verbs', r2:'verbs', r3:'verbs', r4:'verbs', r5:'verbs', r6:'verbs', r7:'verbs',
+  r8:'verbs', r9:'verbs', r10:'verbs', r11:'verbs', r12:'verbs', r13:'verbs', r14:'verbs', r15:'verbs',
+  // ── royal: body parts (r16-r31) ──
+  r16:'body', r17:'body', r18:'body', r19:'body', r20:'body', r21:'body', r22:'body',
+  r23:'body', r24:'body', r25:'body', r26:'body', r27:'body', r28:'body', r29:'body', r30:'body', r31:'body',
+  // ── royal: objects & places (r32-r41) ──
+  r32:'objects', r33:'objects', r34:'objects', r35:'objects', r36:'objects',
+  r37:'objects', r38:'objects', r39:'objects', r40:'objects', r41:'objects',
+
+  // ── formal: thinking & essay words (f1-f10) ──
+  f1:'thinking', f2:'thinking', f3:'thinking', f4:'thinking', f5:'thinking',
+  f6:'thinking', f7:'thinking', f8:'thinking', f9:'thinking', f10:'thinking',
+  // ── formal: everyday verbs → formal (f11-f17, f25-f35) ──
+  f11:'verbs', f12:'verbs', f13:'verbs', f14:'verbs', f15:'verbs', f16:'verbs', f17:'verbs',
+  f25:'verbs', f26:'verbs', f27:'verbs', f28:'verbs', f29:'verbs', f30:'verbs',
+  f31:'verbs', f32:'verbs', f33:'verbs', f34:'verbs', f35:'verbs',
+  // ── formal: writing connectors (f18-f24) ──
+  f18:'connectors', f19:'connectors', f20:'connectors', f21:'connectors',
+  f22:'connectors', f23:'connectors', f24:'connectors',
+};
+
+function themeOf(card) {
+  return CARD_THEMES[card.id] || 'other';
+}
+
 // ══════════════════════ THAI PROSODY PATTERN RECOGNITION LAB ══════════════════════
 // 👀 เห็นหน้าตาคำประพันธ์ → 🔎 สแกนจุดสังเกต → 🧠 ระบุประเภท → 🎯 ตอบข้อสอบ
 // Teaching order: โคลง → กาพย์ → กลอน → ฉันท์ (ฉันท์ taught LAST — easiest to confuse with the others)
@@ -2006,15 +2088,57 @@ function openRoom(key) {
 // ══════════════════════ WORD DECODER ══════════════════════
 
 let decoderExpanded = new Set();
+let currentThemeKey = null;
 
 function openDecoder(key) {
   currentRoomKey = key;
+  const room = ROOMS.find(r => r.key === key);
+  const themes = THEME_DEFS[key];
+  if (!themes) {
+    // No theme groups defined for this deck — open the full deck directly.
+    openDecoderTheme(key, null);
+    return;
+  }
+  document.getElementById('decoder-themes-title').textContent = `${room.emoji} ${room.title}`;
+  document.getElementById('decoder-themes-sub').textContent = room.titleEn;
+  showScreen('decoder-themes');
+  const deck = DECKS[key] || [];
+  const list = document.getElementById('decoder-themes-list');
+  list.innerHTML = themes.map(t => {
+    const cards = deck.filter(c => themeOf(c) === t.key);
+    const learnedCount = cards.filter(c => state.decoderLearned[c.id]).length;
+    return `
+    <div class="mission-card" onclick="openDecoderTheme('${key}', '${t.key}')">
+      <div class="mission-emoji">${t.emoji}</div>
+      <div class="mission-text">
+        <div class="mission-title-th">${t.label}</div>
+        <div class="room-card-desc">${cards.length} cards in this batch</div>
+      </div>
+      <div class="room-count-tag">${learnedCount} / ${cards.length}<br>decoded</div>
+    </div>`;
+  }).join('');
+}
+
+function openDecoderTheme(key, themeKey) {
+  currentRoomKey = key;
+  currentThemeKey = themeKey;
   decoderExpanded = new Set();
   const room = ROOMS.find(r => r.key === key);
-  document.getElementById('decoder-title').textContent = `${room.emoji} ${room.title}`;
+  const themeDef = themeKey && (THEME_DEFS[key] || []).find(t => t.key === themeKey);
+  document.getElementById('decoder-title').textContent = themeDef
+    ? `${themeDef.emoji} ${themeDef.label}`
+    : `${room.emoji} ${room.title}`;
   document.getElementById('decoder-sub').textContent = room.titleEn;
   showScreen('decoder');
-  renderDecoderDeck(key);
+  renderDecoderDeck(key, themeKey);
+}
+
+function goBackFromDecoder() {
+  if (currentThemeKey !== null && THEME_DEFS[currentRoomKey]) {
+    openDecoder(currentRoomKey);
+  } else {
+    showScreen('home');
+  }
 }
 
 function decoderCardHtml(card) {
@@ -2058,8 +2182,9 @@ function decoderCardHtml(card) {
     </div>`;
 }
 
-function renderDecoderDeck(key) {
-  const deck = DECKS[key] || [];
+function renderDecoderDeck(key, themeKey) {
+  let deck = DECKS[key] || [];
+  if (themeKey) deck = deck.filter(c => themeOf(c) === themeKey);
   const content = document.getElementById('decoder-content');
   const order = ['must', 'should', 'bonus'];
   content.innerHTML = order.map(p => {
@@ -2075,7 +2200,7 @@ function renderDecoderDeck(key) {
       ${cards.map(decoderCardHtml).join('')}
     </div>`;
   }).join('');
-  updateDecoderProgress(key);
+  updateDecoderProgress(key, themeKey);
 }
 
 function toggleDecoderCard(id) {
@@ -2090,14 +2215,15 @@ function toggleDecoderLearned(id) {
   saveState();
   if (!wasLearned) addXP(8);
   else renderXP();
-  renderDecoderDeck(currentRoomKey);
+  renderDecoderDeck(currentRoomKey, currentThemeKey);
   decoderExpanded.add(id);
   const el = document.getElementById(`dc-${id}`);
   if (el) el.classList.add('expanded');
 }
 
-function updateDecoderProgress(key) {
-  const deck = DECKS[key] || [];
+function updateDecoderProgress(key, themeKey) {
+  let deck = DECKS[key] || [];
+  if (themeKey) deck = deck.filter(c => themeOf(c) === themeKey);
   const learnedCount = deck.filter(c => state.decoderLearned[c.id]).length;
   const pct = deck.length ? Math.round((learnedCount / deck.length) * 100) : 0;
   const fill = document.getElementById('decoder-progress-fill');
