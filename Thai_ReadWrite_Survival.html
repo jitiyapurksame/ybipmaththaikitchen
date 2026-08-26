@@ -328,6 +328,27 @@
     border-radius: 999px; padding: 4px 12px; margin-bottom: 10px;
   }
   .expansion-list { text-align: left; margin-top: 12px; }
+  .usage-box {
+    text-align: left; margin: 10px 0 4px; padding: 10px 13px; border-radius: 12px;
+    background: rgba(244,180,0,0.08); border: 1px solid rgba(244,180,0,0.25);
+  }
+  .usage-box-label { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .usage-box-text { font-size: 0.8rem; line-height: 1.5; color: var(--text); }
+
+  /* S2 free expansion \u2014 type your own word per category */
+  .free-expand-box { text-align: left; margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--border); }
+  .free-expand-label { font-size: 0.78rem; font-weight: 800; color: var(--gold); margin-bottom: 12px; }
+  .free-expand-field { margin-bottom: 12px; }
+  .free-expand-field-label { font-size: 0.72rem; font-weight: 800; margin-bottom: 5px; }
+  .free-expand-input {
+    width: 100%; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700;
+    background: var(--surface2); border: 2px solid; border-radius: 10px; padding: 10px 12px; color: var(--text);
+  }
+  .free-expand-input:focus { outline: none; }
+  .free-expand-preview {
+    font-family: 'Sarabun', sans-serif; font-size: 1.25rem; font-weight: 800; line-height: 1.6;
+    margin-top: 14px; padding: 12px; background: var(--surface2); border-radius: 12px; min-height: 2.4rem;
+  }
   .expansion-stage {
     font-family: 'Sarabun', sans-serif; font-size: 1.15rem; padding: 10px 4px; border-bottom: 1px dashed var(--border);
     color: var(--muted);
@@ -406,6 +427,33 @@
   .blank-legend-text { display: flex; flex-direction: column; }
   .blank-legend-label { font-size: 0.78rem; font-weight: 800; }
   .blank-legend-structure { font-size: 0.68rem; color: var(--muted); margin-top: 1px; }
+
+  /* Blank match/choose mini-widgets (W1/W2 3-level engine) */
+  .blank-task { text-align: left; margin-top: 16px; }
+  .blank-task-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .blank-task-badge {
+    font-size: 0.68rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; color: #14201a;
+  }
+  .blank-task-prompt { font-family: 'Sarabun', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+  .blank-visual { font-size: 2.6rem; text-align: center; margin-bottom: 10px; }
+  .blank-option-col { display: flex; flex-direction: column; gap: 8px; }
+  .blank-option-btn {
+    font-family: 'Sarabun', sans-serif; font-size: 0.95rem; text-align: left; padding: 11px 13px;
+    border-radius: 10px; background: var(--surface2); border: 2px solid var(--border); color: var(--text); cursor: pointer;
+  }
+  .blank-option-btn:active { transform: scale(0.98); }
+  .blank-option-btn.correct { border-color: var(--accent); background: rgba(22,163,74,0.2); }
+  .blank-option-btn.wrong { border-color: #ef4444; background: rgba(239,68,68,0.15); }
+
+  .finished-piece {
+    margin-top: 18px; text-align: left; background: var(--surface2); border: 1px dashed var(--gold);
+    border-radius: 14px; padding: 14px 16px;
+  }
+  .finished-piece-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .finished-piece-text { font-family: 'Sarabun', sans-serif; font-size: 1.05rem; line-height: 1.9; }
+  .finished-piece-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .legend-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; }
+  .legend-item { font-size: 0.68rem; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -721,6 +769,22 @@ const EXPANSION_SENTENCES = [
       mt: [{ word: 'อย่างช้า ๆ', en: 'slowly' }, { word: 'อย่างมั่นคง', en: 'steadily' }, { word: 'ท่ามกลางพายุ', en: 'through a storm' }],
     },
   },
+  {
+    icon: '⭐', subject: 'ดาว', subjectEn: 'A star', verb: 'ส่องแสง', verbEn: 'shines',
+    categories: {
+      adj: [{ word: 'ดวงเล็ก', en: 'small' }, { word: 'ดวงใหญ่', en: 'big' }, { word: 'สีขาว', en: 'white' }],
+      loc: [{ word: 'อยู่บนท้องฟ้า', en: 'in the sky' }, { word: 'อยู่ไกลจากโลก', en: 'far from Earth' }, { word: 'อยู่เหนือทะเล', en: 'above the sea' }],
+      mt: [{ word: 'อย่างระยิบระยับในยามค่ำคืน', en: 'twinkling at night' }, { word: 'อย่างสว่างไสวตลอดเวลา', en: 'brightly all the time' }, { word: 'อย่างเงียบสงบ', en: 'quietly' }],
+    },
+  },
+  {
+    icon: '📚', subject: 'นักเรียน', subjectEn: 'A student', verb: 'อ่านหนังสือ', verbEn: 'reads',
+    categories: {
+      adj: [{ word: 'คนขยัน', en: 'diligent' }, { word: 'คนเก่ง', en: 'smart' }, { word: 'คนใหม่', en: 'new' }],
+      loc: [{ word: 'ในห้องสมุด', en: 'in the library' }, { word: 'ที่บ้าน', en: 'at home' }, { word: 'ใต้ต้นไม้', en: 'under a tree' }],
+      mt: [{ word: 'อย่างตั้งใจทุกวัน', en: 'attentively every day' }, { word: 'อย่างเงียบ ๆ ตอนกลางคืน', en: 'quietly at night' }, { word: 'อย่างรวดเร็วก่อนสอบ', en: 'quickly before the exam' }],
+    },
+  },
 ];
 // Order the three growth categories are offered in, with color + a plain
 // description of what each type of word does in the sentence.
@@ -734,6 +798,7 @@ const EXPANSION_CATEGORY_META = {
 const PATTERN_CARDS = [
   {
     name: 'Opinion', th: 'ฉันคิดว่า ______ เพราะ ______', en: 'State what you think, then explain why.', icon: '💡',
+    usage: 'Use this near the start of your paragraph, right after introducing the topic. / ใช้ตอนต้นย่อหน้า หลังจากแนะนำหัวข้อแล้ว',
     blanks: [
       { label: 'Opinion \u2014 ความคิดเห็น', structure: 'Subject + Verb (+ Object)', color: '#38bdf8' },
       { label: 'Reason \u2014 เหตุผล', structure: 'Clause explaining why', color: '#f97316' },
@@ -741,6 +806,7 @@ const PATTERN_CARDS = [
   },
   {
     name: 'Explanation', th: 'สาเหตุที่ ______ คือ ______', en: 'Explain the reason behind something.', icon: '🔬',
+    usage: 'Use this when you need to explain the cause behind a fact you just stated. / ใช้เมื่อต้องอธิบายสาเหตุของสิ่งที่เพิ่งกล่าวถึง',
     examples: [['เรือไททานิคจม', 'เรือชนภูเขาน้ำแข็ง'], ['ท้องฟ้ามืดตอนกลางคืน', 'โลกหมุนออกจากดวงอาทิตย์']],
     blanks: [
       { label: 'Situation \u2014 เหตุการณ์', structure: 'Noun phrase / event', color: '#38bdf8' },
@@ -749,6 +815,7 @@ const PATTERN_CARDS = [
   },
   {
     name: 'Comparison', th: '______ มีความคล้ายกับ ______ ในเรื่อง ______', en: 'Compare two things and how they\u2019re alike.', icon: '⚖️',
+    usage: 'Use this in the body of a paragraph, when you want to show how two things are alike. / ใช้ในเนื้อหา เมื่อต้องการเปรียบเทียบว่าสิ่งสองสิ่งคล้ายกันอย่างไร',
     examples: [['ดวงจันทร์', 'โลก', 'เป็นทรงกลม'], ['เรือไททานิค', 'เรือเดินสมุทรลำอื่น', 'ขนาดใหญ่']],
     blanks: [
       { label: 'Thing A \u2014 สิ่งที่ 1', structure: 'Noun', color: '#38bdf8' },
@@ -758,6 +825,7 @@ const PATTERN_CARDS = [
   },
   {
     name: 'Cause \u2192 Effect', th: 'เมื่อ ______ จึงทำให้ ______', en: 'Show how one thing leads to another.', icon: '\u27a1\ufe0f',
+    usage: 'Use this right after describing an event, to show what it led to. / ใช้หลังจากอธิบายเหตุการณ์ เพื่อแสดงผลที่ตามมา',
     examples: [['ฝนตกหนัก', 'น้ำท่วม'], ['ขยะพลาสติกลงทะเล', 'สัตว์ทะเลได้รับอันตราย']],
     blanks: [
       { label: 'Cause \u2014 สาเหตุ', structure: 'Clause (Subject + Verb)', color: '#38bdf8' },
@@ -766,6 +834,7 @@ const PATTERN_CARDS = [
   },
   {
     name: 'Example', th: 'ตัวอย่างเช่น ______', en: 'Give a concrete example.', icon: '📌',
+    usage: 'Use this right after a statement or reason, to give a real instance that supports it. / ใช้หลังประโยคหรือเหตุผลที่กล่าวไปแล้ว เพื่อยกตัวอย่างที่สนับสนุน',
     examples: [['ดาวพฤหัสบดีเป็นดาวเคราะห์ที่ใหญ่ที่สุด'], ['การรีไซเคิลขวดพลาสติก']],
     blanks: [
       { label: 'Example \u2014 ตัวอย่าง', structure: 'Noun phrase / Clause', color: '#38bdf8' },
@@ -773,6 +842,7 @@ const PATTERN_CARDS = [
   },
   {
     name: 'Conclusion', th: 'ดังนั้น ______', en: 'Sum up your point.', icon: '\u2705',
+    usage: 'Use this at the very end, after ALL your reasons have been given, to sum everything up. / ใช้ตอนท้ายสุด หลังจากให้เหตุผลครบทุกข้อแล้ว เพื่อสรุปทั้งหมด',
     examples: [['เราจึงควรช่วยกันลดขยะพลาสติก'], ['การสำรวจอวกาศจึงมีประโยชน์ต่อมนุษย์']],
     blanks: [
       { label: 'Conclusion \u2014 บทสรุป', structure: 'Clause (Subject + Verb)', color: '#38bdf8' },
@@ -826,32 +896,32 @@ const FILL_BLANK_ITEMS = [
   {
     th: 'วันนี้ฉันรู้สึก ______ เพราะ ______', en: 'Today I feel ___ because ___', icon: '😊',
     blanks: [
-      { label: 'Feeling', structure: 'Adjective', color: '#38bdf8' },
-      { label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316' },
+      { label: 'Feeling', structure: 'Adjective', color: '#38bdf8', correctFill: 'ดีใจ', visual: '😊', distractors: ['เศร้า', 'โกรธ'] },
+      { label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316', correctFill: 'ได้เรียนรู้เรื่องดวงดาว', distractors: ['ฝนตกหนักมาก', 'เรือจมลงในทะเล'] },
     ],
     sampleValues: ['ดีใจ', 'ได้เรียนรู้เรื่องดวงดาว'],
   },
   {
     th: 'สิ่งที่ฉันชอบเกี่ยวกับอวกาศคือ ______', en: 'What I like about space is ___', icon: '🌌',
-    blanks: [{ label: 'Liked aspect', structure: 'Noun phrase', color: '#38bdf8' }],
+    blanks: [{ label: 'Liked aspect', structure: 'Noun phrase', color: '#38bdf8', correctFill: 'ดวงดาวมากมาย', visual: '🌌', distractors: ['สัตว์ทะเล', 'เรือเดินสมุทร'] }],
     sampleValues: ['ดวงดาวมากมาย'],
   },
   {
     th: 'สัตว์ที่ฉันชอบที่สุดคือ ______ เพราะ ______', en: 'My favorite animal is ___ because ___', icon: '🐦',
     blanks: [
-      { label: 'Animal', structure: 'Noun', color: '#38bdf8' },
-      { label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316' },
+      { label: 'Animal', structure: 'Noun', color: '#38bdf8', correctFill: 'เสือ', visual: '🐯', distractors: ['ปลา', 'นก'] },
+      { label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316', correctFill: 'มันแข็งแรงและสวยงาม', distractors: ['มันบินได้สูง', 'มันว่ายน้ำเก่ง'] },
     ],
     sampleValues: ['เสือ', 'มันแข็งแรงและสวยงาม'],
   },
   {
     th: 'ถ้าฉันได้ไปทะเล ฉันอยากจะ ______', en: 'If I went to the sea, I would want to ___', icon: '🌊',
-    blanks: [{ label: 'What you\u2019d do', structure: 'Verb phrase', color: '#38bdf8' }],
+    blanks: [{ label: 'What you\u2019d do', structure: 'Verb phrase', color: '#38bdf8', correctFill: 'ว่ายน้ำและดูปลา', visual: '🏊', distractors: ['ดูดาวตอนกลางคืน', 'อ่านหนังสือเกี่ยวกับเรือ'] }],
     sampleValues: ['ว่ายน้ำและดูปลา'],
   },
   {
     th: 'เรื่องที่น่าสนใจเกี่ยวกับเรือไททานิคคือ ______', en: 'An interesting fact about the Titanic is ___', icon: '🚢',
-    blanks: [{ label: 'Interesting fact', structure: 'Noun phrase / Clause', color: '#38bdf8' }],
+    blanks: [{ label: 'Interesting fact', structure: 'Noun phrase / Clause', color: '#38bdf8', correctFill: 'มันจมในการเดินทางครั้งแรก', visual: '🚢', distractors: ['มันบินได้เร็วมาก', 'มันอยู่บนดาวอังคาร'] }],
     sampleValues: ['มันจมในการเดินทางครั้งแรก'],
   },
 ];
@@ -860,93 +930,140 @@ const STARTER_TOPICS = [
   {
     title: 'สัตว์ที่ฉันชอบ (An animal I like)', icon: '🐦',
     starters: [
-      { th: 'สัตว์ที่ฉันชอบคือ ______', label: 'Animal', structure: 'Noun', color: '#38bdf8', sample: 'นก' },
-      { th: 'ฉันชอบสัตว์ชนิดนี้เพราะ ______', label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316', sample: 'มันบินได้และร้องเพลงเพราะ' },
-      { th: 'สิ่งที่น่าสนใจคือ ______', label: 'Interesting fact', structure: 'Noun phrase / Clause', color: '#a855f7', sample: 'มันสามารถอพยพไปได้ไกลมาก' },
+      { th: 'สัตว์ที่ฉันชอบคือ ______', label: 'Animal', structure: 'Noun', color: '#38bdf8', correctFill: 'นก', visual: '🐦', distractors: ['ปลา', 'เสือ'] },
+      { th: 'ฉันชอบสัตว์ชนิดนี้เพราะ ______', label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316', correctFill: 'มันบินได้และร้องเพลงเพราะ', distractors: ['มันว่ายน้ำเก่ง', 'มันวิ่งเร็วมาก'] },
+      { th: 'สิ่งที่น่าสนใจคือ ______', label: 'Interesting fact', structure: 'Noun phrase / Clause', color: '#a855f7', correctFill: 'มันสามารถอพยพไปได้ไกลมาก', distractors: ['มันอาศัยอยู่ใต้น้ำ', 'มันมีเปลือกแข็ง'] },
     ],
   },
   {
     title: 'ดาวเคราะห์ที่ฉันอยากไป (A planet I want to visit)', icon: '🪐',
     starters: [
-      { th: 'ดาวเคราะห์ที่ฉันอยากไปคือ ______', label: 'Planet', structure: 'Noun', color: '#38bdf8', sample: 'ดาวอังคาร' },
-      { th: 'ฉันอยากไปเพราะ ______', label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316', sample: 'มันมีสีแดงสวยงามและน่าสำรวจ' },
-      { th: 'สิ่งที่ฉันอยากทำที่นั่นคือ ______', label: 'Activity', structure: 'Verb phrase', color: '#a855f7', sample: 'สำรวจพื้นผิวและถ่ายรูป' },
+      { th: 'ดาวเคราะห์ที่ฉันอยากไปคือ ______', label: 'Planet', structure: 'Noun', color: '#38bdf8', correctFill: 'ดาวอังคาร', visual: '\ud83d\udd34', distractors: ['ดวงจันทร์', 'ดาวศุกร์'] },
+      { th: 'ฉันอยากไปเพราะ ______', label: 'Reason', structure: 'Clause (Subject + Verb)', color: '#f97316', correctFill: 'มันมีสีแดงสวยงามและน่าสำรวจ', distractors: ['มันอยู่ใกล้ดวงอาทิตย์ที่สุด', 'มันมีวงแหวนสวยงาม'] },
+      { th: 'สิ่งที่ฉันอยากทำที่นั่นคือ ______', label: 'Activity', structure: 'Verb phrase', color: '#a855f7', correctFill: 'สำรวจพื้นผิวและถ่ายรูป', distractors: ['ว่ายน้ำในทะเล', 'ปลูกต้นไม้'] },
     ],
   },
   {
     title: 'เรือไททานิค (The Titanic)', icon: '🚢',
     starters: [
-      { th: 'สิ่งที่ฉันรู้เกี่ยวกับเรือไททานิคคือ ______', label: 'Fact', structure: 'Noun phrase / Clause', color: '#38bdf8', sample: 'มันเป็นเรือที่ใหญ่ที่สุดในยุคนั้น' },
-      { th: 'สิ่งที่ทำให้ฉันประทับใจคือ ______', label: 'Impression', structure: 'Noun phrase / Clause', color: '#f97316', sample: 'ความยิ่งใหญ่ของการออกแบบเรือ' },
-      { th: 'ถ้าฉันอยู่บนเรือ ฉันจะ ______', label: 'Action', structure: 'Verb phrase', color: '#a855f7', sample: 'หาที่ปลอดภัยและช่วยเหลือคนอื่น' },
+      { th: 'สิ่งที่ฉันรู้เกี่ยวกับเรือไททานิคคือ ______', label: 'Fact', structure: 'Noun phrase / Clause', color: '#38bdf8', correctFill: 'มันเป็นเรือที่ใหญ่ที่สุดในยุคนั้น', distractors: ['มันเป็นเรือดำน้ำ', 'มันแล่นไปดาวอังคาร'] },
+      { th: 'สิ่งที่ทำให้ฉันประทับใจคือ ______', label: 'Impression', structure: 'Noun phrase / Clause', color: '#f97316', correctFill: 'ความยิ่งใหญ่ของการออกแบบเรือ', distractors: ['ความเร็วของเครื่องบิน', 'สีสันของดอกไม้'] },
+      { th: 'ถ้าฉันอยู่บนเรือ ฉันจะ ______', label: 'Action', structure: 'Verb phrase', color: '#a855f7', correctFill: 'หาที่ปลอดภัยและช่วยเหลือคนอื่น', distractors: ['นอนหลับต่อไป', 'ไม่สนใจสถานการณ์'] },
     ],
   },
 ];
+// Flat list of every starter line across all topics, for the linear
+// match \u2192 choose \u2192 write navigation (topic reference kept for display).
+const W2_UNITS = STARTER_TOPICS.flatMap((topic, ti) => topic.starters.map((s, li) => ({ topic, topicIdx: ti, lineIdx: li, ...s })));
+
+// Every blank across the Writing Lab now goes through the same 3-level
+// climb: match the starter to its complement, choose it from options
+// (with a picture where one makes sense), then write it for real.
+const BLANK_STAGE_ORDER = ['match', 'choose', 'write'];
+const BLANK_STAGE_META = {
+  match:  { emoji: '\ud83d\udd17', label: 'Match it' },
+  choose: { emoji: '\ud83d\uddbc\ufe0f', label: 'Choose it' },
+  write:  { emoji: '\u270d\ufe0f', label: 'Write it' },
+};
 
 const PARAGRAPH3_TOPICS = [
   {
     title: 'การปลูกต้นไม้ (Planting trees)', icon: '🌳',
     opener: 'การปลูกต้นไม้มีประโยชน์หลายประการ',
-    lines: ['ประการแรก ______', 'ประการที่สอง ______'],
+    lines: [
+      { th: 'ประการแรก ______', label: 'First point', structure: 'Clause (Subject + Verb)', color: '#38bdf8', correctFill: 'ต้นไม้ช่วยฟอกอากาศให้บริสุทธิ์', visual: '\ud83c\udf2c\ufe0f', distractors: ['เรือช่วยขนส่งสินค้า', 'ดาวช่วยให้ท้องฟ้าสวยงาม'] },
+      { th: 'ประการที่สอง ______', label: 'Second point', structure: 'Clause (Subject + Verb)', color: '#f97316', correctFill: 'ต้นไม้เป็นที่อยู่อาศัยของสัตว์หลายชนิด', visual: '\ud83d\udc3f\ufe0f', distractors: ['เรือแล่นได้เร็วมาก', 'ดาวอยู่ไกลจากโลกมาก'] },
+    ],
   },
   {
     title: 'การอนุรักษ์ทะเล (Ocean conservation)', icon: '🌊',
     opener: 'การอนุรักษ์ทะเลมีความสำคัญมาก',
-    lines: ['ประการแรก ______', 'ประการที่สอง ______'],
+    lines: [
+      { th: 'ประการแรก ______', label: 'First point', structure: 'Clause (Subject + Verb)', color: '#38bdf8', correctFill: 'ทะเลเป็นที่อยู่อาศัยของสัตว์น้ำมากมาย', visual: '\ud83d\udc20', distractors: ['ต้นไม้ให้ร่มเงา', 'ดาวเคราะห์มีหลายดวง'] },
+      { th: 'ประการที่สอง ______', label: 'Second point', structure: 'Clause (Subject + Verb)', color: '#f97316', correctFill: 'ทะเลช่วยควบคุมสภาพอากาศของโลก', visual: '\ud83c\udf21\ufe0f', distractors: ['เรือมีขนาดใหญ่มาก', 'ต้นไม้ผลัดใบในฤดูหนาว'] },
+    ],
   },
   {
     title: 'อวกาศ (Space)', icon: '🌌',
     opener: 'อวกาศเป็นเรื่องที่น่าสนใจมาก',
-    lines: ['ประการแรก ______', 'ประการที่สอง ______'],
+    lines: [
+      { th: 'ประการแรก ______', label: 'First point', structure: 'Clause (Subject + Verb)', color: '#38bdf8', correctFill: 'อวกาศมีดาวเคราะห์และดวงดาวมากมาย', visual: '\ud83e\ude90', distractors: ['ทะเลมีคลื่นแรง', 'ต้นไม้มีรากลึก'] },
+      { th: 'ประการที่สอง ______', label: 'Second point', structure: 'Clause (Subject + Verb)', color: '#f97316', correctFill: 'นักวิทยาศาสตร์ค้นพบสิ่งใหม่ ๆ อยู่เสมอ', visual: '\ud83d\udd2d', distractors: ['ปลาว่ายน้ำเก่ง', 'เรือแล่นข้ามมหาสมุทร'] },
+    ],
   },
 ];
+// Flat list of every line across all topics for match \u2192 choose \u2192 write nav.
+const W3_UNITS = PARAGRAPH3_TOPICS.flatMap((topic, ti) => topic.lines.map((s, li) => ({ topic, topicIdx: ti, lineIdx: li, ...s })));
 
+const W4_COLORS = ['#38bdf8', '#f97316', '#a855f7', '#16a34a', '#facc15'];
 const PARAGRAPH_BUILDER_TOPICS = [
   {
     title: 'ทำไมการอ่านหนังสือจึงสำคัญ (Why reading matters)', icon: '📖',
-    blocks: ['Topic sentence \u2014 ประโยคหลัก', 'Reason 1 \u2014 เหตุผลที่ 1', 'Example \u2014 ตัวอย่าง', 'Reason 2 \u2014 เหตุผลที่ 2', 'Conclusion \u2014 สรุป'],
+    blocks: [
+      { label: 'Topic sentence \u2014 ประโยคหลัก', correctFill: 'การอ่านหนังสือมีประโยชน์มากมายต่อชีวิต', distractors: ['การว่ายน้ำเป็นกีฬาที่สนุก', 'เรือไททานิคเป็นเรือที่มีชื่อเสียง'] },
+      { label: 'Reason 1 \u2014 เหตุผลที่ 1', correctFill: 'ทำให้เราได้ความรู้ใหม่ ๆ', distractors: ['ทำให้เราวิ่งเร็วขึ้น', 'ทำให้เราว่ายน้ำเก่งขึ้น'] },
+      { label: 'Example \u2014 ตัวอย่าง', correctFill: 'เช่น การอ่านเรื่องเกี่ยวกับอวกาศทำให้รู้จักดาวเคราะห์ต่าง ๆ', visual: '\ud83d\udcda', distractors: ['เช่น การว่ายน้ำทุกเช้า', 'เช่น การดูดาวตอนกลางคืน'] },
+      { label: 'Reason 2 \u2014 เหตุผลที่ 2', correctFill: 'นอกจากนี้ยังช่วยพัฒนาทักษะการคิด', distractors: ['นอกจากนี้ยังทำให้ตัวสูงขึ้น', 'นอกจากนี้ยังทำให้ว่ายน้ำเก่งขึ้น'] },
+      { label: 'Conclusion \u2014 สรุป', correctFill: 'ดังนั้นทุกคนควรอ่านหนังสือเป็นประจำ', distractors: ['ดังนั้นทุกคนควรว่ายน้ำทุกวัน', 'ดังนั้นทุกคนควรไปดูเรือ'] },
+    ],
   },
   {
     title: 'ทำไมอวกาศจึงน่าสนใจ (Why space is interesting)', icon: '🌌',
-    blocks: ['Topic sentence \u2014 ประโยคหลัก', 'Reason 1 \u2014 เหตุผลที่ 1', 'Example \u2014 ตัวอย่าง', 'Reason 2 \u2014 เหตุผลที่ 2', 'Conclusion \u2014 สรุป'],
+    blocks: [
+      { label: 'Topic sentence \u2014 ประโยคหลัก', correctFill: 'อวกาศเป็นเรื่องที่มนุษย์อยากเรียนรู้มาโดยตลอด', distractors: ['การทำอาหารเป็นเรื่องสนุก', 'ทะเลมีความสวยงาม'] },
+      { label: 'Reason 1 \u2014 เหตุผลที่ 1', correctFill: 'เพราะมีดาวเคราะห์และดวงดาวมากมายให้ศึกษา', distractors: ['เพราะมีปลาหลากหลายชนิด', 'เพราะมีต้นไม้หลายแบบ'] },
+      { label: 'Example \u2014 ตัวอย่าง', correctFill: 'เช่น การค้นพบดาวเคราะห์ดวงใหม่ที่อาจมีสิ่งมีชีวิต', visual: '\ud83d\udd2d', distractors: ['เช่น การปลูกต้นไม้ในสวน', 'เช่น การว่ายน้ำในทะเล'] },
+      { label: 'Reason 2 \u2014 เหตุผลที่ 2', correctFill: 'นอกจากนี้ยังช่วยให้เราเข้าใจโลกของเรามากขึ้น', distractors: ['นอกจากนี้ยังทำให้เราหิวมากขึ้น', 'นอกจากนี้ยังทำให้เราง่วงนอน'] },
+      { label: 'Conclusion \u2014 สรุป', correctFill: 'ดังนั้นการศึกษาอวกาศจึงมีคุณค่าอย่างมาก', distractors: ['ดังนั้นการว่ายน้ำจึงไม่สำคัญ', 'ดังนั้นทุกคนควรเลิกอ่านหนังสือ'] },
+    ],
   },
 ];
+// Flat list of every block across both topics, each tagged with its
+// position-based color (same 5-color cycle as the blocks themselves).
+const W4_UNITS = PARAGRAPH_BUILDER_TOPICS.flatMap((topic, ti) =>
+  topic.blocks.map((b, bi) => ({ topic, topicIdx: ti, blockIdx: bi, color: W4_COLORS[bi % W4_COLORS.length], ...b }))
+);
 
 const ESSAY_GENRES = [
   {
     key: 'essay', name: 'เรียงความ (Essay)', icon: '📝',
     blocks: [
-      { label: 'Introduction \u2014 เปิดเรื่อง', hint: 'เช่น "ปัจจุบัน... เป็นสิ่งที่มีบทบาทในชีวิตประจำวัน"' },
-      { label: 'Body 1 \u2014 ประการแรก', hint: 'ตัวอย่างเช่น ______' },
-      { label: 'Body 2 \u2014 ประการที่สอง', hint: 'ตัวอย่างเช่น ______' },
-      { label: 'Conclusion \u2014 สรุป', hint: 'ดังนั้น ______ ควร ______' },
+      { label: 'Introduction \u2014 เปิดเรื่อง', hint: 'เช่น "ปัจจุบัน... เป็นสิ่งที่มีบทบาทในชีวิตประจำวัน"', correctFill: 'ปัจจุบันเทคโนโลยีเข้ามามีบทบาทในชีวิตประจำวันมากขึ้น', distractors: ['ปัจจุบันปลาในทะเลมีจำนวนมาก', 'ปัจจุบันเรือไททานิคจมอยู่ใต้ทะเล'] },
+      { label: 'Body 1 \u2014 ประการแรก', hint: 'ตัวอย่างเช่น ______', correctFill: 'ตัวอย่างเช่น การใช้อินเทอร์เน็ตช่วยให้หาข้อมูลได้ง่ายขึ้น', distractors: ['ตัวอย่างเช่น การว่ายน้ำในสระ', 'ตัวอย่างเช่น การปลูกต้นไม้ในสวน'] },
+      { label: 'Body 2 \u2014 ประการที่สอง', hint: 'ตัวอย่างเช่น ______', correctFill: 'ตัวอย่างเช่น การสื่อสารกับเพื่อนทำได้สะดวกขึ้น', distractors: ['ตัวอย่างเช่น การนอนหลับตอนกลางวัน', 'ตัวอย่างเช่น การเล่นกีฬากลางแจ้ง'] },
+      { label: 'Conclusion \u2014 สรุป', hint: 'ดังนั้น ______ ควร ______', correctFill: 'ดังนั้นเทคโนโลยีจึงมีทั้งประโยชน์และควรใช้อย่างเหมาะสม', distractors: ['ดังนั้นทุกคนควรหยุดใช้เทคโนโลยี', 'ดังนั้นทะเลจึงไม่สำคัญต่อโลก'] },
     ],
   },
   {
     key: 'letter', name: 'จดหมาย / อีเมล (Letter / Email)', icon: '✉️',
     blocks: [
-      { label: 'Greeting \u2014 คำขึ้นต้น', hint: 'เรียน... / สวัสดี...' },
-      { label: 'Body \u2014 เนื้อหา', hint: 'บอกจุดประสงค์ของจดหมาย' },
-      { label: 'Closing \u2014 คำลงท้าย', hint: 'ขอแสดงความนับถือ / ด้วยความคิดถึง' },
+      { label: 'Greeting \u2014 คำขึ้นต้น', hint: 'เรียน... / สวัสดี...', correctFill: 'เรียน คุณครูที่เคารพ', distractors: ['ขอแสดงความนับถือ', 'ตัวอย่างเช่น'] },
+      { label: 'Body \u2014 เนื้อหา', hint: 'บอกจุดประสงค์ของจดหมาย', correctFill: 'จุดประสงค์ของจดหมายนี้คือ อยากขอคำแนะนำเรื่องการเรียน', distractors: ['เรียน คุณครูที่เคารพ', 'ขอแสดงความนับถือ'] },
+      { label: 'Closing \u2014 คำลงท้าย', hint: 'ขอแสดงความนับถือ / ด้วยความคิดถึง', correctFill: 'ขอแสดงความนับถือ', distractors: ['เรียน คุณครูที่เคารพ', 'จุดประสงค์ของจดหมายนี้คือ'] },
     ],
   },
   {
     key: 'narrative', name: 'เล่าเรื่อง (Narrative)', icon: '📖',
     blocks: [
-      { label: 'Beginning \u2014 เริ่มเรื่อง', hint: 'เหตุการณ์เกิดขึ้นเมื่อไหร่ ที่ไหน' },
-      { label: 'Middle \u2014 เหตุการณ์หลัก', hint: 'เกิดอะไรขึ้นต่อไป' },
-      { label: 'End \u2014 จบเรื่อง', hint: 'เรื่องจบลงอย่างไร' },
+      { label: 'Beginning \u2014 เริ่มเรื่อง', hint: 'เหตุการณ์เกิดขึ้นเมื่อไหร่ ที่ไหน', correctFill: 'ในตอนแรกฉันไปเที่ยวพิพิธภัณฑ์วิทยาศาสตร์', distractors: ['จากนั้นฉันก็กลับบ้าน', 'ในที่สุดเรื่องราวก็จบลง'] },
+      { label: 'Middle \u2014 เหตุการณ์หลัก', hint: 'เกิดอะไรขึ้นต่อไป', correctFill: 'จากนั้นฉันได้เห็นแบบจำลองเรือไททานิค', visual: '\ud83d\udea2', distractors: ['ในตอนแรกท้องฟ้าแจ่มใส', 'ในที่สุดฉันก็เข้าใจมากขึ้น'] },
+      { label: 'End \u2014 จบเรื่อง', hint: 'เรื่องจบลงอย่างไร', correctFill: 'ในที่สุดฉันก็กลับบ้านด้วยความประทับใจ', distractors: ['ในตอนแรกฉันตื่นแต่เช้า', 'จากนั้นฝนก็เริ่มตก'] },
     ],
   },
   {
     key: 'opinion', name: 'แสดงความคิดเห็น (Opinion)', icon: '⚖️',
     blocks: [
-      { label: 'Claim \u2014 ข้อคิดเห็น', hint: 'ฉันคิดว่า ______' },
-      { label: 'Reason \u2014 เหตุผล', hint: 'เพราะ ______' },
-      { label: 'Example \u2014 ตัวอย่าง', hint: 'ตัวอย่างเช่น ______' },
+      { label: 'Claim \u2014 ข้อคิดเห็น', hint: 'ฉันคิดว่า ______', correctFill: 'ฉันคิดว่ามนุษย์ควรอนุรักษ์ทะเล', distractors: ['เพราะทะเลมีขยะมาก', 'ตัวอย่างเช่น การทิ้งขยะลงทะเล'] },
+      { label: 'Reason \u2014 เหตุผล', hint: 'เพราะ ______', correctFill: 'เพราะทะเลเป็นที่อยู่อาศัยของสัตว์น้ำมากมาย', distractors: ['ฉันคิดว่าอวกาศน่าสนใจ', 'ตัวอย่างเช่น ปลาวาฬ'] },
+      { label: 'Example \u2014 ตัวอย่าง', hint: 'ตัวอย่างเช่น ______', correctFill: 'ตัวอย่างเช่น การลดการใช้พลาสติก', distractors: ['ฉันคิดว่าเราควรหยุดว่ายน้ำ', 'เพราะฉันชอบดูดาว'] },
     ],
   },
 ];
+const W5_GENRE_COLORS = ['#38bdf8', '#f97316', '#a855f7', '#16a34a'];
+// Flat list of every block across all 4 genres for match \u2192 choose \u2192 write nav.
+const W5_UNITS = ESSAY_GENRES.flatMap((genre, gi) =>
+  genre.blocks.map((b, bi) => ({ genre, genreIdx: gi, blockIdx: bi, color: W5_GENRE_COLORS[bi % W5_GENRE_COLORS.length], ...b }))
+);
 
 /* ══════════════════ STATE ══════════════════ */
 const STORE_KEY = 'thai-rw-state';
@@ -961,17 +1078,27 @@ function loadState(){
       s.hardWords = s.hardWords || {};
       s.s1 = s.s1 || {};
       s.s2 = s.s2 || {};
+      s.s2free = s.s2free || {};
       s.patterns = s.patterns || {};
       s.w1 = s.w1 || {};
       s.w2 = s.w2 || {};
+      s.w1stage = s.w1stage || {};
+      s.w2stage = s.w2stage || {};
       s.w3 = s.w3 || {};
       s.w4 = s.w4 || {};
       s.w5 = s.w5 || {};
+      s.w3stage = s.w3stage || {};
+      s.w4stage = s.w4stage || {};
+      s.w5stage = s.w5stage || {};
+      s.w2text = s.w2text || {};
+      s.w3text = s.w3text || {};
+      s.w4text = s.w4text || {};
+      s.w5text = s.w5text || {};
       s.writingTypes = s.writingTypes || {};
       return s;
     }
   } catch(e){}
-  return { xp: 0, r: { r1: {}, r2: {}, r3: {}, r4: {} }, letters: {}, vowels: {}, hardWords: {}, s1: {}, s2: {}, patterns: {}, w1: {}, w2: {}, w3: {}, w4: {}, w5: {}, writingTypes: {} };
+  return { xp: 0, r: { r1: {}, r2: {}, r3: {}, r4: {} }, letters: {}, vowels: {}, hardWords: {}, s1: {}, s2: {}, s2free: {}, patterns: {}, w1: {}, w2: {}, w1stage: {}, w2stage: {}, w3: {}, w4: {}, w5: {}, w3stage: {}, w4stage: {}, w5stage: {}, w2text: {}, w3text: {}, w4text: {}, w5text: {}, writingTypes: {} };
 }
 function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 let state = loadState();
@@ -2141,11 +2268,28 @@ function renderExpansionItem(){
 
   let categorySection = '';
   if(currentCatIdx === -1){
+    const freeDone = !!state.s2free[activeExpansionIdx];
     categorySection = `
       <div class="btn-row" style="margin-top:20px;">
         <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markExpansionDone(this)">
           ${done ? '\u2705 Fully grown!' : '\ud83c\udf89 Fully grown!'}
         </button>
+      </div>
+      <div class="free-expand-box">
+        <div class="free-expand-label">\ud83d\udd8a\ufe0f Try It Yourself \u2014 pick your OWN words</div>
+        ${EXPANSION_CATEGORY_ORDER.map(catKey => {
+          const meta = EXPANSION_CATEGORY_META[catKey];
+          return `
+          <div class="free-expand-field">
+            <div class="free-expand-field-label" style="color:${meta.color}">${meta.label} \u2014 ${meta.labelTh}</div>
+            <input type="text" class="free-expand-input" id="free-${catKey}" style="border-color:${meta.color}" placeholder="\u2026" oninput="updateFreeExpansionPreview()">
+          </div>`;
+        }).join('')}
+        <div class="free-expand-preview" id="freeExpandPreview">${item.subject} ${item.verb}</div>
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="pill-btn" onclick="speakFreeExpansion()">\ud83d\udd0a Listen</button>
+          <button class="pill-btn ${freeDone ? 'toggled' : 'primary'}" onclick="markFreeExpansionDone(this)">${freeDone ? '\u2705 Made it!' : '\u2705 I made my own!'}</button>
+        </div>
       </div>`;
   } else {
     const catKey = EXPANSION_CATEGORY_ORDER[currentCatIdx];
@@ -2192,6 +2336,35 @@ function changeExpansion(catIdx){
 function markExpansionDone(btn){
   if(!state.s2[activeExpansionIdx]){ state.s2[activeExpansionIdx] = true; state.xp += 30; saveState(); }
   if(btn){ btn.textContent = '\u2705 Fully grown!'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+}
+
+// Builds a live preview of the child's own subject+adj+verb+loc+mt
+// sentence as he types each word into its color-coded field.
+function readFreeExpansionInputs(){
+  const item = EXPANSION_SENTENCES[activeExpansionIdx];
+  const adj = (document.getElementById('free-adj') || {}).value || '';
+  const loc = (document.getElementById('free-loc') || {}).value || '';
+  const mt = (document.getElementById('free-mt') || {}).value || '';
+  return { item, adj, loc, mt };
+}
+function updateFreeExpansionPreview(){
+  const { item, adj, loc, mt } = readFreeExpansionInputs();
+  const preview = document.getElementById('freeExpandPreview');
+  if(!preview) return;
+  let html = `<span>${item.subject}</span>`;
+  if(adj) html += `<span style="color:${EXPANSION_CATEGORY_META.adj.color}">${adj}</span>`;
+  html += `<span>${item.verb}</span>`;
+  if(loc) html += `<span style="color:${EXPANSION_CATEGORY_META.loc.color}">${loc}</span>`;
+  if(mt) html += `<span style="color:${EXPANSION_CATEGORY_META.mt.color}">${mt}</span>`;
+  preview.innerHTML = html;
+}
+function speakFreeExpansion(){
+  const { item, adj, loc, mt } = readFreeExpansionInputs();
+  speakThai(item.subject + adj + item.verb + loc + mt, false);
+}
+function markFreeExpansionDone(btn){
+  if(!state.s2free[activeExpansionIdx]){ state.s2free[activeExpansionIdx] = true; state.xp += 30; saveState(); }
+  if(btn){ btn.textContent = '\u2705 Made it!'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
 }
 
 function expansionNavHtml(){
@@ -2259,6 +2432,31 @@ function buildPlainExample(card, values){
   return text;
 }
 
+// For templates where the blank sits at the very end (most W2/W3 lines),
+// returns the connector text before it, e.g. "ประการแรก" from
+// "ประการแรก ______" — used to prefill the write box so the child
+// continues writing rather than starting from nothing.
+function templateStarterPrefix(th){
+  const idx = th.indexOf('______');
+  if(idx < 0) return '';
+  const after = th.slice(idx + 6).trim();
+  return after === '' ? th.slice(0, idx).trim() : '';
+}
+
+// Renders the "when to use this" positioning guidance below a pattern
+// card's template, split into its English and Thai halves (separated
+// by " / " in the data).
+function usageBoxHtml(card){
+  if(!card.usage) return '';
+  const parts = card.usage.split(' / ');
+  return `
+    <div class="usage-box">
+      <div class="usage-box-label">\ud83d\udccd When to use this</div>
+      <div class="usage-box-text">${parts[0]}</div>
+      ${parts[1] ? `<div class="usage-box-text" style="margin-top:4px;">${parts[1]}</div>` : ''}
+    </div>`;
+}
+
 function renderTemplateBlanks(card){
   const segments = card.th.split('______');
   let html = '';
@@ -2304,6 +2502,7 @@ function renderPatternCard(){
         <div class="pattern-template">${renderTemplateBlanks(card)}</div>
         ${blankLegendHtml(card)}
         <div class="practice-en" style="margin-top:6px;">${card.en}</div>
+        ${usageBoxHtml(card)}
 
         <div class="topic-chip-row">
           ${OPINION_SCENARIOS.map((s, i) => `<button class="topic-chip ${i === activeOpinionTopicIdx ? 'active' : ''}" onclick="selectOpinionTopic(${i})">${s.icon} ${s.topic}</button>`).join('')}
@@ -2339,6 +2538,7 @@ function renderPatternCard(){
       <div class="pattern-template">${renderTemplateBlanks(card)}</div>
       ${blankLegendHtml(card)}
       <div class="practice-en" style="margin-top:10px;">${card.en}</div>
+      ${usageBoxHtml(card)}
       <div class="btn-row">
         <button class="pill-btn" onclick="speakThai('${escJs(card.th.replace(/______/g, ''))}', false)">\ud83d\udd0a Listen</button>
       </div>
@@ -2384,214 +2584,584 @@ function patternNavHtml(){
 function prevPattern(){ if(activePatternIdx > 0){ activePatternIdx--; renderPatternCard(); window.scrollTo(0,0); } }
 function nextPattern(){ if(activePatternIdx < PATTERN_CARDS.length - 1){ activePatternIdx++; renderPatternCard(); window.scrollTo(0,0); } }
 
-/* ══════════════════ W1 — FILL THE BLANK ENGINE ══════════════════ */
-let activeFillIdx = 0;
+/* ══════════════════ W1 — FILL THE BLANK ENGINE (Match \u2192 Choose \u2192 Write) ══════════════════ */
+let activeFillIdx = 0, activeFillStageIdx = 0;
+
 function openFillBlankLevel(){
-  sourceWorld = 'w5'; activeFillIdx = 0;
+  sourceWorld = 'w5'; activeFillIdx = 0; activeFillStageIdx = 0;
   document.getElementById('practiceTitle').textContent = '\ud83d\ude0a W1 \u2014 Fill the Blank';
   document.getElementById('world').classList.remove('active');
   document.getElementById('practice').classList.add('active');
-  renderFillBlank();
+  renderFillStage();
   window.scrollTo(0,0);
 }
-function renderFillBlank(){
+
+function fillStageKey(){ return activeFillIdx + '-' + BLANK_STAGE_ORDER[activeFillStageIdx]; }
+function markFillStageDone(xp){
+  const key = fillStageKey();
+  if(!state.w1stage[key]){ state.w1stage[key] = true; state.xp += xp; saveState(); }
+}
+
+function renderFillStage(){
   stopAnyRecording();
   const item = FILL_BLANK_ITEMS[activeFillIdx];
-  document.getElementById('practiceProgress').textContent = `Prompt ${activeFillIdx + 1} of ${FILL_BLANK_ITEMS.length}`;
-  const done = !!state.w1[activeFillIdx];
-  document.getElementById('practiceBody').innerHTML = `
-    <div class="practice-card">
-      <div class="item-icon">${item.icon}</div>
-      <div class="pattern-template">${renderTemplateBlanks(item)}</div>
-      ${blankLegendHtml(item)}
-      <div class="practice-en" style="margin-top:8px;">${item.en}</div>
-      <div class="btn-row">
-        <button class="pill-btn" onclick="speakThai('${escJs(item.th.replace(/______/g, ''))}', false)">\ud83d\udd0a Listen</button>
+  const stage = BLANK_STAGE_ORDER[activeFillStageIdx];
+  const stepNum = activeFillIdx * BLANK_STAGE_ORDER.length + activeFillStageIdx + 1;
+  const totalSteps = FILL_BLANK_ITEMS.length * BLANK_STAGE_ORDER.length;
+  document.getElementById('practiceProgress').textContent =
+    `Prompt ${activeFillIdx + 1} of ${FILL_BLANK_ITEMS.length} \u2014 ${BLANK_STAGE_META[stage].emoji} ${BLANK_STAGE_META[stage].label} (${stepNum}/${totalSteps})`;
+
+  const body = document.getElementById('practiceBody');
+
+  if(stage === 'match' || stage === 'choose'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${item.icon}</div>
+        <div class="pattern-template">${renderTemplateBlanks(item)}</div>
+        ${blankLegendHtml(item)}
+        <div class="practice-en" style="margin-top:8px;">${item.en}</div>
+        <div id="blankTasks">${item.blanks.map((b, i) => blankTaskHtml('fill', i, b, stage)).join('')}</div>
       </div>
-      ${item.sampleValues ? `
-        <div class="practice-en" style="margin-top:14px;">Example \u2014 tap to use it:</div>
-        <div class="phrase-chip-col">
-          <button class="phrase-chip" onclick="insertOpinionPhrase('${escJs(buildPlainExample(item, item.sampleValues))}')">${buildColoredExampleHtml(item, item.sampleValues)}</button>
-        </div>` : ''}
-      <textarea id="w1Input" class="type-input" style="height:80px; font-size:1.1rem; margin-top:14px;" placeholder="Write your sentence here\u2026"></textarea>
-      <div class="btn-row">
-        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW1Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+      ${blankStageNavHtml(item.blanks.length)}
+    `;
+    item.blanks.forEach((b, i) => setupBlankTask('fill', i, b, stage));
+  } else {
+    const done = !!state.w1[activeFillIdx];
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${item.icon}</div>
+        <div class="pattern-template">${renderTemplateBlanks(item)}</div>
+        ${blankLegendHtml(item)}
+        <div class="practice-en" style="margin-top:8px;">${item.en}</div>
+        <div class="btn-row">
+          <button class="pill-btn" onclick="speakThai('${escJs(item.th.replace(/______/g, ''))}', false)">\ud83d\udd0a Listen</button>
+        </div>
+        ${item.sampleValues ? `
+          <div class="practice-en" style="margin-top:14px;">Example \u2014 tap to use it:</div>
+          <div class="phrase-chip-col">
+            <button class="phrase-chip" onclick="insertOpinionPhrase('${escJs(buildPlainExample(item, item.sampleValues))}')">${buildColoredExampleHtml(item, item.sampleValues)}</button>
+          </div>` : ''}
+        <textarea id="w1Input" class="type-input" style="height:80px; font-size:1.1rem; margin-top:14px;" placeholder="Write your sentence here\u2026"></textarea>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW1Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+        </div>
       </div>
-    </div>
-    ${simpleNavHtml(activeFillIdx, FILL_BLANK_ITEMS.length, 'prevFill', 'nextFill')}
-  `;
+      ${blankStageNavHtml(0)}
+    `;
+  }
+}
+
+// Renders one match/choose mini-widget for a single blank: a shuffled
+// set of options (correct fill + distractors), with a visual emoji
+// shown for the Choose stage when the blank has one.
+function blankTaskHtml(kind, i, b, stage){
+  const opts = shuffleArr([b.correctFill, ...(b.distractors || [])]);
+  return `
+    <div class="blank-task" id="${kind}Task-${i}">
+      <div class="blank-task-header">
+        <span class="blank-task-badge" style="background:${b.color}">${b.label}</span>
+        ${b.structure ? `<span style="font-size:0.72rem; color:var(--muted);">${b.structure}</span>` : ''}
+      </div>
+      ${stage === 'choose' && b.visual ? `<div class="blank-visual">${b.visual}</div>` : ''}
+      <div class="blank-option-col" id="${kind}Opts-${i}">
+        ${opts.map(o => `<button class="blank-option-btn" data-val="${encodeURIComponent(o)}">${o}</button>`).join('')}
+      </div>
+    </div>`;
+}
+function setupBlankTask(kind, i, b, stage){
+  const container = document.getElementById(kind + 'Opts-' + i);
+  if(!container) return;
+  container.querySelectorAll('.blank-option-btn').forEach(btn => {
+    btn.onclick = () => {
+      const val = decodeURIComponent(btn.dataset.val);
+      if(val === b.correctFill){
+        btn.classList.add('correct');
+        container.querySelectorAll('.blank-option-btn').forEach(x => x.onclick = null);
+        checkAllBlanksDone(kind);
+      } else {
+        btn.classList.add('wrong');
+        setTimeout(() => btn.classList.remove('wrong'), 500);
+      }
+    };
+  });
+}
+
+// Stitches together everyone's saved block text (falling back to the
+// correct-fill sample for any block not yet written) into one finished
+// paragraph/essay, each part colored to match its role \u2014 so the child
+// sees what the whole real thing looks like once assembled.
+function finishedPieceHtml(units, textMap, opener){
+  const legend = units.map(u => `<span class="legend-item"><span class="legend-dot" style="background:${u.color}"></span>${u.label}</span>`).join('');
+  const body = units.map(u => `<span style="color:${u.color}">${(textMap[u.globalIdx] || u.correctFill)}</span> `).join('');
+  return `
+    <div class="finished-piece">
+      <div class="finished-piece-label">\ud83d\udccb Finished piece \u2014 here\u2019s what it looks like put together</div>
+      <div class="finished-piece-text">${opener ? `${opener} ` : ''}${body}</div>
+      <div class="finished-piece-legend">${legend}</div>
+    </div>`;
+}
+
+// Once every blank's mini-widget on screen is solved, award the stage XP.
+function checkAllBlanksDone(kind){
+  const remaining = document.querySelectorAll(`[id^="${kind}Opts-"] .blank-option-btn:not(.correct)`);
+  const stillActive = Array.from(remaining).some(b => b.onclick !== null);
+  if(!stillActive){
+    if(kind === 'fill') markFillStageDone(10);
+    else if(kind === 'w2') markW2StageDone(10);
+    else if(kind === 'w3') markW3StageDone(10);
+    else if(kind === 'w4') markW4StageDone(10);
+    else if(kind === 'w5') markW5StageDone(10);
+  }
+}
+
+
+function blankStageNavHtml(blankCount){
+  const isFirstStage = activeFillStageIdx === 0 && activeFillIdx === 0;
+  const isLastStage = activeFillStageIdx === BLANK_STAGE_ORDER.length - 1 && activeFillIdx === FILL_BLANK_ITEMS.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirstStage ? 'visibility:hidden;' : ''}" onclick="prevFillStage()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLastStage ? 'visibility:hidden;' : ''}" onclick="nextFillStage()">Next \u2192</button>
+    </div>`;
+}
+function prevFillStage(){
+  if(activeFillStageIdx > 0){ activeFillStageIdx--; }
+  else if(activeFillIdx > 0){ activeFillIdx--; activeFillStageIdx = BLANK_STAGE_ORDER.length - 1; }
+  else return;
+  renderFillStage(); window.scrollTo(0,0);
+}
+function nextFillStage(){
+  if(activeFillStageIdx < BLANK_STAGE_ORDER.length - 1){ activeFillStageIdx++; }
+  else if(activeFillIdx < FILL_BLANK_ITEMS.length - 1){ activeFillIdx++; activeFillStageIdx = 0; }
+  else return;
+  renderFillStage(); window.scrollTo(0,0);
 }
 function markW1Tried(btn){
   if(!state.w1[activeFillIdx]){ state.w1[activeFillIdx] = true; state.xp += 20; saveState(); }
+  markFillStageDone(0);
   if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
 }
-function prevFill(){ if(activeFillIdx > 0){ activeFillIdx--; renderFillBlank(); window.scrollTo(0,0); } }
-function nextFill(){ if(activeFillIdx < FILL_BLANK_ITEMS.length - 1){ activeFillIdx++; renderFillBlank(); window.scrollTo(0,0); } }
 
-/* ══════════════════ W2 — SENTENCE STARTERS ENGINE ══════════════════ */
-let activeStarterIdx = 0;
+/* ══════════════════ W2 — SENTENCE STARTERS ENGINE (Match \u2192 Choose \u2192 Write) ══════════════════ */
+let activeStarterIdx = 0; // kept for openWorld's progress readout (per-topic)
+let activeW2UnitIdx = 0, activeW2StageIdx = 0;
+
 function openStarterLevel(){
-  sourceWorld = 'w5'; activeStarterIdx = 0;
+  sourceWorld = 'w5'; activeW2UnitIdx = 0; activeW2StageIdx = 0;
   document.getElementById('practiceTitle').textContent = '\u270d\ufe0f W2 \u2014 Sentence Starters';
   document.getElementById('world').classList.remove('active');
   document.getElementById('practice').classList.add('active');
-  renderStarterTopic();
+  renderW2Stage();
   window.scrollTo(0,0);
 }
-function renderStarterTopic(){
-  stopAnyRecording();
-  const topic = STARTER_TOPICS[activeStarterIdx];
-  document.getElementById('practiceProgress').textContent = `Topic ${activeStarterIdx + 1} of ${STARTER_TOPICS.length}`;
-  const done = !!state.w2[activeStarterIdx];
-  document.getElementById('practiceBody').innerHTML = `
-    <div class="practice-card">
-      <div class="item-icon">${topic.icon}</div>
-      <div class="pattern-name-badge">${topic.title}</div>
-      ${topic.starters.map((s, i) => `
-        <div class="write-block">
-          <div class="write-block-label" style="color:${s.color}">${renderTemplateBlanks({ th: s.th, blanks: [s] })}</div>
-          <div class="blank-legend-structure" style="margin-bottom:6px;">${s.label} \u2014 ${s.structure}</div>
-          <button class="phrase-chip" style="margin-bottom:8px;" onclick="insertW2Sample(${i}, '${escJs(s.sample)}')"><span style="color:${s.color}">${s.sample}</span></button>
-          <textarea class="type-input" id="w2ta-${i}" placeholder="\u2026"></textarea>
-        </div>`).join('')}
-      <div class="btn-row">
-        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW2Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
-      </div>
-    </div>
-    ${simpleNavHtml(activeStarterIdx, STARTER_TOPICS.length, 'prevStarter', 'nextStarter')}
-  `;
+
+function w2StageKey(){ return activeW2UnitIdx + '-' + BLANK_STAGE_ORDER[activeW2StageIdx]; }
+function markW2StageDone(xp){
+  const key = w2StageKey();
+  if(!state.w2stage[key]){ state.w2stage[key] = true; state.xp += xp; saveState(); }
 }
-function insertW2Sample(i, sample){
-  const box = document.getElementById('w2ta-' + i);
+// A topic counts as "done" for the W5 hub progress once every line in
+// it has had its write stage marked complete at least once.
+function recomputeW2TopicDone(topicIdx){
+  const lineCount = STARTER_TOPICS[topicIdx].starters.length;
+  const unitIdxs = W2_UNITS.map((u, i) => u.topicIdx === topicIdx ? i : -1).filter(i => i >= 0);
+  const allWritten = unitIdxs.every(i => !!state.w2stage[i + '-write']);
+  if(allWritten) state.w2[topicIdx] = true;
+}
+
+function renderW2Stage(){
+  stopAnyRecording();
+  const unit = W2_UNITS[activeW2UnitIdx];
+  const stage = BLANK_STAGE_ORDER[activeW2StageIdx];
+  const stepNum = activeW2UnitIdx * BLANK_STAGE_ORDER.length + activeW2StageIdx + 1;
+  const totalSteps = W2_UNITS.length * BLANK_STAGE_ORDER.length;
+  document.getElementById('practiceProgress').textContent =
+    `${unit.topic.title.split(' (')[0]} \u2014 line ${unit.lineIdx + 1} of ${unit.topic.starters.length} \u2014 ${BLANK_STAGE_META[stage].emoji} ${BLANK_STAGE_META[stage].label} (${stepNum}/${totalSteps})`;
+
+  const body = document.getElementById('practiceBody');
+
+  if(stage === 'match' || stage === 'choose'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${unit.topic.icon}</div>
+        <div class="pattern-name-badge">${unit.topic.title}</div>
+        <div class="write-block-label" style="color:${unit.color}; margin-top:10px;">${renderTemplateBlanks({ th: unit.th, blanks: [unit] })}</div>
+        <div id="w2Tasks">${blankTaskHtml('w2', 0, unit, stage)}</div>
+      </div>
+      ${blankStageNavHtml2()}
+    `;
+    setupBlankTask('w2', 0, unit, stage);
+  } else {
+    const done = !!state.w2stage[w2StageKey()];
+    const starter = templateStarterPrefix(unit.th);
+    const savedText = state.w2text[activeW2UnitIdx] || (starter ? starter + ' ' : '');
+    const fullExample = starter ? `${starter} ${unit.correctFill}` : unit.correctFill;
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${unit.topic.icon}</div>
+        <div class="pattern-name-badge">${unit.topic.title}</div>
+        <div class="write-block-label" style="color:${unit.color}; margin-top:10px;">${renderTemplateBlanks({ th: unit.th, blanks: [unit] })}</div>
+        <div class="blank-legend-structure" style="margin-bottom:10px;">${unit.label} \u2014 ${unit.structure}</div>
+        <div class="practice-en">The sentence starter is already in the box below \u2014 write your own words after it!</div>
+        <textarea class="type-input" id="w2ta" placeholder="\u2026" style="margin-top:8px;">${savedText}</textarea>
+        <div class="practice-en" style="margin-top:12px;">Stuck? Here\u2019s one idea (tap to use it instead):</div>
+        <button class="phrase-chip" style="margin-top:6px;" onclick="insertW2Sample('${escJs(fullExample)}')"><span style="color:${unit.color}">${fullExample}</span></button>
+        <div class="btn-row" style="margin-top:10px;">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW2WriteTried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+        </div>
+      </div>
+      ${blankStageNavHtml2()}
+    `;
+  }
+}
+function insertW2Sample(sample){
+  const box = document.getElementById('w2ta');
   if(!box) return;
   box.value = sample;
   box.focus();
 }
-function markW2Tried(btn){
-  if(!state.w2[activeStarterIdx]){ state.w2[activeStarterIdx] = true; state.xp += 30; saveState(); }
-  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+function markW2WriteTried(btn){
+  const box = document.getElementById('w2ta');
+  if(box) state.w2text[activeW2UnitIdx] = box.value.trim() || state.w2text[activeW2UnitIdx] || '';
+  markW2StageDone(20);
+  recomputeW2TopicDone(W2_UNITS[activeW2UnitIdx].topicIdx);
+  saveState();
+  renderW2Stage();
 }
-function prevStarter(){ if(activeStarterIdx > 0){ activeStarterIdx--; renderStarterTopic(); window.scrollTo(0,0); } }
-function nextStarter(){ if(activeStarterIdx < STARTER_TOPICS.length - 1){ activeStarterIdx++; renderStarterTopic(); window.scrollTo(0,0); } }
 
-/* ══════════════════ W3 — 3-SENTENCE PARAGRAPH ENGINE ══════════════════ */
-let activeP3Idx = 0;
+function blankStageNavHtml2(){
+  const isFirst = activeW2StageIdx === 0 && activeW2UnitIdx === 0;
+  const isLast = activeW2StageIdx === BLANK_STAGE_ORDER.length - 1 && activeW2UnitIdx === W2_UNITS.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevW2Stage()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextW2Stage()">Next \u2192</button>
+    </div>`;
+}
+function prevW2Stage(){
+  if(activeW2StageIdx > 0){ activeW2StageIdx--; }
+  else if(activeW2UnitIdx > 0){ activeW2UnitIdx--; activeW2StageIdx = BLANK_STAGE_ORDER.length - 1; }
+  else return;
+  renderW2Stage(); window.scrollTo(0,0);
+}
+function nextW2Stage(){
+  if(activeW2StageIdx < BLANK_STAGE_ORDER.length - 1){ activeW2StageIdx++; }
+  else if(activeW2UnitIdx < W2_UNITS.length - 1){ activeW2UnitIdx++; activeW2StageIdx = 0; }
+  else return;
+  renderW2Stage(); window.scrollTo(0,0);
+}
+
+/* ══════════════════ W3 — 3-SENTENCE PARAGRAPH ENGINE (Match \u2192 Choose \u2192 Write) ══════════════════ */
+let activeW3UnitIdx = 0, activeW3StageIdx = 0;
+
 function openParagraph3Level(){
-  sourceWorld = 'w5'; activeP3Idx = 0;
+  sourceWorld = 'w5'; activeW3UnitIdx = 0; activeW3StageIdx = 0;
   document.getElementById('practiceTitle').textContent = '\ud83d\udcc4 W3 \u2014 3-Sentence Paragraph';
   document.getElementById('world').classList.remove('active');
   document.getElementById('practice').classList.add('active');
-  renderParagraph3();
+  renderW3Stage();
   window.scrollTo(0,0);
 }
-function renderParagraph3(){
-  stopAnyRecording();
-  const topic = PARAGRAPH3_TOPICS[activeP3Idx];
-  document.getElementById('practiceProgress').textContent = `Topic ${activeP3Idx + 1} of ${PARAGRAPH3_TOPICS.length}`;
-  const done = !!state.w3[activeP3Idx];
-  document.getElementById('practiceBody').innerHTML = `
-    <div class="practice-card">
-      <div class="item-icon">${topic.icon}</div>
-      <div class="pattern-name-badge">${topic.title}</div>
-      <div class="fixed-opener">${topic.opener}</div>
-      ${topic.lines.map(s => `
-        <div class="write-block">
-          <div class="write-block-label">${s}</div>
-          <textarea class="type-input" placeholder="\u2026"></textarea>
-        </div>`).join('')}
-      <div class="btn-row">
-        <button class="pill-btn" onclick="speakThai(document.querySelector('.fixed-opener').textContent, false)">\ud83d\udd0a Listen to opener</button>
-      </div>
-      <div class="btn-row">
-        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW3Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
-      </div>
-    </div>
-    ${simpleNavHtml(activeP3Idx, PARAGRAPH3_TOPICS.length, 'prevP3', 'nextP3')}
-  `;
-}
-function markW3Tried(btn){
-  if(!state.w3[activeP3Idx]){ state.w3[activeP3Idx] = true; state.xp += 35; saveState(); }
-  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
-}
-function prevP3(){ if(activeP3Idx > 0){ activeP3Idx--; renderParagraph3(); window.scrollTo(0,0); } }
-function nextP3(){ if(activeP3Idx < PARAGRAPH3_TOPICS.length - 1){ activeP3Idx++; renderParagraph3(); window.scrollTo(0,0); } }
 
-/* ══════════════════ W4 — PARAGRAPH BUILDER ENGINE ══════════════════ */
-let activeP4Idx = 0;
+function w3StageKey(){ return activeW3UnitIdx + '-' + BLANK_STAGE_ORDER[activeW3StageIdx]; }
+function markW3StageDone(xp){
+  const key = w3StageKey();
+  if(!state.w3stage[key]){ state.w3stage[key] = true; state.xp += xp; saveState(); }
+}
+function recomputeW3TopicDone(topicIdx){
+  const unitIdxs = W3_UNITS.map((u, i) => u.topicIdx === topicIdx ? i : -1).filter(i => i >= 0);
+  if(unitIdxs.every(i => !!state.w3stage[i + '-write'])) state.w3[topicIdx] = true;
+}
+
+function renderW3Stage(){
+  stopAnyRecording();
+  const unit = W3_UNITS[activeW3UnitIdx];
+  const stage = BLANK_STAGE_ORDER[activeW3StageIdx];
+  const stepNum = activeW3UnitIdx * BLANK_STAGE_ORDER.length + activeW3StageIdx + 1;
+  const totalSteps = W3_UNITS.length * BLANK_STAGE_ORDER.length;
+  document.getElementById('practiceProgress').textContent =
+    `${unit.topic.title.split(' (')[0]} \u2014 line ${unit.lineIdx + 1} of ${unit.topic.lines.length} \u2014 ${BLANK_STAGE_META[stage].emoji} ${BLANK_STAGE_META[stage].label} (${stepNum}/${totalSteps})`;
+
+  const body = document.getElementById('practiceBody');
+
+  if(stage === 'match' || stage === 'choose'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${unit.topic.icon}</div>
+        <div class="pattern-name-badge">${unit.topic.title}</div>
+        <div class="fixed-opener">${unit.topic.opener}</div>
+        <div class="write-block-label" style="color:${unit.color}; margin-top:10px;">${renderTemplateBlanks({ th: unit.th, blanks: [unit] })}</div>
+        <div id="w3Tasks">${blankTaskHtml('w3', 0, unit, stage)}</div>
+      </div>
+      ${w3NavHtml()}
+    `;
+    setupBlankTask('w3', 0, unit, stage);
+  } else {
+    const done = !!state.w3stage[w3StageKey()];
+    const starter = templateStarterPrefix(unit.th);
+    const savedText = state.w3text[activeW3UnitIdx] || (starter ? starter + ' ' : '');
+    const fullExample = starter ? `${starter} ${unit.correctFill}` : unit.correctFill;
+    const topicUnitIdxs = W3_UNITS.map((u, i) => u.topicIdx === unit.topicIdx ? i : -1).filter(i => i >= 0);
+    const topicFullyWritten = topicUnitIdxs.every(i => !!state.w3stage[i + '-write']);
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${unit.topic.icon}</div>
+        <div class="pattern-name-badge">${unit.topic.title}</div>
+        <div class="fixed-opener">${unit.topic.opener}</div>
+        <div class="write-block-label" style="color:${unit.color}; margin-top:10px;">${renderTemplateBlanks({ th: unit.th, blanks: [unit] })}</div>
+        <div class="blank-legend-structure" style="margin-bottom:10px;">${unit.label} \u2014 ${unit.structure}</div>
+        <div class="practice-en">The sentence starter is already in the box below \u2014 write your own reason after it!</div>
+        <textarea class="type-input" id="w3ta" placeholder="\u2026" style="margin-top:8px;">${savedText}</textarea>
+        <div class="practice-en" style="margin-top:12px;">Stuck? Here\u2019s one idea (tap to use it instead):</div>
+        <button class="phrase-chip" style="margin-top:6px;" onclick="insertW3Sample('${escJs(fullExample)}')"><span style="color:${unit.color}">${fullExample}</span></button>
+        <div class="btn-row" style="margin-top:10px;">
+          <button class="pill-btn" onclick="speakThai(document.querySelector('.fixed-opener').textContent, false)">\ud83d\udd0a Listen to opener</button>
+        </div>
+        <div class="btn-row">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW3WriteTried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+        </div>
+        ${topicFullyWritten ? finishedPieceHtml(topicUnitIdxs.map(i => ({ ...W3_UNITS[i], globalIdx: i })), state.w3text, unit.topic.opener) : ''}
+      </div>
+      ${w3NavHtml()}
+    `;
+  }
+}
+function insertW3Sample(sample){
+  const box = document.getElementById('w3ta');
+  if(!box) return;
+  box.value = sample;
+  box.focus();
+}
+function markW3WriteTried(btn){
+  const box = document.getElementById('w3ta');
+  if(box) state.w3text[activeW3UnitIdx] = box.value.trim() || state.w3text[activeW3UnitIdx] || '';
+  markW3StageDone(35);
+  recomputeW3TopicDone(W3_UNITS[activeW3UnitIdx].topicIdx);
+  saveState();
+  renderW3Stage();
+}
+function w3NavHtml(){
+  const isFirst = activeW3StageIdx === 0 && activeW3UnitIdx === 0;
+  const isLast = activeW3StageIdx === BLANK_STAGE_ORDER.length - 1 && activeW3UnitIdx === W3_UNITS.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevW3Stage()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextW3Stage()">Next \u2192</button>
+    </div>`;
+}
+function prevW3Stage(){
+  if(activeW3StageIdx > 0){ activeW3StageIdx--; }
+  else if(activeW3UnitIdx > 0){ activeW3UnitIdx--; activeW3StageIdx = BLANK_STAGE_ORDER.length - 1; }
+  else return;
+  renderW3Stage(); window.scrollTo(0,0);
+}
+function nextW3Stage(){
+  if(activeW3StageIdx < BLANK_STAGE_ORDER.length - 1){ activeW3StageIdx++; }
+  else if(activeW3UnitIdx < W3_UNITS.length - 1){ activeW3UnitIdx++; activeW3StageIdx = 0; }
+  else return;
+  renderW3Stage(); window.scrollTo(0,0);
+}
+
+/* ══════════════════ W4 — PARAGRAPH BUILDER ENGINE (Match \u2192 Choose \u2192 Write) ══════════════════ */
+let activeW4UnitIdx = 0, activeW4StageIdx = 0;
+
 function openParagraphBuilderLevel(){
-  sourceWorld = 'w5'; activeP4Idx = 0;
+  sourceWorld = 'w5'; activeW4UnitIdx = 0; activeW4StageIdx = 0;
   document.getElementById('practiceTitle').textContent = '\ud83e\uddf1 W4 \u2014 Paragraph Builder';
   document.getElementById('world').classList.remove('active');
   document.getElementById('practice').classList.add('active');
-  renderParagraphBuilder();
+  renderW4Stage();
   window.scrollTo(0,0);
 }
-function renderParagraphBuilder(){
-  stopAnyRecording();
-  const topic = PARAGRAPH_BUILDER_TOPICS[activeP4Idx];
-  document.getElementById('practiceProgress').textContent = `Topic ${activeP4Idx + 1} of ${PARAGRAPH_BUILDER_TOPICS.length}`;
-  const done = !!state.w4[activeP4Idx];
-  document.getElementById('practiceBody').innerHTML = `
-    <div class="practice-card">
-      <div class="item-icon">${topic.icon}</div>
-      <div class="pattern-name-badge">${topic.title}</div>
-      ${topic.blocks.map((b, i) => `
-        <div class="write-block">
-          <div class="write-block-label">${i + 1}. ${b}</div>
-          <textarea class="type-input" placeholder="\u2026"></textarea>
-        </div>`).join('')}
-      <div class="btn-row">
-        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW4Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
-      </div>
-    </div>
-    ${simpleNavHtml(activeP4Idx, PARAGRAPH_BUILDER_TOPICS.length, 'prevP4', 'nextP4')}
-  `;
-}
-function markW4Tried(btn){
-  if(!state.w4[activeP4Idx]){ state.w4[activeP4Idx] = true; state.xp += 45; saveState(); }
-  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
-}
-function prevP4(){ if(activeP4Idx > 0){ activeP4Idx--; renderParagraphBuilder(); window.scrollTo(0,0); } }
-function nextP4(){ if(activeP4Idx < PARAGRAPH_BUILDER_TOPICS.length - 1){ activeP4Idx++; renderParagraphBuilder(); window.scrollTo(0,0); } }
 
-/* ══════════════════ W5 — ESSAY / GENRE BUILDER ENGINE ══════════════════ */
-let activeGenreIdx = 0;
+function w4StageKey(){ return activeW4UnitIdx + '-' + BLANK_STAGE_ORDER[activeW4StageIdx]; }
+function markW4StageDone(xp){
+  const key = w4StageKey();
+  if(!state.w4stage[key]){ state.w4stage[key] = true; state.xp += xp; saveState(); }
+}
+function recomputeW4TopicDone(topicIdx){
+  const unitIdxs = W4_UNITS.map((u, i) => u.topicIdx === topicIdx ? i : -1).filter(i => i >= 0);
+  if(unitIdxs.every(i => !!state.w4stage[i + '-write'])) state.w4[topicIdx] = true;
+}
+
+function renderW4Stage(){
+  stopAnyRecording();
+  const unit = W4_UNITS[activeW4UnitIdx];
+  const stage = BLANK_STAGE_ORDER[activeW4StageIdx];
+  const stepNum = activeW4UnitIdx * BLANK_STAGE_ORDER.length + activeW4StageIdx + 1;
+  const totalSteps = W4_UNITS.length * BLANK_STAGE_ORDER.length;
+  document.getElementById('practiceProgress').textContent =
+    `${unit.topic.title.split(' (')[0]} \u2014 block ${unit.blockIdx + 1} of ${unit.topic.blocks.length} \u2014 ${BLANK_STAGE_META[stage].emoji} ${BLANK_STAGE_META[stage].label} (${stepNum}/${totalSteps})`;
+
+  const body = document.getElementById('practiceBody');
+
+  if(stage === 'match' || stage === 'choose'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${unit.topic.icon}</div>
+        <div class="pattern-name-badge">${unit.topic.title}</div>
+        <div id="w4Tasks">${blankTaskHtml('w4', 0, unit, stage)}</div>
+      </div>
+      ${w4NavHtml()}
+    `;
+    setupBlankTask('w4', 0, unit, stage);
+  } else {
+    const done = !!state.w4stage[w4StageKey()];
+    const savedText = state.w4text[activeW4UnitIdx] || '';
+    const topicUnitIdxs = W4_UNITS.map((u, i) => u.topicIdx === unit.topicIdx ? i : -1).filter(i => i >= 0);
+    const topicFullyWritten = topicUnitIdxs.every(i => !!state.w4stage[i + '-write']);
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${unit.topic.icon}</div>
+        <div class="pattern-name-badge">${unit.topic.title}</div>
+        <div class="write-block-label" style="color:${unit.color}; margin-top:10px;">${unit.blockIdx + 1}. ${unit.label}</div>
+        <button class="phrase-chip" style="margin-bottom:8px;" onclick="insertW4Sample('${escJs(unit.correctFill)}')"><span style="color:${unit.color}">${unit.correctFill}</span></button>
+        <textarea class="type-input" id="w4ta" placeholder="\u2026">${savedText}</textarea>
+        <div class="btn-row" style="margin-top:10px;">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW4WriteTried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+        </div>
+        ${topicFullyWritten ? finishedPieceHtml(topicUnitIdxs.map(i => ({ ...W4_UNITS[i], globalIdx: i })), state.w4text) : ''}
+      </div>
+      ${w4NavHtml()}
+    `;
+  }
+}
+function insertW4Sample(sample){
+  const box = document.getElementById('w4ta');
+  if(!box) return;
+  box.value = sample;
+  box.focus();
+}
+function markW4WriteTried(btn){
+  const box = document.getElementById('w4ta');
+  if(box) state.w4text[activeW4UnitIdx] = box.value.trim() || state.w4text[activeW4UnitIdx] || '';
+  markW4StageDone(45);
+  recomputeW4TopicDone(W4_UNITS[activeW4UnitIdx].topicIdx);
+  saveState();
+  renderW4Stage();
+}
+function w4NavHtml(){
+  const isFirst = activeW4StageIdx === 0 && activeW4UnitIdx === 0;
+  const isLast = activeW4StageIdx === BLANK_STAGE_ORDER.length - 1 && activeW4UnitIdx === W4_UNITS.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevW4Stage()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextW4Stage()">Next \u2192</button>
+    </div>`;
+}
+function prevW4Stage(){
+  if(activeW4StageIdx > 0){ activeW4StageIdx--; }
+  else if(activeW4UnitIdx > 0){ activeW4UnitIdx--; activeW4StageIdx = BLANK_STAGE_ORDER.length - 1; }
+  else return;
+  renderW4Stage(); window.scrollTo(0,0);
+}
+function nextW4Stage(){
+  if(activeW4StageIdx < BLANK_STAGE_ORDER.length - 1){ activeW4StageIdx++; }
+  else if(activeW4UnitIdx < W4_UNITS.length - 1){ activeW4UnitIdx++; activeW4StageIdx = 0; }
+  else return;
+  renderW4Stage(); window.scrollTo(0,0);
+}
+
+/* ══════════════════ W5 — ESSAY / GENRE BUILDER ENGINE (Match \u2192 Choose \u2192 Write) ══════════════════ */
+let activeW5UnitIdx = 0, activeW5StageIdx = 0;
+
 function openEssayLevel(){
-  sourceWorld = 'w5'; activeGenreIdx = 0;
+  sourceWorld = 'w5'; activeW5UnitIdx = 0; activeW5StageIdx = 0;
   document.getElementById('practiceTitle').textContent = '\ud83d\udcdd W5 \u2014 Essay / Genre Builder';
   document.getElementById('world').classList.remove('active');
   document.getElementById('practice').classList.add('active');
-  renderEssayGenre();
+  renderW5Stage();
   window.scrollTo(0,0);
 }
-function renderEssayGenre(){
+
+function w5StageKey(){ return activeW5UnitIdx + '-' + BLANK_STAGE_ORDER[activeW5StageIdx]; }
+function markW5StageDone(xp){
+  const key = w5StageKey();
+  if(!state.w5stage[key]){ state.w5stage[key] = true; state.xp += xp; saveState(); }
+}
+function recomputeW5GenreDone(genreIdx){
+  const unitIdxs = W5_UNITS.map((u, i) => u.genreIdx === genreIdx ? i : -1).filter(i => i >= 0);
+  if(unitIdxs.every(i => !!state.w5stage[i + '-write'])) state.w5[genreIdx] = true;
+}
+
+function renderW5Stage(){
   stopAnyRecording();
-  const genre = ESSAY_GENRES[activeGenreIdx];
-  document.getElementById('practiceProgress').textContent = `Genre ${activeGenreIdx + 1} of ${ESSAY_GENRES.length}`;
-  const done = !!state.w5[activeGenreIdx];
-  document.getElementById('practiceBody').innerHTML = `
-    <div class="practice-card">
-      <div class="item-icon">${genre.icon}</div>
-      <div class="pattern-name-badge">${genre.name}</div>
-      ${genre.blocks.map(b => `
-        <div class="write-block">
-          <div class="write-block-label">${b.label}</div>
-          <div class="write-block-hint">${b.hint}</div>
-          <textarea class="type-input" placeholder="\u2026"></textarea>
-        </div>`).join('')}
-      <div class="btn-row">
-        <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW5Tried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+  const unit = W5_UNITS[activeW5UnitIdx];
+  const stage = BLANK_STAGE_ORDER[activeW5StageIdx];
+  const stepNum = activeW5UnitIdx * BLANK_STAGE_ORDER.length + activeW5StageIdx + 1;
+  const totalSteps = W5_UNITS.length * BLANK_STAGE_ORDER.length;
+  document.getElementById('practiceProgress').textContent =
+    `${unit.genre.name.split(' (')[0]} \u2014 block ${unit.blockIdx + 1} of ${unit.genre.blocks.length} \u2014 ${BLANK_STAGE_META[stage].emoji} ${BLANK_STAGE_META[stage].label} (${stepNum}/${totalSteps})`;
+
+  const body = document.getElementById('practiceBody');
+
+  if(stage === 'match' || stage === 'choose'){
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${unit.genre.icon}</div>
+        <div class="pattern-name-badge">${unit.genre.name}</div>
+        <div id="w5Tasks">${blankTaskHtml('w5', 0, unit, stage)}</div>
       </div>
-    </div>
-    ${simpleNavHtml(activeGenreIdx, ESSAY_GENRES.length, 'prevGenre', 'nextGenre')}
-  `;
+      ${w5NavHtml()}
+    `;
+    setupBlankTask('w5', 0, unit, stage);
+  } else {
+    const done = !!state.w5stage[w5StageKey()];
+    const savedText = state.w5text[activeW5UnitIdx] || '';
+    const genreUnitIdxs = W5_UNITS.map((u, i) => u.genreIdx === unit.genreIdx ? i : -1).filter(i => i >= 0);
+    const genreFullyWritten = genreUnitIdxs.every(i => !!state.w5stage[i + '-write']);
+    body.innerHTML = `
+      <div class="practice-card">
+        <div class="item-icon">${unit.genre.icon}</div>
+        <div class="pattern-name-badge">${unit.genre.name}</div>
+        <div class="write-block-label" style="color:${unit.color}; margin-top:10px;">${unit.label}</div>
+        <div class="write-block-hint">${unit.hint}</div>
+        <button class="phrase-chip" style="margin:8px 0;" onclick="insertW5Sample('${escJs(unit.correctFill)}')"><span style="color:${unit.color}">${unit.correctFill}</span></button>
+        <textarea class="type-input" id="w5ta" placeholder="\u2026">${savedText}</textarea>
+        <div class="btn-row" style="margin-top:10px;">
+          <button class="pill-btn ${done ? 'toggled' : 'primary'}" onclick="markW5WriteTried(this)">${done ? '\u2705 Tried it' : '\u2705 I tried it!'}</button>
+        </div>
+        ${genreFullyWritten ? finishedPieceHtml(genreUnitIdxs.map(i => ({ ...W5_UNITS[i], globalIdx: i })), state.w5text) : ''}
+      </div>
+      ${w5NavHtml()}
+    `;
+  }
 }
-function markW5Tried(btn){
-  if(!state.w5[activeGenreIdx]){ state.w5[activeGenreIdx] = true; state.xp += 50; saveState(); }
-  if(btn){ btn.textContent = '\u2705 Tried it'; btn.classList.remove('primary'); btn.classList.add('toggled'); }
+function insertW5Sample(sample){
+  const box = document.getElementById('w5ta');
+  if(!box) return;
+  box.value = sample;
+  box.focus();
 }
-function prevGenre(){ if(activeGenreIdx > 0){ activeGenreIdx--; renderEssayGenre(); window.scrollTo(0,0); } }
-function nextGenre(){ if(activeGenreIdx < ESSAY_GENRES.length - 1){ activeGenreIdx++; renderEssayGenre(); window.scrollTo(0,0); } }
+function markW5WriteTried(btn){
+  const box = document.getElementById('w5ta');
+  if(box) state.w5text[activeW5UnitIdx] = box.value.trim() || state.w5text[activeW5UnitIdx] || '';
+  markW5StageDone(50);
+  recomputeW5GenreDone(W5_UNITS[activeW5UnitIdx].genreIdx);
+  saveState();
+  renderW5Stage();
+}
+function w5NavHtml(){
+  const isFirst = activeW5StageIdx === 0 && activeW5UnitIdx === 0;
+  const isLast = activeW5StageIdx === BLANK_STAGE_ORDER.length - 1 && activeW5UnitIdx === W5_UNITS.length - 1;
+  return `
+    <div class="practice-nav">
+      <button class="pill-btn" style="${isFirst ? 'visibility:hidden;' : ''}" onclick="prevW5Stage()">\u2190 Prev</button>
+      <button class="pill-btn" style="${isLast ? 'visibility:hidden;' : ''}" onclick="nextW5Stage()">Next \u2192</button>
+    </div>`;
+}
+function prevW5Stage(){
+  if(activeW5StageIdx > 0){ activeW5StageIdx--; }
+  else if(activeW5UnitIdx > 0){ activeW5UnitIdx--; activeW5StageIdx = BLANK_STAGE_ORDER.length - 1; }
+  else return;
+  renderW5Stage(); window.scrollTo(0,0);
+}
+function nextW5Stage(){
+  if(activeW5StageIdx < BLANK_STAGE_ORDER.length - 1){ activeW5StageIdx++; }
+  else if(activeW5UnitIdx < W5_UNITS.length - 1){ activeW5UnitIdx++; activeW5StageIdx = 0; }
+  else return;
+  renderW5Stage(); window.scrollTo(0,0);
+}
 
 /* Shared simple Prev/Next nav for single-index carousels */
 function simpleNavHtml(idx, total, prevFn, nextFn){
