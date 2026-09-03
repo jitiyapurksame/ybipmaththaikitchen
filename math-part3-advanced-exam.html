@@ -1234,6 +1234,41 @@ function translationVectorSVG(x, y, dx, dy, caption) {
 // ── Speed/Distance/Time: a car travelling along a distance line ──
 // ── Speed/Distance/Time: a car travelling along a distance line, broken into
 //    per-hour (or per-half-hour) segments so the rate is visible, not just stated ──
+// ── Transformations: four quick "what am I looking at" icons for the identify-type missions ──
+function reflectionIconSVG(caption) {
+  const inner = `
+    <line x1="100" y1="15" x2="100" y2="145" stroke="${RED}" stroke-width="3" stroke-dasharray="6,4"/>
+    <polygon points="30,120 85,120 85,40" fill="${GOLD}" stroke="${GOLDLINE}" stroke-width="2"/>
+    <polygon points="170,120 115,120 115,40" fill="${TEAL}" fill-opacity="0.55" stroke="${TEAL}" stroke-width="2"/>
+    <text x="100" y="30" font-size="12" fill="${RED}" font-weight="bold" text-anchor="middle">mirror line</text>`;
+  return svgWrap(inner, 200, 155, caption || 'One side is the mirror-flip of the other', 210);
+}
+function rotationIconSVG(caption) {
+  const inner = `
+    <circle cx="100" cy="90" r="3.5" fill="${LABEL}"/>
+    <polygon points="100,90 155,90 155,50" fill="${GOLD}" stroke="${GOLDLINE}" stroke-width="2"/>
+    <polygon points="100,90 100,35 60,35" fill="${TEAL}" fill-opacity="0.55" stroke="${TEAL}" stroke-width="2"/>
+    <path d="M130,90 A30,30 0 0 1 100,60" fill="none" stroke="${RED}" stroke-width="2.5" marker-end="url(#rarrow)"/>
+    <defs><marker id="rarrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${RED}"/></marker></defs>
+    <text x="100" y="130" font-size="12" fill="${MUTED}" text-anchor="middle">turns around the fixed dot</text>`;
+  return svgWrap(inner, 200, 145, caption || 'Same shape, spun around a fixed point', 210);
+}
+function translationIconSVG(caption) {
+  const inner = `
+    <polygon points="30,120 85,120 85,60" fill="${GOLD}" stroke="${GOLDLINE}" stroke-width="2"/>
+    <polygon points="115,120 170,120 170,60" fill="${TEAL}" fill-opacity="0.55" stroke="${TEAL}" stroke-width="2"/>
+    <line x1="90" y1="90" x2="112" y2="90" stroke="${RED}" stroke-width="3" marker-end="url(#tarrow2)"/>
+    <defs><marker id="tarrow2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${RED}"/></marker></defs>`;
+  return svgWrap(inner, 200, 140, caption || 'Same size, same way up — it just slides over', 210);
+}
+function enlargementIconSVG(caption) {
+  const inner = `
+    <polygon points="40,140 40,100 80,140" fill="${GOLD}" stroke="${GOLDLINE}" stroke-width="2"/>
+    <polygon points="40,140 40,40 140,140" fill="none" stroke="${TEAL}" stroke-width="2.5" stroke-dasharray="6,4"/>
+    <text x="90" y="20" font-size="12" fill="${MUTED}" text-anchor="middle">same shape, bigger size</text>`;
+  return svgWrap(inner, 200, 155, caption || 'Same corner, everything scaled up (or down)', 210);
+}
+
 function speedLineSVG(distance, time, speed, unit, caption) {
   unit = unit || 'km';
   const x0 = 20, x1 = 190, y = 95;
@@ -1334,6 +1369,21 @@ function boxSVG(lLabel, wLabel, hLabel, caption) {
     <text x="${x0 - 10}" y="${y0 - fh / 2}" font-size="15" fill="${LABEL}" font-weight="bold" text-anchor="end">${hLabel}</text>
     <text x="${(D[0] + E[0]) / 2 - 6}" y="${(D[1] + E[1]) / 2 - 6}" font-size="15" fill="${TEAL}" font-weight="bold" text-anchor="end">${wLabel}</text>`;
   return svgWrap(inner, x0 + fw + dx + 25, y0 + 35, caption, 250);
+}
+
+// ── Volume: a cylinder (soup can / cooking pot) with radius and height labeled ──
+function cylinderSVG(rLabel, hLabel, caption) {
+  const cx = 100, topY = 35, rx = 55, ry = 16, bottomY = 130;
+  const inner = `
+    <ellipse cx="${cx}" cy="${bottomY}" rx="${rx}" ry="${ry}" fill="${BG}" stroke="${GOLD}" stroke-width="2.5"/>
+    <line x1="${cx - rx}" y1="${topY}" x2="${cx - rx}" y2="${bottomY}" stroke="${GOLD}" stroke-width="2.5"/>
+    <line x1="${cx + rx}" y1="${topY}" x2="${cx + rx}" y2="${bottomY}" stroke="${GOLD}" stroke-width="2.5"/>
+    <ellipse cx="${cx}" cy="${topY}" rx="${rx}" ry="${ry}" fill="${GOLD}" fill-opacity="0.35" stroke="${GOLD}" stroke-width="2.5"/>
+    <line x1="${cx}" y1="${topY}" x2="${cx + rx}" y2="${topY}" stroke="${RED}" stroke-width="2.5"/>
+    <text x="${cx + rx / 2}" y="${topY - 8}" font-size="14" fill="${RED}" font-weight="bold" text-anchor="middle">${rLabel}</text>
+    <line x1="${cx + rx + 14}" y1="${topY}" x2="${cx + rx + 14}" y2="${bottomY}" stroke="${TEAL}" stroke-width="2"/>
+    <text x="${cx + rx + 20}" y="${(topY + bottomY) / 2 + 4}" font-size="14" fill="${TEAL}" font-weight="bold">${hLabel}</text>`;
+  return svgWrap(inner, 210, 150, caption || 'A cooking pot — like a soup can shape', 230);
 }
 
 // ── Circles: a circle with the radius or diameter line drawn and labeled ──
@@ -1729,48 +1779,48 @@ const LEVELS = {
     color: 5,
     emoji: '🍩',
     missions: [
-      { type: 'calc', instruction: 'Circumference = π × diameter (use π = 3.14). Radius = 5, so diameter = 10', problem: 'C = π × 10', answer: '31.4', hint: {
+      { type: 'calc', instruction: '🥞 Pancake edge recipe: <strong>crust length (circumference) = π × across (diameter)</strong>. Use π = 3.14 — it\'s just a fixed number, like a measuring constant every chef uses. Your pancake\'s radius is 5, so across = 10', problem: 'C = π × 10', answer: '31.4', hint: {
         visual: circleMeasureSVG('d=10', 'diameter'),
         formula: '3.14 × 10 = 31.4.'
       } },
-      { type: 'calc', instruction: 'Circumference from diameter directly', problem: 'diameter = 10, C = π × 10', answer: '31.4', hint: {
+      { type: 'calc', instruction: '🍕 Same recipe again — measure the crust straight from the "across" measurement', problem: 'across (diameter) = 10, C = π × 10', answer: '31.4', hint: {
         visual: circleMeasureSVG('d=10', 'diameter'),
         formula: '3.14 × 10 = 31.4.'
       } },
-      { type: 'calc', instruction: 'Area = π × r² (use π = 3.14)', problem: 'radius = 4, A = 3.14 × 4²', answer: '50.24', hint: {
+      { type: 'calc', instruction: '🍩 Donut surface recipe: <strong>surface (area) = π × radius²</strong> — square the radius first, then multiply by 3.14', problem: 'radius = 4, A = 3.14 × 4²', answer: '50.24', hint: {
         visual: circleMeasureSVG('r=4', 'radius'),
         formula: '4²=16. 3.14×16=50.24.'
       } },
-      { type: 'calc', instruction: 'Find the radius from the diameter', problem: 'diameter = 14, radius = ?', answer: '7', hint: {
+      { type: 'calc', instruction: '🥧 Your pie tin measures 14cm straight across. What\'s the radius (halfway to the middle)?', problem: 'diameter = 14, radius = ?', answer: '7', hint: {
         visual: circleMeasureSVG('d=14', 'diameter'),
         formula: 'radius = diameter ÷ 2 = 14 ÷ 2 = 7.'
       } },
-      { type: 'calc', instruction: 'Find the area', problem: 'radius = 3, A = 3.14 × 3²', answer: '28.26', hint: {
+      { type: 'calc', instruction: '🍩 Find the donut surface (area) again — square, then × 3.14', problem: 'radius = 3, A = 3.14 × 3²', answer: '28.26', hint: {
         visual: circleMeasureSVG('r=3', 'radius'),
         formula: '3²=9. 3.14×9=28.26.'
       } },
-      { type: 'calc', instruction: 'Find the circumference', problem: 'radius = 10, C = 2 × 3.14 × 10', answer: '62.8', hint: {
+      { type: 'calc', instruction: '🍕 Find the crust length (circumference). Recipe: 2 × π × radius', problem: 'radius = 10, C = 2 × 3.14 × 10', answer: '62.8', hint: {
         visual: circleMeasureSVG('r=10', 'radius'),
         formula: '2×3.14×10=62.8.'
       } },
-      { type: 'calc', instruction: 'Find the diameter from the circumference', problem: 'C = 18.84, diameter = C ÷ π', answer: '6', hint: {
+      { type: 'calc', instruction: '🍳 You measured 18.84cm of crust around a fried egg. Work backwards to find the "across" measurement — undo the recipe (÷ π instead of × π)', problem: 'C = 18.84, diameter = C ÷ π', answer: '6', hint: {
         visual: circleMeasureSVG('d=?', 'diameter', 'Circumference = 18.84'),
         formula: '18.84 ÷ 3.14 = 6.'
       } },
-      { type: 'calc', instruction: 'Find the area of a semicircle (half a circle)', problem: 'radius = 4, semicircle area = (3.14 × 4²) ÷ 2', answer: '25.12', hint: {
+      { type: 'calc', instruction: '🥯 A bagel sliced clean in half — find the surface of just ONE half (semicircle). Same recipe, then halve it', problem: 'radius = 4, semicircle area = (3.14 × 4²) ÷ 2', answer: '25.12', hint: {
         visual: semicircleSVG('r=4'),
         formula: 'Full circle area = 50.24. Half of that = 25.12.'
       } },
-      { type: 'calc', instruction: 'Find the area', problem: 'radius = 2, A = 3.14 × 2²', answer: '12.56', hint: {
+      { type: 'calc', instruction: '🍩 One more donut surface — square the radius, multiply by 3.14', problem: 'radius = 2, A = 3.14 × 2²', answer: '12.56', hint: {
         visual: circleMeasureSVG('r=2', 'radius'),
         formula: '2²=4. 3.14×4=12.56.'
       } },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find both circumference and area', problem: 'radius = 10 — find C and A (use π = 3.14)', answer: '62.8,314', hint: {
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: A big pizza has radius 10cm. Find the crust length AND the surface area', problem: 'radius = 10 — find C and A (use π = 3.14)', answer: '62.8,314', hint: {
         visual: circleMeasureSVG('r=10', 'radius'),
         formula: 'C = 2×3.14×10 = 62.8. A = 3.14×10² = 314.'
       }, solution: [
-        { action: 'Circumference', detail: '2 × 3.14 × 10 = 62.8', check: '62.8' },
-        { action: 'Area', detail: '3.14 × 10² = 3.14 × 100 = 314', check: '314' }
+        { action: 'Crust length (circumference)', detail: '2 × 3.14 × 10 = 62.8', check: '62.8' },
+        { action: 'Surface (area)', detail: '3.14 × 10² = 3.14 × 100 = 314', check: '314' }
       ]},
     ]
   },
@@ -1779,42 +1829,45 @@ const LEVELS = {
     color: 1,
     emoji: '🧊',
     missions: [
-      { type: 'calc', instruction: 'Volume of a cuboid = length × width × height', problem: '5 × 3 × 2', answer: '30', hint: {
+      { type: 'calc', instruction: '🥡 Lunchbox recipe: <strong>volume (how much fits inside) = length × width × height</strong>. Stack all three measurements together', problem: '5 × 3 × 2', answer: '30', hint: {
         visual: boxSVG(5, 3, 2),
         formula: '5×3=15. 15×2=30.'
       } },
-      { type: 'calc', instruction: 'Volume of a cube = side³', problem: 'side = 4, V = 4³', answer: '64', hint: {
+      { type: 'calc', instruction: '🧊 An ice cube tray hole is a perfect cube (all sides equal). Recipe: <strong>side × side × side</strong>', problem: 'side = 4, V = 4³', answer: '64', hint: {
         visual: boxSVG(4, 4, 4, 'A cube — all sides equal'),
         formula: '4×4×4=64.'
       } },
-      { type: 'calc', instruction: 'Volume of a prism = cross-section area × length', problem: 'area = 12, length = 5', answer: '60', hint: '12×5=60.' },
-      { type: 'calc', instruction: 'Surface area of a cube = 6 × side²', problem: 'side = 3, SA = 6 × 3²', answer: '54', hint: {
+      { type: 'calc', instruction: '🍞 A loaf-tin shape (prism) holds: <strong>the flat end\'s area × how long it is</strong>', problem: 'area = 12, length = 5', answer: '60', hint: '12×5=60.' },
+      { type: 'calc', instruction: '🎁 Wrapping a cube-shaped snack box — <strong>surface (wrapping paper needed) = 6 × side²</strong> because a cube has 6 matching square faces', problem: 'side = 3, SA = 6 × 3²', answer: '54', hint: {
         visual: boxSVG(3, 3, 3, 'A cube has 6 identical square faces'),
         formula: '3²=9. 6×9=54.'
       } },
-      { type: 'calc', instruction: 'Surface area of a cuboid = 2(lw + lh + wh)', problem: 'l=4, w=3, h=2', answer: '52', hint: {
+      { type: 'calc', instruction: '🎁 Wrapping a rectangular lunchbox — <strong>surface = 2(lw + lh + wh)</strong>. Work out each pair of faces, add them, then double', problem: 'l=4, w=3, h=2', answer: '52', hint: {
         visual: boxSVG(4, 3, 2),
         formula: 'lw=12, lh=8, wh=6. Sum=26. 2×26=52.'
       } },
-      { type: 'calc', instruction: 'Volume of a cylinder = π × r² × h (use π = 3.14)', problem: 'r=3, h=5', answer: '141.3', hint: '3.14×9×5=141.3.' },
-      { type: 'calc', instruction: 'Volume of a cuboid', problem: '10 × 2 × 3', answer: '60', hint: {
+      { type: 'calc', instruction: '🥫 A soup pot is a cylinder. Recipe: <strong>volume = π × radius² × height</strong> (use π = 3.14)', problem: 'r=3, h=5', answer: '141.3', hint: {
+        visual: cylinderSVG('r=3', 'h=5'),
+        formula: '3.14×9×5=141.3.'
+      } },
+      { type: 'calc', instruction: '🥡 Another lunchbox — same recipe, new numbers', problem: '10 × 2 × 3', answer: '60', hint: {
         visual: boxSVG(10, 2, 3),
         formula: '10×2=20. 20×3=60.'
       } },
-      { type: 'calc', instruction: 'Find the missing height. Volume = 60, length = 5, width = 4', problem: 'h = 60 ÷ (5 × 4)', answer: '3', hint: {
+      { type: 'calc', instruction: '🕵️ A container holds 60cm³. You know length=5 and width=4 but the height got wiped off the label. Work backwards to find it', problem: 'h = 60 ÷ (5 × 4)', answer: '3', hint: {
         visual: boxSVG(5, 4, '?', 'Volume = 60 — height is missing'),
         formula: '5×4=20. 60÷20=3.'
       } },
-      { type: 'calc', instruction: 'Volume of a cube', problem: 'side = 5, V = 5³', answer: '125', hint: {
+      { type: 'calc', instruction: '🧊 One more ice-cube-tray cube', problem: 'side = 5, V = 5³', answer: '125', hint: {
         visual: boxSVG(5, 5, 5, 'A cube — all sides equal'),
         formula: '5×5×5=125.'
       } },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find volume then surface area', problem: 'Cuboid: l=6, w=5, h=4', answer: '120,148', hint: {
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: A cake box is 6×5×4cm. Find how much cake fits inside (volume), then how much wrapping paper covers it (surface area)', problem: 'Cuboid: l=6, w=5, h=4', answer: '120,148', hint: {
         visual: boxSVG(6, 5, 4),
         formula: 'Volume=6×5×4=120. SA=2(30+24+20)=148.'
       }, solution: [
-        { action: 'Volume', detail: '6 × 5 × 4 = 120', check: '120' },
-        { action: 'Surface area', detail: '2(30+24+20) = 2×74 = 148', check: '148' }
+        { action: 'Volume (space inside)', detail: '6 × 5 × 4 = 120', check: '120' },
+        { action: 'Surface area (wrapping paper)', detail: '2(30+24+20) = 2×74 = 148', check: '148' }
       ]},
     ]
   },
@@ -1823,49 +1876,49 @@ const LEVELS = {
     color: 2,
     emoji: '🍽️',
     missions: [
-      { type: 'calc', instruction: 'Find the mean (add up, divide by how many)', problem: '4, 6, 8, 10, 12', answer: '8', hint: {
-        visual: sequenceBarsSVG([4, 6, 8, 10, 12], null, 'These blocks show the data — imagine levelling them all to one flat height'),
+      { type: 'calc', instruction: '⭐ 5 taste-testers score your dish out of 10. Find the <strong>mean</strong> (share it out equally — add all scores, divide by how many testers)', problem: '4, 6, 8, 10, 12', answer: '8', hint: {
+        visual: sequenceBarsSVG([4, 6, 8, 10, 12], null, 'These blocks show the scores — imagine levelling them all to one flat height'),
         formula: 'Sum=40. 40÷5=8.'
       } },
-      { type: 'calc', instruction: 'Find the median (middle value when sorted)', problem: '3, 7, 9, 2, 5', answer: '5', hint: {
+      { type: 'calc', instruction: '🌡️ 5 oven temperature readings (in order they were taken). Find the <strong>median</strong> — line them up smallest to biggest, then pick the one bang in the middle', problem: '3, 7, 9, 2, 5', answer: '5', hint: {
         visual: sequenceBarsSVG([2, 3, 5, 7, 9], null, 'Sorted smallest to largest — the middle block is the median'),
         formula: 'Sorted: 2,3,5,7,9. Middle value is 5.'
       } },
-      { type: 'calc', instruction: 'Find the mode (most frequent value)', problem: '2, 3, 3, 5, 7, 3', answer: '3', hint: {
+      { type: 'calc', instruction: '🧂 You measured out these teaspoons of salt across 6 recipes. Find the <strong>mode</strong> — the amount that shows up the most', problem: '2, 3, 3, 5, 7, 3', answer: '3', hint: {
         visual: sequenceBarsSVG([2, 3, 3, 5, 7, 3], null, 'Which block height shows up more than any other?'),
         formula: '3 appears three times — more than any other number.'
       } },
-      { type: 'calc', instruction: 'Find the range (biggest − smallest)', problem: '4, 9, 15, 2, 11', answer: '13', hint: {
+      { type: 'calc', instruction: '⏱️ Five different recipes took these many minutes to cook. Find the <strong>range</strong> (biggest − smallest) — the gap between fastest and slowest', problem: '4, 9, 15, 2, 11', answer: '13', hint: {
         visual: sequenceBarsSVG([2, 4, 9, 11, 15], null, 'Sorted — range is the gap between the shortest and tallest block'),
         formula: 'Biggest=15, smallest=2. 15−2=13.'
       } },
-      { type: 'calc', instruction: 'Find the mean', problem: '10, 20, 30, 40, 50, 60', answer: '35', hint: {
-        visual: sequenceBarsSVG([10, 20, 30, 40, 50, 60], null, 'These blocks show the data — imagine levelling them all to one flat height'),
+      { type: 'calc', instruction: '⭐ Six taste-testers scored your soup. Find the mean', problem: '10, 20, 30, 40, 50, 60', answer: '35', hint: {
+        visual: sequenceBarsSVG([10, 20, 30, 40, 50, 60], null, 'These blocks show the scores — imagine levelling them all to one flat height'),
         formula: 'Sum=210. 210÷6=35.'
       } },
-      { type: 'calc', instruction: 'Find the median (even number of values — average the middle two)', problem: '1, 2, 3, 4', answer: '2.5', hint: {
+      { type: 'calc', instruction: '🌡️ Four oven readings — an EVEN amount this time, so the median sits between the middle two (average them)', problem: '1, 2, 3, 4', answer: '2.5', hint: {
         visual: sequenceBarsSVG([1, 2, 3, 4], null, 'With an even count, the median sits between the middle two blocks'),
         formula: 'Middle two are 2 and 3. (2+3)÷2=2.5.'
       } },
-      { type: 'calc', instruction: 'The mean of 5 numbers is 10. Four of them are 8, 9, 11, 12. Find the fifth', problem: 'Total needed = 5×10 = 50', answer: '10', hint: {
+      { type: 'calc', instruction: '🕵️ Five taste-tester scores must average out to 10. Four scores got smudged and only these show: 8, 9, 11, 12. What must the fifth score be?', problem: 'Total needed = 5×10 = 50', answer: '10', hint: {
         visual: sequenceBarsSVG([8, 9, 11, 12, '?'], null, 'Four known blocks, one missing — together they must average to 10'),
         formula: 'Sum of four known = 40. Fifth = 50−40 = 10.'
       } },
-      { type: 'calc', instruction: 'Find the range', problem: 'max = 45, min = 12', answer: '33', hint: {
+      { type: 'calc', instruction: '🌡️ The oven swung between these two temperatures while baking. Find the range', problem: 'max = 45, min = 12', answer: '33', hint: {
         visual: sequenceBarsSVG([12, 45], ['range = ?']),
         formula: '45−12=33.'
       } },
-      { type: 'calc', instruction: 'Find the mean (decimal answer)', problem: '2, 3, 4, 5', answer: '3.5', hint: {
-        visual: sequenceBarsSVG([2, 3, 4, 5], null, 'These blocks show the data — imagine levelling them all to one flat height'),
+      { type: 'calc', instruction: '⭐ Find the mean taste-test score (this one comes out as a decimal)', problem: '2, 3, 4, 5', answer: '3.5', hint: {
+        visual: sequenceBarsSVG([2, 3, 4, 5], null, 'These blocks show the scores — imagine levelling them all to one flat height'),
         formula: 'Sum=14. 14÷4=3.5.'
       } },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Find mean, median AND mode', problem: '5, 7, 7, 9, 12', answer: '8,7,7', hint: {
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Five judges scored your final dish. Find the mean, median, AND mode', problem: '5, 7, 7, 9, 12', answer: '8,7,7', hint: {
         visual: sequenceBarsSVG([5, 7, 7, 9, 12], null, 'Already sorted — look at the whole shape for all three answers'),
         formula: 'Mean: sum=40, 40÷5=8. Median: middle value=7. Mode: most frequent=7.'
       }, solution: [
-        { action: 'Mean', detail: '(5+7+7+9+12)÷5 = 40÷5 = 8', check: '8' },
-        { action: 'Median', detail: 'sorted middle value = 7', check: '7' },
-        { action: 'Mode', detail: 'most frequent value = 7', check: '7' }
+        { action: 'Mean (share equally)', detail: '(5+7+7+9+12)÷5 = 40÷5 = 8', check: '8' },
+        { action: 'Median (middle score)', detail: 'sorted middle value = 7', check: '7' },
+        { action: 'Mode (most common score)', detail: 'most frequent value = 7', check: '7' }
       ]},
     ]
   },
@@ -1874,43 +1927,43 @@ const LEVELS = {
     color: 3,
     emoji: '📐',
     missions: [
-      { type: 'calc', instruction: 'Pythagoras: a² + b² = c² (c is the longest side). Find c', problem: 'a=3, b=4, c=?', answer: '5', hint: {
+      { type: 'calc', instruction: '🔪 Slice a rectangular cutting board corner to corner. Pythagoras recipe: <strong>a² + b² = c²</strong> (c is always the diagonal cut — the longest side). Find the cut length c', problem: 'a=3, b=4, c=?', answer: '5', hint: {
         visual: rightTriangleSVG('a=3', 'b=4', 'c=?'),
         formula: '3²+4²=9+16=25. √25=5.'
       } },
-      { type: 'calc', instruction: 'Find the hypotenuse (longest side)', problem: 'a=6, b=8, c=?', answer: '10', hint: {
+      { type: 'calc', instruction: '🪜 A step-ladder to the top spice shelf — find the diagonal (hypotenuse, longest side)', problem: 'a=6, b=8, c=?', answer: '10', hint: {
         visual: rightTriangleSVG('a=6', 'b=8', 'c=?'),
         formula: '6²+8²=36+64=100. √100=10.'
       } },
-      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=5, b=12, c=?', answer: '13', hint: {
+      { type: 'calc', instruction: '🍕 A pizza box diagonal — find the hypotenuse', problem: 'a=5, b=12, c=?', answer: '13', hint: {
         visual: rightTriangleSVG('a=5', 'b=12', 'c=?'),
         formula: '5²+12²=25+144=169. √169=13.'
       } },
-      { type: 'calc', instruction: 'Find a missing SHORT side this time — rearrange: b² = c² − a²', problem: 'c=13, a=5, b=?', answer: '12', hint: {
+      { type: 'calc', instruction: '🔪 This time you know the diagonal cut AND one side of the board — rearrange the recipe to find the missing SHORT side: <strong>b² = c² − a²</strong>', problem: 'c=13, a=5, b=?', answer: '12', hint: {
         visual: rightTriangleSVG('a=5', 'b=?', 'c=13'),
         formula: '13²−5²=169−25=144. √144=12.'
       } },
-      { type: 'calc', instruction: 'Find the missing short side', problem: 'c=10, a=6, b=?', answer: '8', hint: {
+      { type: 'calc', instruction: '🧺 Find the missing short side of the basket frame', problem: 'c=10, a=6, b=?', answer: '8', hint: {
         visual: rightTriangleSVG('a=6', 'b=?', 'c=10'),
         formula: '10²−6²=100−36=64. √64=8.'
       } },
-      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=9, b=12, c=?', answer: '15', hint: {
+      { type: 'calc', instruction: '🍽️ Find the diagonal of a rectangular serving tray', problem: 'a=9, b=12, c=?', answer: '15', hint: {
         visual: rightTriangleSVG('a=9', 'b=12', 'c=?'),
         formula: '9²+12²=81+144=225. √225=15.'
       } },
-      { type: 'calc', instruction: 'Find the missing short side', problem: 'c=25, a=7, b=?', answer: '24', hint: {
+      { type: 'calc', instruction: '🔪 Find the missing short side', problem: 'c=25, a=7, b=?', answer: '24', hint: {
         visual: rightTriangleSVG('a=7', 'b=?', 'c=25'),
         formula: '25²−7²=625−49=576. √576=24.'
       } },
-      { type: 'calc', instruction: 'Find the hypotenuse', problem: 'a=8, b=15, c=?', answer: '17', hint: {
+      { type: 'calc', instruction: '🪜 Find the ladder length (hypotenuse) reaching a top shelf', problem: 'a=8, b=15, c=?', answer: '17', hint: {
         visual: rightTriangleSVG('a=8', 'b=15', 'c=?'),
         formula: '8²+15²=64+225=289. √289=17.'
       } },
-      { type: 'calc', instruction: 'Is a triangle with these three sides right-angled? Check if a²+b²=c²', problem: 'sides 5, 12, 13', answer: 'yes', hint: {
+      { type: 'calc', instruction: '🧐 Quality check! Does this cutting board actually have a true right-angle corner? Test if a²+b²=c²', problem: 'sides 5, 12, 13', answer: 'yes', hint: {
         visual: rightTriangleSVG('a=5', 'b=12', 'c=13'),
         formula: '5²+12²=25+144=169=13². Yes, it works!'
       } },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Real-world Pythagoras', problem: 'A 10m ladder leans against a wall. Its base is 6m from the wall. How high up the wall does it reach?', answer: '8', hint: {
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Real kitchen problem — a 10m ladder leans against the wall to reach the top spice shelf. Its base sits 6m from the wall. How high up the wall does it reach?', problem: 'A 10m ladder leans against a wall. Its base is 6m from the wall. How high up the wall does it reach?', answer: '8', hint: {
         visual: rightTriangleSVG('base=6', 'height=?', 'ladder=10'),
         formula: 'ladder=hypotenuse=10. base=6. height²=10²−6²=100−36=64. height=8.'
       }, solution: [
@@ -1925,28 +1978,46 @@ const LEVELS = {
     color: 4,
     emoji: '🥞',
     missions: [
-      { type: 'calc', instruction: 'Reflect the point in the x-axis (flip the sign of the y-coordinate)', problem: 'Point (3, 4) reflected in the x-axis = ?', answer: '(3,-4)', hint: {
+      { type: 'calc', instruction: '🥞 Flip a pancake over the griddle line (x-axis). Recipe: <strong>x stays put, y flips sign</strong>', problem: 'Point (3, 4) reflected in the x-axis = ?', answer: '(3,-4)', hint: {
         visual: coordinateGraphSVG([{ x: 3, y: 4, label: '(3,4)' }], 'x'),
         formula: 'x stays the same, y flips sign: (3,4) → (3,−4).'
       } },
-      { type: 'calc', instruction: 'Reflect the point in the y-axis (flip the sign of the x-coordinate)', problem: 'Point (2, 5) reflected in the y-axis = ?', answer: '(-2,5)', hint: {
+      { type: 'calc', instruction: '🥞 Flip the pancake the other way, over the y-axis. Recipe: <strong>y stays put, x flips sign</strong>', problem: 'Point (2, 5) reflected in the y-axis = ?', answer: '(-2,5)', hint: {
         visual: coordinateGraphSVG([{ x: 2, y: 5, label: '(2,5)' }], 'y'),
         formula: 'y stays the same, x flips sign: (2,5) → (−2,5).'
       } },
-      { type: 'calc', instruction: 'Translate the point by the vector (add to each coordinate)', problem: 'Point (1, 2) translated by (3, −1) = ?', answer: '(4,1)', hint: {
+      { type: 'calc', instruction: '🍕 Slide a pizza tray across the counter (translate) — just add the slide amount to each coordinate', problem: 'Point (1, 2) translated by (3, −1) = ?', answer: '(4,1)', hint: {
         visual: translationVectorSVG(1, 2, 3, -1),
         formula: '1+3=4, 2+(−1)=1. New point: (4,1).'
       } },
-      { type: 'calc', instruction: 'Translate the point', problem: 'Point (−2, 3) translated by (2, 2) = ?', answer: '(0,5)', hint: {
+      { type: 'calc', instruction: '🍕 Slide the tray again with a new vector', problem: 'Point (−2, 3) translated by (2, 2) = ?', answer: '(0,5)', hint: {
         visual: translationVectorSVG(-2, 3, 2, 2),
         formula: '−2+2=0, 3+2=5. New point: (0,5).'
       } },
-      { type: 'identify', instruction: 'A shape flips over a mirror line. This transformation is called...?', problem: 'Shape flips over a line', answer: 'reflection', hint: 'Think of a mirror image.' },
-      { type: 'identify', instruction: 'A shape turns around a fixed point. This transformation is called...?', problem: 'Shape turns around a point', answer: 'rotation', hint: 'Think of a clock hand turning.' },
-      { type: 'identify', instruction: 'A shape slides without turning or flipping. This transformation is called...?', problem: 'Shape slides in a straight direction', answer: 'translation', hint: 'It moves, but stays facing the same way.' },
-      { type: 'identify', instruction: 'A shape gets bigger or smaller by a scale factor. This transformation is called...?', problem: 'Shape resizes', answer: 'enlargement', hint: 'Think of zooming in or out.' },
-      { type: 'calc', instruction: 'Enlarge by scale factor 2 — multiply the length', problem: 'original length = 5, scale factor = 2', answer: '10', hint: '5 × 2 = 10.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Enlarge a rectangle and find the new area', problem: 'Rectangle 3×4 enlarged by scale factor 3. Find the new area.', answer: '108', hint: 'New sides: 3×3=9, 4×3=12. New area = 9×12=108.', solution: [
+      { type: 'identify', instruction: '🥞 You flip a pancake over — like looking in a mirror. What\'s this move called?', problem: 'Shape flips over a line', answer: 'reflection', hint: {
+        visual: reflectionIconSVG(),
+        formula: 'Think of a mirror image — one side is the flipped copy of the other.'
+      } },
+      { type: 'identify', instruction: '🍕 You spin a pizza around on the tray, without sliding or flipping it. What\'s this move called?', problem: 'Shape turns around a point', answer: 'rotation', hint: {
+        visual: rotationIconSVG(),
+        formula: 'Think of a clock hand turning around its middle pin.'
+      } },
+      { type: 'identify', instruction: '🍪 You slide a tray of cookies across the counter — no turning, no flipping, just moving. What\'s this move called?', problem: 'Shape slides in a straight direction', answer: 'translation', hint: {
+        visual: translationIconSVG(),
+        formula: 'It moves, but stays facing the exact same way.'
+      } },
+      { type: 'identify', instruction: '👨‍🍳 You double a recipe so every ingredient gets bigger by the same scale factor. What\'s this move called?', problem: 'Shape resizes', answer: 'enlargement', hint: {
+        visual: enlargementIconSVG(),
+        formula: 'Think of zooming in — everything grows (or shrinks) by the same factor.'
+      } },
+      { type: 'calc', instruction: '👨‍🍳 Scaling up a recipe: double every measurement (scale factor 2) — multiply the length', problem: 'original length = 5, scale factor = 2', answer: '10', hint: {
+        visual: enlargementIconSVG('5 × 2 = 10 — same shape, bigger batch'),
+        formula: '5 × 2 = 10.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: A rectangular baking tray is 3×4cm. You triple the recipe (scale factor 3) — find the new tray area', problem: 'Rectangle 3×4 enlarged by scale factor 3. Find the new area.', answer: '108', hint: {
+        visual: enlargementIconSVG('Every side gets 3× bigger before you multiply for area'),
+        formula: 'New sides: 3×3=9, 4×3=12. New area = 9×12=108.'
+      }, solution: [
         { action: 'Scale side 3cm', detail: '3 × 3 = 9', check: '9' },
         { action: 'Scale side 4cm', detail: '4 × 3 = 12', check: '12' },
         { action: 'New area', detail: '9 × 12 = 108', check: '108' }
@@ -1958,40 +2029,43 @@ const LEVELS = {
     color: 5,
     emoji: '⏱️',
     missions: [
-      { type: 'calc', instruction: 'Speed = distance ÷ time', problem: 'distance=100km, time=2h', answer: '50', hint: {
+      { type: 'calc', instruction: '🛵 A delivery bike recipe: <strong>speed = distance ÷ time</strong>. How fast did it ride to deliver dinner?', problem: 'distance=100km, time=2h', answer: '50', hint: {
         visual: speedLineSVG(100, 2, null, 'km'),
         formula: '100 ÷ 2 = 50 km/h.'
       } },
-      { type: 'calc', instruction: 'Distance = speed × time', problem: 'speed=60km/h, time=3h', answer: '180', hint: {
+      { type: 'calc', instruction: '🛵 Recipe flipped: <strong>distance = speed × time</strong>. How far did the delivery bike travel?', problem: 'speed=60km/h, time=3h', answer: '180', hint: {
         visual: speedLineSVG(null, 3, 60, 'km'),
         formula: '60 × 3 = 180 km.'
       } },
-      { type: 'calc', instruction: 'Time = distance ÷ speed', problem: 'distance=150km, speed=50km/h', answer: '3', hint: {
+      { type: 'calc', instruction: '🛒 Recipe flipped again: <strong>time = distance ÷ speed</strong>. How long is the grocery run?', problem: 'distance=150km, speed=50km/h', answer: '3', hint: {
         visual: speedLineSVG(150, null, 50, 'km'),
         formula: '150 ÷ 50 = 3 hours.'
       } },
-      { type: 'calc', instruction: 'Find the speed', problem: 'distance=240km, time=4h', answer: '60', hint: {
+      { type: 'calc', instruction: '🛵 Find the delivery bike\'s speed', problem: 'distance=240km, time=4h', answer: '60', hint: {
         visual: speedLineSVG(240, 4, null, 'km'),
         formula: '240 ÷ 4 = 60 km/h.'
       } },
-      { type: 'calc', instruction: 'Find the speed', problem: 'distance=90 miles, time=1.5h', answer: '60', hint: {
+      { type: 'calc', instruction: '🚚 Find the food-truck\'s speed (different units this time — miles)', problem: 'distance=90 miles, time=1.5h', answer: '60', hint: {
         visual: speedLineSVG(90, 1.5, null, 'miles'),
         formula: '90 ÷ 1.5 = 60 mph.'
       } },
-      { type: 'calc', instruction: 'Find the distance', problem: 'speed=45km/h, time=2h', answer: '90', hint: {
+      { type: 'calc', instruction: '🛵 Find the delivery distance', problem: 'speed=45km/h, time=2h', answer: '90', hint: {
         visual: speedLineSVG(null, 2, 45, 'km'),
         formula: '45 × 2 = 90 km.'
       } },
-      { type: 'calc', instruction: 'Find the time', problem: 'speed=30km/h, distance=120km', answer: '4', hint: {
+      { type: 'calc', instruction: '🛒 Find how long the grocery run took', problem: 'speed=30km/h, distance=120km', answer: '4', hint: {
         visual: speedLineSVG(120, null, 30, 'km'),
         formula: '120 ÷ 30 = 4 hours.'
       } },
-      { type: 'calc', instruction: 'Direct proportion: if 5 apples cost £2, find the cost of 15 apples', problem: '15 apples = 3 × 5 apples', answer: '6', hint: '3 times as many apples = 3 × £2 = £6.' },
-      { type: 'calc', instruction: 'Find the average speed for a two-part journey', problem: '100km in 2h, then 80km in 2h — total distance ÷ total time', answer: '45', hint: {
+      { type: 'calc', instruction: '🍎 Ingredient shopping — <strong>direct proportion</strong>: 5 apples cost £2. Use a bar model — line up 3 equal "5 apple" groups to make 15 apples, then just add up the cost bars', problem: '15 apples = 3 × 5 apples', answer: '6', hint: {
+        visual: `<div style="text-align:center;font-size:0.72rem;color:#b9a488;margin-bottom:4px">Each bar = 5 apples = £2</div>${ratioBarSVG([1,1,1])}`,
+        formula: '3 times as many apples = 3 × £2 = £6.'
+      } },
+      { type: 'calc', instruction: '🛵 Two delivery legs in one trip. Find the AVERAGE speed for the whole trip: total distance ÷ total time (don\'t just average the two speeds!)', problem: '100km in 2h, then 80km in 2h — total distance ÷ total time', answer: '45', hint: {
         visual: speedLineSVG(100, 2, null, 'km', 'Leg 1') + speedLineSVG(80, 2, null, 'km', 'Leg 2'),
         formula: 'Total distance=180km. Total time=4h. 180÷4=45km/h.'
       } },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: Multi-part journey — find the overall average speed', problem: 'A car travels 150km in 3h, then 100km in 2h. Find the average speed for the whole journey.', answer: '50', hint: {
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: A delivery van does two legs of a food run — find the average speed for the whole journey', problem: 'A car travels 150km in 3h, then 100km in 2h. Find the average speed for the whole journey.', answer: '50', hint: {
         visual: speedLineSVG(150, 3, null, 'km', 'Leg 1') + speedLineSVG(100, 2, null, 'km', 'Leg 2'),
         formula: 'Total distance=250km. Total time=5h. 250÷5=50km/h.'
       }, solution: [
@@ -2505,9 +2579,10 @@ function getHintTiers(m) {
     return [{ label: '💡 Hint', content: h }];
   }
   const tiers = [];
-  if (h.visual) tiers.push({ label: '🖼️ Picture it', content: h.visual });
+  // h.visual is now shown automatically above the problem (not hidden behind a hint tap),
+  // so it's intentionally left out here to avoid showing the same picture twice.
   if (h.setup) tiers.push({ label: '✏️ Set it up', content: h.setup });
-  if (h.formula) tiers.push({ label: '📐 Key formula', content: h.formula });
+  if (h.formula) tiers.push({ label: '📐 Recipe (formula)', content: h.formula });
   return tiers;
 }
 
@@ -2561,11 +2636,13 @@ function renderMission() {
   const showBidmas = level.title === 'Order of Operations' || /BIDMAS|PEMDAS/i.test(m.instruction) || /BIDMAS|PEMDAS/i.test(m.hint || '');
   const showFractionHelper = /\d+\s*\/\s*\d+\s*[+\-−]\s*\d+\s*\/\s*\d+/.test(m.problem || '');
 
+  const autoVisual = m.visual || (m.hint && typeof m.hint === 'object' && m.hint.visual) || '';
+
   viewport.innerHTML = `
     <div class="mission-card mc-${level.color}">
       <div class="mission-badge ${isBoss ? 'boss' : ''}">${badgeText}</div>
       <div class="mission-instruction">${m.instruction}</div>
-      ${m.visual ? `<div class="mission-visual">${m.visual}</div>` : ''}
+      ${autoVisual ? `<div class="mission-visual">${autoVisual}</div>` : ''}
       <div class="mission-problem">${m.problem}</div>
 
       ${isBoss ? `
