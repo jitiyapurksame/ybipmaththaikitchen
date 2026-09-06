@@ -45,6 +45,7 @@
     --m20: #eab308;  /* exam strategy – yellow */
     --m21: #0ea5e9;  /* survival tier 4 – sky blue (harder) */
     --m22: #dc2626;  /* survival tier 5 – deep red (hardest) */
+    --m23: #38bdf8;  /* climate & SDGs – ice blue */
 
     --c-cause: #fbbf24;    /* gold */
     --c-result: #38bdf8;   /* sky blue */
@@ -201,6 +202,7 @@
   .mission-card[data-m="ps3"]::before { background: var(--m17); }
   .mission-card[data-m="ps4"]::before { background: var(--m21); }
   .mission-card[data-m="ps5"]::before { background: var(--m22); }
+  .mission-card[data-m="ps6"]::before { background: var(--m23); }
   .mission-card[data-m="visual"]::before { background: var(--m18); }
   .mission-card[data-m="speed"]::before { background: var(--m19); }
   .mission-card[data-m="strategy"]::before { background: var(--m20); }
@@ -565,10 +567,14 @@
     background: rgba(16,185,129,0.08);
   }
 
-  .hl-check-dot {
-    width: 14px; height: 14px;
+  .hl-check-emoji {
+    width: 30px; height: 30px;
     border-radius: 50%;
     flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
   }
 
   .hl-check-box {
@@ -629,6 +635,41 @@
   }
 
   .dq-boss .dq-stars { color: var(--purple); }
+
+  .dq-boss-write { cursor: default; align-items: stretch; }
+  .dq-boss-write.checked { border-color: var(--green); background: rgba(16,185,129,0.08); }
+
+  .boss-sub-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); margin: 8px 0 6px; }
+  .boss-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+  .boss-chip {
+    border: 1.5px solid rgba(168,85,247,0.4);
+    background: rgba(168,85,247,0.08);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+  }
+  .boss-chip:active { transform: scale(0.96); }
+  .boss-chip.keyword-chip { border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.1); }
+  .boss-textarea {
+    width: 100%;
+    min-height: 80px;
+    margin-top: 8px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    color: var(--text);
+    resize: vertical;
+  }
+  .boss-textarea:focus { outline: none; border-color: var(--purple); }
+  .boss-note { font-size: 0.74rem; color: var(--muted); margin-top: 8px; line-height: 1.4; }
 
   .dq-options { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
   .dq-option {
@@ -703,6 +744,26 @@
 
   .summary-check.checked { border-color: var(--green); background: rgba(16,185,129,0.08); }
 
+  .sum-kw-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sum-kw-chip {
+    border: 1.5px solid rgba(251,191,36,0.4);
+    background: rgba(251,191,36,0.1);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sum-kw-chip:active { transform: scale(0.96); }
+  .sum-kw-chip.used {
+    border-color: var(--green);
+    background: rgba(16,185,129,0.18);
+    color: var(--green);
+  }
+  .sum-kw-chip.used::before { content: '✓ '; }
+
   /* Stuck on a word */
   .stuck-btn {
     background: rgba(251,191,36,0.1);
@@ -731,6 +792,17 @@
   }
 
   .vocab-panel.open { display: block; }
+
+  .article-note {
+    background: rgba(56,189,248,0.1);
+    border: 1px solid rgba(56,189,248,0.3);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
 
   .vocab-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
 
@@ -984,7 +1056,7 @@
   }
 
   .connect-pairs-found {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; min-height: 28px;
+    display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; min-height: 28px;
   }
 
   .pair-chip {
@@ -995,7 +1067,28 @@
     font-size: 0.78rem;
     font-weight: 700;
     color: var(--green);
+    display: inline-block;
+    margin-bottom: 4px;
   }
+
+  .pair-chip-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pair-why-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+  .pair-why-input:focus { outline: none; border-color: var(--accent2); }
 
 
     font-family: 'Bangers', cursive;
@@ -1788,6 +1881,16 @@
       <div class="mission-xp">+180 XP</div>
       <div class="mission-done" id="done-ps5">✅</div>
     </div>
+    <div class="mission-card" data-m="ps6" onclick="openMission('ps6')">
+      <div class="mission-emoji">❄️</div>
+      <div class="mission-info">
+        <div class="mission-num">Secret Recipe · SDG Special</div>
+        <div class="mission-title">โลกร้อนและเป้าหมาย SDGs</div>
+        <div class="mission-skill">Taste Test: Who · What · Where · When · Why · How</div>
+      </div>
+      <div class="mission-xp">+180 XP</div>
+      <div class="mission-done" id="done-ps6">✅</div>
+    </div>
     <div class="mission-card" data-m="visual" onclick="openVisual()">
       <div class="mission-emoji">🍱</div>
       <div class="mission-info">
@@ -2104,7 +2207,7 @@ const MISSIONS = {
       { stars: '⭐⭐', text: 'Why can we see the Moon at night if it has no light of its own?', hint: 'Find the word "สะท้อนแสง" (reflect light)', boss: false, options: ['It reflects light from the Sun', 'It burns like a star', 'It glows from heat', "It makes its own light"], correct: 0 },
       { stars: '⭐⭐⭐', text: 'How long does the Moon take to orbit the Earth once?', hint: 'Find the number in sentence 5', boss: false, options: ['1 day', 'About 27 days', '365 days', 'About 100 days'], correct: 1 },
       { stars: '⭐⭐⭐⭐', text: 'What causes the Moon to look like a different shape each night?', hint: 'Find "มุมของแสงที่สะท้อน" in sentence 3', boss: false, options: ['The changing angle of reflected light as it orbits', 'The Moon changing size', 'Clouds covering the Moon', 'The Moon spinning faster'], correct: 0 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does the Moon affect the ocean, and why?', hint: 'Connect: gravity → sea water → tide', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does the Moon affect the ocean, and why?', hint: 'Connect: gravity → sea water → tide', starters: ["The Moon's gravity pulls the sea water, so ","I think the ocean has tides because "], boss: true },
     ],
     connections: [
       { emoji: '🌙', label: 'Moon' },
@@ -2157,7 +2260,7 @@ const MISSIONS = {
       { stars: '⭐⭐', text: 'Why does a solid have a fixed shape?', hint: 'Find "อนุภาคเรียงตัวชิดกัน" in sentence 2', boss: false, options: ['Its particles are packed close and barely move', 'It has no particles', 'It is always cold', 'Its particles move very fast'], correct: 0 },
       { stars: '⭐⭐⭐', text: 'What happens to ice when it receives heat?', hint: 'Find "ละลาย" in sentence 4', boss: false, options: ['It melts into water', 'It gets harder', 'It turns into a solid', 'It disappears completely'], correct: 0 },
       { stars: '⭐⭐⭐⭐', text: 'At what temperature does water boil, according to sentence 5?', hint: 'Find the number', boss: false, options: ['0°C', '50°C', '100°C', '200°C'], correct: 2 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why can steam spread out to fill a whole room, but ice cannot?', hint: 'Compare how the particles move in each state', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why can steam spread out to fill a whole room, but ice cannot?', hint: 'Compare how the particles move in each state', starters: ["In steam, the particles move ","Steam can spread out because "], boss: true },
     ],
     connections: [
       { emoji: '🧊', label: 'Ice (solid)' },
@@ -2210,7 +2313,7 @@ const MISSIONS = {
       { stars: '⭐⭐', text: 'What triggers the airbag to inflate?', hint: 'Find "เซ็นเซอร์" in sentence 3', boss: false, options: ['A sensor detecting a hard crash', 'The driver pressing a button', 'The engine overheating', 'The seatbelt clicking'], correct: 0 },
       { stars: '⭐⭐⭐', text: 'How fast does the airbag inflate after a crash?', hint: 'Find "เสี้ยววินาที" in sentence 3', boss: false, options: ['Within a split second', 'After 10 seconds', 'After 1 minute', 'The next day'], correct: 0 },
       { stars: '⭐⭐⭐⭐', text: 'What is the purpose of the "crumple zone"?', hint: 'Find "ดูดซับแรงกระแทก" in sentence 6', boss: false, options: ['To absorb impact force before it reaches passengers', 'To make the car lighter', 'To improve fuel economy', 'To hold the seatbelt in place'], correct: 0 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How do all three safety features work together to protect a passenger?', hint: 'Connect: seatbelt + airbag + crumple zone', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How do all three safety features work together to protect a passenger?', hint: 'Connect: seatbelt + airbag + crumple zone', starters: ["First the sensor triggers the airbag, then ","All three parts work together because "], boss: true },
     ],
     connections: [
       { emoji: '🪑', label: 'Seatbelt' },
@@ -2263,7 +2366,7 @@ const MISSIONS = {
       { stars: '⭐⭐', text: 'Why does a comet grow a "tail" when it gets close to the Sun?', hint: 'Find "ระเหิด" in sentence 2', boss: false, options: ['Heat turns its ice into gas, which trails behind it', 'It sheds its outer rock layer', 'The Sun pulls dust off it', 'It spins and flings off pieces'], correct: 0 },
       { stars: '⭐⭐⭐', text: 'What is a meteor, according to sentence 4?', hint: 'Look at sentence 4', boss: false, options: ['A piece of rock or metal falling from space', 'A small comet', 'A piece of the Moon', 'A type of star'], correct: 0 },
       { stars: '⭐⭐⭐⭐', text: 'Why does a meteor burn up and glow in the sky?', hint: 'Find "แรงเสียดทาน" in sentence 5', boss: false, options: ['Friction with the atmosphere heats it up', 'It explodes on its own', 'Sunlight sets it on fire', 'It collides with the Moon'], correct: 0 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why do most meteors never actually reach the ground?', hint: 'Look at the last sentence', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why do most meteors never actually reach the ground?', hint: 'Look at the last sentence', starters: ["Most meteors burn up because ","Friction with the atmosphere makes "], boss: true },
     ],
     connections: [
       { emoji: '☄️', label: 'Comet' },
@@ -2316,7 +2419,7 @@ const MISSIONS = {
       { stars: '⭐⭐', text: 'What is friction, according to sentence 3?', hint: 'Look at sentence 3', boss: false, options: ['A force that resists motion between two touching surfaces', 'A force that pulls objects down', 'The heat made by an engine', 'The air pushing against a car'], correct: 0 },
       { stars: '⭐⭐⭐', text: 'What do the tread grooves do when the road is wet?', hint: 'Find "ระบายน้ำ" in sentence 4', boss: false, options: ['Drain water out from under the tire', 'Make the tire heavier', 'Cool down the engine', 'Increase the air pressure'], correct: 0 },
       { stars: '⭐⭐⭐⭐', text: 'Why is a worn-out tire with a smooth tread dangerous?', hint: 'Find "แรงเสียดทานลดลง" in sentence 6', boss: false, options: ['It has much less friction and can skid', 'It makes the car too fast', 'It uses more fuel', 'It changes the car color'], correct: 0 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does correct tire air pressure help a driver control the car?', hint: 'Look at the last sentence', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does correct tire air pressure help a driver control the car?', hint: 'Look at the last sentence', starters: ["If the air pressure is correct, the tire ","Good tire pressure helps control because "], boss: true },
     ],
     connections: [
       { emoji: '🛞', label: 'Tire' },
@@ -2368,7 +2471,7 @@ const MISSIONS = {
       { stars: '⭐⭐', text: 'What happens when the firework is lit, according to sentence 3?', hint: 'Look at sentence 3', boss: false, options: ['The gunpowder explodes and releases heat energy', 'The metal compound melts slowly', 'The firework cools down', 'Nothing happens for a few minutes'], correct: 0 },
       { stars: '⭐⭐⭐', text: 'What color does strontium compound produce?', hint: 'Find "สตรอนเซียม" in sentence 5', boss: false, options: ['Red', 'Blue', 'Yellow', 'Green'], correct: 0 },
       { stars: '⭐⭐⭐⭐', text: 'Why do metal atoms release colored light?', hint: 'Find "ได้รับพลังงาน" in sentence 4', boss: false, options: ['Heat gives them energy, which they release as light', 'They reflect the fire around them', 'They are naturally glowing', 'They mix with gunpowder smoke'], correct: 0 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How could a chemist design a firework that shows several different colors in one explosion?', hint: 'Connect: different metal compounds → different colors', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How could a chemist design a firework that shows several different colors in one explosion?', hint: 'Connect: different metal compounds → different colors', starters: ["To get different colors, the chemist could mix ","Each metal makes a different color because "], boss: true },
     ],
     connections: [
       { emoji: '🎆', label: 'Firework' },
@@ -2419,7 +2522,7 @@ const MISSIONS = {
       { stars: '⭐⭐', text: "What does Archimedes' principle explain, according to sentence 2?", hint: 'Look at sentence 2', boss: false, options: ['Buoyant force', 'Air pressure', 'Gravity on land', 'Wind speed'], correct: 0 },
       { stars: '⭐⭐⭐', text: "Why does the ship's hollow shape help it float?", hint: 'Find "แทนที่น้ำในปริมาณมาก" in sentence 4', boss: false, options: ['It displaces a large amount of water', 'It makes the ship lighter than air', 'It reduces the ship\'s weight to zero', 'It stops water from touching the hull'], correct: 0 },
       { stars: '⭐⭐⭐⭐', text: 'What happens to the buoyant force if water gets inside a damaged ship?', hint: 'Find sentence 6', boss: false, options: ['It decreases', 'It increases', 'It stays exactly the same', 'It disappears instantly'], correct: 0 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does this passage explain why the Titanic eventually sank, using the idea of buoyant force?', hint: 'Connect: damage → less displaced water → less buoyant force', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How does this passage explain why the Titanic eventually sank, using the idea of buoyant force?', hint: 'Connect: damage → less displaced water → less buoyant force', starters: ["When the hull was damaged, it displaced less water, so ","Less buoyant force meant "], boss: true },
     ],
     connections: [
       { emoji: '🚢', label: 'Ship' },
@@ -2471,17 +2574,17 @@ const MISSIONS = {
       { stars: '⭐⭐', text: 'How were passengers divided on the ship?', hint: 'Find "ชั้นหนึ่ง ชั้นสอง ชั้นสาม" in sentence 2', boss: false, options: ['Into first, second, and third class by ticket price', 'By age group', 'By country of birth', 'By how much luggage they had'], correct: 0 },
       { stars: '⭐⭐⭐', text: 'What facilities did first-class passengers enjoy?', hint: 'Find sentence 3', boss: false, options: ['Dining rooms, a swimming pool, and a library', 'Only a shared bunk room', 'A private lifeboat each', 'Nothing special'], correct: 0 },
       { stars: '⭐⭐⭐⭐', text: 'Why were third-class passengers less likely to survive an emergency?', hint: 'Find "ใกล้ดาดฟ้าและเรือชูชีพ" in sentence 5', boss: false, options: ['They were farther from the deck and lifeboats', 'They were not allowed on the ship at all', 'They did not know how to swim', 'They stayed in the engine room'], correct: 0 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why do you think this event led people to demand equal safety for passengers of every class?', hint: 'Look at the last sentence', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why do you think this event led people to demand equal safety for passengers of every class?', hint: 'Look at the last sentence', starters: ["Because third class passengers were farther from escape routes, people thought ","This felt unfair because "], boss: true },
     ],
     connections: [
-      { emoji: '🎫', label: 'Ticket class' },
+      { emoji: '🎫', label: 'Ticket price' },
+      { emoji: '🏷️', label: 'Passenger class' },
       { emoji: '🛏️', label: 'First class' },
+      { emoji: '🚪', label: 'Near deck & lifeboats' },
       { emoji: '🧳', label: 'Third class' },
-      { emoji: '🚪', label: 'Deck' },
-      { emoji: '🛟', label: 'Lifeboat' },
-      { emoji: '⚖️', label: 'Fairness' },
+      { emoji: '⬇️', label: 'Far from deck & lifeboats' },
     ],
-    pairs: [[1,3],[2,4],[0,5]],
+    pairs: [[0,1],[2,3],[4,5]],
     summaryExample: 'ผู้โดยสารชั้นหนึ่งอยู่ใกล้เรือชูชีพมากกว่าชั้นสาม โอกาสรอดชีวิตจึงต่างกัน เหตุการณ์นี้ทำให้เกิดการเรียกร้องความปลอดภัยที่เท่าเทียมกัน'
   },
   9: {
@@ -2522,7 +2625,7 @@ const MISSIONS = {
       { stars: '⭐⭐', text: 'What does yeast eat, according to sentence 2?', hint: 'Find "น้ำตาลในแป้ง"', boss: false, options: ['Sugar in the dough', 'Water only', 'Air', 'Salt'], correct: 0 },
       { stars: '⭐⭐⭐', text: 'What two things does yeast release during fermentation?', hint: 'Find sentence 3', boss: false, options: ['Carbon dioxide gas and alcohol', 'Oxygen and water', 'Salt and sugar', 'Heat and light'], correct: 0 },
       { stars: '⭐⭐⭐⭐', text: 'What traps the gas inside the dough and makes it puff up?', hint: 'Find "กลูเตน" in sentence 4', boss: false, options: ['The gluten protein structure', 'The oven walls', 'The mixing bowl', 'The yeast itself'], correct: 0 },
-      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How is baking bread both a biology process and a chemistry process at the same time?', hint: 'Connect: yeast (living thing) + heat (chemical change)', boss: true },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How is baking bread both a biology process and a chemistry process at the same time?', hint: 'Connect: yeast (living thing) + heat (chemical change)', starters: ["The yeast is a living thing, so that part is biology because ","The heat causes a chemical change because "], boss: true },
     ],
     connections: [
       { emoji: '🦠', label: 'Yeast' },
@@ -2572,7 +2675,7 @@ const MISSIONS = {
       { stars: '📍 WHERE', text: 'Where do planets travel around?', hint: 'Find "โคจรรอบดวงอาทิตย์" in sentence 4', boss: false, options: ['Around the Sun', 'Around the Moon', 'Around each other', 'Around Earth only'], correct: 0 },
       { stars: '⏰ WHEN', text: 'When do we see stars as small points of light?', hint: 'Find the word "เมื่อ" in sentence 2', boss: false, options: ['When we look at the night sky', 'When it rains', 'When the Sun rises', 'When the Moon is full'], correct: 0 },
       { stars: '💡 WHY', text: 'Why do planets not shine like stars do?', hint: 'Connect it back to sentence 3', boss: false, options: ['They have no light of their own', 'They are too far from Earth', 'They are too small', 'They orbit too fast'], correct: 0 },
-      { stars: '⚙️ HOW · BOSS', text: 'How would you explain the difference between a star and a planet to a friend?', hint: 'Connect: star = own light, planet = reflects light', boss: true },
+      { stars: '⚙️ HOW · BOSS', text: 'How would you explain the difference between a star and a planet to a friend?', hint: 'Connect: star = own light, planet = reflects light', starters: ["A star makes its own light, but a planet ","I would tell my friend that "], boss: true },
     ],
     connections: [
       { emoji: '⭐', label: 'Star' },
@@ -2625,7 +2728,7 @@ const MISSIONS = {
       { stars: '📍 WHERE', text: 'Where (on what material) does rust appear?', hint: 'Find "เหล็ก" in sentence 4', boss: false, options: ['On iron', 'On paper', 'On ice', 'On water'], correct: 0 },
       { stars: '⏰ WHEN', text: 'When does iron start to rust?', hint: 'Find the word "เมื่อ" in sentence 4', boss: false, options: ['When it touches humid air for a long time', 'When it is heated quickly', 'When it is frozen', 'When it is painted'], correct: 0 },
       { stars: '💡 WHY', text: 'Why is burning paper a chemical change and not a physical one?', hint: 'Find sentence 7 — it cannot change back', boss: false, options: ['The ash and gas cannot turn back into paper', 'Paper just changes shape', 'It only gets hot, nothing else', 'It is reversible like melting ice'], correct: 0 },
-      { stars: '⚙️ HOW · BOSS', text: 'How can you tell a chemical reaction happened, without seeing a brand-new object?', hint: 'Connect: color change, smell, gas bubbles (sentence 8)', boss: true },
+      { stars: '⚙️ HOW · BOSS', text: 'How can you tell a chemical reaction happened, without seeing a brand-new object?', hint: 'Connect: color change, smell, gas bubbles (sentence 8)', starters: ["You can tell because you might see, smell, or ","Signs of a chemical reaction include "], boss: true },
     ],
     connections: [
       { emoji: '🧊', label: 'Ice melting' },
@@ -2681,7 +2784,7 @@ const MISSIONS = {
       { stars: '📍 WHERE', text: 'Where does the fuel burn to create pressure?', hint: 'Find "ภายในเครื่องยนต์" in sentence 3', boss: false, options: ['Inside the engine', 'Inside the tires', 'Inside the battery', 'Inside the fuel tank cap'], correct: 0 },
       { stars: '⏰ WHEN', text: "When does a car's wheel turn slower and stop?", hint: 'Find sentence 9 about the brake', boss: false, options: ['When the brake uses friction on the wheel', 'When the engine turns off by itself', 'When the fuel tank is full', 'When the piston stops moving forever'], correct: 0 },
       { stars: '💡 WHY', text: "Why don't electric cars produce exhaust fumes?", hint: 'Find "ไม่มีการเผาไหม้" in sentence 7', boss: false, options: ['They have no fuel combustion', 'They move too slowly', 'They only drive short distances', 'They use less electricity'], correct: 0 },
-      { stars: '⚙️ HOW · BOSS', text: 'How is an electric car both better and worse than a fuel car, based on the passage?', hint: 'Connect sentences 7 and 8', boss: true },
+      { stars: '⚙️ HOW · BOSS', text: 'How is an electric car both better and worse than a fuel car, based on the passage?', hint: 'Connect sentences 7 and 8', starters: ["An electric car is better because ","But an electric car is worse because "], boss: true },
     ],
     connections: [
       { emoji: '⛽', label: 'Fuel' },
@@ -2738,7 +2841,7 @@ const MISSIONS = {
       { stars: '📍 WHERE', text: 'Where did the Titanic hit the iceberg?', hint: 'Find "มหาสมุทรแอตแลนติก" in sentence 4', boss: false, options: ['The Atlantic Ocean', 'The Pacific Ocean', 'The Indian Ocean', 'A harbor'], correct: 0 },
       { stars: '⏰ WHEN', text: 'When did the Titanic sink?', hint: 'Find "ปี 1912" in sentence 4', boss: false, options: ['1912', '1898', '1945', '1920'], correct: 0 },
       { stars: '💡 WHY', text: 'Why did the Britannic sink, according to the passage?', hint: 'Find "ชนกับทุ่นระเบิด" in sentence 9', boss: false, options: ['It struck a mine during a war', 'It hit the same iceberg as Titanic', 'It ran out of fuel', 'It collided with the SS America'], correct: 0 },
-      { stars: '⚙️ HOW · BOSS', text: 'How did the sinking of the Titanic change future ships, based on sentence 7?', hint: 'Connect: disaster → new safety rules', boss: true },
+      { stars: '⚙️ HOW · BOSS', text: 'How did the sinking of the Titanic change future ships, based on sentence 7?', hint: 'Connect: disaster → new safety rules', starters: ["After the Titanic sank, ships had to ","New safety rules included "], boss: true },
     ],
     connections: [
       { emoji: '🚢', label: 'Titanic' },
@@ -2798,7 +2901,7 @@ const MISSIONS = {
       { stars: '📍 WHERE', text: 'Where does the Maillard reaction happen on food?', hint: 'Find "ผิวขนมปังหรือเนื้อย่าง" in sentence 8', boss: false, options: ['On the surface of bread or grilled meat', 'Deep inside a liquid', 'Only inside an egg', 'Only in sugar water'], correct: 0 },
       { stars: '⏰ WHEN', text: 'When do milk proteins clump together, according to sentence 9?', hint: 'Find the word "เมื่อ"', boss: false, options: ['When lemon juice is added to milk', 'When milk is frozen', 'When milk is boiled for an hour', 'When milk is left in the sun'], correct: 0 },
       { stars: '💡 WHY', text: 'Why is dissolving sugar in water only a physical change?', hint: 'Find "น้ำตาลยังคงเป็นน้ำตาลเหมือนเดิม" in sentence 13', boss: false, options: ['The sugar is still sugar, just spread through the water', 'The sugar disappears completely', 'The water turns into a new substance', 'The sugar changes into salt'], correct: 0 },
-      { stars: '⚙️ HOW · BOSS', text: 'How can you tell whether something in the kitchen is a chemical change or just a physical one?', hint: 'Connect sentences 11–14', boss: true },
+      { stars: '⚙️ HOW · BOSS', text: 'How can you tell whether something in the kitchen is a chemical change or just a physical one?', hint: 'Connect sentences 11–14', starters: ["It's a chemical change if ","It's just a physical change if "], boss: true },
     ],
     connections: [
       { emoji: '🥚', label: 'Egg white' },
@@ -2810,6 +2913,60 @@ const MISSIONS = {
     ],
     pairs: [[0,1],[2,3],[4,5]],
     summaryExample: 'การตีไข่ขาวและการอบเค้กเป็นการเปลี่ยนแปลงทางเคมี แต่การละลายน้ำตาลในน้ำเป็นเพียงการเปลี่ยนแปลงทางกายภาพเท่านั้น'
+  },
+  ps6: {
+    title: 'Survival · SDG Special',
+    sub: 'โลกร้อนและเป้าหมาย SDGs · 7 lines',
+    emoji: '❄️',
+    color: 23,
+    badge: '❄️ Climate Guardian',
+    xp: 180,
+    articleNote: "Fun fact: in the movie Frozen, an endless winter trapped the kingdom of Arendelle in ice. In real life, our planet has the OPPOSITE problem — it's getting warmer, not colder. Let's find out why!",
+    article: {
+      title: '❄️🌍 โลกร้อนและเป้าหมาย SDGs',
+      sentences: [
+        'โลกของเรากำลังร้อนขึ้นเรื่อยๆ ปรากฏการณ์นี้เรียกว่า ภาวะโลกร้อน',
+        'เมื่อมนุษย์เผาผลาญเชื้อเพลิงฟอสซิล เช่น น้ำมันและถ่านหิน แก๊สคาร์บอนไดออกไซด์จะถูกปล่อยสู่ชั้นบรรยากาศ',
+        'แก๊สเหล่านี้ดักจับความร้อนจากดวงอาทิตย์ไว้รอบโลก เหมือนผ้าห่มหนาที่คลุมโลกไว้',
+        'ดังนั้น อุณหภูมิเฉลี่ยของโลกจึงสูงขึ้น และน้ำแข็งขั้วโลกก็ละลายเร็วขึ้น',
+        'ในขณะที่บางพื้นที่ประสบภัยแล้งรุนแรง บางพื้นที่กลับเผชิญกับน้ำท่วมและพายุที่รุนแรงขึ้น',
+        'การเปลี่ยนแปลงเหล่านี้ส่งผลกระทบต่อสัตว์ พืช และการดำรงชีวิตของมนุษย์ทั่วโลก',
+        'ดังนั้น ทั่วโลกจึงร่วมมือกันตั้งเป้าหมายการพัฒนาที่ยั่งยืน (SDGs) เพื่อลดการปล่อยแก๊สเรือนกระจกและปกป้องโลกของเรา'
+      ]
+    },
+    vocab: [
+      { thai: 'ภาวะโลกร้อน', eng: 'global warming' },
+      { thai: 'เชื้อเพลิงฟอสซิล', eng: 'fossil fuel' },
+      { thai: 'คาร์บอนไดออกไซด์', eng: 'carbon dioxide' },
+      { thai: 'ชั้นบรรยากาศ', eng: 'atmosphere' },
+      { thai: 'น้ำแข็งขั้วโลก', eng: 'polar ice' },
+      { thai: 'ภัยแล้ง', eng: 'drought' },
+      { thai: 'แก๊สเรือนกระจก', eng: 'greenhouse gas' },
+      { thai: 'เป้าหมายการพัฒนาที่ยั่งยืน', eng: 'Sustainable Development Goals (SDGs)' },
+    ],
+    highlight: [
+      { color: '#fbbf24', dot: '#fbbf24', label: '🔥 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🍯 Circle Result words', example: 'ดังนั้น' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚖️ Circle Contrast words', example: 'ในขณะที่' },
+      { color: '#10b981', dot: '#10b981', label: '🌍 Circle Climate Effects', example: 'น้ำแข็งขั้วโลก, ภัยแล้ง, น้ำท่วม' },
+    ],
+    questions: [
+      { stars: '⭐', text: 'What is the name for the Earth slowly getting hotter, according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['Global warming', 'A snow storm', 'An ice age', 'A rainy season'], correct: 0 },
+      { stars: '⭐⭐', text: 'What is released into the atmosphere when fossil fuels are burned?', hint: 'Find "คาร์บอนไดออกไซด์" in sentence 2', boss: false, options: ['Carbon dioxide gas', 'Clean oxygen', 'Water only', 'Solid rock'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What do greenhouse gases do to heat from the Sun, according to sentence 3?', hint: 'Find "ดักจับความร้อน" — like a thick blanket', boss: false, options: ['They trap it around the Earth like a blanket', 'They send it back into space instantly', 'They turn it into ice', 'They have no effect on it'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'What is happening in different parts of the world because of climate change, according to sentence 5?', hint: 'Find "ในขณะที่" — the contrast word', boss: false, options: ['Some places get worse droughts, others get worse floods and storms', 'Every place gets exactly the same weather', 'Every place is getting colder', 'Nothing has changed anywhere'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'Why do you think countries need to work together to solve climate change, instead of each country trying alone?', hint: 'Look at the last sentence about SDGs', starters: ['Countries need to work together because ', 'If only one country tried to fix it, '], boss: true },
+    ],
+    connections: [
+      { emoji: '🔥', label: 'Fossil fuels burned' },
+      { emoji: '☁️', label: 'CO2 in the air' },
+      { emoji: '🌡️', label: 'Earth gets warmer' },
+      { emoji: '🧊', label: 'Polar ice melts' },
+      { emoji: '🌵', label: 'Drought' },
+      { emoji: '🌊', label: 'Flooding' },
+    ],
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'เมื่อมนุษย์เผาเชื้อเพลิงฟอสซิล แก๊สเรือนกระจกจะดักความร้อนไว้ ทำให้โลกร้อนขึ้นและเกิดภัยธรรมชาติ ประเทศต่างๆ จึงร่วมมือกันผ่านเป้าหมาย SDGs'
   }
 };
 
@@ -3283,7 +3440,7 @@ function renderDoneBadges() {
   if (g15) g15.style.display = state.done['grammar15'] ? 'block' : 'none';
   const dec = document.getElementById('done-decoder');
   if (dec) dec.style.display = state.done['decoder'] ? 'block' : 'none';
-  ['ps1','ps2','ps3','ps4','ps5'].forEach(k => {
+  ['ps1','ps2','ps3','ps4','ps5','ps6'].forEach(k => {
     const el = document.getElementById(`done-${k}`);
     if (el) el.style.display = state.done[k] ? 'block' : 'none';
   });
@@ -3329,7 +3486,7 @@ function buildTrophyList() {
   list.push({ badge: '🎯 Sentence Type Detective', earned: !!state.done['grammar15'] });
   list.push({ badge: '🔗 Sentence Connector Master', earned: !!state.done['grammar2'] });
   list.push({ badge: '🧩 Chunk Master', earned: !!state.done['decoder'] });
-  ['ps1','ps2','ps3','ps4','ps5'].forEach(k => {
+  ['ps1','ps2','ps3','ps4','ps5','ps6'].forEach(k => {
     if (MISSIONS[k]) list.push({ badge: MISSIONS[k].badge, earned: !!state.done[k] });
   });
   list.push({ badge: '🖼️ Visual Vocab Ace', earned: !!state.done['visual'] });
@@ -4860,6 +5017,37 @@ function builderNextRound() {
 
 function accentClass(m) { return `step-accent-${MISSIONS[currentMission].color}`; }
 
+// Turn a highlight category label (e.g. "🟡 Circle Cause words") into a clear,
+// memorable picture instead of a color-only pill. Matching is keyword-based so
+// it works for every mission automatically, including new ones.
+function catIcon(label) {
+  const t = label.toLowerCase();
+  if (t.includes('cause')) return '🔥';
+  if (t.includes('result')) return '🍯';
+  if (t.includes('contrast')) return '⚖️';
+  if (t.includes('climate')) return '🌍';
+  if (t.includes('effect') || t.includes('impact')) return '💥';
+  if (t.includes('number')) return '🔢';
+  if (t.includes('class')) return '🎫';
+  if (t.includes('feeling') || t.includes('emotion')) return '❤️';
+  if (t.includes('character') || t.includes('who')) return '🧑';
+  if (t.includes('place') || t.includes('location')) return '📍';
+  if (t.includes('time')) return '⏰';
+  if (t.includes('weather')) return '🌦️';
+  if (t.includes('object')) return '🎯';
+  return '🔑';
+}
+
+// Strip the old color-ball emoji + "Circle"/"words" filler so the button shows
+// a short, specific name (e.g. "Cause", "Contrast words" → "Contrast").
+function catShortLabel(label) {
+  let t = label.replace(/^[^\p{L}]+/u, '').trim(); // remove leading emoji/symbols
+  t = t.replace(/^Circle\s+(the\s+)?/i, '');
+  t = t.replace(/\s*words?$/i, '');
+  t = t.trim();
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
 function buildComboStep(m) {
   // Build word-span article — split each sentence into tappable words/clusters
   const articleHtml = m.article.sentences.map((sentence, si) => {
@@ -4871,18 +5059,18 @@ function buildComboStep(m) {
     return `<div style="margin-bottom:12px"><span style="color:var(--muted);font-size:0.72rem;margin-right:6px">${si+1}.</span>${spans}</div>`;
   }).join('');
 
-  // Build highlight color buttons from mission's highlight categories
-  const hlColors = ['#10b981','#fbbf24','#3b82f6','#ef4444'];
+  // Build highlight buttons from mission's highlight categories — each spice
+  // gets its own picture (not just a color) so it's easy to tell apart at a glance.
   const toolbarBtns = m.highlight.map((h, i) =>
-    `<button class="hl-btn hl-btn-${i} ${i===0?'active-tool':''}" onclick="setActiveTool(${i})" id="hl-tool-${i}">${h.label.replace(/^[^ ]+ /,'').split(' ')[0]}</button>`
+    `<button class="hl-btn hl-btn-${i} ${i===0?'active-tool':''}" onclick="setActiveTool(${i})" id="hl-tool-${i}">${catIcon(h.label)} ${catShortLabel(h.label)}</button>`
   ).join('');
 
   // Checklist items (auto-checked by JS when user highlights)
   const checkItems = m.highlight.map((h, i) => `
     <div class="hl-check-item" id="hl-check-${i}">
-      <div class="hl-check-dot" style="background:${hlColors[i]}"></div>
+      <div class="hl-check-emoji hl-check-emoji-${i}">${catIcon(h.label)}</div>
       <div>
-        <div style="font-weight:800">${h.label}</div>
+        <div style="font-weight:800">${catShortLabel(h.label)}</div>
         <div style="font-size:0.75rem;color:var(--muted);margin-top:2px">e.g. ${h.example}</div>
       </div>
       <div class="hl-check-box" id="hl-checkmark-${i}"></div>
@@ -4938,6 +5126,7 @@ function buildComboStep(m) {
         </div>
       </div>
 
+      ${m.articleNote ? `<div class="article-note">🧊 ${m.articleNote}</div>` : ''}
       <div class="article-box" id="article-box">
         <div class="article-title">${m.article.title}</div>
         ${articleHtml}
@@ -4968,6 +5157,7 @@ function buildComboStep(m) {
 }
 
 function buildDetectiveStep(m) {
+  bossAnswered = {};
   const sentencesHtml = m.article.sentences
     .map((s, i) => `<div style="margin-bottom:8px"><span style="color:var(--muted);font-size:0.72rem;margin-right:5px">${i+1}.</span>${s}</div>`)
     .join('');
@@ -4998,6 +5188,23 @@ function buildDetectiveStep(m) {
             </div>
             <div class="dq-hint" id="dq-hint-${i}" style="display:none">💡 ${q.hint}</div>
           </div>
+        </div>` : q.boss ? `
+        <div class="dq-item dq-boss dq-boss-write" id="dq-item-${i}">
+          <div class="dq-content" style="width:100%">
+            <div class="dq-stars">${q.stars}</div>
+            <div class="dq-text">${q.text}</div>
+            <div class="dq-hint" style="margin-bottom:8px">💡 ${q.hint}</div>
+            <div class="boss-sub-label">👉 Tap a starter to begin, or just start typing:</div>
+            <div class="boss-chip-row">
+              ${(q.starters || []).map((s, si) => `<button type="button" class="boss-chip starter-chip" onclick="insertBossStarter(${i}, ${si})">💬 ${s}</button>`).join('')}
+            </div>
+            <div class="boss-sub-label">🧂 Tap a word to add it to your answer:</div>
+            <div class="boss-chip-row">
+              ${(m.vocab || []).slice(0, 6).map((v, vi) => `<button type="button" class="boss-chip keyword-chip" onclick="insertBossWord(${i}, ${vi})">${v.eng}</button>`).join('')}
+            </div>
+            <textarea class="boss-textarea" id="boss-text-${i}" placeholder="Write your answer here — English is OK! Any honest try is great." oninput="onBossInput(${i})"></textarea>
+            <div class="boss-note">✨ There's no single "correct" answer here — the teacher just wants to see you thinking!</div>
+          </div>
         </div>` : `
         <div class="dq-item ${q.boss ? 'dq-boss' : ''}" onclick="toggleCheck(this)">
           <div class="dq-check"></div>
@@ -5011,6 +5218,45 @@ function buildDetectiveStep(m) {
     <div style="flex:1"></div>
     <button class="btn-primary" onclick="nextStep()">Dish tasted! →</button>
   </div>`;
+}
+
+let bossAnswered = {};
+
+function insertBossStarter(qIndex, starterIndex) {
+  const m = MISSIONS[currentMission];
+  const q = m.questions[qIndex];
+  const box = document.getElementById(`boss-text-${qIndex}`);
+  if (!box || !q.starters) return;
+  box.value = q.starters[starterIndex];
+  box.focus();
+  box.setSelectionRange(box.value.length, box.value.length);
+  onBossInput(qIndex);
+}
+
+function insertBossWord(qIndex, vocabIndex) {
+  const m = MISSIONS[currentMission];
+  const word = m.vocab[vocabIndex] && m.vocab[vocabIndex].eng;
+  if (!word) return;
+  const box = document.getElementById(`boss-text-${qIndex}`);
+  if (!box) return;
+  const sep = box.value && !box.value.endsWith(' ') ? ' ' : '';
+  box.value += sep + word + ' ';
+  box.focus();
+  onBossInput(qIndex);
+}
+
+function onBossInput(qIndex) {
+  const box = document.getElementById(`boss-text-${qIndex}`);
+  const item = document.getElementById(`dq-item-${qIndex}`);
+  if (!box || !item) return;
+  const hasText = box.value.trim().length > 0;
+  item.classList.toggle('checked', hasText);
+  if (hasText && !bossAnswered[qIndex]) {
+    bossAnswered[qIndex] = true;
+    addXP(10);
+  } else if (!hasText && bossAnswered[qIndex]) {
+    bossAnswered[qIndex] = false;
+  }
 }
 
 function selectMCAnswer(btn, qIndex, chosenIndex, correctIndex) {
@@ -5044,7 +5290,7 @@ function buildDrawStep(m) {
   <div class="step-card ${accentClass(m)}">
     <div class="step-label">Step 3 · Combine the Ingredients</div>
     <div class="step-title">🥘 Tap to Combine</div>
-    <div class="connect-instruction">Tap two ingredient cards that go together in the recipe.<br>Find as many combinations as you can!</div>
+    <div class="connect-instruction">Tap two ingredient cards that go together in the recipe.<br>Find as many combinations as you can — then say why they match!</div>
 
     <div class="connect-status" id="connect-status">Tap any ingredient to start</div>
 
@@ -5058,29 +5304,77 @@ function buildDrawStep(m) {
   </div>`;
 }
 
+let summaryAnswered = false;
+
 function buildSummaryStep(m) {
+  summaryAnswered = false;
+  const kwChips = (m.vocab || []).map((v, i) =>
+    `<button type="button" class="sum-kw-chip" id="sum-kw-${i}" onclick="insertSummaryWord(${i})">${v.eng}</button>`
+  ).join('');
+
   return `
   <div class="step-card ${accentClass(m)}">
     <div class="step-label">Step 4 · Plate the Dish</div>
-    <div class="step-title">🍽️ Plate It Up — Sum It Up in 1 Sentence</div>
-    <div class="step-instruction">Serve up 1 sentence that sums up the whole recipe — no more than 20 words</div>
+    <div class="step-title">🍽️ Plate It Up — Write Your Own Summary</div>
+    <div class="step-instruction">Write a few sentences that cover the key ingredients of this recipe. English is totally OK — any honest try beats no try!</div>
 
     <div class="summary-box">
-      <div class="summary-prompt">Example of a perfectly plated sentence:</div>
-      <div class="summary-example">"${m.summaryExample}"</div>
-      <div class="scan-item summary-check" onclick="toggleCheck(this)" style="margin-top:12px">
-        <div class="scan-check"></div>
-        <div>✓ I plated my dish (saying it out loud counts too)</div>
+      <div class="summary-prompt">🧂 Key ingredients to try to include (tap to add):</div>
+      <div class="sum-kw-row">${kwChips}</div>
+
+      <textarea class="boss-textarea" id="summary-textarea" style="min-height:100px; margin-top:10px" placeholder="Write your summary here..." oninput="onSummaryInput()"></textarea>
+
+      <button type="button" class="stuck-btn" style="margin-top:10px" onclick="toggleSummaryExample()">
+        💡 <span id="summary-example-label">Need an idea? See an example</span>
+      </button>
+      <div class="vocab-panel" id="summary-example-panel">
+        <div class="summary-example">"${m.summaryExample}"</div>
       </div>
     </div>
 
     <div style="background:rgba(232,117,44,0.08); border:1px solid rgba(232,117,44,0.2); border-radius:12px; padding:12px 14px; font-size:0.82rem; color:var(--accent2); line-height:1.6">
-      👨‍🍳 <strong>Chef's tip:</strong> If the teacher asks "Do you understand?" — say this summary sentence. The teacher will see you were paying attention.
+      👨‍🍳 <strong>Chef's tip:</strong> If the teacher asks "Do you understand?" — read your summary out loud. The teacher will see you were paying attention.
     </div>
 
     <div style="flex:1"></div>
     <button class="btn-primary" onclick="nextStep()">🍽️ Dish Served! Mission Complete!</button>
   </div>`;
+}
+
+function insertSummaryWord(vocabIndex) {
+  const m = MISSIONS[currentMission];
+  const word = m.vocab[vocabIndex] && m.vocab[vocabIndex].eng;
+  const box = document.getElementById('summary-textarea');
+  if (!word || !box) return;
+  const sep = box.value && !box.value.endsWith(' ') ? ' ' : '';
+  box.value += sep + word + ' ';
+  box.focus();
+  onSummaryInput();
+}
+
+function onSummaryInput() {
+  const m = MISSIONS[currentMission];
+  const box = document.getElementById('summary-textarea');
+  if (!box) return;
+  const val = box.value.toLowerCase();
+  (m.vocab || []).forEach((v, i) => {
+    const chip = document.getElementById(`sum-kw-${i}`);
+    if (!chip) return;
+    const firstWord = v.eng.toLowerCase().split(/[\s/]/)[0];
+    chip.classList.toggle('used', firstWord.length > 2 && val.includes(firstWord));
+  });
+  if (val.trim().length > 0 && !summaryAnswered) {
+    summaryAnswered = true;
+    addXP(10);
+  }
+}
+
+function toggleSummaryExample() {
+  const panel = document.getElementById('summary-example-panel');
+  const label = document.getElementById('summary-example-label');
+  if (!panel) return;
+  const isOpen = panel.classList.toggle('open');
+  label.textContent = isOpen ? 'Hide the example' : 'Need an idea? See an example';
 }
 
 // ══════════════════════ HELPERS ══════════════════════
@@ -5148,12 +5442,26 @@ function connectTap(idx) {
       connectMatched.push(a, b);
       addXP(8);
 
-      // Show pair chip
+      // Show pair chip + a place to say WHY they connect (in any language!)
       const pairsEl = document.getElementById('connect-pairs');
+      const wrap = document.createElement('div');
+      wrap.className = 'pair-chip-wrap';
       const chip = document.createElement('div');
       chip.className = 'pair-chip';
-      chip.textContent = `${m.connections[a].emoji} ↔ ${m.connections[b].emoji}`;
-      pairsEl.appendChild(chip);
+      chip.textContent = `${m.connections[a].emoji} ${m.connections[a].label} ↔ ${m.connections[b].emoji} ${m.connections[b].label}`;
+      const why = document.createElement('input');
+      why.type = 'text';
+      why.className = 'pair-why-input';
+      why.placeholder = `Why do these go together? (English is OK)`;
+      why.oninput = function() {
+        if (this.value.trim().length > 2 && !this.dataset.rewarded) {
+          this.dataset.rewarded = '1';
+          addXP(4);
+        }
+      };
+      wrap.appendChild(chip);
+      wrap.appendChild(why);
+      pairsEl.appendChild(wrap);
 
       const remaining = m.connections.length - connectMatched.length;
       if (remaining <= 0) {
