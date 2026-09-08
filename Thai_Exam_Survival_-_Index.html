@@ -46,6 +46,8 @@
     --m21: #0ea5e9;  /* survival tier 4 – sky blue (harder) */
     --m22: #dc2626;  /* survival tier 5 – deep red (hardest) */
     --m23: #38bdf8;  /* climate & SDGs – ice blue */
+    --m24: #22c55e;  /* recycling & SDG12 – green */
+    --m25: #0ea5e9;  /* ocean plastic & SDG14 – sea blue */
 
     --c-cause: #fbbf24;    /* gold */
     --c-result: #38bdf8;   /* sky blue */
@@ -203,6 +205,8 @@
   .mission-card[data-m="ps4"]::before { background: var(--m21); }
   .mission-card[data-m="ps5"]::before { background: var(--m22); }
   .mission-card[data-m="ps6"]::before { background: var(--m23); }
+  .mission-card[data-m="ps7"]::before { background: var(--m24); }
+  .mission-card[data-m="ps8"]::before { background: var(--m25); }
   .mission-card[data-m="visual"]::before { background: var(--m18); }
   .mission-card[data-m="speed"]::before { background: var(--m19); }
   .mission-card[data-m="strategy"]::before { background: var(--m20); }
@@ -1891,6 +1895,26 @@
       <div class="mission-xp">+180 XP</div>
       <div class="mission-done" id="done-ps6">✅</div>
     </div>
+    <div class="mission-card" data-m="ps7" onclick="openMission('ps7')">
+      <div class="mission-emoji">♻️</div>
+      <div class="mission-info">
+        <div class="mission-num">Secret Recipe · SDG Special</div>
+        <div class="mission-title">รีไซเคิลและการบริโภคอย่างยั่งยืน</div>
+        <div class="mission-skill">Taste Test: Who · What · Where · When · Why · How</div>
+      </div>
+      <div class="mission-xp">+180 XP</div>
+      <div class="mission-done" id="done-ps7">✅</div>
+    </div>
+    <div class="mission-card" data-m="ps8" onclick="openMission('ps8')">
+      <div class="mission-emoji">🐢</div>
+      <div class="mission-info">
+        <div class="mission-num">Secret Recipe · SDG Special</div>
+        <div class="mission-title">ขยะพลาสติกในมหาสมุทร</div>
+        <div class="mission-skill">Taste Test: Who · What · Where · When · Why · How</div>
+      </div>
+      <div class="mission-xp">+180 XP</div>
+      <div class="mission-done" id="done-ps8">✅</div>
+    </div>
     <div class="mission-card" data-m="visual" onclick="openVisual()">
       <div class="mission-emoji">🍱</div>
       <div class="mission-info">
@@ -2967,6 +2991,112 @@ const MISSIONS = {
     ],
     pairs: [[0,1],[2,3],[4,5]],
     summaryExample: 'เมื่อมนุษย์เผาเชื้อเพลิงฟอสซิล แก๊สเรือนกระจกจะดักความร้อนไว้ ทำให้โลกร้อนขึ้นและเกิดภัยธรรมชาติ ประเทศต่างๆ จึงร่วมมือกันผ่านเป้าหมาย SDGs'
+  },
+  ps7: {
+    title: 'Survival · SDG Special',
+    sub: 'รีไซเคิลและการบริโภคอย่างยั่งยืน · 7 lines',
+    emoji: '♻️',
+    color: 24,
+    badge: '♻️ Recycling Ranger',
+    xp: 180,
+    articleNote: "Every time you cook, you make a little 'waste' — peels, wrappers, leftover bits. This mission is about what happens to waste, and how the 3 R's turn kitchen chemistry into planet-saving chemistry!",
+    article: {
+      title: '♻️ รีไซเคิลและการบริโภคอย่างยั่งยืน',
+      sentences: [
+        'ทุกวันนี้มนุษย์ผลิตขยะจำนวนมหาศาลจากการบริโภคและการผลิตสินค้า',
+        'เมื่อขยะพลาสติกถูกทิ้งอย่างไม่ถูกวิธี มันจะใช้เวลานับร้อยปีในการย่อยสลาย',
+        'ดังนั้น หลายประเทศจึงส่งเสริมหลักการ 3R คือ ลดการใช้ ใช้ซ้ำ และแปรรูปใช้ใหม่',
+        'การลดการใช้ หมายถึงการซื้อและใช้สิ่งของเท่าที่จำเป็นตั้งแต่แรก',
+        'ในขณะที่การใช้ซ้ำคือการนำของเดิมกลับมาใช้ประโยชน์ใหม่แทนการทิ้ง',
+        'ส่วนการแปรรูปใช้ใหม่คือการนำวัสดุ เช่น กระดาษ แก้ว และพลาสติก มาผ่านกระบวนการเปลี่ยนเป็นสินค้าใหม่',
+        'ดังนั้น การปฏิบัติตามหลัก 3R จึงช่วยลดขยะและใช้ทรัพยากรของโลกได้อย่างยั่งยืนตามเป้าหมาย SDG ข้อที่ 12'
+      ]
+    },
+    vocab: [
+      { thai: 'ขยะ', eng: 'waste / trash' },
+      { thai: 'ย่อยสลาย', eng: 'to decompose' },
+      { thai: 'ลดการใช้', eng: 'reduce' },
+      { thai: 'ใช้ซ้ำ', eng: 'reuse' },
+      { thai: 'แปรรูปใช้ใหม่', eng: 'recycle' },
+      { thai: 'ทรัพยากร', eng: 'resources' },
+      { thai: 'ยั่งยืน', eng: 'sustainable' },
+    ],
+    highlight: [
+      { color: '#fbbf24', dot: '#fbbf24', label: '🔥 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🍯 Circle Result words', example: 'ดังนั้น' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚖️ Circle Contrast words', example: 'ในขณะที่' },
+      { color: '#22c55e', dot: '#22c55e', label: '♻️ Circle the 3 R Words', example: 'ลดการใช้, ใช้ซ้ำ, แปรรูปใช้ใหม่' },
+    ],
+    questions: [
+      { stars: '⭐', text: 'What has been happening because of consumption and production, according to sentence 1?', hint: 'Look at the first sentence', boss: false, options: ['Huge amounts of waste are being produced', 'Waste has disappeared completely', 'Only paper waste exists', 'Nothing has changed'], correct: 0 },
+      { stars: '⭐⭐', text: 'How long can plastic waste take to decompose if it is thrown away the wrong way, according to sentence 2?', hint: 'Find "นับร้อยปี" in sentence 2', boss: false, options: ['Hundreds of years', 'A few minutes', 'One day', 'It never breaks down at all'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What does "reduce" (ลดการใช้) mean, according to sentence 4?', hint: 'Look at sentence 4', boss: false, options: ['Buying and using only what you truly need', 'Buying more things than you need', 'Throwing things away faster', 'Never buying anything at all'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'What is the difference between "reuse" and "recycle", based on sentences 5–6?', hint: 'Compare sentence 5 (ใช้ซ้ำ) and sentence 6 (แปรรูปใช้ใหม่)', boss: false, options: ['Reuse keeps the same object; recycle turns the material into something new', 'They mean exactly the same thing', 'Reuse means throwing it away; recycle means buying new', 'Recycle means never touching it again'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: "Why do you think practicing the 3 R's helps meet Sustainable Development Goal 12?", hint: 'Look at the last sentence', starters: ["Practicing the 3 R's helps because ", "If nobody followed the 3 R's, "], boss: true },
+    ],
+    connections: [
+      { emoji: '🛍️', label: 'Buy only what you need' },
+      { emoji: '⬇️', label: 'Reduce' },
+      { emoji: '🔄', label: 'Use it again' },
+      { emoji: '🧺', label: 'Reuse' },
+      { emoji: '🏭', label: 'Turn old material into new' },
+      { emoji: '📦', label: 'Recycle' },
+    ],
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'มนุษย์สร้างขยะมากมาย จึงต้องใช้หลัก 3R คือ ลดการใช้ ใช้ซ้ำ และแปรรูปใช้ใหม่ เพื่อรักษาทรัพยากรของโลกให้ยั่งยืน'
+  },
+  ps8: {
+    title: 'Survival · SDG Special',
+    sub: 'ขยะพลาสติกในมหาสมุทร · 7 lines',
+    emoji: '🐢',
+    color: 25,
+    badge: '🐢 Ocean Guardian',
+    xp: 180,
+    articleNote: "You love ships and the ocean — but today's oceans face a different danger than icebergs: plastic. Let's find out how it gets there and how it hurts ocean life.",
+    article: {
+      title: '🌊 ขยะพลาสติกในมหาสมุทร',
+      sentences: [
+        'มหาสมุทรปกคลุมพื้นผิวโลกมากกว่าร้อยละเจ็ดสิบ และเป็นบ้านของสิ่งมีชีวิตนับล้านชนิด',
+        'เมื่อขยะพลาสติกจากบนบกถูกพัดพาลงสู่แม่น้ำ มันมักไหลลงสู่ทะเลในที่สุด',
+        'พลาสติกในทะเลจะค่อยๆ แตกตัวเป็นชิ้นเล็กๆ ที่เรียกว่าไมโครพลาสติก',
+        'ดังนั้น ปลาและสัตว์ทะเลจึงอาจกินไมโครพลาสติกเข้าไปโดยเข้าใจผิดว่าเป็นอาหาร',
+        'ในขณะที่สัตว์บางชนิด เช่น เต่าทะเล อาจติดอยู่ในขยะพลาสติกและได้รับบาดเจ็บ',
+        'การปนเปื้อนของพลาสติกจึงส่งผลกระทบต่อห่วงโซ่อาหารทั้งระบบ รวมถึงมนุษย์ที่กินอาหารทะเลด้วย',
+        'ดังนั้น การลดขยะพลาสติกและทำความสะอาดชายฝั่งจึงเป็นส่วนหนึ่งของเป้าหมาย SDG ข้อที่ 14 เพื่อรักษาชีวิตใต้ท้องทะเล'
+      ]
+    },
+    vocab: [
+      { thai: 'มหาสมุทร', eng: 'ocean' },
+      { thai: 'ไมโครพลาสติก', eng: 'microplastic' },
+      { thai: 'สัตว์ทะเล', eng: 'marine animal' },
+      { thai: 'เต่าทะเล', eng: 'sea turtle' },
+      { thai: 'ห่วงโซ่อาหาร', eng: 'food chain' },
+      { thai: 'ปนเปื้อน', eng: 'to contaminate' },
+      { thai: 'ชายฝั่ง', eng: 'coastline' },
+    ],
+    highlight: [
+      { color: '#fbbf24', dot: '#fbbf24', label: '🔥 Circle Cause words', example: 'เมื่อ' },
+      { color: '#3b82f6', dot: '#3b82f6', label: '🍯 Circle Result words', example: 'ดังนั้น' },
+      { color: '#ef4444', dot: '#ef4444', label: '⚖️ Circle Contrast words', example: 'ในขณะที่' },
+      { color: '#0ea5e9', dot: '#0ea5e9', label: '🐠 Circle Ocean Animals', example: 'ปลา, เต่าทะเล, สัตว์ทะเล' },
+    ],
+    questions: [
+      { stars: '⭐', text: "What percentage of Earth's surface is covered by ocean, according to sentence 1?", hint: 'Look at the first sentence', boss: false, options: ['More than seventy percent', 'About ten percent', 'Exactly fifty percent', 'None of it'], correct: 0 },
+      { stars: '⭐⭐', text: 'Where does plastic waste from land usually end up, according to sentence 2?', hint: 'Find "ไหลลงสู่ทะเล" in sentence 2', boss: false, options: ['It usually flows into the sea', 'It disappears completely', 'It turns into sand', 'It flies away'], correct: 0 },
+      { stars: '⭐⭐⭐', text: 'What is a microplastic, according to sentence 3?', hint: 'Find "ไมโครพลาสติก" in sentence 3', boss: false, options: ['A tiny broken piece of plastic', 'A type of fish', 'A kind of seaweed', 'A large plastic bottle'], correct: 0 },
+      { stars: '⭐⭐⭐⭐', text: 'What might happen to a sea turtle, according to sentence 5?', hint: 'Find "เต่าทะเล" in sentence 5', boss: false, options: ['It could get trapped in plastic waste and get hurt', 'It could turn into plastic', 'It could grow bigger from eating plastic', 'Nothing happens to sea turtles'], correct: 0 },
+      { stars: '⭐⭐⭐⭐⭐ BOSS', text: 'How could plastic pollution in the ocean eventually affect a person eating seafood far away?', hint: 'Look at sentence 6 about the food chain', starters: ['Plastic could affect a person because ', 'It travels through the food chain by '], boss: true },
+    ],
+    connections: [
+      { emoji: '🏙️', label: 'Land waste' },
+      { emoji: '🌊', label: 'Flows into the sea' },
+      { emoji: '🧩', label: 'Plastic breaks into pieces' },
+      { emoji: '🔬', label: 'Microplastic' },
+      { emoji: '🐟', label: 'Fish eat it' },
+      { emoji: '🍽️', label: 'Ends up in our food' },
+    ],
+    pairs: [[0,1],[2,3],[4,5]],
+    summaryExample: 'ขยะพลาสติกจากบนบกไหลลงทะเลและแตกเป็นไมโครพลาสติก สัตว์ทะเลกินเข้าไปและส่งผลกระทบต่อห่วงโซ่อาหารรวมถึงมนุษย์ด้วย'
   }
 };
 
@@ -3440,7 +3570,7 @@ function renderDoneBadges() {
   if (g15) g15.style.display = state.done['grammar15'] ? 'block' : 'none';
   const dec = document.getElementById('done-decoder');
   if (dec) dec.style.display = state.done['decoder'] ? 'block' : 'none';
-  ['ps1','ps2','ps3','ps4','ps5','ps6'].forEach(k => {
+  ['ps1','ps2','ps3','ps4','ps5','ps6','ps7','ps8'].forEach(k => {
     const el = document.getElementById(`done-${k}`);
     if (el) el.style.display = state.done[k] ? 'block' : 'none';
   });
@@ -3486,7 +3616,7 @@ function buildTrophyList() {
   list.push({ badge: '🎯 Sentence Type Detective', earned: !!state.done['grammar15'] });
   list.push({ badge: '🔗 Sentence Connector Master', earned: !!state.done['grammar2'] });
   list.push({ badge: '🧩 Chunk Master', earned: !!state.done['decoder'] });
-  ['ps1','ps2','ps3','ps4','ps5','ps6'].forEach(k => {
+  ['ps1','ps2','ps3','ps4','ps5','ps6','ps7','ps8'].forEach(k => {
     if (MISSIONS[k]) list.push({ badge: MISSIONS[k].badge, earned: !!state.done[k] });
   });
   list.push({ badge: '🖼️ Visual Vocab Ace', earned: !!state.done['visual'] });
@@ -5026,6 +5156,8 @@ function catIcon(label) {
   if (t.includes('result')) return '🍯';
   if (t.includes('contrast')) return '⚖️';
   if (t.includes('climate')) return '🌍';
+  if (t.includes('recycl') || t.includes('3 r')) return '♻️';
+  if (t.includes('animal') || t.includes('marine')) return '🐠';
   if (t.includes('effect') || t.includes('impact')) return '💥';
   if (t.includes('number')) return '🔢';
   if (t.includes('class')) return '🎫';
