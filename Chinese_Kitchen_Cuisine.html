@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chinese Kitchen — Unit 1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&display=swap');
+  :root{
+    --paper:#201410;
+    --card:#32211a;
+    --ink:#fbeee0;
+    --ink-light:#c2a68a;
+    --red:#e8482c;
+    --red-dark:#c23b3b;
+    --gold:#f4b400;
+    --gold-dark:#d9a441;
+    --green:#3E8E5C;
+    --line:#5a3d26;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(ellipse at top, #3a2412 0%, #201410 55%, #150d0a 100%);
+    color:var(--ink);
+    font-family:'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    min-height:100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #app{ max-width:640px; margin:0 auto; padding:18px 16px 60px; }
+  h1,h2,h3{ margin:0 0 6px; }
+  header.top{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  header.top .title{ font-family:'Bangers', cursive; font-size:24px; letter-spacing:1px; font-weight:400; color:var(--gold); }
+  .back-btn{
+    background:none; border:none; font-size:15px; color:var(--ink-light);
+    cursor:pointer; padding:6px 4px 6px 0;
+  }
+  .back-btn:active{ color:var(--ink); }
+  .subtitle{ color:var(--ink-light); font-size:13px; margin:-6px 0 16px; }
+
+  .tile{
+    background:var(--card); border:2px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; margin-bottom:12px; cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    box-shadow:2px 2px 0 var(--line);
+  }
+  .tile .name{ font-weight:700; font-size:16px; }
+  .tile .sub{ font-size:12.5px; color:var(--ink-light); margin-top:2px; }
+  .tile .status{ font-size:12px; color:var(--green); font-weight:700; white-space:nowrap; }
+  .tile .arrow{ font-size:18px; color:var(--ink-light); }
+  .section-label{ font-size:13px; font-weight:800; color:var(--gold-dark); text-transform:uppercase; letter-spacing:0.5px; margin:20px 0 8px; }
+
+  .card{
+    background:var(--card); border:2px solid var(--ink); border-radius:var(--radius);
+    padding:26px 20px; text-align:center; min-height:190px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    box-shadow:4px 4px 0 var(--gold);
+  }
+  .card .hanzi{ font-size:44px; font-weight:700; }
+  .card .pinyin{ font-size:19px; color:var(--red-dark); font-weight:700; }
+  .card .english{ font-size:17px; background:rgba(244,180,0,0.14); border:1px solid var(--line); border-radius:8px; padding:8px 14px; }
+  .card .type{ font-size:11.5px; color:var(--ink-light); letter-spacing:0.5px; text-transform:uppercase; }
+  .progress-line{ font-size:13px; color:var(--ink-light); margin-bottom:8px; }
+
+  .btn{
+    background:var(--red); color:#fff; border:none; border-radius:10px;
+    padding:12px 18px; font-size:15px; font-weight:700; cursor:pointer;
+    font-family:inherit;
+  }
+  .btn:active{ background:var(--red-dark); }
+  .btn.secondary{ background:var(--card); color:var(--ink); border:2px solid var(--ink); }
+  .btn:disabled{ opacity:.4; }
+  .nav-row{ display:flex; gap:10px; margin-top:14px; justify-content:center; }
+
+  .dialogue-line{
+    background:var(--card); border:2px solid var(--line); border-radius:12px;
+    padding:14px 16px; margin-bottom:10px;
+  }
+  .dialogue-line .speaker{ font-size:12px; font-weight:800; color:var(--gold-dark); margin-bottom:4px; }
+  .dialogue-line .hanzi{ font-size:20px; margin-bottom:4px; }
+  .dialogue-line .pinyin{ font-size:14px; color:var(--red-dark); }
+  .dialogue-line .english{ font-size:14px; color:var(--ink-light); margin-top:4px; }
+  .dialogue-line.current{ border-color:var(--red); box-shadow:2px 2px 0 var(--gold); }
+  .dialogue-line.dim{ opacity:.35; }
+
+  .pattern-card{
+    background:var(--card); border:2px solid var(--line); border-radius:12px;
+    padding:14px 16px; margin-bottom:10px; cursor:pointer;
+  }
+  .pattern-card .head{ display:flex; justify-content:space-between; align-items:center; }
+  .pattern-card .hanzi{ font-size:19px; font-weight:700; }
+  .pattern-card .pinyin{ font-size:13px; color:var(--red-dark); }
+  .pattern-card .meaning{ font-size:12.5px; color:var(--ink-light); }
+  .pattern-card .examples{ margin-top:10px; border-top:1px dashed var(--line); padding-top:10px; display:none; }
+  .pattern-card.open .examples{ display:block; }
+  .example-row{ margin-bottom:8px; }
+  .example-row .hanzi{ font-size:16px; }
+  .example-row .pinyin{ font-size:13px; color:var(--red-dark); }
+  .example-row .english{ font-size:13px; color:var(--ink-light); }
+
+  .match-grid{ display:flex; gap:14px; margin-top:14px; }
+  .match-col{ flex:1; display:flex; flex-direction:column; gap:8px; }
+  .match-item{
+    background:var(--card); border:2px solid var(--ink); border-radius:10px;
+    padding:12px 10px; text-align:center; cursor:pointer; font-weight:700; font-size:14px;
+  }
+  .match-item.selected{ background:var(--gold); color:#2b1810; }
+  .match-item.correct{ background:var(--green); color:#fff; border-color:var(--green); cursor:default; }
+  .match-item.wrong{ background:var(--red); color:#fff; border-color:var(--red); }
+  .match-item.done{ visibility:hidden; }
+  .match-status{ text-align:center; font-size:14px; margin-top:14px; color:var(--ink-light); }
+
+  .stroke-card{
+    background:var(--card); border:2px solid var(--line); border-radius:12px;
+    padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;
+  }
+  .stroke-shape{ font-size:26px; width:44px; text-align:center; }
+  .stroke-info{ flex:1; }
+  .stroke-info .name{ font-weight:700; font-size:15px; }
+  .stroke-info .name .en{ font-weight:400; color:var(--ink-light); font-size:13px; }
+  .stroke-info .dir{ font-size:13px; color:var(--red-dark); margin:2px 0; }
+  .stroke-info .examples{ font-size:20px; }
+  .stroke-info .tip{ font-size:12px; color:var(--gold-dark); margin-top:4px; font-style:italic; }
+
+  .empty-note{ color:var(--ink-light); font-size:14px; padding:10px 2px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============ CONTENT (transcribed from the son's Unit 1 textbook photos) ============ */
+const LESSONS = [
+  {
+    id: "warmup",
+    num: 0,
+    title: "Unit Warm-up",
+    hanzi: "School, Classmates & Teachers",
+    vocab: [
+      {hanzi:"学校", pinyin:"xuéxiào", english:"school"},
+      {hanzi:"校长", pinyin:"xiàozhǎng", english:"principal / headmaster"},
+      {hanzi:"老师", pinyin:"lǎoshī", english:"teacher"},
+      {hanzi:"同学", pinyin:"tóngxué", english:"classmate"},
+      {hanzi:"朋友", pinyin:"péngyou", english:"friend"}
+    ],
+    dialogue: [
+      {speaker:"Wáng Jiāmíng", hanzi:"你好，我是王家明。", pinyin:"Nǐ hǎo, wǒ shì Wáng Jiāmíng.", english:"Hello, I am Wang Jiaming."},
+      {speaker:"Wáng Jiāmíng", hanzi:"谢谢，再见。", pinyin:"Xièxie, zàijiàn.", english:"Thank you, goodbye."}
+    ]
+  },
+  {
+    id: "l1",
+    num: 1,
+    title: "你好",
+    hanzi: "你好", pinyin:"nǐ hǎo", meaning:"Hello",
+    vocab: [
+      {hanzi:"你", pinyin:"nǐ", english:"you", type:"pron."},
+      {hanzi:"好", pinyin:"hǎo", english:"good", type:"adj."},
+      {hanzi:"我", pinyin:"wǒ", english:"I / me", type:"pron."},
+      {hanzi:"叫", pinyin:"jiào", english:"call / to be named", type:"v."},
+      {hanzi:"王家明", pinyin:"Wáng Jiāmíng", english:"(name) Wang Jiaming", type:"proper noun"},
+      {hanzi:"大卫", pinyin:"Dàwèi", english:"(name) David", type:"proper noun"}
+    ],
+    dialogue: [
+      {speaker:"家明 Jiāmíng", hanzi:"你好！", pinyin:"Nǐ hǎo!", english:"Hello!"},
+      {speaker:"大卫 Dàwèi", hanzi:"你好！", pinyin:"Nǐ hǎo!", english:"Hello!"},
+      {speaker:"家明 Jiāmíng", hanzi:"我叫王家明。", pinyin:"Wǒ jiào Wáng Jiāmíng.", english:"My name is Wang Jiaming."},
+      {speaker:"大卫 Dàwèi", hanzi:"我叫大卫。", pinyin:"Wǒ jiào Dàwèi.", english:"My name is David."}
+    ],
+    extra: [
+      {hanzi:"早上好", pinyin:"zǎoshang hǎo", english:"good morning"},
+      {hanzi:"晚上好", pinyin:"wǎnshang hǎo", english:"good evening"}
+    ]
+  },
+  {
+    id: "l2",
+    num: 2,
+    title: "再见",
+    hanzi: "再见", pinyin:"zài jiàn", meaning:"Goodbye",
+    vocab: [
+      {hanzi:"同学", pinyin:"tóngxué", english:"classmate", type:"n."},
+      {hanzi:"们", pinyin:"men", english:"suffix — makes a pronoun/person-noun plural", type:"suf."},
+      {hanzi:"老师", pinyin:"lǎoshī", english:"teacher", type:"n."},
+      {hanzi:"再见", pinyin:"zàijiàn", english:"see you; goodbye", type:"v."},
+      {hanzi:"林(老师)", pinyin:"Lín (lǎoshī)", english:"(surname) Lin", type:"proper noun"}
+    ],
+    dialogue: [
+      {speaker:"林老师 T. Lin", hanzi:"同学们好！", pinyin:"Tóngxuémen hǎo!", english:"Hello, class!"},
+      {speaker:"同学们 Class", hanzi:"老师好！", pinyin:"Lǎoshī hǎo!", english:"Hello, teacher!"},
+      {speaker:"林老师 T. Lin", hanzi:"同学们再见！", pinyin:"Tóngxuémen zàijiàn!", english:"Goodbye, class!"},
+      {speaker:"同学们 Class", hanzi:"林老师再见！", pinyin:"Lín lǎoshī zàijiàn!", english:"Goodbye, Teacher Lin!"}
+    ],
+    extra: [
+      {hanzi:"现在上课！", pinyin:"Xiànzài shàng kè!", english:"Let's begin class."},
+      {hanzi:"现在下课！", pinyin:"Xiànzài xià kè!", english:"Class is over."},
+      {hanzi:"明天见！", pinyin:"Míngtiān jiàn!", english:"See you tomorrow!"}
+    ]
+  },
+  {
+    id: "l3",
+    num: 3,
+    title: "我是王家明",
+    hanzi: "我是王家明", pinyin:"wǒ shì Wáng Jiāmíng", meaning:"I am Wang Jiaming",
+    vocab: [
+      {hanzi:"是", pinyin:"shì", english:"to be (is / am / are)", type:"v."},
+      {hanzi:"她", pinyin:"tā", english:"she", type:"pron."},
+      {hanzi:"他", pinyin:"tā", english:"he", type:"pron."},
+      {hanzi:"你们", pinyin:"nǐmen", english:"you (plural)", type:"pron."},
+      {hanzi:"玛丽", pinyin:"Mǎlì", english:"(name) Mary", type:"proper noun"},
+      {hanzi:"杰克", pinyin:"Jiékè", english:"(name) Jack", type:"proper noun"}
+    ],
+    dialogue: [
+      {speaker:"家明 Jiāmíng", hanzi:"林老师好！我是王家明。", pinyin:"Lín lǎoshī hǎo! Wǒ shì Wáng Jiāmíng.", english:"Hello Teacher Lin! I am Wang Jiaming."},
+      {speaker:"林老师 T. Lin", hanzi:"你好！", pinyin:"Nǐ hǎo!", english:"Hello!"},
+      {speaker:"林老师 T. Lin", hanzi:"她是玛丽，他是杰克。", pinyin:"Tā shì Mǎlì, tā shì Jiékè.", english:"She is Mary, he is Jack."},
+      {speaker:"家明 Jiāmíng", hanzi:"你们好！", pinyin:"Nǐmen hǎo!", english:"Hello (everyone)!"},
+      {speaker:"玛丽、杰克 Mary & Jack", hanzi:"你好！", pinyin:"Nǐ hǎo!", english:"Hello!"}
+    ],
+    extra: [
+      {hanzi:"请跟我说！", pinyin:"Qǐng gēn wǒ shuō!", english:"Please say it after me."}
+    ]
+  },
+  {
+    id: "l4",
+    num: 4,
+    title: "谢谢",
+    hanzi: "谢谢", pinyin:"xiè xie", meaning:"Thank you",
+    vocab: [
+      {hanzi:"谢谢", pinyin:"xièxie", english:"thank", type:"v."},
+      {hanzi:"不客气", pinyin:"bú kèqi", english:"you're welcome", type:"phrase"},
+      {hanzi:"什么", pinyin:"shénme", english:"what", type:"pron."},
+      {hanzi:"名字", pinyin:"míngzi", english:"name", type:"n."}
+    ],
+    dialogue: [
+      {speaker:"老师 Teacher", hanzi:"谢谢你！", pinyin:"Xièxie nǐ!", english:"Thank you!"},
+      {speaker:"家明 Jiāmíng", hanzi:"不客气。", pinyin:"Bú kèqi.", english:"You're welcome."},
+      {speaker:"老师 Teacher", hanzi:"你叫什么名字？", pinyin:"Nǐ jiào shénme míngzi?", english:"What is your name?"},
+      {speaker:"家明 Jiāmíng", hanzi:"我叫王家明。", pinyin:"Wǒ jiào Wáng Jiāmíng.", english:"My name is Wang Jiaming."},
+      {speaker:"家明 Jiāmíng", hanzi:"老师再见。", pinyin:"Lǎoshī zàijiàn.", english:"Goodbye, teacher."},
+      {speaker:"老师 Teacher", hanzi:"再见。", pinyin:"Zàijiàn.", english:"Goodbye."}
+    ],
+    extra: [
+      {hanzi:"请看黑板！", pinyin:"Qǐng kàn hēibǎn!", english:"Please look at the blackboard."}
+    ]
+  },
+  {
+    id: "l5",
+    num: 5,
+    title: "她们是学生吗",
+    hanzi: "她们是学生吗", pinyin:"tāmen shì xuésheng ma", meaning:"Are they students?",
+    vocab: [
+      {hanzi:"她们", pinyin:"tāmen", english:"they / them (female)", type:"pron."},
+      {hanzi:"学生", pinyin:"xuésheng", english:"student", type:"n."},
+      {hanzi:"吗", pinyin:"ma", english:"question particle — added to the end of a yes/no question", type:"pt."},
+      {hanzi:"校长", pinyin:"xiàozhǎng", english:"headmaster / principal", type:"n."}
+    ],
+    dialogue: [
+      {speaker:"家明 Jiāmíng", hanzi:"她们是学生吗？", pinyin:"Tāmen shì xuésheng ma?", english:"Are they students?"},
+      {speaker:"杰克 Jack", hanzi:"是，她们是学生。", pinyin:"Shì, tāmen shì xuésheng.", english:"Yes, they are students."},
+      {speaker:"家明 Jiāmíng", hanzi:"他是老师吗？", pinyin:"Tā shì lǎoshī ma?", english:"Is he a teacher?"},
+      {speaker:"杰克 Jack", hanzi:"不，他不是老师，他是校长。", pinyin:"Bù, tā bú shì lǎoshī, tā shì xiàozhǎng.", english:"No, he is not a teacher, he is the principal."}
+    ],
+    extra: [
+      {hanzi:"请打开书！", pinyin:"Qǐng dǎ kāi shū!", english:"Please open your books."}
+    ]
+  }
+];
+
+const PATTERNS = [
+  {hanzi:"你好", pinyin:"nǐ hǎo", meaning:"Greeting someone",
+   examples:[
+     {hanzi:"你好！你们好！", pinyin:"Nǐ hǎo! Nǐmen hǎo!", english:"Hello! Hello everyone!"}
+   ]},
+  {hanzi:"我叫……", pinyin:"wǒ jiào...", meaning:"Introducing your name",
+   examples:[
+     {hanzi:"我叫杰克。", pinyin:"Wǒ jiào Jiékè.", english:"My name is Jack."},
+     {hanzi:"我叫王家明。", pinyin:"Wǒ jiào Wáng Jiāmíng.", english:"My name is Wang Jiaming."}
+   ]},
+  {hanzi:"我是……", pinyin:"wǒ shì...", meaning:"Saying what/who you are",
+   examples:[
+     {hanzi:"我是学生。", pinyin:"Wǒ shì xuésheng.", english:"I am a student."},
+     {hanzi:"我是老师。", pinyin:"Wǒ shì lǎoshī.", english:"I am a teacher."}
+   ]},
+  {hanzi:"是……吗？", pinyin:"shì...ma?", meaning:"Asking a yes/no question",
+   examples:[
+     {hanzi:"他是中学生吗？", pinyin:"Tā shì zhōngxuéshēng ma?", english:"Is he a secondary school student?"},
+     {hanzi:"他是校长吗？", pinyin:"Tā shì xiàozhǎng ma?", english:"Is he the principal?"}
+   ]},
+  {hanzi:"不是……", pinyin:"bú shì...", meaning:"Saying what something is NOT",
+   examples:[
+     {hanzi:"她不是学生。", pinyin:"Tā bú shì xuésheng.", english:"She is not a student."},
+     {hanzi:"他们不是中学生。", pinyin:"Tāmen bú shì zhōngxuéshēng.", english:"They are not secondary school students."}
+   ]},
+  {hanzi:"……的……", pinyin:"...de...", meaning:"Showing possession (\u2018's\u2019)",
+   examples:[
+     {hanzi:"他们是我的朋友。", pinyin:"Tāmen shì wǒ de péngyou.", english:"They are my friends."},
+     {hanzi:"我是林老师的学生。", pinyin:"Wǒ shì Lín lǎoshī de xuésheng.", english:"I am Teacher Lin's student."}
+   ]}
+];
+
+/* Matching pairs, taken from the workbook exercise on Lesson 2 vocabulary */
+const MATCH_PAIRS = [
+  {pinyin:"tóngxué", english:"classmate"},
+  {pinyin:"lǎoshī", english:"teacher"},
+  {pinyin:"zàijiàn", english:"see you"},
+  {pinyin:"men", english:"a suffix"},
+  {pinyin:"jiào", english:"call"},
+  {pinyin:"hǎo", english:"good"}
+];
+
+/* Stroke reference, transcribed from the "Strokes of Chinese Characters" chart.
+   kitchenTip is just a memory-trick analogy layered on top — the pinyin name,
+   direction, and examples are the real facts to know for the test. */
+const STROKES = [
+  {shape:"\u3001", namePinyin:"diǎn", nameEnglish:"dot stroke", dir:"\u2198 small stroke down-right", examples:"家 丽", kitchenTip:"Like a single drip of soy sauce falling off the spoon."},
+  {shape:"\u2015", namePinyin:"héng", nameEnglish:"horizontal line", dir:"\u2192 left to right", examples:"王 大", kitchenTip:"One clean swipe of the spatula across the wok."},
+  {shape:"\uFF5C", namePinyin:"shù", nameEnglish:"vertical line", dir:"\u2193 top to bottom", examples:"王 们", kitchenTip:"A chopstick standing straight up in the rice bowl."},
+  {shape:"\u30CE", namePinyin:"piě", nameEnglish:"left-falling stroke", dir:"\u2199 down and to the left", examples:"家 大", kitchenTip:"A peel curling off to the left as you slice a mango."},
+  {shape:"\u2572", namePinyin:"nà", nameEnglish:"right-falling stroke", dir:"\u2198 down and to the right", examples:"校 长", kitchenTip:"A knife sliding down-right through a carrot."},
+  {shape:"\u2510", namePinyin:"héng gōu", nameEnglish:"horizontal line + hook", dir:"\u2192 across, hook down at the end", examples:"学 好", kitchenTip:"Sliding a pan lid across, then hooking it down to seal in the steam."},
+  {shape:"\u21B3", namePinyin:"shù gōu", nameEnglish:"vertical line + hook", dir:"\u2193 down, hook left at the end", examples:"你", kitchenTip:"Dropping a noodle into the pot, then flicking it left with the tongs."},
+  {shape:"\u2197", namePinyin:"tí", nameEnglish:"rising stroke", dir:"\u2197 up and to the right", examples:"我", kitchenTip:"Flipping a pancake up and off the pan."},
+  {shape:"\u231F", namePinyin:"héng zhé", nameEnglish:"horizontal line, then a turn down", dir:"\u2192 then \u2193", examples:"明 叫", kitchenTip:"Sliding a tray across the counter, then setting it straight down."},
+  {shape:"\u2319", namePinyin:"héng zhé gōu", nameEnglish:"horizontal line, turn down, then a hook", dir:"\u2192 then \u2193 then hook left", examples:"他 们", kitchenTip:"Sliding, dropping, then scooping back — like plating with a spoon."}
+];
+
+/* ============ STATE / PERSISTENCE ============ */
+const STORAGE_KEY = "chinese-kitchen-state";
+function loadProgress(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function saveProgress(p){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch(e){}
+}
+let progress = loadProgress();
+function lessonProgress(id){
+  if(!progress[id]) progress[id] = {vocabDone:false, dialogueDone:false};
+  return progress[id];
+}
+function markDone(id, field){
+  const lp = lessonProgress(id);
+  lp[field] = true;
+  progress[id] = lp;
+  saveProgress(progress);
+}
+function findLesson(id){ return LESSONS.find(l => l.id === id); }
+
+/* ============ ROUTING ============ */
+let route = {screen:"home"};
+function nav(next){ route = next; render(); window.scrollTo(0,0); }
+
+const app = document.getElementById('app');
+function render(){
+  app.innerHTML = "";
+  if(route.screen==="home") return renderHome();
+  if(route.screen==="lesson") return renderLessonHub(route.lessonId);
+  if(route.screen==="vocab") return renderVocab(route.lessonId);
+  if(route.screen==="dialogue") return renderDialogue(route.lessonId);
+  if(route.screen==="patterns") return renderPatterns();
+  if(route.screen==="match") return renderMatch();
+  if(route.screen==="strokes") return renderStrokes();
+}
+
+function topBar(title, onBack){
+  const header = document.createElement('header');
+  header.className = "top";
+  if(onBack){
+    const b = document.createElement('button');
+    b.className = "back-btn"; b.textContent = "\u2190 Back";
+    b.onclick = onBack;
+    header.appendChild(b);
+  }
+  const t = document.createElement('span');
+  t.className = "title";
+  t.textContent = title;
+  header.appendChild(t);
+  app.appendChild(header);
+}
+
+/* ---- HOME ---- */
+function renderHome(){
+  topBar("\u{1F95F} Chinese Kitchen \u2014 Unit 1");
+  const sub = document.createElement('p');
+  sub.className = "subtitle";
+  sub.textContent = "School, Classmates & Teachers \u2014 today's menu, straight from your cookbook (coursebook)";
+  app.appendChild(sub);
+
+  const label1 = document.createElement('div');
+  label1.className = "section-label";
+  label1.textContent = "\u{1F37D}\uFE0F Dishes on the Menu";
+  app.appendChild(label1);
+
+  LESSONS.forEach(lesson => {
+    const lp = lessonProgress(lesson.id);
+    const doneCount = (lp.vocabDone?1:0) + (lp.dialogueDone?1:0);
+    const tile = document.createElement('div');
+    tile.className = "tile";
+    const heading = lesson.num===0 ? "\u{1F9C2} Mise en Place" : `Dish ${lesson.num}: ${lesson.hanzi} (${lesson.pinyin})`;
+    const subline = lesson.num===0 ? lesson.title + " \u2014 prep ingredients before Dish 1" : lesson.meaning;
+    tile.innerHTML = `
+      <div>
+        <div class="name">${heading}</div>
+        <div class="sub">${subline}</div>
+      </div>
+      <span class="status">${doneCount}/2 \u2713</span>
+      <span class="arrow">\u2192</span>
+    `;
+    tile.onclick = ()=> nav({screen:"lesson", lessonId:lesson.id});
+    app.appendChild(tile);
+  });
+
+  const label2 = document.createElement('div');
+  label2.className = "section-label";
+  label2.textContent = "\u{1F9EA} Test Kitchen (Extra Practice)";
+  app.appendChild(label2);
+
+  const patternsTile = document.createElement('div');
+  patternsTile.className = "tile";
+  patternsTile.innerHTML = `<div><div class="name">\u{1F372} Cooking Techniques</div><div class="sub">6 reusable recipe patterns from the Unit Summary</div></div><span class="arrow">\u2192</span>`;
+  patternsTile.onclick = ()=> nav({screen:"patterns"});
+  app.appendChild(patternsTile);
+
+  const matchTile = document.createElement('div');
+  matchTile.className = "tile";
+  matchTile.innerHTML = `<div><div class="name">\u{1F525} Flavor Pairing</div><div class="sub">Match each pinyin ingredient to its English flavor</div></div><span class="arrow">\u2192</span>`;
+  matchTile.onclick = ()=> nav({screen:"match"});
+  app.appendChild(matchTile);
+
+  const strokeTile = document.createElement('div');
+  strokeTile.className = "tile";
+  strokeTile.innerHTML = `<div><div class="name">\u{1F52A} Knife & Wok Skills</div><div class="sub">10 basic prep moves for writing characters</div></div><span class="arrow">\u2192</span>`;
+  strokeTile.onclick = ()=> nav({screen:"strokes"});
+  app.appendChild(strokeTile);
+}
+
+/* ---- LESSON HUB ---- */
+function renderLessonHub(lessonId){
+  const lesson = findLesson(lessonId);
+  if(!lesson) return renderHome();
+  const lp = lessonProgress(lessonId);
+  const heading = lesson.num===0 ? lesson.title : `Lesson ${lesson.num}: ${lesson.hanzi}`;
+  topBar(heading, ()=>nav({screen:"home"}));
+
+  if(lesson.pinyin){
+    const p = document.createElement('p');
+    p.className = "subtitle";
+    p.textContent = `${lesson.pinyin} \u2014 ${lesson.meaning}`;
+    app.appendChild(p);
+  }
+
+  const vocabTile = document.createElement('div');
+  vocabTile.className = "tile";
+  vocabTile.innerHTML = `<div><div class="name">\u{1F9C2} Ingredient Cards</div><div class="sub">${lesson.vocab.length} ingredients to prep</div></div><span class="status">${lp.vocabDone?'\u2713 Done':''}</span><span class="arrow">\u2192</span>`;
+  vocabTile.onclick = ()=> nav({screen:"vocab", lessonId});
+  app.appendChild(vocabTile);
+
+  const dialogueTile = document.createElement('div');
+  dialogueTile.className = "tile";
+  dialogueTile.innerHTML = `<div><div class="name">\u{1F35C} Follow the Recipe</div><div class="sub">${lesson.dialogue.length} steps</div></div><span class="status">${lp.dialogueDone?'\u2713 Done':''}</span><span class="arrow">\u2192</span>`;
+  dialogueTile.onclick = ()=> nav({screen:"dialogue", lessonId});
+  app.appendChild(dialogueTile);
+
+  if(lesson.extra && lesson.extra.length){
+    const label = document.createElement('div');
+    label.className = "section-label";
+    label.textContent = "\u{1F468}\u200D\u{1F373} Chef's Notes (classroom phrases)";
+    app.appendChild(label);
+    lesson.extra.forEach(ex=>{
+      const row = document.createElement('div');
+      row.className = "dialogue-line";
+      row.innerHTML = `<div class="hanzi">${ex.hanzi}</div><div class="pinyin">${ex.pinyin}</div><div class="english">${ex.english}</div>`;
+      app.appendChild(row);
+    });
+  }
+}
+
+/* ---- VOCAB FLASHCARDS ---- */
+function renderVocab(lessonId){
+  const lesson = findLesson(lessonId);
+  topBar("\u{1F9C2} Ingredient Cards", ()=>nav({screen:"lesson", lessonId}));
+
+  let idx = 0;
+  let revealed = false;
+  const cards = lesson.vocab;
+
+  function draw(){
+    const old = document.getElementById('vWrap');
+    if(old) old.remove();
+    const wrap = document.createElement('div');
+    wrap.id = "vWrap";
+    const c = cards[idx];
+    wrap.innerHTML = `
+      <div class="progress-line">${idx+1} / ${cards.length}</div>
+      <div class="card">
+        ${c.type? `<div class="type">${c.type}</div>` : ``}
+        <div class="hanzi">${c.hanzi}</div>
+        <div class="pinyin">${c.pinyin}</div>
+        ${revealed? `<div class="english">${c.english}</div>` : `<button class="btn" id="vReveal">\u{1F944} Taste it (reveal meaning)</button>`}
+      </div>
+      <div class="nav-row">
+        <button class="btn secondary" id="vPrev" ${idx===0?'disabled':''}>\u2190 Prev</button>
+        <button class="btn" id="vNext">${idx===cards.length-1? 'Finish' : 'Next \u2192'}</button>
+      </div>
+    `;
+    app.appendChild(wrap);
+    if(!revealed){
+      document.getElementById('vReveal').onclick = ()=>{ revealed=true; draw(); };
+    }
+    document.getElementById('vPrev').onclick = ()=>{ if(idx>0){ idx--; revealed=false; draw(); } };
+    document.getElementById('vNext').onclick = ()=>{
+      if(idx < cards.length-1){ idx++; revealed=false; draw(); }
+      else { markDone(lessonId, 'vocabDone'); nav({screen:"lesson", lessonId}); }
+    };
+  }
+  draw();
+}
+
+/* ---- DIALOGUE PRACTICE ---- */
+function renderDialogue(lessonId){
+  const lesson = findLesson(lessonId);
+  topBar("\u{1F35C} Follow the Recipe", ()=>nav({screen:"lesson", lessonId}));
+
+  let idx = 0;
+  let stage = 0; // 0 = hanzi only, 1 = + pinyin, 2 = + english
+  const lines = lesson.dialogue;
+
+  function draw(){
+    const old = document.getElementById('dWrap');
+    if(old) old.remove();
+    const wrap = document.createElement('div');
+    wrap.id = "dWrap";
+    const p = document.createElement('div');
+    p.className = "progress-line";
+    p.textContent = `${idx+1} / ${lines.length}`;
+    wrap.appendChild(p);
+
+    lines.forEach((line, i)=>{
+      const row = document.createElement('div');
+      row.className = "dialogue-line" + (i===idx? " current" : " dim");
+      let inner = `<div class="speaker">${line.speaker}</div><div class="hanzi">${line.hanzi}</div>`;
+      if(i===idx){
+        if(stage>=1) inner += `<div class="pinyin">${line.pinyin}</div>`;
+        if(stage>=2) inner += `<div class="english">${line.english}</div>`;
+      }
+      row.innerHTML = inner;
+      wrap.appendChild(row);
+    });
+
+    const navRow = document.createElement('div');
+    navRow.className = "nav-row";
+    if(stage < 2){
+      const btn = document.createElement('button');
+      btn.className = "btn";
+      btn.textContent = stage===0? "Show pinyin" : "Show English";
+      btn.onclick = ()=>{ stage++; draw(); };
+      navRow.appendChild(btn);
+    } else {
+      const btn = document.createElement('button');
+      btn.className = "btn";
+      btn.textContent = idx===lines.length-1? "Finish" : "Next step \u2192";
+      btn.onclick = ()=>{
+        if(idx < lines.length-1){ idx++; stage=0; draw(); }
+        else { markDone(lessonId, 'dialogueDone'); nav({screen:"lesson", lessonId}); }
+      };
+      navRow.appendChild(btn);
+    }
+    wrap.appendChild(navRow);
+    app.appendChild(wrap);
+  }
+  draw();
+}
+
+/* ---- SENTENCE PATTERNS ---- */
+function renderPatterns(){
+  topBar("\u{1F372} Cooking Techniques", ()=>nav({screen:"home"}));
+  const sub = document.createElement('p');
+  sub.className = "subtitle";
+  sub.textContent = "Tap a technique to see it used in real dishes (examples)";
+  app.appendChild(sub);
+
+  PATTERNS.forEach((pat, i)=>{
+    const card = document.createElement('div');
+    card.className = "pattern-card";
+    card.innerHTML = `
+      <div class="head">
+        <div>
+          <div class="hanzi">${pat.hanzi}</div>
+          <div class="pinyin">${pat.pinyin}</div>
+          <div class="meaning">${pat.meaning}</div>
+        </div>
+        <span class="arrow">\u25BE</span>
+      </div>
+      <div class="examples">
+        ${pat.examples.map(ex=>`
+          <div class="example-row">
+            <div class="hanzi">${ex.hanzi}</div>
+            <div class="pinyin">${ex.pinyin}</div>
+            <div class="english">${ex.english}</div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+    card.onclick = ()=> card.classList.toggle('open');
+    app.appendChild(card);
+  });
+}
+
+/* ---- PINYIN MATCH GAME ---- */
+function renderMatch(){
+  topBar("\u{1F525} Flavor Pairing", ()=>nav({screen:"home"}));
+  const sub = document.createElement('p');
+  sub.className = "subtitle";
+  sub.textContent = "Tap a pinyin ingredient, then match it to its English flavor";
+  app.appendChild(sub);
+
+  const pinyinOrder = MATCH_PAIRS.map((p,i)=>i).sort(()=>Math.random()-0.5);
+  const englishOrder = MATCH_PAIRS.map((p,i)=>i).sort(()=>Math.random()-0.5);
+  let selectedPinyin = null;
+  let matchedCount = 0;
+
+  const grid = document.createElement('div');
+  grid.className = "match-grid";
+  const colA = document.createElement('div');
+  colA.className = "match-col";
+  const colB = document.createElement('div');
+  colB.className = "match-col";
+  grid.appendChild(colA);
+  grid.appendChild(colB);
+  app.appendChild(grid);
+
+  const status = document.createElement('div');
+  status.className = "match-status";
+  status.textContent = `Matched: 0 / ${MATCH_PAIRS.length}`;
+  app.appendChild(status);
+
+  pinyinOrder.forEach(i=>{
+    const item = document.createElement('div');
+    item.className = "match-item";
+    item.textContent = MATCH_PAIRS[i].pinyin;
+    item.dataset.index = i;
+    item.onclick = ()=>{
+      if(item.classList.contains('correct')) return;
+      colA.querySelectorAll('.match-item').forEach(el=>el.classList.remove('selected'));
+      item.classList.add('selected');
+      selectedPinyin = i;
+    };
+    colA.appendChild(item);
+  });
+
+  englishOrder.forEach(i=>{
+    const item = document.createElement('div');
+    item.className = "match-item";
+    item.textContent = MATCH_PAIRS[i].english;
+    item.dataset.index = i;
+    item.onclick = ()=>{
+      if(item.classList.contains('correct') || selectedPinyin===null) return;
+      const pinyinEl = colA.querySelector(`.match-item[data-index="${selectedPinyin}"]`);
+      if(selectedPinyin === i){
+        item.classList.remove('wrong');
+        item.classList.add('correct');
+        pinyinEl.classList.remove('selected');
+        pinyinEl.classList.add('correct');
+        selectedPinyin = null;
+        matchedCount++;
+        status.textContent = `Matched: ${matchedCount} / ${MATCH_PAIRS.length}`;
+        if(matchedCount === MATCH_PAIRS.length){
+          status.textContent = "\u{1F389} All matched! Nice work.";
+        }
+      } else {
+        item.classList.add('wrong');
+        setTimeout(()=>item.classList.remove('wrong'), 500);
+      }
+    };
+    colB.appendChild(item);
+  });
+}
+
+/* ---- STROKE ORDER GUIDE ---- */
+function renderStrokes(){
+  topBar("\u{1F52A} Knife & Wok Skills", ()=>nav({screen:"home"}));
+  const sub = document.createElement('p');
+  sub.className = "subtitle";
+  sub.textContent = "The 10 basic strokes \u2014 with a kitchen memory trick for each (test on the real direction!)";
+  app.appendChild(sub);
+
+  STROKES.forEach(s=>{
+    const card = document.createElement('div');
+    card.className = "stroke-card";
+    card.innerHTML = `
+      <div class="stroke-shape">${s.shape}</div>
+      <div class="stroke-info">
+        <div class="name">${s.namePinyin} <span class="en">${s.nameEnglish}</span></div>
+        <div class="dir">${s.dir}</div>
+        <div class="examples">${s.examples}</div>
+        <div class="tip">\u{1F373} ${s.kitchenTip}</div>
+      </div>
+    `;
+    app.appendChild(card);
+  });
+}
+
+render();
+</script>
+</body>
+</html>

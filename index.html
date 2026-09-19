@@ -20,6 +20,8 @@
     --thai-b: #a855f7;
     --lit-a: #a855f7;
     --lit-b: #f4b942;
+    --chi-a: #e8482c;
+    --chi-b: #f4b400;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -179,6 +181,7 @@
   .station.math::before { background: linear-gradient(135deg, var(--math-a), var(--math-b)); }
   .station.thai::before { background: linear-gradient(135deg, var(--thai-a), var(--thai-b)); }
   .station.lit::before { background: linear-gradient(135deg, var(--lit-a), var(--lit-b)); }
+  .station.chi::before { background: linear-gradient(135deg, var(--chi-a), var(--chi-b)); }
 
   .station-inner { position: relative; display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; }
 
@@ -195,6 +198,7 @@
   .station.math .station-icon { background: linear-gradient(135deg, var(--math-a), var(--math-b)); }
   .station.thai .station-icon { background: linear-gradient(135deg, var(--thai-a), var(--thai-b)); }
   .station.lit .station-icon { background: linear-gradient(135deg, var(--lit-a), var(--lit-b)); }
+  .station.chi .station-icon { background: linear-gradient(135deg, var(--chi-a), var(--chi-b)); }
 
   .station-text { flex: 1; }
 
@@ -432,17 +436,29 @@
         <div class="station-arrow">›</div>
       </div>
     </a>
+
+    <a class="station chi" href="Chinese_Kitchen_Cuisine.html">
+      <div class="station-inner">
+        <div class="station-icon">🥟</div>
+        <div class="station-text">
+          <div class="station-title">Chinese Kitchen</div>
+          <div class="station-desc">Prep ingredient cards and follow the recipe for Unit 1 dialogue.</div>
+          <div class="station-progress" id="chiProgress"></div>
+        </div>
+        <div class="station-arrow">›</div>
+      </div>
+    </a>
   </div>
 
   <div class="tools">
     <div class="tool-btn" onclick="openBackupModal()">
       <span>💾 Backup / Restore Progress</span>
-      <span class="tool-status">all 4 apps</span>
+      <span class="tool-status">all 5 apps</span>
     </div>
   </div>
 
   <footer>
-    Keep this file in the same folder as the other apps (the 3 Math parts + Thai Reading + Thai Read & Write + Literature) — tap a station to open it. Backup/Restore for all 4 apps is managed here.
+    Keep this file in the same folder as the other apps (the 3 Math parts + Thai Reading + Thai Read & Write + Literature + Chinese Kitchen) — tap a station to open it. Backup/Restore for all 5 apps is managed here.
   </footer>
 
 <!-- Backup Modal -->
@@ -533,6 +549,28 @@
   tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
   tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
 
+  // Chinese Kitchen tracks per-lesson done-flags, not XP, so it gets its own preview.
+  function tryShowChineseProgress() {
+    try {
+      const raw = localStorage.getItem('chinese-kitchen-state');
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      const ids = Object.keys(state || {});
+      if (!ids.length) return;
+      let done = 0, total = 0;
+      ids.forEach(id => {
+        const lp = state[id];
+        total += 2;
+        if (lp.vocabDone) done++;
+        if (lp.dialogueDone) done++;
+      });
+      const el = document.getElementById('chiProgress');
+      el.textContent = `${done}/${total} steps cooked`;
+      el.classList.add('show');
+    } catch (e) { /* ignore */ }
+  }
+  tryShowChineseProgress();
+
   // Per-part completion counts for the Math quick-jump chips (1-9 / 10-19 / 20-28)
   function showPartCounts() {
     try {
@@ -569,6 +607,7 @@
         rw: JSON.parse(localStorage.getItem('thai-rw-state') || 'null'),
         lit: JSON.parse(localStorage.getItem('thaiKitchenState_v1') || 'null'),
         litSketches: JSON.parse(localStorage.getItem('thaiKitchenSketchbook_v1') || 'null'),
+        chinese: JSON.parse(localStorage.getItem('chinese-kitchen-state') || 'null'),
       };
       box.value = btoa(encodeURIComponent(JSON.stringify(bundle)));
       status.className = 'modal-error ok';
@@ -615,12 +654,14 @@
       if (bundle.rw) localStorage.setItem('thai-rw-state', JSON.stringify(bundle.rw));
       if (bundle.lit) localStorage.setItem('thaiKitchenState_v1', JSON.stringify(bundle.lit));
       if (bundle.litSketches) localStorage.setItem('thaiKitchenSketchbook_v1', JSON.stringify(bundle.litSketches));
+      if (bundle.chinese) localStorage.setItem('chinese-kitchen-state', JSON.stringify(bundle.chinese));
       status.className = 'modal-error ok';
       status.textContent = '✓ Progress restored! Reopen an app to see it.';
       tryShowProgress('math-complete-state', 'mathProgress', 'xp');
       tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
       tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
       tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
+      tryShowChineseProgress();
     } catch (e) {
       status.className = 'modal-error err';
       status.textContent = 'That code looks invalid — check it was copied in full.';
