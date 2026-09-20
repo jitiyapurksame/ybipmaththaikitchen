@@ -22,6 +22,8 @@
     --lit-b: #f4b942;
     --chi-a: #e8482c;
     --chi-b: #f4b400;
+    --exam-a: #1f9a6f;
+    --exam-b: #3b6fd4;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -182,6 +184,7 @@
   .station.thai::before { background: linear-gradient(135deg, var(--thai-a), var(--thai-b)); }
   .station.lit::before { background: linear-gradient(135deg, var(--lit-a), var(--lit-b)); }
   .station.chi::before { background: linear-gradient(135deg, var(--chi-a), var(--chi-b)); }
+  .station.examlab::before { background: linear-gradient(135deg, var(--exam-a), var(--exam-b)); }
 
   .station-inner { position: relative; display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; }
 
@@ -199,6 +202,7 @@
   .station.thai .station-icon { background: linear-gradient(135deg, var(--thai-a), var(--thai-b)); }
   .station.lit .station-icon { background: linear-gradient(135deg, var(--lit-a), var(--lit-b)); }
   .station.chi .station-icon { background: linear-gradient(135deg, var(--chi-a), var(--chi-b)); }
+  .station.examlab .station-icon { background: linear-gradient(135deg, var(--exam-a), var(--exam-b)); }
 
   .station-text { flex: 1; }
 
@@ -401,6 +405,18 @@
       </div>
     </div>
 
+    <a class="station examlab" href="Math_Exam_Lab.html">
+      <div class="station-inner">
+        <div class="station-icon">🧪</div>
+        <div class="station-text">
+          <div class="station-title">Math Exam Lab</div>
+          <div class="station-desc">Midterm survival kitchen — bar models, sketch pads, and panic-button hints.</div>
+          <div class="station-progress" id="examProgress"></div>
+        </div>
+        <div class="station-arrow">›</div>
+      </div>
+    </a>
+
     <a class="station thai" href="Thai_Exam_Survival_-_Index.html">
       <div class="station-inner">
         <div class="station-icon">🍳</div>
@@ -453,7 +469,7 @@
   <div class="tools">
     <div class="tool-btn" onclick="openBackupModal()">
       <span>💾 Backup / Restore Progress</span>
-      <span class="tool-status">all 5 apps</span>
+      <span class="tool-status">all 6 apps</span>
     </div>
   </div>
 
@@ -548,6 +564,7 @@
   tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
   tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
   tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
+  tryShowProgress('mathExamLabState_v1', 'examProgress', 'xp');
 
   // Chinese Kitchen tracks per-lesson done-flags, not XP, so it gets its own preview.
   function tryShowChineseProgress() {
@@ -608,6 +625,7 @@
         lit: JSON.parse(localStorage.getItem('thaiKitchenState_v1') || 'null'),
         litSketches: JSON.parse(localStorage.getItem('thaiKitchenSketchbook_v1') || 'null'),
         chinese: JSON.parse(localStorage.getItem('chinese-kitchen-state') || 'null'),
+        examLab: JSON.parse(localStorage.getItem('mathExamLabState_v1') || 'null'),
       };
       box.value = btoa(encodeURIComponent(JSON.stringify(bundle)));
       status.className = 'modal-error ok';
@@ -655,12 +673,14 @@
       if (bundle.lit) localStorage.setItem('thaiKitchenState_v1', JSON.stringify(bundle.lit));
       if (bundle.litSketches) localStorage.setItem('thaiKitchenSketchbook_v1', JSON.stringify(bundle.litSketches));
       if (bundle.chinese) localStorage.setItem('chinese-kitchen-state', JSON.stringify(bundle.chinese));
+      if (bundle.examLab) localStorage.setItem('mathExamLabState_v1', JSON.stringify(bundle.examLab));
       status.className = 'modal-error ok';
       status.textContent = '✓ Progress restored! Reopen an app to see it.';
       tryShowProgress('math-complete-state', 'mathProgress', 'xp');
       tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
       tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
       tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
+      tryShowProgress('mathExamLabState_v1', 'examProgress', 'xp');
       tryShowChineseProgress();
     } catch (e) {
       status.className = 'modal-error err';
