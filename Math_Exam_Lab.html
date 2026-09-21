@@ -36,7 +36,9 @@ h3{font-family:'Bangers',cursive;font-size:1.1rem;letter-spacing:1px;margin-bott
 .bar .b{background:var(--accent);}
 .bar .u{background:var(--gold);color:#201410;}
 .q{border-top:1px solid var(--border);padding-top:12px;margin-top:12px;}
-.q p.stem{font-weight:700;margin:0 0 6px;}
+.qhead{display:flex;gap:10px;align-items:flex-start;}
+.qicon{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.25);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0;}
+.q p.stem{font-weight:700;margin:0;flex:1;}
 .steps{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;}
 .steps button{font-size:.75rem;padding:6px 10px;border-radius:10px;border:1px solid var(--accent3);background:none;color:var(--accent3);font-weight:700;}
 .reveal{display:none;background:rgba(0,0,0,.22);border-radius:10px;padding:10px;margin-top:6px;font-size:.85rem;border:1px solid var(--border);}
@@ -109,19 +111,19 @@ const CHAPTERS = [
  intro:"Integers are your fridge and freezer temperatures — some ingredients go below zero! Factors and multiples are about how evenly you can portion ingredients. Square/cube roots undo squaring/cubing a tray size.",
  method:"Bar-model tip: for +/- integer word problems, draw a number-line 'bar' from the start temperature to the end temperature — the length of the jump is your answer.",
  qs:[
-  {stem:"Chef Nam's ice-cream freezer sits at −18°C. During a power cut it warms up by 25°C. What temperature is it now?",
+  {icon:'🧊',stem:"Chef Nam's ice-cream freezer sits at −18°C. During a power cut it warms up by 25°C. What temperature is it now?",
    steps:["Draw a number line from −18.","A rise of 25 means you ADD 25 to −18.","−18 + 25 = ?"],
    ans:"7°C (−18 + 25 = 7)",
    visual:{type:'numberline',mode:'jump',min:-20,max:10,step:5,start:-18,end:7,jumpLabel:'+25',cap:'The jump crosses 0 — 18 steps to reach 0, then 7 more to land on 7.'}},
-  {stem:"You have 36 cherry tomatoes and want to split them into bowls with NO leftovers, more than 1 bowl. List two possible bowl sizes.",
+  {icon:'🍅',stem:"You have 36 cherry tomatoes and want to split them into bowls with NO leftovers, more than 1 bowl. List two possible bowl sizes.",
    steps:["This is asking for factors of 36.","List pairs that multiply to 36: 1×36, 2×18, 3×12, 4×9, 6×6.","Pick any two factor numbers as bowl sizes."],
    ans:"Any factor pair, e.g. 4 bowls of 9, or 6 bowls of 6.",
    visual:{type:'grid',emoji:'🍅',rows:6,cols:6,cap:'36 tomatoes arranged as 6 rows of 6 — one valid way to portion them evenly!'}},
-  {stem:"A square baking tray has an area of 64 cm². What is the side length?",
+  {icon:'🔲',stem:"A square baking tray has an area of 64 cm². What is the side length?",
    steps:["Area = side × side, so side = √Area.","√64 = ? (what number times itself = 64?)"],
    ans:"8 cm, because 8 × 8 = 64.",
    visual:{type:'grid',emoji:'◻️',rows:8,cols:8,cap:'An 8×8 grid of tiles covers 64 cm², so each side of the tray is 8 cm.'}},
-  {stem:"A yeast culture doubles every hour. It starts as 2¹ = 2 grams. Write and work out the mass after 4 hours as an index (power) expression.",
+  {icon:'🧫',stem:"A yeast culture doubles every hour. It starts as 2¹ = 2 grams. Write and work out the mass after 4 hours as an index (power) expression.",
    steps:["Doubling 4 times from a start of 2¹ means the exponent grows by 1 each hour.","After 4 hours: 2⁴ + 1 hour started, so total exponent = 5 → 2⁵.","2⁵ = 2×2×2×2×2 = ?"],
    ans:"32 grams (2⁵ = 32).",
    visual:{type:'chain',steps:['Start: 2','Hr1: 4','Hr2: 8','Hr3: 16','Hr4: 32'],cap:'Each hour, the amount doubles — follow the chain.'}}
@@ -130,19 +132,19 @@ const CHAPTERS = [
  intro:"Expressions are recipe instructions written in ingredient letters. Expanding brackets = scaling a recipe up. Factorising = spotting a common ingredient you can pull out. Solving equations = balancing a recipe scale. Inequalities = a safe oven-temperature RANGE, not one exact number.",
  method:"Shape problems (like pizza-dough edges) almost always use ONE rule: matching tick marks or parallel sides are EQUAL. Set the two expressions equal and solve — then always CHECK by plugging your answer back in.",
  qs:[
-  {stem:"A trapezoid pizza dough has one slanted edge = 4(y − 3) cm and the other = 2y + 2 cm. The tick marks show they're equal. Find y, then check your answer.",
+  {icon:'🍕',stem:"A trapezoid pizza dough has one slanted edge = 4(y − 3) cm and the other = 2y + 2 cm. The tick marks show they're equal. Find y, then check your answer.",
    steps:["Set the two edges equal: 4(y−3) = 2y+2.","Expand the bracket: 4y − 12 = 2y + 2.","Collect y's on one side: 4y − 2y = 2 + 12 → 2y = 14.","Solve: y = 7. Check: 4(7−3)=16 and 2(7)+2=16 ✓"],
    ans:"y = 7. Both edges = 16 cm — matches!",
    visual:{type:'bar',parts:[{v:16,cls:'a',l:'Edge 1 = 4(y−3) = 16'},{v:16,cls:'b',l:'Edge 2 = 2y+2 = 16'}],cap:'Equal tick marks mean equal bar lengths.'}},
-  {stem:"A rectangle of rolled dough has width 2(y+3) cm and length 37 cm, and the opposite width is 20 cm. Find y.",
+  {icon:'🫓',stem:"A rectangle of rolled dough has width 2(y+3) cm and length 37 cm, and the opposite width is 20 cm. Find y.",
    steps:["Opposite sides of a rectangle are equal: 2(y+3) = 20.","Expand: 2y + 6 = 20.","Solve: 2y = 14 → y = 7."],
    ans:"y = 7. Check: 2(7+3) = 20 ✓",
    visual:{type:'bar',parts:[{v:20,cls:'a',l:'2(y+3) = 20'},{v:20,cls:'b',l:'opposite side = 20'}],cap:'Opposite sides of a rectangle are always equal.'}},
-  {stem:"Flour needed for the base is x grams. Sugar is 3 grams more than double the flour. Write an expression for the sugar.",
+  {icon:'🥣',stem:"Flour needed for the base is x grams. Sugar is 3 grams more than double the flour. Write an expression for the sugar.",
    steps:["'Double the flour' = 2 × x = 2x.","'3 more than' that = add 3."],
    ans:"Sugar = 2x + 3",
    visual:{type:'bar',parts:[{v:2,cls:'a',l:'flour = x'},{v:4,cls:'b',l:'double flour = 2x'},{v:1,cls:'u',l:'+3 sugar'}],cap:'Not to scale — just shows how the parts build the expression.'}},
-  {stem:"Your oven's safe baking range is written as 6 ⩽ x ⩽ 9 (hundreds of °F). Draw this on a number line and describe it in words.",
+  {icon:'🌡️',stem:"Your oven's safe baking range is written as 6 ⩽ x ⩽ 9 (hundreds of °F). Draw this on a number line and describe it in words.",
    steps:["Filled/closed circles at 6 and 9 (⩽ means 'including').","Shade the line segment between 6 and 9."],
    ans:"The oven temperature can be anywhere from 6 to 9 hundred °F, including both 6 and 9.",
    visual:{type:'numberline',mode:'range',min:0,max:12,step:1,lo:6,hi:9,loInclusive:true,hiInclusive:true,label:'6 ⩽ x ⩽ 9',cap:'Filled dots = "including" that number; the thick line is every value in between.'}}
@@ -151,11 +153,11 @@ const CHAPTERS = [
  intro:"A formula is just a lab recipe card with letters instead of amounts. Substitution means pouring in the actual numbers where the letters are.",
  method:"Recipe for substitution: (1) Copy the formula. (2) Replace each letter with its number, in brackets. (3) Do multiplication before addition (order of operations). (4) Write the units.",
  qs:[
-  {stem:"Use v = u + 10t to find v when u = 8 and t = 15.",
+  {icon:'🏃',stem:"Use v = u + 10t to find v when u = 8 and t = 15.",
    steps:["Substitute: v = 8 + 10(15).","Multiply first: 10 × 15 = 150.","Add: 8 + 150."],
    ans:"v = 158",
    visual:{type:'chain',steps:['u = 8','t = 15','v = 8 + 10×15','v = 158'],cap:'Follow the chain left to right.'}},
-  {stem:"Use F = ma (force = mass × acceleration, like the force of your rolling pin) to find F when m = 8 and a = −4.",
+  {icon:'💥',stem:"Use F = ma (force = mass × acceleration, like the force of your rolling pin) to find F when m = 8 and a = −4.",
    steps:["Substitute: F = 8 × (−4).","A positive times a negative is negative."],
    ans:"F = −32",
    visual:{type:'chain',steps:['m = 8','a = −4','F = 8 × (−4)','F = −32'],cap:'A positive times a negative gives a negative answer.'}}
@@ -164,11 +166,11 @@ const CHAPTERS = [
  intro:"Precise measuring is what separates a chemist from a mess! Multiplying/dividing by 0.1 and 0.01 just SHIFTS the digits — the decimal point slides, the digits don't change.",
  method:"Trick: ×0.1 is the same as ÷10 (digits shift right). ×0.01 is the same as ÷100 (shift right twice). Rounding: look ONE digit past the place you're rounding to — 5 or more, round up.",
  qs:[
-  {stem:"A recipe needs 250 g of sugar, but your scale only measures in units of 0.1 g. What is 250 × 0.1?",
+  {icon:'🥄',stem:"A recipe needs 250 g of sugar, but your scale only measures in units of 0.1 g. What is 250 × 0.1?",
    steps:["×0.1 = ÷10.","Shift the decimal point one place left."],
    ans:"25 (250 × 0.1 = 25)",
    visual:{type:'chain',steps:['250','× 0.1','shift point left','= 25'],cap:'Multiplying by 0.1 slides the decimal point one place left.'}},
-  {stem:"Round 3.847 kg of flour to 1 decimal place.",
+  {icon:'📏',stem:"Round 3.847 kg of flour to 1 decimal place.",
    steps:["Look at the digit after the 1st decimal place: 3.8|47.","4 is less than 5, so round DOWN."],
    ans:"3.8 kg",
    visual:{type:'chain',steps:['3.8 | 47','look at 4','4 < 5','round DOWN → 3.8'],cap:'Only the very next digit decides whether you round up or down.'}}
@@ -177,11 +179,11 @@ const CHAPTERS = [
  intro:"Multiplying decimals is like diluting a strong sauce — the answer is usually SMALLER. Dividing by a decimal is the reverse: convert it to a whole number first (multiply both numbers by 10, 100...).",
  method:"Trick for dividing by a decimal: multiply BOTH numbers by the same power of 10 until the divisor is a whole number, then divide as normal.",
  qs:[
-  {stem:"You're scaling a sauce recipe: 0.6 L of stock × 0.5 (halving it). What's the result?",
+  {icon:'🍶',stem:"You're scaling a sauce recipe: 0.6 L of stock × 0.5 (halving it). What's the result?",
    steps:["Multiply as if there were no decimals: 6 × 5 = 30.","Count total decimal places in the question (1+1=2).","Place the point 2 digits from the right: 0.30."],
    ans:"0.3 L",
    visual:{type:'chain',steps:['0.6 × 0.5','ignore points: 6×5=30','2 decimal places total','0.30 L'],cap:'Multiply like whole numbers, then place the decimal point back in.'}},
-  {stem:"You have 4.8 g of citric acid and need to split it into 0.2 g test portions. How many portions?",
+  {icon:'💧',stem:"You have 4.8 g of citric acid and need to split it into 0.2 g test portions. How many portions?",
    steps:["4.8 ÷ 0.2.","Multiply both by 10 to clear the decimal: 48 ÷ 2."],
    ans:"24 portions",
    visual:{type:'grid',emoji:'🧪',rows:4,cols:6,cap:'24 test-tube portions of 0.2 g each, poured from the 4.8 g flask.'}}
@@ -242,7 +244,7 @@ function renderChapter(c,i){
     let visualHtml = q.visual ? renderVisual(q.visual) : '';
     let qid = `${c.id}${i}q${j}`;
     return `<div class="q">
-      <p class="stem">Q${j+1}. ${q.stem} <span class="donemark" id="mark_${qid}">${doneIds.has(qid)?'✅':''}</span></p>
+      <div class="qhead"><div class="qicon">${q.icon||'🔬'}</div><p class="stem">Q${j+1}. ${q.stem} <span class="donemark" id="mark_${qid}">${doneIds.has(qid)?'✅':''}</span></p></div>
       <div class="drawrow"><small>✏️ Sketch your bar model or working here first — the real exam won't have pictures!</small><button class="clearbtn" onclick="undoPad('${padId}')">↩️ Undo</button><button class="clearbtn" onclick="clearPad('${padId}')">Clear</button></div>
       <canvas class="drawpad" id="${padId}"></canvas>
       <div class="steps">${stepsBtns}<button style="background:var(--accent2);color:#fff;border-color:var(--accent2);" onclick="toggleStep('${c.id}${i}q${j}ans');saveXP(5);markDone('${qid}',${i},${c.qs.length})">✅ Check Answer (+5 XP)</button></div>
