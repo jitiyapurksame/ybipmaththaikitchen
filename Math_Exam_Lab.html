@@ -19,6 +19,9 @@ body{margin:0;background:radial-gradient(ellipse at top,#3a2412 0%,#201410 55%,#
 header{position:sticky;top:0;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;z-index:5;}
 header h1{margin:0;font-family:'Bangers',cursive;font-size:1.5rem;letter-spacing:1px;}
 header p{margin:2px 0 0;font-size:.8rem;opacity:.92;}
+#examBar{display:none;gap:6px;flex-wrap:wrap;padding:10px 10px 0;background:var(--bg);}
+#examBar button{padding:6px 14px;border-radius:16px;border:1px solid var(--gold);background:rgba(244,180,0,.08);color:var(--gold);font-size:.75rem;font-weight:800;}
+#examBar button.active{background:var(--gold);color:#201410;}
 nav{display:flex;gap:6px;flex-wrap:wrap;padding:10px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:64px;z-index:4;}
 nav button{flex:0 0 auto;padding:7px 12px;border-radius:20px;border:1px solid var(--border);background:rgba(0,0,0,.22);color:var(--text);font-size:.78rem;font-weight:700;white-space:nowrap;}
 nav button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;}
@@ -69,8 +72,9 @@ small.hint{color:var(--muted);}
 <header>
   <a class="backlink" href="index.html">← Kitchen Ninja HQ</a>
   <h1>🧪 Math Exam Lab</h1>
-  <p>Year 8 Midterm Survival Kitchen — turn stress into experiments</p>
+  <p id="examLabel">Year 8 Midterm Survival Kitchen — turn stress into experiments</p>
 </header>
+<div id="examBar"></div>
 <nav id="nav"></nav>
 <main id="main"></main>
 
@@ -106,8 +110,16 @@ const STARTERS = [
  "Even if I'm not sure, my best estimate is ... because ..."
 ];
 
+// Registry of exam sets. Add a new {id,label,short} entry here whenever a new
+// exam is being prepped for, and tag each chapter below with its examSet(s).
+// A chapter that should carry over for cumulative review just gets tagged
+// into the new exam's id too — no need to retype it.
+const EXAMS = [
+ {id:'y8_t1_mid', label:'Year 8 · Term 1 Midterm', short:'T1 Midterm'}
+];
+
 const CHAPTERS = [
-{id:'integers', icon:'🧊', name:'Freezer Lab', title:'Chapter 1 · Integers',
+{examSet:'y8_t1_mid', id:'integers', icon:'🧊', name:'Freezer Lab', title:'Chapter 1 · Integers',
  intro:"Integers are your fridge and freezer temperatures — some ingredients go below zero! Factors and multiples are about how evenly you can portion ingredients. Square/cube roots undo squaring/cubing a tray size.",
  method:"Bar-model tip: for +/- integer word problems, draw a number-line 'bar' from the start temperature to the end temperature — the length of the jump is your answer.",
  qs:[
@@ -128,7 +140,7 @@ const CHAPTERS = [
    ans:"32 grams (2⁵ = 32).",
    visual:{type:'chain',steps:['Start: 2','Hr1: 4','Hr2: 8','Hr3: 16','Hr4: 32'],cap:'Each hour, the amount doubles — follow the chain.'}}
  ]},
-{id:'expr', icon:'🥧', name:'Dough Equations', title:'Chapter 2 · Expressions, Formulae & Equations',
+{examSet:'y8_t1_mid', id:'expr', icon:'🥧', name:'Dough Equations', title:'Chapter 2 · Expressions, Formulae & Equations',
  intro:"Expressions are recipe instructions written in ingredient letters. Expanding brackets = scaling a recipe up. Factorising = spotting a common ingredient you can pull out. Solving equations = balancing a recipe scale. Inequalities = a safe oven-temperature RANGE, not one exact number.",
  method:"Shape problems (like pizza-dough edges) almost always use ONE rule: matching tick marks or parallel sides are EQUAL. Set the two expressions equal and solve — then always CHECK by plugging your answer back in.",
  qs:[
@@ -149,7 +161,7 @@ const CHAPTERS = [
    ans:"The oven temperature can be anywhere from 6 to 9 hundred °F, including both 6 and 9.",
    visual:{type:'numberline',mode:'range',min:0,max:12,step:1,lo:6,hi:9,loInclusive:true,hiInclusive:true,label:'6 ⩽ x ⩽ 9',cap:'Filled dots = "including" that number; the thick line is every value in between.'}}
  ]},
-{id:'formula', icon:'⚗️', name:'Formula Flask', title:'Bonus · Using Formulae (Substitution)',
+{examSet:'y8_t1_mid', id:'formula', icon:'⚗️', name:'Formula Flask', title:'Bonus · Using Formulae (Substitution)',
  intro:"A formula is just a lab recipe card with letters instead of amounts. Substitution means pouring in the actual numbers where the letters are.",
  method:"Recipe for substitution: (1) Copy the formula. (2) Replace each letter with its number, in brackets. (3) Do multiplication before addition (order of operations). (4) Write the units.",
  qs:[
@@ -162,7 +174,7 @@ const CHAPTERS = [
    ans:"F = −32",
    visual:{type:'chain',steps:['m = 8','a = −4','F = 8 × (−4)','F = −32'],cap:'A positive times a negative gives a negative answer.'}}
  ]},
-{id:'place', icon:'⚖️', name:'Measuring Station', title:'Chapter 3 · Place Value & Rounding',
+{examSet:'y8_t1_mid', id:'place', icon:'⚖️', name:'Measuring Station', title:'Chapter 3 · Place Value & Rounding',
  intro:"Precise measuring is what separates a chemist from a mess! Multiplying/dividing by 0.1 and 0.01 just SHIFTS the digits — the decimal point slides, the digits don't change.",
  method:"Trick: ×0.1 is the same as ÷10 (digits shift right). ×0.01 is the same as ÷100 (shift right twice). Rounding: look ONE digit past the place you're rounding to — 5 or more, round up.",
  qs:[
@@ -175,7 +187,7 @@ const CHAPTERS = [
    ans:"3.8 kg",
    visual:{type:'chain',steps:['3.8 | 47','look at 4','4 < 5','round DOWN → 3.8'],cap:'Only the very next digit decides whether you round up or down.'}}
  ]},
-{id:'decimals', icon:'🧫', name:'Decimal Dilution Lab', title:'Chapter 4 · Decimals',
+{examSet:'y8_t1_mid', id:'decimals', icon:'🧫', name:'Decimal Dilution Lab', title:'Chapter 4 · Decimals',
  intro:"Multiplying decimals is like diluting a strong sauce — the answer is usually SMALLER. Dividing by a decimal is the reverse: convert it to a whole number first (multiply both numbers by 10, 100...).",
  method:"Trick for dividing by a decimal: multiply BOTH numbers by the same power of 10 until the divisor is a whole number, then divide as normal.",
  qs:[
@@ -190,14 +202,52 @@ const CHAPTERS = [
  ]}
 ];
 
-let melState = (function(){
-  try { return JSON.parse(localStorage.getItem('mathExamLabState_v1')||'null') || {xp:0,done:[]}; }
-  catch(e){ return {xp:0,done:[]}; }
+function stateKey(examId){ return 'mathExamLab_'+examId+'_v1'; }
+
+// One-time migration: if this is the very first exam set and old progress was
+// saved under the original single-exam key, carry it over so no XP is lost.
+(function migrateOldState(){
+  const oldRaw = localStorage.getItem('mathExamLabState_v1');
+  if(oldRaw && !localStorage.getItem(stateKey('y8_t1_mid'))){
+    try{
+      const parsed = JSON.parse(oldRaw);
+      if(parsed && (parsed.xp || (parsed.done&&parsed.done.length))){
+        localStorage.setItem(stateKey('y8_t1_mid'), oldRaw);
+      }
+    }catch(e){}
+  }
 })();
-let xp = Number(melState.xp||0);
-let doneIds = new Set(melState.done||[]);
+
+let currentExamId = localStorage.getItem('mathExamLabCurrentExam');
+if(!EXAMS.some(e=>e.id===currentExamId)) currentExamId = EXAMS[0].id;
+
+let melState, xp, doneIds;
+function loadExamState(examId){
+  try { melState = JSON.parse(localStorage.getItem(stateKey(examId))||'null') || {xp:0,done:[]}; }
+  catch(e){ melState = {xp:0,done:[]}; }
+  xp = Number(melState.xp||0);
+  doneIds = new Set(melState.done||[]);
+}
+loadExamState(currentExamId);
+
+// Keeps the ORIGINAL key updated as a combined total across all exam sets, so
+// the Kitchen Ninja HQ hub tile (which reads mathExamLabState_v1 directly)
+// keeps showing a progress preview without needing its own update yet.
+function updateAggregateState(){
+  let totalXP=0, allDone=[];
+  EXAMS.forEach(e=>{
+    try{
+      const s = JSON.parse(localStorage.getItem(stateKey(e.id))||'null');
+      if(s){ totalXP += Number(s.xp||0); allDone = allDone.concat((s.done||[]).map(d=>e.id+'::'+d)); }
+    }catch(err){}
+  });
+  localStorage.setItem('mathExamLabState_v1', JSON.stringify({xp: totalXP, done: allDone}));
+}
+updateAggregateState();
+
 function saveMelState(){
-  localStorage.setItem('mathExamLabState_v1', JSON.stringify({xp, done:[...doneIds]}));
+  localStorage.setItem(stateKey(currentExamId), JSON.stringify({xp, done:[...doneIds]}));
+  updateAggregateState();
 }
 function chapterComplete(c,i){
   return c.qs.every((q,j)=>doneIds.has(`${c.id}${i}q${j}`));
@@ -207,13 +257,40 @@ function renderXP(){
   let el=document.getElementById('xpTag');
   if(el) el.textContent = '⭐ '+xp+' XP';
 }
+function currentChapters(){
+  return CHAPTERS.filter(c=>c.examSet===currentExamId);
+}
+function buildExamBar(){
+  const bar=document.getElementById('examBar');
+  if(!bar) return;
+  if(EXAMS.length<=1){ bar.style.display='none'; return; }
+  bar.style.display='flex';
+  bar.innerHTML = EXAMS.map(e=>`<button data-e="${e.id}" class="${e.id===currentExamId?'active':''}">${e.short||e.label}</button>`).join('');
+  bar.querySelectorAll('button[data-e]').forEach(b=>b.onclick=()=>switchExam(b.dataset.e));
+}
+function updateHeaderLabel(){
+  const p=document.getElementById('examLabel');
+  const cur=EXAMS.find(e=>e.id===currentExamId);
+  if(p && cur) p.textContent = cur.label+' Survival Kitchen — turn stress into experiments';
+}
+function switchExam(examId){
+  currentExamId = examId;
+  localStorage.setItem('mathExamLabCurrentExam', currentExamId);
+  loadExamState(currentExamId);
+  buildExamBar();
+  updateHeaderLabel();
+  build();
+  renderXP();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
 function build(){
   const nav=document.getElementById('nav');
   const main=document.getElementById('main');
-  nav.innerHTML = CHAPTERS.map((c,i)=>`<button data-i="${i}" class="${i===0?'active':''}">${c.icon} ${c.name}${chapterComplete(c,i)?' ✅':''}</button>`).join('')
+  const chapters=currentChapters();
+  nav.innerHTML = chapters.map((c,i)=>`<button data-i="${i}" class="${i===0?'active':''}">${c.icon} ${c.name}${chapterComplete(c,i)?' ✅':''}</button>`).join('')
     + `<button id="xpTag" style="margin-left:auto;background:none;border:none;color:var(--gold);font-weight:800;">⭐ ${xp} XP</button>`;
-  main.innerHTML = CHAPTERS.map((c,i)=>renderChapter(c,i)).join('');
+  main.innerHTML = chapters.map((c,i)=>renderChapter(c,i)).join('');
   nav.querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>{
     document.getElementById('sec'+b.dataset.i).scrollIntoView({behavior:'smooth'});
   });
@@ -270,7 +347,7 @@ function toggleStep(id){document.getElementById(id).classList.toggle('show');}
 function markDone(qid,i,total){
   if(!doneIds.has(qid)){
     doneIds.add(qid);
-    localStorage.setItem('mathExamLabState_v1', JSON.stringify({xp, done:[...doneIds]}));
+    saveMelState();
   }
   const mark=document.getElementById('mark_'+qid);
   if(mark) mark.textContent='✅';
@@ -422,6 +499,8 @@ function openPanic(){
 }
 function closePanic(){document.getElementById('overlay').classList.remove('show');}
 
+buildExamBar();
+updateHeaderLabel();
 build();
 renderXP();
 </script>
