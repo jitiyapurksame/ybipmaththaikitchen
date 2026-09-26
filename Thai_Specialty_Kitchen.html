@@ -342,6 +342,76 @@
   /* Canvas / drawing */
   .canvas-wrap { background: #1f130c; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; position: relative; }
   canvas { display: block; width: 100%; touch-action: none; }
+
+  /* Plating keyword pills */
+  .pill-layer { position: absolute; inset: 0; pointer-events: none; }
+  .plate-pill {
+    position: absolute; pointer-events: auto; touch-action: none;
+    display: flex; align-items: center; gap: 4px;
+    background: var(--pill-color); color: #1f130c;
+    font-size: 0.68rem; font-weight: 800; padding: 4px 8px; border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35); border: 1px solid rgba(0,0,0,0.15);
+    white-space: nowrap; user-select: none;
+  }
+  .plate-pill.dragging { box-shadow: 0 4px 14px rgba(0,0,0,0.5); z-index: 20; }
+  .pill-remove {
+    background: rgba(0,0,0,0.2); border: none; color: #1f130c; font-size: 0.6rem;
+    width: 14px; height: 14px; border-radius: 50%; line-height: 1; cursor: pointer; padding: 0; flex-shrink: 0;
+  }
+  .pill-tray { margin-top: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+  .pill-tray-label { font-size: 0.74rem; font-weight: 800; color: var(--accent2); margin-bottom: 10px; line-height: 1.4; }
+  .pill-group { margin-bottom: 10px; }
+  .pill-group:last-child { margin-bottom: 0; }
+  .pill-group-label { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 4px; }
+  .pill-group-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill-chip {
+    font-size: 0.72rem; font-weight: 700; padding: 6px 10px; border-radius: 999px;
+    border: 1.5px solid var(--pill-color); background: transparent; color: var(--pill-color);
+    cursor: pointer; font-family: inherit;
+  }
+  .pill-chip:active { transform: scale(0.95); }
+  .pill-chip.used { opacity: 0.35; text-decoration: line-through; }
+
+  /* Flashcard sets & review */
+  .fc-set-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; margin: 0 20px 12px; }
+  .fc-set-top { display: flex; align-items: center; gap: 10px; }
+  .fc-set-emoji { font-size: 1.4rem; }
+  .fc-set-title { font-family: 'Bangers', cursive; font-size: 1rem; letter-spacing: 0.5px; color: var(--gold); }
+  .fc-set-sub { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+  .fc-set-count { margin-left: auto; font-size: 0.7rem; color: var(--gold); text-align: right; flex-shrink: 0; }
+  .fc-set-btn-row { display: flex; gap: 8px; margin-top: 12px; }
+  .fc-export-all-btn {
+    margin: 4px 20px 18px; background: linear-gradient(135deg, #5c3826, #331f14); border: 2px solid var(--gold);
+    border-radius: 14px; padding: 12px 14px; color: var(--gold); font-weight: 800; font-size: 0.82rem;
+    text-align: center; cursor: pointer;
+  }
+  .fc-export-all-btn:active { transform: scale(0.97); }
+  .fc-empty { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 40px 20px; line-height: 1.6; }
+
+  .fc-review-wrap { flex: 1; padding: 10px 20px 24px; display: flex; flex-direction: column; }
+  .fc-review-progress { text-align: center; font-size: 0.74rem; color: var(--muted); margin-bottom: 10px; }
+  .fc-card-stage { perspective: 1200px; flex-shrink: 0; }
+  .fc-card {
+    position: relative; min-height: 280px; border-radius: 18px; cursor: pointer;
+    transition: transform 0.5s; transform-style: preserve-3d;
+  }
+  .fc-card.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: 18px;
+    background: var(--surface); border: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 22px; text-align: center; gap: 10px; overflow-y: auto;
+  }
+  .fc-face-back { transform: rotateY(180deg); background: var(--surface2); }
+  .fc-face-tag { font-size: 0.66rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--accent2); }
+  .fc-face-thai { font-size: 1.5rem; font-weight: 800; line-height: 1.4; }
+  .fc-face-simple { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .fc-face-english { font-size: 1.15rem; font-weight: 800; color: var(--gold); }
+  .fc-face-example { font-size: 0.78rem; color: var(--muted); line-height: 1.5; background: rgba(0,0,0,0.15); border-radius: 10px; padding: 8px 10px; }
+  .fc-hint { font-size: 0.68rem; color: var(--muted); text-align: center; margin-top: 10px; }
+  .fc-nav-row { display: flex; gap: 8px; margin-top: 16px; }
+  .fc-nav-row .canvas-btn { flex: 1; text-align: center; }
+  .fc-bottom-row { display: flex; gap: 8px; margin-top: 10px; }
   .canvas-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .color-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
   .color-dot.active { border-color: #fff; }
@@ -561,6 +631,15 @@
       </div>
     </div>
   </div>
+  <div class="home-btn-row">
+    <div class="trophy-btn" onclick="openFlashcardSets()">
+      <div class="trophy-icon">📇</div>
+      <div>
+        <div class="trophy-title">Flashcard Sets</div>
+        <div class="trophy-sub" id="flashcards-sub-home">0 decoded</div>
+      </div>
+    </div>
+  </div>
 
   <div class="missions-label">Pick a kitchen room</div>
   <div class="missions-list" id="rooms-list"></div>
@@ -579,27 +658,15 @@
   <div class="missions-list" id="room-missions-list" style="padding:0 20px 30px"></div>
 </div>
 
-<!-- ══════════ WORD DECODER — THEME PICKER ══════════ -->
-<div id="decoder-themes" class="screen">
-  <div class="mission-header">
-    <div class="back-btn" onclick="showScreen('home')">←</div>
-    <div class="mission-header-text">
-      <div id="decoder-themes-title">-</div>
-      <div id="decoder-themes-sub">-</div>
-    </div>
-  </div>
-  <div class="missions-label">Pick a smaller batch to tackle</div>
-  <div class="missions-list" id="decoder-themes-list" style="padding:0 20px 30px"></div>
-</div>
-
 <!-- ══════════ WORD DECODER ══════════ -->
 <div id="decoder" class="screen">
   <div class="mission-header">
-    <div class="back-btn" onclick="goBackFromDecoder()">←</div>
+    <div class="back-btn" onclick="showScreen('home')">←</div>
     <div class="mission-header-text">
       <div id="decoder-title">-</div>
       <div id="decoder-sub">-</div>
     </div>
+    <button class="canvas-btn" style="flex-shrink:0; white-space:nowrap" onclick="openFlashcardReview(currentRoomKey)">📇 Flashcards</button>
   </div>
   <div class="decoder-progress-bar">
     <div class="xp-bar-bg"><div class="xp-bar-fill" id="decoder-progress-fill" style="width:0%"></div></div>
@@ -680,6 +747,49 @@
         <button class="canvas-btn" onclick="freeDrawCtrl.download('sketch')">💾 Save Image</button>
       </div>
       <button class="btn-primary" id="freedraw-save-btn" onclick="saveNewSketch()">📓 Save to Sketchbook</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FLASHCARD SETS ══════════ -->
+<div id="flashcards" class="screen">
+  <div class="trophy-header">
+    <div class="back-btn" onclick="showScreen('home')">←</div>
+    <div style="flex:1; font-family:'Bangers',cursive; font-size:1.2rem; letter-spacing:1px; color:var(--gold)">📇 Flashcard Sets</div>
+  </div>
+  <div style="padding:0 20px 12px; font-size:0.78rem; color:var(--muted); line-height:1.5">
+    Only the words you've already ✓ decoded show up here — review them, or export a set to study in Noji.
+  </div>
+  <div id="flashcard-sets-list"></div>
+  <div class="fc-export-all-btn" onclick="exportAllDecodedCSV()">⬇️ Export ALL decoded sets (one CSV)</div>
+</div>
+
+<!-- ══════════ FLASHCARD REVIEW ══════════ -->
+<div id="flashcard-review" class="screen">
+  <div class="mission-header">
+    <div class="back-btn" onclick="showScreen('flashcards')">←</div>
+    <div class="mission-header-text">
+      <div id="fc-review-title">-</div>
+      <div id="fc-review-sub">Flashcard Review</div>
+    </div>
+    <button class="canvas-btn" onclick="exportDeckCSV(reviewDeckKey)">⬇️ CSV</button>
+  </div>
+  <div class="fc-review-wrap">
+    <div class="fc-review-progress" id="fc-review-progress">-</div>
+    <div class="fc-card-stage">
+      <div class="fc-card" id="fc-card" onclick="flipFlashcard()">
+        <div class="fc-face fc-face-front" id="fc-face-front"></div>
+        <div class="fc-face fc-face-back" id="fc-face-back"></div>
+      </div>
+    </div>
+    <div class="fc-hint">👆 Tap the card to flip it</div>
+    <div class="fc-nav-row">
+      <button class="canvas-btn" onclick="prevFlashcard()">⬅️ Prev</button>
+      <button class="canvas-btn" onclick="nextFlashcard()">Next ➡️</button>
+    </div>
+    <div class="fc-bottom-row">
+      <button class="canvas-btn" onclick="shuffleFlashcards()">🔀 Shuffle</button>
+      <button class="canvas-btn" onclick="showScreen('flashcards')">✅ Done reviewing</button>
     </div>
   </div>
 </div>
@@ -1498,75 +1608,6 @@ const DECKS = {
   ],
 };
 
-// ══════════════════════ WORD DECODER THEME GROUPS ══════════════════════
-// Splits each big deck into smaller topic-based batches so a full 30-50
-// card deck isn't dumped on the son all at once.
-
-const THEME_DEFS = {
-  idiom: [
-    { key: 'animal',  emoji: '🐘', label: 'Animal Idioms' },
-    { key: 'body',    emoji: '🖐️', label: 'Body-Part Idioms' },
-    { key: 'water',   emoji: '💧', label: 'Water & Weather Idioms' },
-    { key: 'food',    emoji: '🌾', label: 'Food & Plant Idioms' },
-    { key: 'tool',    emoji: '🔨', label: 'Tool & Object Idioms' },
-    { key: 'wisdom',  emoji: '💭', label: 'Life Wisdom Idioms' },
-  ],
-  royal: [
-    { key: 'verbs',   emoji: '🗣️', label: 'Royal Verbs & Actions' },
-    { key: 'body',    emoji: '🖐️', label: 'Royal Body Parts' },
-    { key: 'objects', emoji: '👑', label: 'Royal Objects & Places' },
-  ],
-  formal: [
-    { key: 'thinking',   emoji: '🧠', label: 'Thinking & Essay Words' },
-    { key: 'verbs',      emoji: '🍽️', label: 'Everyday Verbs → Formal' },
-    { key: 'connectors', emoji: '🔗', label: 'Writing Connectors' },
-    { key: 'upgrades',   emoji: '⬆️', label: 'More Formal Upgrades' },
-  ],
-};
-
-const CARD_THEMES = {
-  // ── idiom: animal ──
-  i2:'animal', i3:'animal', i5:'animal', i6:'animal', i9:'animal', i10:'animal',
-  i12:'animal', i13:'animal', i21:'animal', i22:'animal', i31:'animal', i32:'animal',
-  i44:'animal', i47:'animal', i48:'animal',
-  // ── idiom: body ──
-  i7:'body', i11:'body', i20:'body', i24:'body', i25:'body', i27:'body',
-  i30:'body', i39:'body', i42:'body', i45:'body',
-  // ── idiom: water & weather ──
-  i1:'water', i14:'water', i18:'water', i19:'water', i38:'water', i50:'water',
-  // ── idiom: food & plant ──
-  i15:'food', i16:'food', i36:'food', i40:'food', i41:'food', i43:'food', i46:'food',
-  // ── idiom: tool & object ──
-  i4:'tool', i23:'tool', i33:'tool', i34:'tool', i35:'tool', i37:'tool', i49:'tool',
-  // ── idiom: life wisdom (no strong physical image) ──
-  i8:'wisdom', i17:'wisdom', i26:'wisdom', i28:'wisdom', i29:'wisdom',
-
-  // ── royal: verbs & actions (r1-r15) ──
-  r1:'verbs', r2:'verbs', r3:'verbs', r4:'verbs', r5:'verbs', r6:'verbs', r7:'verbs',
-  r8:'verbs', r9:'verbs', r10:'verbs', r11:'verbs', r12:'verbs', r13:'verbs', r14:'verbs', r15:'verbs',
-  // ── royal: body parts (r16-r31) ──
-  r16:'body', r17:'body', r18:'body', r19:'body', r20:'body', r21:'body', r22:'body',
-  r23:'body', r24:'body', r25:'body', r26:'body', r27:'body', r28:'body', r29:'body', r30:'body', r31:'body',
-  // ── royal: objects & places (r32-r41) ──
-  r32:'objects', r33:'objects', r34:'objects', r35:'objects', r36:'objects',
-  r37:'objects', r38:'objects', r39:'objects', r40:'objects', r41:'objects',
-
-  // ── formal: thinking & essay words (f1-f10) ──
-  f1:'thinking', f2:'thinking', f3:'thinking', f4:'thinking', f5:'thinking',
-  f6:'thinking', f7:'thinking', f8:'thinking', f9:'thinking', f10:'thinking',
-  // ── formal: everyday verbs → formal (f11-f17, f25-f35) ──
-  f11:'verbs', f12:'verbs', f13:'verbs', f14:'verbs', f15:'verbs', f16:'verbs', f17:'verbs',
-  f25:'verbs', f26:'verbs', f27:'verbs', f28:'verbs', f29:'verbs', f30:'verbs',
-  f31:'verbs', f32:'verbs', f33:'verbs', f34:'verbs', f35:'verbs',
-  // ── formal: writing connectors (f18-f24) ──
-  f18:'connectors', f19:'connectors', f20:'connectors', f21:'connectors',
-  f22:'connectors', f23:'connectors', f24:'connectors',
-};
-
-function themeOf(card) {
-  return CARD_THEMES[card.id] || 'other';
-}
-
 // ══════════════════════ THAI PROSODY PATTERN RECOGNITION LAB ══════════════════════
 // 👀 เห็นหน้าตาคำประพันธ์ → 🔎 สแกนจุดสังเกต → 🧠 ระบุประเภท → 🎯 ตอบข้อสอบ
 // Teaching order: โคลง → กาพย์ → กลอน → ฉันท์ (ฉันท์ taught LAST — easiest to confuse with the others)
@@ -1772,6 +1813,12 @@ const MISSIONS = [
     period: 'Reign of King Rama III (Rattanakosin era)',
     form: 'Nirat poem (Klon Nirat) — a travel poem; each stanza ends with the word "เอย"',
   },
+  keywords: {
+    authors: ['Sunthorn Phu'],
+    types: ['Nirat poem (Klon Nirat)'],
+    characters: ['Sunthorn Phu', 'Phat (his son)'],
+    places: ['Wat Ratchasittharam', 'Golden Mountain Chedi', 'Ayutthaya'],
+  },
   storyMap: {
     characters: 'Sunthorn Phu, and Phat (his son)',
     eventSteps: [
@@ -1813,6 +1860,12 @@ const MISSIONS = [
     author: 'Prince Debadisara (Somdet Phra Chao Boromwongse Thoe Krom Phraya Debadisara) — compiled and revised from older verses',
     period: 'Reign of King Rama III (Rattanakosin era)',
     form: 'Khlong Si Suphap (a four-line khlong verse)',
+  },
+  keywords: {
+    authors: ['Prince Debadisara'],
+    types: ['Khlong Si Suphap'],
+    characters: [],
+    places: [],
   },
   storyMap: {
     characters: 'None — the poem is a collection of teachings, not a story with characters',
@@ -1856,6 +1909,12 @@ const MISSIONS = [
     period: 'Sukhothai era (possibly revised again in the Rattanakosin era)',
     form: 'Rai Suphap — an ancient verse form used for proverbs',
   },
+  keywords: {
+    authors: ['Author unknown (Phra Ruang, by tradition)'],
+    types: ['Rai Suphap'],
+    characters: ['Phra Ruang'],
+    places: ['Sukhothai'],
+  },
   storyMap: {
     characters: 'Phra Ruang (giving teachings to the people)',
     eventSteps: [
@@ -1897,6 +1956,12 @@ const MISSIONS = [
     author: 'Sunthorn Phu (Phra Sunthon Wohan)',
     period: 'Reign of King Rama III (written in Phetchaburi as a reading primer for students)',
     form: 'Kap Yani 11, Kap Chabang 16, and Kap Surangkanang 28 (each section follows a different Thai spelling/sound pattern, for reading practice)',
+  },
+  keywords: {
+    authors: ['Sunthorn Phu'],
+    types: ['Kap Yani 11', 'Kap Chabang 16', 'Kap Surangkanang 28'],
+    characters: ['Phra Chai Suriya', 'Nang Sumali', 'Ministers/officials'],
+    places: ['Phetchaburi', 'Mount Kailash'],
   },
   storyMap: {
     characters: 'Phra Chai Suriya, Nang Sumali, and their ministers/officials',
@@ -2031,6 +2096,8 @@ function renderHome() {
   const doneCount = state.done.filter(Boolean).length;
   document.getElementById('trophy-sub-home').textContent = `${doneCount} / ${MISSIONS.length} recipes`;
   document.getElementById('sketchbook-sub-home').textContent = `${sketches.length} saved`;
+  const totalDecoded = ROOMS.filter(r => r.type === 'decoder').reduce((sum, r) => sum + deckDecodedCards(r.key).length, 0);
+  document.getElementById('flashcards-sub-home').textContent = `${totalDecoded} decoded`;
 
   const list = document.getElementById('rooms-list');
   list.innerHTML = ROOMS.map(r => {
@@ -2088,57 +2155,15 @@ function openRoom(key) {
 // ══════════════════════ WORD DECODER ══════════════════════
 
 let decoderExpanded = new Set();
-let currentThemeKey = null;
 
 function openDecoder(key) {
   currentRoomKey = key;
-  const room = ROOMS.find(r => r.key === key);
-  const themes = THEME_DEFS[key];
-  if (!themes) {
-    // No theme groups defined for this deck — open the full deck directly.
-    openDecoderTheme(key, null);
-    return;
-  }
-  document.getElementById('decoder-themes-title').textContent = `${room.emoji} ${room.title}`;
-  document.getElementById('decoder-themes-sub').textContent = room.titleEn;
-  showScreen('decoder-themes');
-  const deck = DECKS[key] || [];
-  const list = document.getElementById('decoder-themes-list');
-  list.innerHTML = themes.map(t => {
-    const cards = deck.filter(c => themeOf(c) === t.key);
-    const learnedCount = cards.filter(c => state.decoderLearned[c.id]).length;
-    return `
-    <div class="mission-card" onclick="openDecoderTheme('${key}', '${t.key}')">
-      <div class="mission-emoji">${t.emoji}</div>
-      <div class="mission-text">
-        <div class="mission-title-th">${t.label}</div>
-        <div class="room-card-desc">${cards.length} cards in this batch</div>
-      </div>
-      <div class="room-count-tag">${learnedCount} / ${cards.length}<br>decoded</div>
-    </div>`;
-  }).join('');
-}
-
-function openDecoderTheme(key, themeKey) {
-  currentRoomKey = key;
-  currentThemeKey = themeKey;
   decoderExpanded = new Set();
   const room = ROOMS.find(r => r.key === key);
-  const themeDef = themeKey && (THEME_DEFS[key] || []).find(t => t.key === themeKey);
-  document.getElementById('decoder-title').textContent = themeDef
-    ? `${themeDef.emoji} ${themeDef.label}`
-    : `${room.emoji} ${room.title}`;
+  document.getElementById('decoder-title').textContent = `${room.emoji} ${room.title}`;
   document.getElementById('decoder-sub').textContent = room.titleEn;
   showScreen('decoder');
-  renderDecoderDeck(key, themeKey);
-}
-
-function goBackFromDecoder() {
-  if (currentThemeKey !== null && THEME_DEFS[currentRoomKey]) {
-    openDecoder(currentRoomKey);
-  } else {
-    showScreen('home');
-  }
+  renderDecoderDeck(key);
 }
 
 function decoderCardHtml(card) {
@@ -2182,9 +2207,8 @@ function decoderCardHtml(card) {
     </div>`;
 }
 
-function renderDecoderDeck(key, themeKey) {
-  let deck = DECKS[key] || [];
-  if (themeKey) deck = deck.filter(c => themeOf(c) === themeKey);
+function renderDecoderDeck(key) {
+  const deck = DECKS[key] || [];
   const content = document.getElementById('decoder-content');
   const order = ['must', 'should', 'bonus'];
   content.innerHTML = order.map(p => {
@@ -2200,7 +2224,7 @@ function renderDecoderDeck(key, themeKey) {
       ${cards.map(decoderCardHtml).join('')}
     </div>`;
   }).join('');
-  updateDecoderProgress(key, themeKey);
+  updateDecoderProgress(key);
 }
 
 function toggleDecoderCard(id) {
@@ -2215,15 +2239,14 @@ function toggleDecoderLearned(id) {
   saveState();
   if (!wasLearned) addXP(8);
   else renderXP();
-  renderDecoderDeck(currentRoomKey, currentThemeKey);
+  renderDecoderDeck(currentRoomKey);
   decoderExpanded.add(id);
   const el = document.getElementById(`dc-${id}`);
   if (el) el.classList.add('expanded');
 }
 
-function updateDecoderProgress(key, themeKey) {
-  let deck = DECKS[key] || [];
-  if (themeKey) deck = deck.filter(c => themeOf(c) === themeKey);
+function updateDecoderProgress(key) {
+  const deck = DECKS[key] || [];
   const learnedCount = deck.filter(c => state.decoderLearned[c.id]).length;
   const pct = deck.length ? Math.round((learnedCount / deck.length) * 100) : 0;
   const fill = document.getElementById('decoder-progress-fill');
@@ -2511,7 +2534,7 @@ function renderStep() {
   else if (currentStep === 2) { matchSelected = null; matchMatched = []; content.innerHTML = buildMatchStep(m); }
   else if (currentStep === 3) content.innerHTML = buildQuizStep(m);
   else if (currentStep === 4) { content.innerHTML = buildMindmapStep(m); requestAnimationFrame(() => initMindmapStep(m)); }
-  else if (currentStep === 5) { content.innerHTML = buildFreeDrawStep(m); requestAnimationFrame(() => missionDrawCtrl.init((ctx, w, h) => drawTemplateForMission(ctx, w, h, m))); }
+  else if (currentStep === 5) { content.innerHTML = buildFreeDrawStep(m); requestAnimationFrame(() => { missionDrawCtrl.init((ctx, w, h) => drawTemplateForMission(ctx, w, h, m)); initMissionPills(m); }); }
   content.scrollTop = 0;
   renderStepDots();
 }
@@ -2998,12 +3021,20 @@ function buildFreeDrawStep(m) {
     <div style="font-size:0.8rem; color:var(--muted); line-height:1.5">
       Draw the story, characters, or a scene from <strong style="color:var(--accent2)">${m.title}</strong> from memory — anything you like
     </div>
-    <div class="canvas-wrap"><canvas id="mission-canvas" height="260"></canvas></div>
+    <div class="canvas-wrap">
+      <canvas id="mission-canvas" height="260"></canvas>
+      <div class="pill-layer" id="mission-pill-layer"></div>
+    </div>
     <div class="canvas-tools" id="mission-color-dots">
       ${colorDots}
-      <button class="canvas-btn" onclick="missionDrawCtrl.clear()">🗑️ Clear</button>
-      <button class="canvas-btn" onclick="missionDrawCtrl.download('${m.title}')">💾 Save Image</button>
+      <button class="canvas-btn" onclick="clearMissionPlate()">🗑️ Clear</button>
+      <button class="canvas-btn" onclick="downloadPlateSnapshot('${m.title}')">💾 Save Image</button>
       <button class="canvas-btn" id="mission-save-sketch-btn" onclick="saveMissionSketch('${m.title}')">📓 Save to Sketchbook</button>
+    </div>
+
+    <div class="pill-tray">
+      <div class="pill-tray-label">🏷️ Tap a keyword below, then drag it onto your plate!</div>
+      <div id="mission-pill-tray"></div>
     </div>
 
     <div class="summary-box">
@@ -3020,9 +3051,184 @@ function buildFreeDrawStep(m) {
 }
 
 function saveMissionSketch(missionTitle) {
-  const dataUrl = missionDrawCtrl.getDataUrl();
+  const dataUrl = renderPlateSnapshot();
   addSketch(missionTitle, dataUrl);
   flashSaved(document.getElementById('mission-save-sketch-btn'));
+}
+
+// ══════════════════════ PLATING KEYWORD PILLS ══════════════════════
+
+const PILL_CAT_INFO = {
+  author: { color: '#f4b942' },
+  type: { color: '#a855f7' },
+  character: { color: '#38bdf8' },
+  place: { color: '#10b981' },
+  vocab: { color: '#e8752c' },
+};
+const PILL_GROUPS = [
+  { cat: 'author', label: '👤 Author' },
+  { cat: 'type', label: '📜 Poem Type' },
+  { cat: 'character', label: '🎭 Characters' },
+  { cat: 'place', label: '📍 Places' },
+  { cat: 'vocab', label: '📖 Words' },
+];
+
+let missionPillsAvailable = [];
+let missionPillsPlaced = [];
+
+function getMissionPills(m) {
+  const list = [];
+  (m.keywords.authors || []).forEach(t => list.push({ label: t, cat: 'author' }));
+  (m.keywords.types || []).forEach(t => list.push({ label: t, cat: 'type' }));
+  (m.keywords.characters || []).forEach(t => list.push({ label: t, cat: 'character' }));
+  (m.keywords.places || []).forEach(t => list.push({ label: t, cat: 'place' }));
+  (m.vocab || []).forEach(v => list.push({ label: `${v.emoji} ${v.word}`, cat: 'vocab' }));
+  return list.map((p, i) => ({ ...p, uid: `p${i}` }));
+}
+
+function initMissionPills(m) {
+  missionPillsAvailable = getMissionPills(m);
+  missionPillsPlaced = [];
+  const layer = document.getElementById('mission-pill-layer');
+  if (layer) layer.innerHTML = '';
+  renderPillTray();
+}
+
+function renderPillTray() {
+  const tray = document.getElementById('mission-pill-tray');
+  if (!tray) return;
+  tray.innerHTML = PILL_GROUPS.map(g => {
+    const items = missionPillsAvailable.filter(p => p.cat === g.cat);
+    if (!items.length) return '';
+    return `<div class="pill-group">
+      <div class="pill-group-label">${g.label}</div>
+      <div class="pill-group-row">
+        ${items.map(p => {
+          const placed = missionPillsPlaced.some(pl => pl.uid === p.uid);
+          return `<button class="pill-chip ${placed ? 'used' : ''}" style="--pill-color:${PILL_CAT_INFO[p.cat].color}" onclick="addPillToPlate('${p.uid}')" ${placed ? 'disabled' : ''}>${p.label}</button>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addPillToPlate(uid) {
+  if (missionPillsPlaced.some(p => p.uid === uid)) return;
+  const src = missionPillsAvailable.find(p => p.uid === uid);
+  if (!src) return;
+  const n = missionPillsPlaced.length;
+  const xPct = 6 + (n % 3) * 30;
+  const yPct = 8 + Math.floor(n / 3) * 18;
+  const placedPill = { ...src, xPct, yPct };
+  missionPillsPlaced.push(placedPill);
+  renderPillTray();
+  renderPlacedPill(placedPill);
+}
+
+function removePillFromPlate(uid) {
+  missionPillsPlaced = missionPillsPlaced.filter(p => p.uid !== uid);
+  const el = document.getElementById('plate-pill-' + uid);
+  if (el) el.remove();
+  renderPillTray();
+}
+
+function renderPlacedPill(p) {
+  const layer = document.getElementById('mission-pill-layer');
+  if (!layer) return;
+  const el = document.createElement('div');
+  el.className = 'plate-pill';
+  el.id = 'plate-pill-' + p.uid;
+  el.dataset.uid = p.uid;
+  el.style.setProperty('--pill-color', PILL_CAT_INFO[p.cat].color);
+  el.style.left = p.xPct + '%';
+  el.style.top = p.yPct + '%';
+  el.innerHTML = `<span>${p.label}</span><button class="pill-remove" onclick="event.stopPropagation(); removePillFromPlate('${p.uid}')">✕</button>`;
+  layer.appendChild(el);
+  makePillDraggable(el, layer);
+}
+
+function makePillDraggable(el, layer) {
+  let dragging = false, startX = 0, startY = 0, origLeft = 0, origTop = 0;
+  el.addEventListener('pointerdown', e => {
+    if (e.target.classList.contains('pill-remove')) return;
+    dragging = true;
+    try { el.setPointerCapture(e.pointerId); } catch (err) {}
+    startX = e.clientX; startY = e.clientY;
+    origLeft = el.offsetLeft; origTop = el.offsetTop;
+    el.classList.add('dragging');
+  });
+  el.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX, dy = e.clientY - startY;
+    const maxLeft = Math.max(0, layer.clientWidth - el.offsetWidth);
+    const maxTop = Math.max(0, layer.clientHeight - el.offsetHeight);
+    const newLeft = Math.min(maxLeft, Math.max(0, origLeft + dx));
+    const newTop = Math.min(maxTop, Math.max(0, origTop + dy));
+    el.style.left = newLeft + 'px';
+    el.style.top = newTop + 'px';
+    const pillData = missionPillsPlaced.find(p => p.uid === el.dataset.uid);
+    if (pillData && layer.clientWidth && layer.clientHeight) {
+      pillData.xPct = (newLeft / layer.clientWidth) * 100;
+      pillData.yPct = (newTop / layer.clientHeight) * 100;
+    }
+  });
+  function endDrag() { dragging = false; el.classList.remove('dragging'); }
+  el.addEventListener('pointerup', endDrag);
+  el.addEventListener('pointercancel', endDrag);
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function renderPlateSnapshot() {
+  const canvas = document.getElementById('mission-canvas');
+  if (!canvas) return '';
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const out = document.createElement('canvas');
+  out.width = canvas.width;
+  out.height = canvas.height;
+  const octx = out.getContext('2d');
+  octx.drawImage(canvas, 0, 0);
+  octx.scale(dpr, dpr);
+  missionPillsPlaced.forEach(p => {
+    const x = (p.xPct / 100) * rect.width;
+    const y = (p.yPct / 100) * rect.height;
+    octx.font = '700 12px Nunito, sans-serif';
+    octx.textBaseline = 'middle';
+    octx.textAlign = 'left';
+    const textW = octx.measureText(p.label).width;
+    const padX = 8, boxH = 20, w = textW + padX * 2;
+    octx.fillStyle = PILL_CAT_INFO[p.cat].color;
+    roundRectPath(octx, x, y, w, boxH, 10);
+    octx.fill();
+    octx.fillStyle = '#1f130c';
+    octx.fillText(p.label, x + padX, y + boxH / 2 + 1);
+  });
+  return out.toDataURL('image/png');
+}
+
+function downloadPlateSnapshot(name) {
+  const dataUrl = renderPlateSnapshot();
+  const link = document.createElement('a');
+  link.download = `${name}.png`;
+  link.href = dataUrl;
+  link.click();
+}
+
+function clearMissionPlate() {
+  missionDrawCtrl.clear();
+  missionPillsPlaced = [];
+  const layer = document.getElementById('mission-pill-layer');
+  if (layer) layer.innerHTML = '';
+  renderPillTray();
 }
 
 // ══════════════════════ SKETCHBOOK ══════════════════════
@@ -3095,6 +3301,145 @@ function saveNewSketch() {
   const dataUrl = freeDrawCtrl.getDataUrl();
   addSketch('Free Sketch', dataUrl);
   openSketchbook();
+}
+
+// ══════════════════════ FLASHCARD SETS (CSV export + review) ══════════════════════
+
+function deckDecodedCards(deckKey) {
+  const deck = DECKS[deckKey] || [];
+  return deck.filter(c => state.decoderLearned[c.id]);
+}
+
+function csvEscape(val) {
+  let s = val == null ? '' : String(val);
+  if (/[",\n\r]/.test(s)) s = '"' + s.replace(/"/g, '""') + '"';
+  return s;
+}
+function rowsToCsv(rows) {
+  return rows.map(r => r.map(csvEscape).join(',')).join('\r\n');
+}
+function downloadCsvFile(filename, rows) {
+  const csv = rowsToCsv(rows);
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function cardBackText(c) {
+  return `${c.english} — ${c.simple}`;
+}
+
+function exportDeckCSV(deckKey) {
+  const room = ROOMS.find(r => r.key === deckKey);
+  const cards = deckDecodedCards(deckKey);
+  if (!cards.length) { alert("You haven't decoded any cards in this set yet — decode a few first, then export!"); return; }
+  const rows = [['Front', 'Back']];
+  cards.forEach(c => rows.push([c.thai, cardBackText(c)]));
+  downloadCsvFile(`${room.key}-flashcards.csv`, rows);
+}
+
+function exportAllDecodedCSV() {
+  const rows = [['Front', 'Back', 'Set']];
+  ROOMS.filter(r => r.type === 'decoder').forEach(room => {
+    deckDecodedCards(room.key).forEach(c => rows.push([c.thai, cardBackText(c), room.title]));
+  });
+  if (rows.length === 1) { alert("You haven't decoded any cards yet — decode a few first, then export!"); return; }
+  downloadCsvFile('thai-kitchen-all-flashcards.csv', rows);
+}
+
+function openFlashcardSets() {
+  showScreen('flashcards');
+  renderFlashcardSets();
+}
+
+function renderFlashcardSets() {
+  const wrap = document.getElementById('flashcard-sets-list');
+  const decoderRooms = ROOMS.filter(r => r.type === 'decoder');
+  wrap.innerHTML = decoderRooms.map(room => {
+    const total = (DECKS[room.key] || []).length;
+    const done = deckDecodedCards(room.key).length;
+    return `
+    <div class="fc-set-card">
+      <div class="fc-set-top">
+        <div class="fc-set-emoji">${room.emoji}</div>
+        <div>
+          <div class="fc-set-title">${room.title}</div>
+          <div class="fc-set-sub">${room.titleEn}</div>
+        </div>
+        <div class="fc-set-count">${done} / ${total}<br>decoded</div>
+      </div>
+      <div class="fc-set-btn-row">
+        <button class="canvas-btn" style="flex:1" onclick="openFlashcardReview('${room.key}')">📇 Review</button>
+        <button class="canvas-btn" style="flex:1" onclick="exportDeckCSV('${room.key}')">⬇️ Export CSV</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let reviewDeckKey = null;
+let reviewCards = [];
+let reviewIndex = 0;
+let reviewFlipped = false;
+
+function openFlashcardReview(deckKey) {
+  const cards = deckDecodedCards(deckKey);
+  if (!cards.length) { alert("No decoded cards in this set yet — go decode a few first, then come back to review!"); return; }
+  reviewDeckKey = deckKey;
+  reviewCards = cards.slice();
+  reviewIndex = 0;
+  reviewFlipped = false;
+  showScreen('flashcard-review');
+  renderFlashcardReview();
+}
+
+function renderFlashcardReview() {
+  const room = ROOMS.find(r => r.key === reviewDeckKey);
+  document.getElementById('fc-review-title').textContent = `${room.emoji} ${room.title}`;
+  document.getElementById('fc-review-sub').textContent = 'Flashcard Review';
+  document.getElementById('fc-review-progress').textContent = `Card ${reviewIndex + 1} / ${reviewCards.length}`;
+  const card = reviewCards[reviewIndex];
+  const info = PRIORITY_INFO[card.priority];
+  document.getElementById('fc-face-front').innerHTML = `
+    <div class="fc-face-tag">${info.emoji} ${info.label}</div>
+    <div class="fc-face-thai">${card.thai}</div>
+    <div class="fc-face-simple">${card.simple}</div>
+  `;
+  document.getElementById('fc-face-back').innerHTML = `
+    <div class="fc-face-tag">🇬🇧 English</div>
+    <div class="fc-face-english">${card.english}</div>
+    ${card.examples && card.examples[0] ? `<div class="fc-face-example">${card.examples[0]}</div>` : ''}
+  `;
+  document.getElementById('fc-card').classList.toggle('flipped', reviewFlipped);
+}
+
+function flipFlashcard() {
+  reviewFlipped = !reviewFlipped;
+  document.getElementById('fc-card').classList.toggle('flipped', reviewFlipped);
+}
+
+function prevFlashcard() {
+  reviewFlipped = false;
+  reviewIndex = (reviewIndex - 1 + reviewCards.length) % reviewCards.length;
+  renderFlashcardReview();
+}
+function nextFlashcard() {
+  reviewFlipped = false;
+  reviewIndex = (reviewIndex + 1) % reviewCards.length;
+  renderFlashcardReview();
+}
+function shuffleFlashcards() {
+  for (let i = reviewCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [reviewCards[i], reviewCards[j]] = [reviewCards[j], reviewCards[i]];
+  }
+  reviewIndex = 0;
+  reviewFlipped = false;
+  renderFlashcardReview();
 }
 
 // ══════════════════════ INIT ══════════════════════
