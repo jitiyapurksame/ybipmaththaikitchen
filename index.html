@@ -228,6 +228,15 @@
   }
   .station-progress.show { display: block; }
 
+  .station-active-exam {
+    margin-top: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    display: none;
+  }
+  .station-active-exam.show { display: block; }
+
   .station-parts {
     margin-top: 12px;
     display: flex;
@@ -412,6 +421,7 @@
           <div class="station-title">Math Exam Lab</div>
           <div class="station-desc">Midterm survival kitchen — bar models, sketch pads, and panic-button hints.</div>
           <div class="station-progress" id="examProgress"></div>
+          <div class="station-active-exam" id="examActiveTag"></div>
         </div>
         <div class="station-arrow">›</div>
       </div>
@@ -460,6 +470,7 @@
           <div class="station-title">Chinese Kitchen</div>
           <div class="station-desc">Prep ingredient cards and follow the recipe for Unit 1 dialogue.</div>
           <div class="station-progress" id="chiProgress"></div>
+          <div class="station-active-exam" id="chiActiveTag"></div>
         </div>
         <div class="station-arrow">›</div>
       </div>
@@ -587,6 +598,25 @@
     } catch (e) { /* ignore */ }
   }
   tryShowChineseProgress();
+
+  // Shows which exam period each exam-tagged app is currently prepping for,
+  // so the son doesn't have to open an app just to check. Each app publishes
+  // its own {id,label} under its own key whenever it loads; if an app hasn't
+  // been opened yet on this device (or is an older version without this
+  // feature), this silently does nothing — the station link still works.
+  function tryShowActiveExam(key, elId) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return;
+      const info = JSON.parse(raw);
+      if (!info || !info.label) return;
+      const el = document.getElementById(elId);
+      el.textContent = `📌 Studying for: ${info.label}`;
+      el.classList.add('show');
+    } catch (e) { /* ignore */ }
+  }
+  tryShowActiveExam('mathExamLabActiveExam', 'examActiveTag');
+  tryShowActiveExam('chineseKitchenActiveExam', 'chiActiveTag');
 
   // Per-part completion counts for the Math quick-jump chips (1-9 / 10-19 / 20-28)
   function showPartCounts() {

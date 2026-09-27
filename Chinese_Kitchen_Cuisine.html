@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Chinese Kitchen — Unit 1</title>
+<title>Chinese Kitchen</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&display=swap');
   :root{
@@ -46,6 +46,11 @@
     box-shadow:2px 2px 0 var(--line);
   }
   .tile .name{ font-weight:700; font-size:16px; }
+  .active-badge{
+    display:inline-block; font-size:10.5px; font-weight:800; letter-spacing:0.3px;
+    background:var(--gold); color:#2b1810; border-radius:8px; padding:2px 7px;
+    margin-left:6px; vertical-align:middle;
+  }
   .tile .sub{ font-size:12.5px; color:var(--ink-light); margin-top:2px; }
   .tile .status{ font-size:12px; color:var(--green); font-weight:700; white-space:nowrap; }
   .tile .arrow{ font-size:18px; color:var(--ink-light); }
@@ -130,202 +135,265 @@
 <div id="app"></div>
 
 <script>
-/* ============ CONTENT (transcribed from the son's Unit 1 textbook photos) ============ */
-const LESSONS = [
+/* =====================================================================
+   CONTENT
+   ---------------------------------------------------------------------
+   This app is organised by EXAM. Every exam gets one UNIT block below,
+   holding that exam's lessons + practice content. Old units are never
+   deleted, so every past exam stays in the app for cumulative review —
+   the son can always jump back to Unit 1 even while studying Unit 3.
+
+   TO ADD THE NEXT EXAM'S CONTENT:
+   1. Add its exam period to EXAM_SETS below (id + label).
+   2. Copy the whole { id:"unit1", ... } block under UNITS, paste it as a
+      new array entry, and change its id (e.g. "unit2") and exam (the
+      EXAM_SETS id you just added).
+   3. Prefix every lesson id inside the new unit so it can't collide with
+      another unit's ids — e.g. "u2-warmup", "u2-l1", "u2-l2"...
+   4. Fill in that unit's lessons / patterns / matchPairs from the
+      textbook. Nothing else in the code needs to change — the Unit
+      Picker, progress tracking, and all four practice screens pick new
+      units up automatically.
+   ===================================================================== */
+
+/* Exam calendar — add each new exam period here as the term progresses.
+   Exactly ONE entry should have active:true — the exam being studied for
+   right now. Move the flag to the new entry when a new exam becomes current;
+   the Unit Picker's "Active now" badge and the Kitchen Ninja HQ hub both
+   read this. */
+const EXAM_SETS = [
+  { id:"y8-t1-mid", label:"Year 8 \u00B7 Term 1 Midterm", active:true }
+  // { id:"y8-t1-final", label:"Year 8 \u00B7 Term 1 Final" },
+  // { id:"y8-t2-mid",   label:"Year 8 \u00B7 Term 2 Midterm" },
+  // { id:"y8-t2-final", label:"Year 8 \u00B7 Term 2 Final" },
+];
+function examLabel(examId){
+  const e = EXAM_SETS.find(x=>x.id===examId);
+  return e ? e.label : examId;
+}
+function activeExam(){
+  return EXAM_SETS.find(e=>e.active) || EXAM_SETS[0];
+}
+
+const UNITS = [
   {
-    id: "warmup",
-    num: 0,
-    title: "Unit Warm-up",
-    hanzi: "School, Classmates & Teachers",
-    vocab: [
-      {hanzi:"学校", pinyin:"xuéxiào", english:"school"},
-      {hanzi:"校长", pinyin:"xiàozhǎng", english:"principal / headmaster"},
-      {hanzi:"老师", pinyin:"lǎoshī", english:"teacher"},
-      {hanzi:"同学", pinyin:"tóngxué", english:"classmate"},
-      {hanzi:"朋友", pinyin:"péngyou", english:"friend"}
+    id: "unit1",
+    exam: "y8-t1-mid",
+    title: "Unit 1",
+    heading: "\u{1F95F} Chinese Kitchen \u2014 Unit 1",
+    subtitle: "School, Classmates & Teachers \u2014 today's menu, straight from your cookbook (coursebook)",
+
+    lessons: [
+      {
+        id: "warmup",
+        num: 0,
+        title: "Unit Warm-up",
+        hanzi: "School, Classmates & Teachers",
+        vocab: [
+          {hanzi:"\u5B66\u6821", pinyin:"xu\u00E9xi\u00E0o", english:"school"},
+          {hanzi:"\u6821\u957F", pinyin:"xi\u00E0ozh\u01CEng", english:"principal / headmaster"},
+          {hanzi:"\u8001\u5E08", pinyin:"l\u01CEosh\u012B", english:"teacher"},
+          {hanzi:"\u540C\u5B66", pinyin:"t\u00F3ngxu\u00E9", english:"classmate"},
+          {hanzi:"\u670B\u53CB", pinyin:"p\u00E9ngyou", english:"friend"}
+        ],
+        dialogue: [
+          {speaker:"W\u00E1ng Ji\u0101m\u00EDng", hanzi:"\u4F60\u597D\uFF0C\u6211\u662F\u738B\u5BB6\u660E\u3002", pinyin:"N\u01D0 h\u01CEo, w\u01D2 sh\u00EC W\u00E1ng Ji\u0101m\u00EDng.", english:"Hello, I am Wang Jiaming."},
+          {speaker:"W\u00E1ng Ji\u0101m\u00EDng", hanzi:"\u8C22\u8C22\uFF0C\u518D\u89C1\u3002", pinyin:"Xi\u00E8xie, z\u00E0iji\u00E0n.", english:"Thank you, goodbye."}
+        ]
+      },
+      {
+        id: "l1",
+        num: 1,
+        title: "\u4F60\u597D",
+        hanzi: "\u4F60\u597D", pinyin:"n\u01D0 h\u01CEo", meaning:"Hello",
+        vocab: [
+          {hanzi:"\u4F60", pinyin:"n\u01D0", english:"you", type:"pron."},
+          {hanzi:"\u597D", pinyin:"h\u01CEo", english:"good", type:"adj."},
+          {hanzi:"\u6211", pinyin:"w\u01D2", english:"I / me", type:"pron."},
+          {hanzi:"\u53EB", pinyin:"ji\u00E0o", english:"call / to be named", type:"v."},
+          {hanzi:"\u738B\u5BB6\u660E", pinyin:"W\u00E1ng Ji\u0101m\u00EDng", english:"(name) Wang Jiaming", type:"proper noun"},
+          {hanzi:"\u5927\u536B", pinyin:"D\u00E0w\u00E8i", english:"(name) David", type:"proper noun"}
+        ],
+        dialogue: [
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u4F60\u597D\uFF01", pinyin:"N\u01D0 h\u01CEo!", english:"Hello!"},
+          {speaker:"\u5927\u536B D\u00E0w\u00E8i", hanzi:"\u4F60\u597D\uFF01", pinyin:"N\u01D0 h\u01CEo!", english:"Hello!"},
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u6211\u53EB\u738B\u5BB6\u660E\u3002", pinyin:"W\u01D2 ji\u00E0o W\u00E1ng Ji\u0101m\u00EDng.", english:"My name is Wang Jiaming."},
+          {speaker:"\u5927\u536B D\u00E0w\u00E8i", hanzi:"\u6211\u53EB\u5927\u536B\u3002", pinyin:"W\u01D2 ji\u00E0o D\u00E0w\u00E8i.", english:"My name is David."}
+        ],
+        extra: [
+          {hanzi:"\u65E9\u4E0A\u597D", pinyin:"z\u01CEoshang h\u01CEo", english:"good morning"},
+          {hanzi:"\u665A\u4E0A\u597D", pinyin:"w\u01CEnshang h\u01CEo", english:"good evening"}
+        ]
+      },
+      {
+        id: "l2",
+        num: 2,
+        title: "\u518D\u89C1",
+        hanzi: "\u518D\u89C1", pinyin:"z\u00E0i ji\u00E0n", meaning:"Goodbye",
+        vocab: [
+          {hanzi:"\u540C\u5B66", pinyin:"t\u00F3ngxu\u00E9", english:"classmate", type:"n."},
+          {hanzi:"\u4EEC", pinyin:"men", english:"suffix \u2014 makes a pronoun/person-noun plural", type:"suf."},
+          {hanzi:"\u8001\u5E08", pinyin:"l\u01CEosh\u012B", english:"teacher", type:"n."},
+          {hanzi:"\u518D\u89C1", pinyin:"z\u00E0iji\u00E0n", english:"see you; goodbye", type:"v."},
+          {hanzi:"\u6797(\u8001\u5E08)", pinyin:"L\u00EDn (l\u01CEosh\u012B)", english:"(surname) Lin", type:"proper noun"}
+        ],
+        dialogue: [
+          {speaker:"\u6797\u8001\u5E08 T. Lin", hanzi:"\u540C\u5B66\u4EEC\u597D\uFF01", pinyin:"T\u00F3ngxu\u00E9men h\u01CEo!", english:"Hello, class!"},
+          {speaker:"\u540C\u5B66\u4EEC Class", hanzi:"\u8001\u5E08\u597D\uFF01", pinyin:"L\u01CEosh\u012B h\u01CEo!", english:"Hello, teacher!"},
+          {speaker:"\u6797\u8001\u5E08 T. Lin", hanzi:"\u540C\u5B66\u4EEC\u518D\u89C1\uFF01", pinyin:"T\u00F3ngxu\u00E9men z\u00E0iji\u00E0n!", english:"Goodbye, class!"},
+          {speaker:"\u540C\u5B66\u4EEC Class", hanzi:"\u6797\u8001\u5E08\u518D\u89C1\uFF01", pinyin:"L\u00EDn l\u01CEosh\u012B z\u00E0iji\u00E0n!", english:"Goodbye, Teacher Lin!"}
+        ],
+        extra: [
+          {hanzi:"\u73B0\u5728\u4E0A\u8BFE\uFF01", pinyin:"Xi\u00E0nz\u00E0i sh\u00E0ng k\u00E8!", english:"Let's begin class."},
+          {hanzi:"\u73B0\u5728\u4E0B\u8BFE\uFF01", pinyin:"Xi\u00E0nz\u00E0i xi\u00E0 k\u00E8!", english:"Class is over."},
+          {hanzi:"\u660E\u5929\u89C1\uFF01", pinyin:"M\u00EDngti\u0101n ji\u00E0n!", english:"See you tomorrow!"}
+        ]
+      },
+      {
+        id: "l3",
+        num: 3,
+        title: "\u6211\u662F\u738B\u5BB6\u660E",
+        hanzi: "\u6211\u662F\u738B\u5BB6\u660E", pinyin:"w\u01D2 sh\u00EC W\u00E1ng Ji\u0101m\u00EDng", meaning:"I am Wang Jiaming",
+        vocab: [
+          {hanzi:"\u662F", pinyin:"sh\u00EC", english:"to be (is / am / are)", type:"v."},
+          {hanzi:"\u5979", pinyin:"t\u0101", english:"she", type:"pron."},
+          {hanzi:"\u4ED6", pinyin:"t\u0101", english:"he", type:"pron."},
+          {hanzi:"\u4F60\u4EEC", pinyin:"n\u01D0men", english:"you (plural)", type:"pron."},
+          {hanzi:"\u739B\u4E3D", pinyin:"M\u01CEl\u00EC", english:"(name) Mary", type:"proper noun"},
+          {hanzi:"\u6770\u514B", pinyin:"Ji\u00E9k\u00E8", english:"(name) Jack", type:"proper noun"}
+        ],
+        dialogue: [
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u6797\u8001\u5E08\u597D\uFF01\u6211\u662F\u738B\u5BB6\u660E\u3002", pinyin:"L\u00EDn l\u01CEosh\u012B h\u01CEo! W\u01D2 sh\u00EC W\u00E1ng Ji\u0101m\u00EDng.", english:"Hello Teacher Lin! I am Wang Jiaming."},
+          {speaker:"\u6797\u8001\u5E08 T. Lin", hanzi:"\u4F60\u597D\uFF01", pinyin:"N\u01D0 h\u01CEo!", english:"Hello!"},
+          {speaker:"\u6797\u8001\u5E08 T. Lin", hanzi:"\u5979\u662F\u739B\u4E3D\uFF0C\u4ED6\u662F\u6770\u514B\u3002", pinyin:"T\u0101 sh\u00EC M\u01CEl\u00EC, t\u0101 sh\u00EC Ji\u00E9k\u00E8.", english:"She is Mary, he is Jack."},
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u4F60\u4EEC\u597D\uFF01", pinyin:"N\u01D0men h\u01CEo!", english:"Hello (everyone)!"},
+          {speaker:"\u739B\u4E3D\u3001\u6770\u514B Mary & Jack", hanzi:"\u4F60\u597D\uFF01", pinyin:"N\u01D0 h\u01CEo!", english:"Hello!"}
+        ],
+        extra: [
+          {hanzi:"\u8BF7\u8DDF\u6211\u8BF4\uFF01", pinyin:"Q\u01D0ng g\u0113n w\u01D2 shu\u014D!", english:"Please say it after me."}
+        ]
+      },
+      {
+        id: "l4",
+        num: 4,
+        title: "\u8C22\u8C22",
+        hanzi: "\u8C22\u8C22", pinyin:"xi\u00E8 xie", meaning:"Thank you",
+        vocab: [
+          {hanzi:"\u8C22\u8C22", pinyin:"xi\u00E8xie", english:"thank", type:"v."},
+          {hanzi:"\u4E0D\u5BA2\u6C14", pinyin:"b\u00FA k\u00E8qi", english:"you're welcome", type:"phrase"},
+          {hanzi:"\u4EC0\u4E48", pinyin:"sh\u00E9nme", english:"what", type:"pron."},
+          {hanzi:"\u540D\u5B57", pinyin:"m\u00EDngzi", english:"name", type:"n."}
+        ],
+        dialogue: [
+          {speaker:"\u8001\u5E08 Teacher", hanzi:"\u8C22\u8C22\u4F60\uFF01", pinyin:"Xi\u00E8xie n\u01D0!", english:"Thank you!"},
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u4E0D\u5BA2\u6C14\u3002", pinyin:"B\u00FA k\u00E8qi.", english:"You're welcome."},
+          {speaker:"\u8001\u5E08 Teacher", hanzi:"\u4F60\u53EB\u4EC0\u4E48\u540D\u5B57\uFF1F", pinyin:"N\u01D0 ji\u00E0o sh\u00E9nme m\u00EDngzi?", english:"What is your name?"},
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u6211\u53EB\u738B\u5BB6\u660E\u3002", pinyin:"W\u01D2 ji\u00E0o W\u00E1ng Ji\u0101m\u00EDng.", english:"My name is Wang Jiaming."},
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u8001\u5E08\u518D\u89C1\u3002", pinyin:"L\u01CEosh\u012B z\u00E0iji\u00E0n.", english:"Goodbye, teacher."},
+          {speaker:"\u8001\u5E08 Teacher", hanzi:"\u518D\u89C1\u3002", pinyin:"Z\u00E0iji\u00E0n.", english:"Goodbye."}
+        ],
+        extra: [
+          {hanzi:"\u8BF7\u770B\u9ED1\u677F\uFF01", pinyin:"Q\u01D0ng k\u00E0n h\u0113ib\u01CEn!", english:"Please look at the blackboard."}
+        ]
+      },
+      {
+        id: "l5",
+        num: 5,
+        title: "\u5979\u4EEC\u662F\u5B66\u751F\u5417",
+        hanzi: "\u5979\u4EEC\u662F\u5B66\u751F\u5417", pinyin:"t\u0101men sh\u00EC xu\u00E9sheng ma", meaning:"Are they students?",
+        vocab: [
+          {hanzi:"\u5979\u4EEC", pinyin:"t\u0101men", english:"they / them (female)", type:"pron."},
+          {hanzi:"\u5B66\u751F", pinyin:"xu\u00E9sheng", english:"student", type:"n."},
+          {hanzi:"\u5417", pinyin:"ma", english:"question particle \u2014 added to the end of a yes/no question", type:"pt."},
+          {hanzi:"\u6821\u957F", pinyin:"xi\u00E0ozh\u01CEng", english:"headmaster / principal", type:"n."}
+        ],
+        dialogue: [
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u5979\u4EEC\u662F\u5B66\u751F\u5417\uFF1F", pinyin:"T\u0101men sh\u00EC xu\u00E9sheng ma?", english:"Are they students?"},
+          {speaker:"\u6770\u514B Jack", hanzi:"\u662F\uFF0C\u5979\u4EEC\u662F\u5B66\u751F\u3002", pinyin:"Sh\u00EC, t\u0101men sh\u00EC xu\u00E9sheng.", english:"Yes, they are students."},
+          {speaker:"\u5BB6\u660E Ji\u0101m\u00EDng", hanzi:"\u4ED6\u662F\u8001\u5E08\u5417\uFF1F", pinyin:"T\u0101 sh\u00EC l\u01CEosh\u012B ma?", english:"Is he a teacher?"},
+          {speaker:"\u6770\u514B Jack", hanzi:"\u4E0D\uFF0C\u4ED6\u4E0D\u662F\u8001\u5E08\uFF0C\u4ED6\u662F\u6821\u957F\u3002", pinyin:"B\u00F9, t\u0101 b\u00FA sh\u00EC l\u01CEosh\u012B, t\u0101 sh\u00EC xi\u00E0ozh\u01CEng.", english:"No, he is not a teacher, he is the principal."}
+        ],
+        extra: [
+          {hanzi:"\u8BF7\u6253\u5F00\u4E66\uFF01", pinyin:"Q\u01D0ng d\u01CE k\u0101i sh\u016B!", english:"Please open your books."}
+        ]
+      }
     ],
-    dialogue: [
-      {speaker:"Wáng Jiāmíng", hanzi:"你好，我是王家明。", pinyin:"Nǐ hǎo, wǒ shì Wáng Jiāmíng.", english:"Hello, I am Wang Jiaming."},
-      {speaker:"Wáng Jiāmíng", hanzi:"谢谢，再见。", pinyin:"Xièxie, zàijiàn.", english:"Thank you, goodbye."}
-    ]
-  },
-  {
-    id: "l1",
-    num: 1,
-    title: "你好",
-    hanzi: "你好", pinyin:"nǐ hǎo", meaning:"Hello",
-    vocab: [
-      {hanzi:"你", pinyin:"nǐ", english:"you", type:"pron."},
-      {hanzi:"好", pinyin:"hǎo", english:"good", type:"adj."},
-      {hanzi:"我", pinyin:"wǒ", english:"I / me", type:"pron."},
-      {hanzi:"叫", pinyin:"jiào", english:"call / to be named", type:"v."},
-      {hanzi:"王家明", pinyin:"Wáng Jiāmíng", english:"(name) Wang Jiaming", type:"proper noun"},
-      {hanzi:"大卫", pinyin:"Dàwèi", english:"(name) David", type:"proper noun"}
+
+    patterns: [
+      {hanzi:"\u4F60\u597D", pinyin:"n\u01D0 h\u01CEo", meaning:"Greeting someone",
+       examples:[
+         {hanzi:"\u4F60\u597D\uFF01\u4F60\u4EEC\u597D\uFF01", pinyin:"N\u01D0 h\u01CEo! N\u01D0men h\u01CEo!", english:"Hello! Hello everyone!"}
+       ]},
+      {hanzi:"\u6211\u53EB\u2026\u2026", pinyin:"w\u01D2 ji\u00E0o...", meaning:"Introducing your name",
+       examples:[
+         {hanzi:"\u6211\u53EB\u6770\u514B\u3002", pinyin:"W\u01D2 ji\u00E0o Ji\u00E9k\u00E8.", english:"My name is Jack."},
+         {hanzi:"\u6211\u53EB\u738B\u5BB6\u660E\u3002", pinyin:"W\u01D2 ji\u00E0o W\u00E1ng Ji\u0101m\u00EDng.", english:"My name is Wang Jiaming."}
+       ]},
+      {hanzi:"\u6211\u662F\u2026\u2026", pinyin:"w\u01D2 sh\u00EC...", meaning:"Saying what/who you are",
+       examples:[
+         {hanzi:"\u6211\u662F\u5B66\u751F\u3002", pinyin:"W\u01D2 sh\u00EC xu\u00E9sheng.", english:"I am a student."},
+         {hanzi:"\u6211\u662F\u8001\u5E08\u3002", pinyin:"W\u01D2 sh\u00EC l\u01CEosh\u012B.", english:"I am a teacher."}
+       ]},
+      {hanzi:"\u662F\u2026\u2026\u5417\uFF1F", pinyin:"sh\u00EC...ma?", meaning:"Asking a yes/no question",
+       examples:[
+         {hanzi:"\u4ED6\u662F\u4E2D\u5B66\u751F\u5417\uFF1F", pinyin:"T\u0101 sh\u00EC zh\u014Dngxu\u00E9sh\u0113ng ma?", english:"Is he a secondary school student?"},
+         {hanzi:"\u4ED6\u662F\u6821\u957F\u5417\uFF1F", pinyin:"T\u0101 sh\u00EC xi\u00E0ozh\u01CEng ma?", english:"Is he the principal?"}
+       ]},
+      {hanzi:"\u4E0D\u662F\u2026\u2026", pinyin:"b\u00FA sh\u00EC...", meaning:"Saying what something is NOT",
+       examples:[
+         {hanzi:"\u5979\u4E0D\u662F\u5B66\u751F\u3002", pinyin:"T\u0101 b\u00FA sh\u00EC xu\u00E9sheng.", english:"She is not a student."},
+         {hanzi:"\u4ED6\u4EEC\u4E0D\u662F\u4E2D\u5B66\u751F\u3002", pinyin:"T\u0101men b\u00FA sh\u00EC zh\u014Dngxu\u00E9sh\u0113ng.", english:"They are not secondary school students."}
+       ]},
+      {hanzi:"\u2026\u2026\u7684\u2026\u2026", pinyin:"...de...", meaning:"Showing possession (\u2018's\u2019)",
+       examples:[
+         {hanzi:"\u4ED6\u4EEC\u662F\u6211\u7684\u670B\u53CB\u3002", pinyin:"T\u0101men sh\u00EC w\u01D2 de p\u00E9ngyou.", english:"They are my friends."},
+         {hanzi:"\u6211\u662F\u6797\u8001\u5E08\u7684\u5B66\u751F\u3002", pinyin:"W\u01D2 sh\u00EC L\u00EDn l\u01CEosh\u012B de xu\u00E9sheng.", english:"I am Teacher Lin's student."}
+       ]}
     ],
-    dialogue: [
-      {speaker:"家明 Jiāmíng", hanzi:"你好！", pinyin:"Nǐ hǎo!", english:"Hello!"},
-      {speaker:"大卫 Dàwèi", hanzi:"你好！", pinyin:"Nǐ hǎo!", english:"Hello!"},
-      {speaker:"家明 Jiāmíng", hanzi:"我叫王家明。", pinyin:"Wǒ jiào Wáng Jiāmíng.", english:"My name is Wang Jiaming."},
-      {speaker:"大卫 Dàwèi", hanzi:"我叫大卫。", pinyin:"Wǒ jiào Dàwèi.", english:"My name is David."}
-    ],
-    extra: [
-      {hanzi:"早上好", pinyin:"zǎoshang hǎo", english:"good morning"},
-      {hanzi:"晚上好", pinyin:"wǎnshang hǎo", english:"good evening"}
-    ]
-  },
-  {
-    id: "l2",
-    num: 2,
-    title: "再见",
-    hanzi: "再见", pinyin:"zài jiàn", meaning:"Goodbye",
-    vocab: [
-      {hanzi:"同学", pinyin:"tóngxué", english:"classmate", type:"n."},
-      {hanzi:"们", pinyin:"men", english:"suffix — makes a pronoun/person-noun plural", type:"suf."},
-      {hanzi:"老师", pinyin:"lǎoshī", english:"teacher", type:"n."},
-      {hanzi:"再见", pinyin:"zàijiàn", english:"see you; goodbye", type:"v."},
-      {hanzi:"林(老师)", pinyin:"Lín (lǎoshī)", english:"(surname) Lin", type:"proper noun"}
-    ],
-    dialogue: [
-      {speaker:"林老师 T. Lin", hanzi:"同学们好！", pinyin:"Tóngxuémen hǎo!", english:"Hello, class!"},
-      {speaker:"同学们 Class", hanzi:"老师好！", pinyin:"Lǎoshī hǎo!", english:"Hello, teacher!"},
-      {speaker:"林老师 T. Lin", hanzi:"同学们再见！", pinyin:"Tóngxuémen zàijiàn!", english:"Goodbye, class!"},
-      {speaker:"同学们 Class", hanzi:"林老师再见！", pinyin:"Lín lǎoshī zàijiàn!", english:"Goodbye, Teacher Lin!"}
-    ],
-    extra: [
-      {hanzi:"现在上课！", pinyin:"Xiànzài shàng kè!", english:"Let's begin class."},
-      {hanzi:"现在下课！", pinyin:"Xiànzài xià kè!", english:"Class is over."},
-      {hanzi:"明天见！", pinyin:"Míngtiān jiàn!", english:"See you tomorrow!"}
-    ]
-  },
-  {
-    id: "l3",
-    num: 3,
-    title: "我是王家明",
-    hanzi: "我是王家明", pinyin:"wǒ shì Wáng Jiāmíng", meaning:"I am Wang Jiaming",
-    vocab: [
-      {hanzi:"是", pinyin:"shì", english:"to be (is / am / are)", type:"v."},
-      {hanzi:"她", pinyin:"tā", english:"she", type:"pron."},
-      {hanzi:"他", pinyin:"tā", english:"he", type:"pron."},
-      {hanzi:"你们", pinyin:"nǐmen", english:"you (plural)", type:"pron."},
-      {hanzi:"玛丽", pinyin:"Mǎlì", english:"(name) Mary", type:"proper noun"},
-      {hanzi:"杰克", pinyin:"Jiékè", english:"(name) Jack", type:"proper noun"}
-    ],
-    dialogue: [
-      {speaker:"家明 Jiāmíng", hanzi:"林老师好！我是王家明。", pinyin:"Lín lǎoshī hǎo! Wǒ shì Wáng Jiāmíng.", english:"Hello Teacher Lin! I am Wang Jiaming."},
-      {speaker:"林老师 T. Lin", hanzi:"你好！", pinyin:"Nǐ hǎo!", english:"Hello!"},
-      {speaker:"林老师 T. Lin", hanzi:"她是玛丽，他是杰克。", pinyin:"Tā shì Mǎlì, tā shì Jiékè.", english:"She is Mary, he is Jack."},
-      {speaker:"家明 Jiāmíng", hanzi:"你们好！", pinyin:"Nǐmen hǎo!", english:"Hello (everyone)!"},
-      {speaker:"玛丽、杰克 Mary & Jack", hanzi:"你好！", pinyin:"Nǐ hǎo!", english:"Hello!"}
-    ],
-    extra: [
-      {hanzi:"请跟我说！", pinyin:"Qǐng gēn wǒ shuō!", english:"Please say it after me."}
-    ]
-  },
-  {
-    id: "l4",
-    num: 4,
-    title: "谢谢",
-    hanzi: "谢谢", pinyin:"xiè xie", meaning:"Thank you",
-    vocab: [
-      {hanzi:"谢谢", pinyin:"xièxie", english:"thank", type:"v."},
-      {hanzi:"不客气", pinyin:"bú kèqi", english:"you're welcome", type:"phrase"},
-      {hanzi:"什么", pinyin:"shénme", english:"what", type:"pron."},
-      {hanzi:"名字", pinyin:"míngzi", english:"name", type:"n."}
-    ],
-    dialogue: [
-      {speaker:"老师 Teacher", hanzi:"谢谢你！", pinyin:"Xièxie nǐ!", english:"Thank you!"},
-      {speaker:"家明 Jiāmíng", hanzi:"不客气。", pinyin:"Bú kèqi.", english:"You're welcome."},
-      {speaker:"老师 Teacher", hanzi:"你叫什么名字？", pinyin:"Nǐ jiào shénme míngzi?", english:"What is your name?"},
-      {speaker:"家明 Jiāmíng", hanzi:"我叫王家明。", pinyin:"Wǒ jiào Wáng Jiāmíng.", english:"My name is Wang Jiaming."},
-      {speaker:"家明 Jiāmíng", hanzi:"老师再见。", pinyin:"Lǎoshī zàijiàn.", english:"Goodbye, teacher."},
-      {speaker:"老师 Teacher", hanzi:"再见。", pinyin:"Zàijiàn.", english:"Goodbye."}
-    ],
-    extra: [
-      {hanzi:"请看黑板！", pinyin:"Qǐng kàn hēibǎn!", english:"Please look at the blackboard."}
-    ]
-  },
-  {
-    id: "l5",
-    num: 5,
-    title: "她们是学生吗",
-    hanzi: "她们是学生吗", pinyin:"tāmen shì xuésheng ma", meaning:"Are they students?",
-    vocab: [
-      {hanzi:"她们", pinyin:"tāmen", english:"they / them (female)", type:"pron."},
-      {hanzi:"学生", pinyin:"xuésheng", english:"student", type:"n."},
-      {hanzi:"吗", pinyin:"ma", english:"question particle — added to the end of a yes/no question", type:"pt."},
-      {hanzi:"校长", pinyin:"xiàozhǎng", english:"headmaster / principal", type:"n."}
-    ],
-    dialogue: [
-      {speaker:"家明 Jiāmíng", hanzi:"她们是学生吗？", pinyin:"Tāmen shì xuésheng ma?", english:"Are they students?"},
-      {speaker:"杰克 Jack", hanzi:"是，她们是学生。", pinyin:"Shì, tāmen shì xuésheng.", english:"Yes, they are students."},
-      {speaker:"家明 Jiāmíng", hanzi:"他是老师吗？", pinyin:"Tā shì lǎoshī ma?", english:"Is he a teacher?"},
-      {speaker:"杰克 Jack", hanzi:"不，他不是老师，他是校长。", pinyin:"Bù, tā bú shì lǎoshī, tā shì xiàozhǎng.", english:"No, he is not a teacher, he is the principal."}
-    ],
-    extra: [
-      {hanzi:"请打开书！", pinyin:"Qǐng dǎ kāi shū!", english:"Please open your books."}
+
+    /* Matching pairs, taken from the workbook exercise on Lesson 2 vocabulary */
+    matchPairs: [
+      {pinyin:"t\u00F3ngxu\u00E9", english:"classmate"},
+      {pinyin:"l\u01CEosh\u012B", english:"teacher"},
+      {pinyin:"z\u00E0iji\u00E0n", english:"see you"},
+      {pinyin:"men", english:"a suffix"},
+      {pinyin:"ji\u00E0o", english:"call"},
+      {pinyin:"h\u01CEo", english:"good"}
     ]
   }
+
+  /* ---- next exam's unit goes here, e.g.: ----
+  ,{
+    id: "unit2",
+    exam: "y8-t1-final",
+    title: "Unit 2",
+    heading: "\u{1F95F} Chinese Kitchen \u2014 Unit 2",
+    subtitle: "...",
+    lessons: [ ... use ids like "u2-warmup", "u2-l1" ... ],
+    patterns: [ ... ],
+    matchPairs: [ ... ]
+  }
+  */
 ];
 
-const PATTERNS = [
-  {hanzi:"你好", pinyin:"nǐ hǎo", meaning:"Greeting someone",
-   examples:[
-     {hanzi:"你好！你们好！", pinyin:"Nǐ hǎo! Nǐmen hǎo!", english:"Hello! Hello everyone!"}
-   ]},
-  {hanzi:"我叫……", pinyin:"wǒ jiào...", meaning:"Introducing your name",
-   examples:[
-     {hanzi:"我叫杰克。", pinyin:"Wǒ jiào Jiékè.", english:"My name is Jack."},
-     {hanzi:"我叫王家明。", pinyin:"Wǒ jiào Wáng Jiāmíng.", english:"My name is Wang Jiaming."}
-   ]},
-  {hanzi:"我是……", pinyin:"wǒ shì...", meaning:"Saying what/who you are",
-   examples:[
-     {hanzi:"我是学生。", pinyin:"Wǒ shì xuésheng.", english:"I am a student."},
-     {hanzi:"我是老师。", pinyin:"Wǒ shì lǎoshī.", english:"I am a teacher."}
-   ]},
-  {hanzi:"是……吗？", pinyin:"shì...ma?", meaning:"Asking a yes/no question",
-   examples:[
-     {hanzi:"他是中学生吗？", pinyin:"Tā shì zhōngxuéshēng ma?", english:"Is he a secondary school student?"},
-     {hanzi:"他是校长吗？", pinyin:"Tā shì xiàozhǎng ma?", english:"Is he the principal?"}
-   ]},
-  {hanzi:"不是……", pinyin:"bú shì...", meaning:"Saying what something is NOT",
-   examples:[
-     {hanzi:"她不是学生。", pinyin:"Tā bú shì xuésheng.", english:"She is not a student."},
-     {hanzi:"他们不是中学生。", pinyin:"Tāmen bú shì zhōngxuéshēng.", english:"They are not secondary school students."}
-   ]},
-  {hanzi:"……的……", pinyin:"...de...", meaning:"Showing possession (\u2018's\u2019)",
-   examples:[
-     {hanzi:"他们是我的朋友。", pinyin:"Tāmen shì wǒ de péngyou.", english:"They are my friends."},
-     {hanzi:"我是林老师的学生。", pinyin:"Wǒ shì Lín lǎoshī de xuésheng.", english:"I am Teacher Lin's student."}
-   ]}
-];
-
-/* Matching pairs, taken from the workbook exercise on Lesson 2 vocabulary */
-const MATCH_PAIRS = [
-  {pinyin:"tóngxué", english:"classmate"},
-  {pinyin:"lǎoshī", english:"teacher"},
-  {pinyin:"zàijiàn", english:"see you"},
-  {pinyin:"men", english:"a suffix"},
-  {pinyin:"jiào", english:"call"},
-  {pinyin:"hǎo", english:"good"}
-];
-
-/* Stroke reference, transcribed from the "Strokes of Chinese Characters" chart.
-   kitchenTip is just a memory-trick analogy layered on top — the pinyin name,
-   direction, and examples are the real facts to know for the test. */
+/* Stroke order reference — shared "knife skills", true for every unit, so it lives
+   outside UNITS. Only needs new entries if a totally new stroke type comes up. */
 const STROKES = [
-  {shape:"\u3001", namePinyin:"diǎn", nameEnglish:"dot stroke", dir:"\u2198 small stroke down-right", examples:"家 丽", kitchenTip:"Like a single drip of soy sauce falling off the spoon."},
-  {shape:"\u2015", namePinyin:"héng", nameEnglish:"horizontal line", dir:"\u2192 left to right", examples:"王 大", kitchenTip:"One clean swipe of the spatula across the wok."},
-  {shape:"\uFF5C", namePinyin:"shù", nameEnglish:"vertical line", dir:"\u2193 top to bottom", examples:"王 们", kitchenTip:"A chopstick standing straight up in the rice bowl."},
-  {shape:"\u30CE", namePinyin:"piě", nameEnglish:"left-falling stroke", dir:"\u2199 down and to the left", examples:"家 大", kitchenTip:"A peel curling off to the left as you slice a mango."},
-  {shape:"\u2572", namePinyin:"nà", nameEnglish:"right-falling stroke", dir:"\u2198 down and to the right", examples:"校 长", kitchenTip:"A knife sliding down-right through a carrot."},
-  {shape:"\u2510", namePinyin:"héng gōu", nameEnglish:"horizontal line + hook", dir:"\u2192 across, hook down at the end", examples:"学 好", kitchenTip:"Sliding a pan lid across, then hooking it down to seal in the steam."},
-  {shape:"\u21B3", namePinyin:"shù gōu", nameEnglish:"vertical line + hook", dir:"\u2193 down, hook left at the end", examples:"你", kitchenTip:"Dropping a noodle into the pot, then flicking it left with the tongs."},
-  {shape:"\u2197", namePinyin:"tí", nameEnglish:"rising stroke", dir:"\u2197 up and to the right", examples:"我", kitchenTip:"Flipping a pancake up and off the pan."},
-  {shape:"\u231F", namePinyin:"héng zhé", nameEnglish:"horizontal line, then a turn down", dir:"\u2192 then \u2193", examples:"明 叫", kitchenTip:"Sliding a tray across the counter, then setting it straight down."},
-  {shape:"\u2319", namePinyin:"héng zhé gōu", nameEnglish:"horizontal line, turn down, then a hook", dir:"\u2192 then \u2193 then hook left", examples:"他 们", kitchenTip:"Sliding, dropping, then scooping back — like plating with a spoon."}
+  {shape:"\u3001", namePinyin:"di\u01CEn", nameEnglish:"dot stroke", dir:"\u2198 small stroke down-right", examples:"\u5BB6 \u4E3D", kitchenTip:"Like a single drip of soy sauce falling off the spoon."},
+  {shape:"\u2015", namePinyin:"h\u00E9ng", nameEnglish:"horizontal line", dir:"\u2192 left to right", examples:"\u738B \u5927", kitchenTip:"One clean swipe of the spatula across the wok."},
+  {shape:"\uFF5C", namePinyin:"sh\u00F9", nameEnglish:"vertical line", dir:"\u2193 top to bottom", examples:"\u738B \u4EEC", kitchenTip:"A chopstick standing straight up in the rice bowl."},
+  {shape:"\u30CE", namePinyin:"pi\u011B", nameEnglish:"left-falling stroke", dir:"\u2199 down and to the left", examples:"\u5BB6 \u5927", kitchenTip:"A peel curling off to the left as you slice a mango."},
+  {shape:"\u2572", namePinyin:"n\u00E0", nameEnglish:"right-falling stroke", dir:"\u2198 down and to the right", examples:"\u6821 \u957F", kitchenTip:"A knife sliding down-right through a carrot."},
+  {shape:"\u2510", namePinyin:"h\u00E9ng g\u014Du", nameEnglish:"horizontal line + hook", dir:"\u2192 across, hook down at the end", examples:"\u5B66 \u597D", kitchenTip:"Sliding a pan lid across, then hooking it down to seal in the steam."},
+  {shape:"\u21B3", namePinyin:"sh\u00F9 g\u014Du", nameEnglish:"vertical line + hook", dir:"\u2193 down, hook left at the end", examples:"\u4F60", kitchenTip:"Dropping a noodle into the pot, then flicking it left with the tongs."},
+  {shape:"\u2197", namePinyin:"t\u00ED", nameEnglish:"rising stroke", dir:"\u2197 up and to the right", examples:"\u6211", kitchenTip:"Flipping a pancake up and off the pan."},
+  {shape:"\u231F", namePinyin:"h\u00E9ng zh\u00E9", nameEnglish:"horizontal line, then a turn down", dir:"\u2192 then \u2193", examples:"\u660E \u53EB", kitchenTip:"Sliding a tray across the counter, then setting it straight down."},
+  {shape:"\u2319", namePinyin:"h\u00E9ng zh\u00E9 g\u014Du", nameEnglish:"horizontal line, turn down, then a hook", dir:"\u2192 then \u2193 then hook left", examples:"\u4ED6 \u4EEC", kitchenTip:"Sliding, dropping, then scooping back \u2014 like plating with a spoon."}
 ];
 
-/* ============ STATE / PERSISTENCE ============ */
+/* ============ STATE / PERSISTENCE ============
+   Storage key is unchanged from the original app, so any progress already
+   saved on the son's iPad carries over automatically after this update. */
 const STORAGE_KEY = "chinese-kitchen-state";
 function loadProgress(){
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
@@ -345,7 +413,32 @@ function markDone(id, field){
   progress[id] = lp;
   saveProgress(progress);
 }
-function findLesson(id){ return LESSONS.find(l => l.id === id); }
+function findUnit(unitId){ return UNITS.find(u => u.id === unitId); }
+function findLesson(lessonId){
+  for(const u of UNITS){
+    const l = u.lessons.find(x => x.id === lessonId);
+    if(l) return l;
+  }
+  return null;
+}
+function unitProgress(unit){
+  let done = 0, total = 0;
+  unit.lessons.forEach(l=>{
+    const lp = lessonProgress(l.id);
+    total += 2;
+    done += (lp.vocabDone?1:0) + (lp.dialogueDone?1:0);
+  });
+  return {done, total};
+}
+
+// Tells the Kitchen Ninja HQ hub which exam is currently active, independent
+// of whichever unit the son happens to be browsing for review right now.
+(function publishActiveExamForHub(){
+  try{
+    const a = activeExam();
+    localStorage.setItem('chineseKitchenActiveExam', JSON.stringify({id:a.id, label:a.label}));
+  }catch(e){}
+})();
 
 /* ============ ROUTING ============ */
 let route = {screen:"home"};
@@ -354,12 +447,13 @@ function nav(next){ route = next; render(); window.scrollTo(0,0); }
 const app = document.getElementById('app');
 function render(){
   app.innerHTML = "";
-  if(route.screen==="home") return renderHome();
-  if(route.screen==="lesson") return renderLessonHub(route.lessonId);
-  if(route.screen==="vocab") return renderVocab(route.lessonId);
-  if(route.screen==="dialogue") return renderDialogue(route.lessonId);
-  if(route.screen==="patterns") return renderPatterns();
-  if(route.screen==="match") return renderMatch();
+  if(route.screen==="home") return renderUnitPicker();
+  if(route.screen==="unit") return renderUnitHome(route.unitId);
+  if(route.screen==="lesson") return renderLessonHub(route.unitId, route.lessonId);
+  if(route.screen==="vocab") return renderVocab(route.unitId, route.lessonId);
+  if(route.screen==="dialogue") return renderDialogue(route.unitId, route.lessonId);
+  if(route.screen==="patterns") return renderPatterns(route.unitId);
+  if(route.screen==="match") return renderMatch(route.unitId);
   if(route.screen==="strokes") return renderStrokes();
 }
 
@@ -379,12 +473,57 @@ function topBar(title, onBack){
   app.appendChild(header);
 }
 
-/* ---- HOME ---- */
-function renderHome(){
-  topBar("\u{1F95F} Chinese Kitchen \u2014 Unit 1");
+/* ---- TOP-LEVEL HOME: UNIT PICKER (pick which exam's menu to cook) ---- */
+function renderUnitPicker(){
+  topBar("\u{1F95F} Chinese Kitchen");
+  const active = activeExam();
   const sub = document.createElement('p');
   sub.className = "subtitle";
-  sub.textContent = "School, Classmates & Teachers \u2014 today's menu, straight from your cookbook (coursebook)";
+  sub.textContent = `\u{1F4CC} Studying for: ${active.label}`;
+  app.appendChild(sub);
+
+  const label1 = document.createElement('div');
+  label1.className = "section-label";
+  label1.textContent = "\u{1F4C5} Menus by Exam";
+  app.appendChild(label1);
+
+  UNITS.forEach(unit=>{
+    const {done, total} = unitProgress(unit);
+    const isActive = unit.exam === active.id;
+    const tile = document.createElement('div');
+    tile.className = "tile";
+    tile.innerHTML = `
+      <div>
+        <div class="name">${unit.title}${isActive ? ' <span class="active-badge">\u{1F525} Active now</span>' : ''}</div>
+        <div class="sub">${examLabel(unit.exam)} \u2014 ${unit.subtitle}</div>
+      </div>
+      <span class="status">${done}/${total} \u2713</span>
+      <span class="arrow">\u2192</span>
+    `;
+    tile.onclick = ()=> nav({screen:"unit", unitId:unit.id});
+    app.appendChild(tile);
+  });
+
+  const label2 = document.createElement('div');
+  label2.className = "section-label";
+  label2.textContent = "\u{1F52A} Shared Kitchen Skills";
+  app.appendChild(label2);
+
+  const strokeTile = document.createElement('div');
+  strokeTile.className = "tile";
+  strokeTile.innerHTML = `<div><div class="name">\u{1F52A} Knife & Wok Skills</div><div class="sub">10 basic prep moves for writing characters \u2014 useful for every unit</div></div><span class="arrow">\u2192</span>`;
+  strokeTile.onclick = ()=> nav({screen:"strokes"});
+  app.appendChild(strokeTile);
+}
+
+/* ---- UNIT HOME (was the old top-level Home, now scoped to one unit) ---- */
+function renderUnitHome(unitId){
+  const unit = findUnit(unitId);
+  if(!unit) return renderUnitPicker();
+  topBar(unit.heading, ()=>nav({screen:"home"}));
+  const sub = document.createElement('p');
+  sub.className = "subtitle";
+  sub.textContent = unit.subtitle;
   app.appendChild(sub);
 
   const label1 = document.createElement('div');
@@ -392,7 +531,7 @@ function renderHome(){
   label1.textContent = "\u{1F37D}\uFE0F Dishes on the Menu";
   app.appendChild(label1);
 
-  LESSONS.forEach(lesson => {
+  unit.lessons.forEach(lesson => {
     const lp = lessonProgress(lesson.id);
     const doneCount = (lp.vocabDone?1:0) + (lp.dialogueDone?1:0);
     const tile = document.createElement('div');
@@ -407,7 +546,7 @@ function renderHome(){
       <span class="status">${doneCount}/2 \u2713</span>
       <span class="arrow">\u2192</span>
     `;
-    tile.onclick = ()=> nav({screen:"lesson", lessonId:lesson.id});
+    tile.onclick = ()=> nav({screen:"lesson", unitId, lessonId:lesson.id});
     app.appendChild(tile);
   });
 
@@ -418,30 +557,24 @@ function renderHome(){
 
   const patternsTile = document.createElement('div');
   patternsTile.className = "tile";
-  patternsTile.innerHTML = `<div><div class="name">\u{1F372} Cooking Techniques</div><div class="sub">6 reusable recipe patterns from the Unit Summary</div></div><span class="arrow">\u2192</span>`;
-  patternsTile.onclick = ()=> nav({screen:"patterns"});
+  patternsTile.innerHTML = `<div><div class="name">\u{1F372} Cooking Techniques</div><div class="sub">${unit.patterns.length} reusable recipe patterns from the Unit Summary</div></div><span class="arrow">\u2192</span>`;
+  patternsTile.onclick = ()=> nav({screen:"patterns", unitId});
   app.appendChild(patternsTile);
 
   const matchTile = document.createElement('div');
   matchTile.className = "tile";
   matchTile.innerHTML = `<div><div class="name">\u{1F525} Flavor Pairing</div><div class="sub">Match each pinyin ingredient to its English flavor</div></div><span class="arrow">\u2192</span>`;
-  matchTile.onclick = ()=> nav({screen:"match"});
+  matchTile.onclick = ()=> nav({screen:"match", unitId});
   app.appendChild(matchTile);
-
-  const strokeTile = document.createElement('div');
-  strokeTile.className = "tile";
-  strokeTile.innerHTML = `<div><div class="name">\u{1F52A} Knife & Wok Skills</div><div class="sub">10 basic prep moves for writing characters</div></div><span class="arrow">\u2192</span>`;
-  strokeTile.onclick = ()=> nav({screen:"strokes"});
-  app.appendChild(strokeTile);
 }
 
 /* ---- LESSON HUB ---- */
-function renderLessonHub(lessonId){
+function renderLessonHub(unitId, lessonId){
   const lesson = findLesson(lessonId);
-  if(!lesson) return renderHome();
+  if(!lesson) return renderUnitHome(unitId);
   const lp = lessonProgress(lessonId);
   const heading = lesson.num===0 ? lesson.title : `Lesson ${lesson.num}: ${lesson.hanzi}`;
-  topBar(heading, ()=>nav({screen:"home"}));
+  topBar(heading, ()=>nav({screen:"unit", unitId}));
 
   if(lesson.pinyin){
     const p = document.createElement('p');
@@ -453,13 +586,13 @@ function renderLessonHub(lessonId){
   const vocabTile = document.createElement('div');
   vocabTile.className = "tile";
   vocabTile.innerHTML = `<div><div class="name">\u{1F9C2} Ingredient Cards</div><div class="sub">${lesson.vocab.length} ingredients to prep</div></div><span class="status">${lp.vocabDone?'\u2713 Done':''}</span><span class="arrow">\u2192</span>`;
-  vocabTile.onclick = ()=> nav({screen:"vocab", lessonId});
+  vocabTile.onclick = ()=> nav({screen:"vocab", unitId, lessonId});
   app.appendChild(vocabTile);
 
   const dialogueTile = document.createElement('div');
   dialogueTile.className = "tile";
   dialogueTile.innerHTML = `<div><div class="name">\u{1F35C} Follow the Recipe</div><div class="sub">${lesson.dialogue.length} steps</div></div><span class="status">${lp.dialogueDone?'\u2713 Done':''}</span><span class="arrow">\u2192</span>`;
-  dialogueTile.onclick = ()=> nav({screen:"dialogue", lessonId});
+  dialogueTile.onclick = ()=> nav({screen:"dialogue", unitId, lessonId});
   app.appendChild(dialogueTile);
 
   if(lesson.extra && lesson.extra.length){
@@ -477,9 +610,9 @@ function renderLessonHub(lessonId){
 }
 
 /* ---- VOCAB FLASHCARDS ---- */
-function renderVocab(lessonId){
+function renderVocab(unitId, lessonId){
   const lesson = findLesson(lessonId);
-  topBar("\u{1F9C2} Ingredient Cards", ()=>nav({screen:"lesson", lessonId}));
+  topBar("\u{1F9C2} Ingredient Cards", ()=>nav({screen:"lesson", unitId, lessonId}));
 
   let idx = 0;
   let revealed = false;
@@ -511,16 +644,16 @@ function renderVocab(lessonId){
     document.getElementById('vPrev').onclick = ()=>{ if(idx>0){ idx--; revealed=false; draw(); } };
     document.getElementById('vNext').onclick = ()=>{
       if(idx < cards.length-1){ idx++; revealed=false; draw(); }
-      else { markDone(lessonId, 'vocabDone'); nav({screen:"lesson", lessonId}); }
+      else { markDone(lessonId, 'vocabDone'); nav({screen:"lesson", unitId, lessonId}); }
     };
   }
   draw();
 }
 
 /* ---- DIALOGUE PRACTICE ---- */
-function renderDialogue(lessonId){
+function renderDialogue(unitId, lessonId){
   const lesson = findLesson(lessonId);
-  topBar("\u{1F35C} Follow the Recipe", ()=>nav({screen:"lesson", lessonId}));
+  topBar("\u{1F35C} Follow the Recipe", ()=>nav({screen:"lesson", unitId, lessonId}));
 
   let idx = 0;
   let stage = 0; // 0 = hanzi only, 1 = + pinyin, 2 = + english
@@ -562,7 +695,7 @@ function renderDialogue(lessonId){
       btn.textContent = idx===lines.length-1? "Finish" : "Next step \u2192";
       btn.onclick = ()=>{
         if(idx < lines.length-1){ idx++; stage=0; draw(); }
-        else { markDone(lessonId, 'dialogueDone'); nav({screen:"lesson", lessonId}); }
+        else { markDone(lessonId, 'dialogueDone'); nav({screen:"lesson", unitId, lessonId}); }
       };
       navRow.appendChild(btn);
     }
@@ -573,14 +706,15 @@ function renderDialogue(lessonId){
 }
 
 /* ---- SENTENCE PATTERNS ---- */
-function renderPatterns(){
-  topBar("\u{1F372} Cooking Techniques", ()=>nav({screen:"home"}));
+function renderPatterns(unitId){
+  const unit = findUnit(unitId);
+  topBar("\u{1F372} Cooking Techniques", ()=>nav({screen:"unit", unitId}));
   const sub = document.createElement('p');
   sub.className = "subtitle";
   sub.textContent = "Tap a technique to see it used in real dishes (examples)";
   app.appendChild(sub);
 
-  PATTERNS.forEach((pat, i)=>{
+  unit.patterns.forEach((pat, i)=>{
     const card = document.createElement('div');
     card.className = "pattern-card";
     card.innerHTML = `
@@ -608,13 +742,15 @@ function renderPatterns(){
 }
 
 /* ---- PINYIN MATCH GAME ---- */
-function renderMatch(){
-  topBar("\u{1F525} Flavor Pairing", ()=>nav({screen:"home"}));
+function renderMatch(unitId){
+  const unit = findUnit(unitId);
+  topBar("\u{1F525} Flavor Pairing", ()=>nav({screen:"unit", unitId}));
   const sub = document.createElement('p');
   sub.className = "subtitle";
   sub.textContent = "Tap a pinyin ingredient, then match it to its English flavor";
   app.appendChild(sub);
 
+  const MATCH_PAIRS = unit.matchPairs;
   const pinyinOrder = MATCH_PAIRS.map((p,i)=>i).sort(()=>Math.random()-0.5);
   const englishOrder = MATCH_PAIRS.map((p,i)=>i).sort(()=>Math.random()-0.5);
   let selectedPinyin = null;

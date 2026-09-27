@@ -117,9 +117,13 @@ const STARTERS = [
 // exam is being prepped for, and tag each chapter below with its examSet(s).
 // A chapter that should carry over for cumulative review just gets tagged
 // into the new exam's id too — no need to retype it.
+// Exactly ONE entry should have active:true — that's the exam being studied
+// for right now. Move the flag to the new entry when a new exam becomes
+// current; the Kitchen Ninja HQ hub and the ★ marker below both read this.
 const EXAMS = [
- {id:'y8_t1_mid', label:'Year 8 · Term 1 Midterm', short:'T1 Midterm'}
+ {id:'y8_t1_mid', label:'Year 8 · Term 1 Midterm', short:'T1 Midterm', active:true}
 ];
+function activeExamMeta(){ return EXAMS.find(e=>e.active) || EXAMS[0]; }
 
 const CHAPTERS = [
 {examSet:'y8_t1_mid', id:'integers', icon:'🧊', name:'Freezer Lab', title:'Chapter 1 · Integers',
@@ -222,7 +226,7 @@ function stateKey(examId){ return 'mathExamLab_'+examId+'_v1'; }
 })();
 
 let currentExamId = localStorage.getItem('mathExamLabCurrentExam');
-if(!EXAMS.some(e=>e.id===currentExamId)) currentExamId = EXAMS[0].id;
+if(!EXAMS.some(e=>e.id===currentExamId)) currentExamId = activeExamMeta().id;
 
 let melState, xp, doneIds, sketches;
 function loadExamState(examId){
@@ -249,6 +253,16 @@ function updateAggregateState(){
 }
 updateAggregateState();
 
+// Tells the Kitchen Ninja HQ hub which exam is currently active, independent
+// of whichever chapter the son happens to be browsing for review right now.
+function publishActiveExamForHub(){
+  try{
+    const a = activeExamMeta();
+    localStorage.setItem('mathExamLabActiveExam', JSON.stringify({id:a.id, label:a.label}));
+  }catch(e){}
+}
+publishActiveExamForHub();
+
 function saveMelState(){
   localStorage.setItem(stateKey(currentExamId), JSON.stringify({xp, done:[...doneIds], sketches}));
   updateAggregateState();
@@ -269,7 +283,7 @@ function buildExamBar(){
   if(!bar) return;
   if(EXAMS.length<=1){ bar.style.display='none'; return; }
   bar.style.display='flex';
-  bar.innerHTML = EXAMS.map(e=>`<button data-e="${e.id}" class="${e.id===currentExamId?'active':''}">${e.short||e.label}</button>`).join('');
+  bar.innerHTML = EXAMS.map(e=>`<button data-e="${e.id}" class="${e.id===currentExamId?'active':''}">${e.short||e.label}${e.active?' \u2605':''}</button>`).join('');
   bar.querySelectorAll('button[data-e]').forEach(b=>b.onclick=()=>switchExam(b.dataset.e));
 }
 function updateHeaderLabel(){
