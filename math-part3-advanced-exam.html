@@ -1401,6 +1401,93 @@ function circleMeasureSVG(label, lineType, caption) {
   return svgWrap(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${GOLD}" stroke-width="3"/>${line}`, 200, 200, caption);
 }
 
+// ══════════════════════ MASTER CHEF SHOWDOWN visual helpers ══════════════════════
+
+// ── Equation: a balance-scale showing both sides of the equation must stay level ──
+function balanceScaleSVG(leftExpr, rightExpr, caption) {
+  const cx = 105, beamY = 55, panY = 100;
+  const inner = `
+    <polygon points="${cx - 6},175 ${cx + 6},175 ${cx},${beamY + 8}" fill="${LINE}"/>
+    <rect x="${cx - 45}" y="170" width="90" height="8" fill="${LINE}" rx="3"/>
+    <line x1="20" y1="${beamY}" x2="190" y2="${beamY}" stroke="${GOLD}" stroke-width="4"/>
+    <line x1="30" y1="${beamY}" x2="30" y2="${panY}" stroke="${GOLDLINE}" stroke-width="2"/>
+    <line x1="180" y1="${beamY}" x2="180" y2="${panY}" stroke="${GOLDLINE}" stroke-width="2"/>
+    <rect x="5" y="${panY}" width="50" height="26" fill="${BG}" stroke="${GOLDLINE}" stroke-width="2" rx="6"/>
+    <rect x="155" y="${panY}" width="50" height="26" fill="${BG}" stroke="${GOLDLINE}" stroke-width="2" rx="6"/>
+    <text x="30" y="${panY + 18}" font-size="13" fill="${LABEL}" font-weight="bold" text-anchor="middle">${leftExpr}</text>
+    <text x="180" y="${panY + 18}" font-size="13" fill="${LABEL}" font-weight="bold" text-anchor="middle">${rightExpr}</text>`;
+  return svgWrap(inner, 210, 185, caption || 'Both pans must stay balanced — whatever you do to one side, do to the other', 220);
+}
+
+// ── Negative × negative: two direction-flip arrows on a number line, ending up positive ──
+function signFlipSVG(caption) {
+  const y = 45, x0 = 20, x1 = 180;
+  const inner = `
+    <line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${LINE}" stroke-width="2"/>
+    <circle cx="${(x0+x1)/2}" cy="${y}" r="4" fill="${GOLD}"/>
+    <path d="M${(x0+x1)/2},${y-10} A22,14 0 0 1 ${(x0+x1)/2+40},${y-10}" fill="none" stroke="${RED}" stroke-width="2.5" marker-end="url(#flip1)"/>
+    <path d="M${(x0+x1)/2+40},${y-10} A22,14 0 0 1 ${(x0+x1)/2},${y-10}" fill="none" stroke="${TEAL}" stroke-width="2.5" marker-end="url(#flip2)" transform="translate(0,26)"/>
+    <defs>
+      <marker id="flip1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${RED}"/></marker>
+      <marker id="flip2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${TEAL}"/></marker>
+    </defs>
+    <text x="${(x0+x1)/2}" y="${y+38}" font-size="12" fill="${MUTED}" text-anchor="middle">flip once (−), then flip again (−) = back to (+)</text>`;
+  return svgWrap(inner, 200, 100, caption || 'Two flips cancel out — negative × negative = positive', 230);
+}
+
+// ── Trapezium: parallel sides a & b, height h marked, matching the ½(a+b)×h recipe ──
+function trapeziumSVG(aLabel, bLabel, hLabel, caption) {
+  const x0 = 25, y0 = 30, yB = 140, topW = 90, botW = 150, topX = 55;
+  const inner = `
+    <polygon points="${topX},${y0} ${topX + topW},${y0} ${x0 + botW},${yB} ${x0},${yB}" fill="${BG}" stroke="${GOLD}" stroke-width="3"/>
+    <line x1="${topX}" y1="${y0}" x2="${topX}" y2="${yB}" stroke="${TEAL}" stroke-width="2" stroke-dasharray="5,4"/>
+    <text x="${topX + topW / 2}" y="${y0 - 10}" font-size="14" fill="${LABEL}" font-weight="bold" text-anchor="middle">a = ${aLabel}</text>
+    <text x="${x0 + botW / 2}" y="${yB + 20}" font-size="14" fill="${LABEL}" font-weight="bold" text-anchor="middle">b = ${bLabel}</text>
+    <text x="${topX - 10}" y="${(y0 + yB) / 2}" font-size="14" fill="${TEAL}" font-weight="bold" text-anchor="end">h = ${hLabel}</text>`;
+  return svgWrap(inner, 220, 170, caption || 'The two parallel sides are a and b — h is the straight-up height between them', 230);
+}
+
+// ── Probability: a "total = 1" bar split into P(A), P(B), and "neither" ──
+function probabilitySumBarSVG(pA, pB, labelA, labelB, caption) {
+  const w = 280, usable = w - 8, h = 40;
+  const rest = Math.max(0, 1 - pA - pB);
+  const segs = [
+    { v: pA, color: RED, label: labelA || `P(A)=${pA}` },
+    { v: pB, color: TEAL, label: labelB || `P(B)=${pB}` },
+    { v: rest, color: LINE, label: rest > 0.02 ? 'neither' : '' }
+  ];
+  let x = 4, out = '';
+  segs.forEach(s => {
+    const segW = usable * s.v;
+    if (segW > 1) {
+      out += `<rect x="${x.toFixed(1)}" y="4" width="${(segW - 2).toFixed(1)}" height="30" fill="${s.color}" stroke="${BG}" stroke-width="1" rx="3"/>`;
+      if (s.label) out += `<text x="${(x + segW / 2).toFixed(1)}" y="24" font-size="11" fill="${s.color === LINE ? MUTED : '#1b120d'}" text-anchor="middle" font-weight="700">${s.label}</text>`;
+    }
+    x += segW;
+  });
+  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:260px;display:block;margin:8px auto">${out}</svg><div style="text-align:center;font-size:0.72rem;color:${MUTED};margin-top:-2px">${caption || 'Mutually exclusive events never overlap — just add the two chunks'}</div>`;
+}
+
+// ── Multi-step money chain: box → arrow (with op label) → box → arrow → box ──
+function priceChainSVG(steps, caption) {
+  // steps: [{ label, value }, ...] — draws value boxes with the operation written on the arrow between them
+  const boxW = 74, boxH = 46, gap = 46, y0 = 20;
+  let out = '', x = 10;
+  steps.forEach((s, i) => {
+    out += `<rect x="${x}" y="${y0}" width="${boxW}" height="${boxH}" fill="${BG}" stroke="${i === steps.length - 1 ? RED : GOLD}" stroke-width="2.5" rx="8"/>
+      <text x="${x + boxW / 2}" y="${y0 + boxH / 2 + 5}" font-size="14" fill="${LABEL}" font-weight="bold" text-anchor="middle">${s.value}</text>
+      <text x="${x + boxW / 2}" y="${y0 + boxH + 16}" font-size="10" fill="${MUTED}" text-anchor="middle">${s.label}</text>`;
+    if (i < steps.length - 1) {
+      const ax = x + boxW, ax2 = ax + gap;
+      out += `<line x1="${ax}" y1="${y0 + boxH / 2}" x2="${ax2}" y2="${y0 + boxH / 2}" stroke="${TEAL}" stroke-width="2.5" marker-end="url(#pchain${i})"/>
+        <defs><marker id="pchain${i}" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${TEAL}"/></marker></defs>
+        <text x="${(ax + ax2) / 2}" y="${y0 + boxH / 2 - 8}" font-size="11" fill="${TEAL}" font-weight="bold" text-anchor="middle">${s.opToNext || ''}</text>`;
+    }
+    x += boxW + gap;
+  });
+  return `<svg viewBox="0 0 ${x} 100" style="width:100%;max-width:320px;display:block;margin:8px auto">${out}</svg>${caption ? `<div style="text-align:center;font-size:0.72rem;color:${MUTED};margin-top:-2px">${caption}</div>` : ''}`;
+}
+
 function semicircleSVG(label, caption) {
   const cx = 100, cy = 130, r = 70;
   const inner = `
@@ -2103,16 +2190,37 @@ const LEVELS = {
     color: 2,
     emoji: '🔥',
     missions: [
-      { type: 'step', instruction: '5-minute timed challenge — Step 1: circle all numbers in this question. How many numbers?', problem: 'A box holds 24 chocolates. Sara buys 3 boxes. She eats 7. How many left?', answer: '3', hint: 'Numbers: 24, 3, 7 = three numbers.' },
-      { type: 'calc', instruction: 'Now solve the chocolate problem', problem: '(24 × 3) − 7 = ?', answer: '65', hint: '24 × 3 = 72. 72 − 7 = 65.' },
+      { type: 'step', instruction: '5-minute timed challenge — Step 1: circle all numbers in this question. How many numbers?', problem: 'A box holds 24 chocolates. Sara buys 3 boxes. She eats 7. How many left?', answer: '3', hint: {
+        visual: `<div style="text-align:center;font-size:1.1rem;line-height:2">A box holds <span style="background:${GOLD};color:#1b120d;padding:2px 8px;border-radius:6px;font-weight:800">24</span> chocolates. Sara buys <span style="background:${TEAL};color:#1b120d;padding:2px 8px;border-radius:6px;font-weight:800">3</span> boxes. She eats <span style="background:${RED};color:#fff;padding:2px 8px;border-radius:6px;font-weight:800">7</span>.</div>`,
+        formula: 'Numbers: 24, 3, 7 = three numbers.'
+      } },
+      { type: 'calc', instruction: '🍫 Now solve the chocolate problem', problem: '(24 × 3) − 7 = ?', answer: '65', hint: {
+        visual: priceChainSVG([{ label: 'per box', value: 24, opToNext: '× 3 boxes' }, { label: '3 boxes total', value: 72, opToNext: '− 7 eaten' }, { label: 'left', value: 65 }]),
+        formula: '24 × 3 = 72. 72 − 7 = 65.'
+      } },
       { type: 'step', instruction: 'Never leave a blank! What do you ALWAYS write even when unsure?', problem: 'Exam tip: always write ___', answer: 'something', hint: 'Any working, any formula, any guess — partial marks exist!' },
       { type: 'calc', instruction: 'Quick fire: estimate first, then solve', problem: '19 × 21 ≈ ?  (estimate to nearest 10)', answer: '400', hint: '20 × 20 = 400. Estimation is fine!' },
-      { type: 'solve', instruction: 'Timed: 60 seconds — solve it!', problem: '4(2x − 3) = 20', answer: '4', hint: 'Expand: 8x−12=20. Add 12: 8x=32. Divide: x=4.' },
-      { type: 'calc', instruction: 'Timed: Quick percentage', problem: '17.5% of 80', answer: '14', hint: '10%=8, 5%=4, 2.5%=2. Total=14.' },
+      { type: 'solve', instruction: '⚖️ Timed: 60 seconds — keep both sides of the recipe balanced and solve it!', problem: '4(2x − 3) = 20', answer: '4', hint: {
+        visual: balanceScaleSVG('4(2x−3)', '20'),
+        formula: 'Expand: 8x−12=20. Add 12: 8x=32. Divide: x=4.'
+      } },
+      { type: 'calc', instruction: 'Timed: Quick percentage', problem: '17.5% of 80', answer: '14', hint: {
+        visual: percentBarSVG(17.5),
+        formula: '10%=8, 5%=4, 2.5%=2. Total=14.'
+      } },
       { type: 'step', instruction: 'Check your work strategy — what do you do LAST in an exam?', problem: 'After finishing: always ___ your answers', answer: 'check', hint: 'Substitute back in, re-read the question, check units.' },
-      { type: 'calc', instruction: 'Timed: Solve this', problem: '2x² = 50  →  x² = 25  →  x = ?', answer: '5', hint: 'x² = 25, so x = √25 = 5.' },
-      { type: 'calc', instruction: 'Show your working — what is 23% of 400?', problem: '23% of 400 = ?', answer: '92', hint: '20%=80, 3%=12. Total=92.' },
-      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: 3-minute mixed exam question', problem: 'Solve: 5(x+2) = 3x + 16', answer: '3', hint: 'Expand: 5x+10=3x+16. 2x=6. x=3.', solution: [
+      { type: 'calc', instruction: 'Timed: Solve this', problem: '2x² = 50  →  x² = 25  →  x = ?', answer: '5', hint: {
+        visual: squareAreaSVG(25, 'What side, squared, gives 25?'),
+        formula: 'x² = 25, so x = √25 = 5.'
+      } },
+      { type: 'calc', instruction: 'Show your working — what is 23% of 400?', problem: '23% of 400 = ?', answer: '92', hint: {
+        visual: percentBarSVG(23),
+        formula: '20%=80, 3%=12. Total=92.'
+      } },
+      { type: 'boss', instruction: '🔪 CHEF CHALLENGE: 3-minute mixed exam question — keep the recipe balanced', problem: 'Solve: 5(x+2) = 3x + 16', answer: '3', hint: {
+        visual: balanceScaleSVG('5(x+2)', '3x+16'),
+        formula: 'Expand: 5x+10=3x+16. 2x=6. x=3.'
+      }, solution: [
         { action: 'Expand', detail: '5x + 10 = 3x + 16' },
         { action: 'Collect x', detail: '2x = 6', check: '6' },
         { action: 'Divide', detail: 'x = 3', check: '3' }
@@ -2124,16 +2232,50 @@ const LEVELS = {
     color: 3,
     emoji: '👨\u200d🍳',
     missions: [
-      { type: 'solve', instruction: '👨\u200d🍳 Master Chef Q1: Equations', problem: '3(2x − 4) = 2x + 8', answer: '5', hint: 'Expand: 6x−12=2x+8. 4x=20. x=5.' },
-      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q2: Negative numbers', problem: '−6 × −4', answer: '24', hint: 'Negative × Negative = Positive.' },
-      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q3: BIDMAS', problem: '4² + (3 × 5) − 8', answer: '23', hint: 'Powers: 16. Brackets: 15. 16+15−8=23.' },
-      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q4: Fractions', problem: '3/4 ÷ 1/2', answer: '3/2', hint: 'Flip the second fraction and multiply: 3/4 × 2/1 = 6/4 = 3/2.' },
-      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q5: Percentage change', problem: 'Price goes from £80 to £100. % increase = ?', answer: '25', hint: 'Change = 20. (20/80)×100 = 25%.' },
-      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q6: Ratio & proportion', problem: '4:5:6, Total = 90. Find the middle share.', answer: '30', hint: 'Total parts=15. Each=6. Middle=5×6=30.' },
-      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q7: Area', problem: 'Trapezium: a=8, b=12, h=5. Area = ½(a+b)×h = ?', answer: '50', hint: '½ × (8+12) × 5 = ½ × 20 × 5 = 50.' },
-      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q8: Probability', problem: 'P(A)=0.3, P(B)=0.5, mutually exclusive. P(A or B) = ?', answer: '0.8', hint: 'P(A or B) = P(A) + P(B) = 0.3 + 0.5 = 0.8.' },
-      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q9: nth term', problem: 'Sequence: 1, 4, 9, 16, 25... What is the 7th term?', answer: '49', hint: 'These are square numbers! 7² = 49.' },
-      { type: 'boss', instruction: '🔪 MEGA CHEF CHALLENGE Q10: Multi-step word problem', problem: 'A phone costs £360. It\'s reduced by 15%, then VAT of 20% is added. Final price = ?', answer: '367.2', hint: 'Reduced: 360×0.85=306. VAT: 306×1.20=367.20.', solution: [
+      { type: 'solve', instruction: '👨\u200d🍳 Master Chef Q1: Equations — keep the recipe balanced on both sides', problem: '3(2x − 4) = 2x + 8', answer: '5', hint: {
+        visual: balanceScaleSVG('3(2x−4)', '2x+8'),
+        formula: 'Expand: 6x−12=2x+8. 4x=20. x=5.'
+      } },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q2: Negative numbers — flip direction twice', problem: '−6 × −4', answer: '24', hint: {
+        visual: signFlipSVG(),
+        formula: 'Negative × Negative = Positive.'
+      } },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q3: BIDMAS — follow the recipe order: Brackets, Indices, Divide/Multiply, Add/Subtract', problem: '4² + (3 × 5) − 8', answer: '23', hint: {
+        visual: `<div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;font-size:0.78rem;font-weight:700">
+          <span style="background:${GOLD};color:#1b120d;padding:4px 8px;border-radius:8px">1. Brackets (3×5)=15</span>
+          <span style="background:${TEAL};color:#1b120d;padding:4px 8px;border-radius:8px">2. Indices 4²=16</span>
+          <span style="background:${RED};color:#fff;padding:4px 8px;border-radius:8px">3. Add/Subtract 16+15−8</span>
+        </div>`,
+        formula: 'Powers: 16. Brackets: 15. 16+15−8=23.'
+      } },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q4: Fractions — flip the second one and multiply', problem: '3/4 ÷ 1/2', answer: '3/2', hint: {
+        visual: fractionPizzaRow([[3,4],[1,2]], '÷'),
+        formula: 'Flip the second fraction and multiply: 3/4 × 2/1 = 6/4 = 3/2.'
+      } },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q5: Percentage change — how much bigger did the price get?', problem: 'Price goes from £80 to £100. % increase = ?', answer: '25', hint: {
+        visual: rateScaleSVG('£80', 'before', '£100', 'after'),
+        formula: 'Change = 20. (20/80)×100 = 25%.'
+      } },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q6: Ratio & proportion — split the whole recipe into its parts', problem: '4:5:6, Total = 90. Find the middle share.', answer: '30', hint: {
+        visual: `<div style="text-align:center;font-size:0.72rem;color:#b9a488;margin-bottom:4px">Bar split into 4 : 5 : 6 (15 parts total)</div>${ratioBarSVG([4,5,6])}`,
+        formula: 'Total parts=15. Each=6. Middle=5×6=30.'
+      } },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q7: Area — a trapezium-shaped serving tray. Recipe: ½(a+b)×h', problem: 'Trapezium: a=8, b=12, h=5. Area = ½(a+b)×h = ?', answer: '50', hint: {
+        visual: trapeziumSVG(8, 12, 5),
+        formula: '½ × (8+12) × 5 = ½ × 20 × 5 = 50.'
+      } },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q8: Probability — two events that can never happen at the same time (mutually exclusive), just add the chances', problem: 'P(A)=0.3, P(B)=0.5, mutually exclusive. P(A or B) = ?', answer: '0.8', hint: {
+        visual: probabilitySumBarSVG(0.3, 0.5),
+        formula: 'P(A or B) = P(A) + P(B) = 0.3 + 0.5 = 0.8.'
+      } },
+      { type: 'calc', instruction: '👨\u200d🍳 Master Chef Q9: nth term — spot the growing pattern', problem: 'Sequence: 1, 4, 9, 16, 25... What is the 7th term?', answer: '49', hint: {
+        visual: sequenceBarsSVG([1, 4, 9, 16, 25, '?'], null, 'These are square numbers — 1², 2², 3², 4², 5²... what comes at position 7?'),
+        formula: 'These are square numbers! 7² = 49.'
+      } },
+      { type: 'boss', instruction: '🔪 MEGA CHEF CHALLENGE Q10: Multi-step word problem — follow the price through each step', problem: 'A phone costs £360. It\'s reduced by 15%, then VAT of 20% is added. Final price = ?', answer: '367.2', hint: {
+        visual: priceChainSVG([{ label: 'start price', value: '£360', opToNext: '−15%' }, { label: 'after discount', value: '£306', opToNext: '+20% VAT' }, { label: 'final price', value: '£367.20' }]),
+        formula: 'Reduced: 360×0.85=306. VAT: 306×1.20=367.20.'
+      }, solution: [
         { action: '15% off', detail: '360 × 0.85 = £306', check: '306' },
         { action: '20% VAT', detail: '306 × 1.20 = £367.20', check: '367.2|367.20' }
       ]},
