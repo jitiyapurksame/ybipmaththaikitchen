@@ -257,6 +257,18 @@
   .station-part-sub { font-size: 0.6rem; color: var(--muted); margin-top: 1px; }
   .station-part-count { font-size: 0.62rem; font-weight: 800; color: var(--gold); margin-top: 2px; display: block; }
 
+  .station-season-label {
+    margin-top: 14px;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .station-season-label + .station-parts { margin-top: 6px; }
+  .station-part-chip.locked { opacity: 0.55; cursor: default; border-style: dashed; }
+  .station-part-chip.new { border-color: var(--gold); }
+
   .station-arrow {
     font-size: 1.4rem;
     color: var(--muted);
@@ -390,11 +402,12 @@
         <div class="station-icon">🔪</div>
         <div class="station-text">
           <div class="station-title">Math Kitchen Ninja</div>
-          <div class="station-desc">Slice through Year 8 missions, level by level.</div>
+          <div class="station-desc">Slice through Year 8 missions — and the new Year 9 menu!</div>
           <div class="station-progress" id="mathProgress"></div>
         </div>
         <div class="station-arrow">›</div>
       </a>
+      <div class="station-season-label">Season 1 · Year 8 ✅</div>
       <div class="station-parts">
         <a class="station-part-chip" href="math-part1-foundations.html">
           <div class="station-part-label">Part 1</div>
@@ -411,6 +424,24 @@
           <div class="station-part-sub">Advanced & Exam</div>
           <span class="station-part-count" id="mathPart3Count"></span>
         </a>
+      </div>
+      <div class="station-season-label">Season 2 · Year 9 — Sous-Chef Menu 🆕</div>
+      <div class="station-parts">
+        <a class="station-part-chip new" href="math-y9-part-a-number-kitchen.html">
+          <div class="station-part-label">Part A</div>
+          <div class="station-part-sub">Number Kitchen II</div>
+          <span class="station-part-count" id="mathPartACount"></span>
+        </a>
+        <div class="station-part-chip locked">
+          <div class="station-part-label">🔒 Part B</div>
+          <div class="station-part-sub">Algebra Kitchen II</div>
+          <span class="station-part-count">coming soon</span>
+        </div>
+        <div class="station-part-chip locked">
+          <div class="station-part-label">🔒 Part C</div>
+          <div class="station-part-sub">Shape & Data II</div>
+          <span class="station-part-count">coming soon</span>
+        </div>
       </div>
     </div>
 
@@ -485,7 +516,7 @@
   </div>
 
   <footer>
-    Keep this file in the same folder as the other apps (the 3 Math parts + Thai Reading + Thai Read & Write + Literature + Chinese Kitchen) — tap a station to open it. Backup/Restore for all 5 apps is managed here.
+    Keep this file in the same folder as the other apps (the 3 Math parts + Year 9 Part A + Thai Reading + Thai Read & Write + Literature + Chinese Kitchen) — tap a station to open it. Backup/Restore for all 5 apps is managed here.
   </footer>
 
 <!-- Backup Modal -->
@@ -618,7 +649,7 @@
   tryShowActiveExam('mathExamLabActiveExam', 'examActiveTag');
   tryShowActiveExam('chineseKitchenActiveExam', 'chiActiveTag');
 
-  // Per-part completion counts for the Math quick-jump chips (1-9 / 10-19 / 20-28)
+  // Per-part completion counts for the Math quick-jump chips (1-9 / 10-19 / 20-28 / Y9 A 101-110)
   function showPartCounts() {
     try {
       const raw = localStorage.getItem('math-complete-state');
@@ -628,7 +659,8 @@
       const ranges = [
         { id: 'mathPart1Count', min: 1, max: 9 },
         { id: 'mathPart2Count', min: 10, max: 19 },
-        { id: 'mathPart3Count', min: 20, max: 28 }
+        { id: 'mathPart3Count', min: 20, max: 28 },
+        { id: 'mathPartACount', min: 101, max: 110 }
       ];
       ranges.forEach(r => {
         let done = 0;
