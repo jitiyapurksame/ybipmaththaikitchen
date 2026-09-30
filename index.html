@@ -179,6 +179,7 @@
     position: absolute;
     inset: 0;
     opacity: 0.16;
+    pointer-events: none; /* the colour glow must never swallow taps meant for the part chips */
   }
   .station.math::before { background: linear-gradient(135deg, var(--math-a), var(--math-b)); }
   .station.thai::before { background: linear-gradient(135deg, var(--thai-a), var(--thai-b)); }
@@ -238,6 +239,7 @@
   .station-active-exam.show { display: block; }
 
   .station-parts {
+    position: relative; /* sits above the glow layer so chips are tappable */
     margin-top: 12px;
     display: flex;
     gap: 8px;
@@ -258,6 +260,7 @@
   .station-part-count { font-size: 0.62rem; font-weight: 800; color: var(--gold); margin-top: 2px; display: block; }
 
   .station-season-label {
+    position: relative;
     margin-top: 14px;
     font-size: 0.64rem;
     font-weight: 800;
