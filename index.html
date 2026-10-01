@@ -435,16 +435,16 @@
           <div class="station-part-sub">Number Kitchen II</div>
           <span class="station-part-count" id="mathPartACount"></span>
         </a>
-        <div class="station-part-chip locked">
-          <div class="station-part-label">🔒 Part B</div>
+        <a class="station-part-chip new" href="math-y9-part-b-algebra-kitchen.html">
+          <div class="station-part-label">Part B</div>
           <div class="station-part-sub">Algebra Kitchen II</div>
-          <span class="station-part-count">coming soon</span>
-        </div>
-        <div class="station-part-chip locked">
-          <div class="station-part-label">🔒 Part C</div>
+          <span class="station-part-count" id="mathPartBCount"></span>
+        </a>
+        <a class="station-part-chip new" href="math-y9-part-c-shape-data-kitchen.html">
+          <div class="station-part-label">Part C</div>
           <div class="station-part-sub">Shape & Data II</div>
-          <span class="station-part-count">coming soon</span>
-        </div>
+          <span class="station-part-count" id="mathPartCCount"></span>
+        </a>
       </div>
     </div>
 
@@ -663,7 +663,9 @@
         { id: 'mathPart1Count', min: 1, max: 9 },
         { id: 'mathPart2Count', min: 10, max: 19 },
         { id: 'mathPart3Count', min: 20, max: 28 },
-        { id: 'mathPartACount', min: 101, max: 110 }
+        { id: 'mathPartACount', min: 101, max: 110 },
+        { id: 'mathPartBCount', min: 111, max: 120 },
+        { id: 'mathPartCCount', min: 121, max: 130 }
       ];
       ranges.forEach(r => {
         let done = 0;
