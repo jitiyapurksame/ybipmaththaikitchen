@@ -121,6 +121,31 @@ details.notes summary{cursor:pointer;font-weight:800;color:var(--gold);font-size
 .cheer{text-align:center;font-weight:900;color:var(--gold);font-size:1.1rem;padding:6px;}
 .fab{z-index:9;}
 
+.daily{background:rgba(244,180,0,.08);border:2px solid var(--gold);border-radius:16px;padding:12px;margin:10px 0;}
+.daily.stamped{background:var(--good);border-color:var(--accent);}
+.dhead{display:flex;justify-content:space-between;align-items:center;font-size:1rem;margin-bottom:2px;color:var(--gold);font-weight:800;}
+.drow{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:11px;margin-top:6px;border-radius:12px;border:1.5px solid var(--border);background:rgba(0,0,0,.25);color:var(--text);font-family:inherit;}
+.drow b{display:block;font-size:.88rem;}.drow small{color:var(--muted);font-size:.7rem;font-weight:700;}
+.drow span:last-child{margin-left:auto;color:var(--gold);font-weight:900;}
+.drow.dd{border-color:var(--accent);background:var(--good);}
+.stampmsg{text-align:center;font-weight:900;color:var(--gold);padding:10px 6px 2px;font-size:.95rem;}
+.swap{margin-top:8px;background:none;border:1px dashed var(--muted);color:var(--muted);border-radius:10px;padding:6px 12px;font-size:.75rem;font-weight:700;font-family:inherit;}
+.fridge{background:rgba(31,154,111,.15);border:1px dashed var(--accent);border-radius:12px;padding:10px;margin-bottom:12px;font-weight:700;font-size:.85rem;}
+/* ── Exam Day ── */
+#examview{display:none;position:fixed;inset:0;z-index:8;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#examview.show{display:block;}
+#examview .seg,#examview .marks .pills{} 
+#examview .padbar .seg{display:none;}
+#examview .qbody>.q .marks{display:none;}
+#examview .card .marks{display:block;}
+.extabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.extabs button{width:42px;height:42px;border-radius:12px;border:2px solid var(--border);background:rgba(0,0,0,.25);color:var(--text);font-weight:900;font-family:inherit;}
+.extabs button.on{background:var(--gold);color:#201410;border-color:var(--gold);}
+.extabs button.has:not(.on){border-color:var(--accent);}
+.exwarn{display:none;background:rgba(215,38,61,.2);border:1px solid #d7263d;border-radius:10px;padding:8px;font-weight:800;font-size:.82rem;margin-bottom:8px;}
+.exwarn:not(:empty){display:block;}
+.examcard{border-color:var(--accent2);background:rgba(255,140,63,.08);}
+
 </style>
 </head>
 <body>
@@ -400,6 +425,7 @@ function awardStar(qid){
   melState.stars=melState.stars||{};
   const prev=melState.stars[qid];
   if(st) markDone(qid,st.ci,st.ct);
+  if(typeof dailyTick==='function') dailyTick(qid);
   if(prev==null||lev<prev){
     const bonus=10+(3-lev)*5;
     melState.stars[qid]=lev; xp+=bonus; renderXP();
@@ -493,7 +519,8 @@ function clearBig(pid){
 }
 function persistBig(pid,manual){
   const st=padState[pid]; if(!st) return;
-  sketches[pid]={strokes:st.strokes,savedAt:Date.now(),size:st.size};
+  const cvx=document.getElementById(pid);
+  sketches[pid]={strokes:st.strokes,savedAt:Date.now(),size:st.size,w:cvx?cvx.clientWidth:0,h:cvx?cvx.clientHeight:0};
   const ok=saveMelState();
   const note=document.getElementById('note_'+pid);
   if(note){
@@ -530,6 +557,77 @@ function tilesHtml(c,i){
     return `<button class="tile ${st}" onclick="openQ(${i},${j})"><span class="tn">${st==='done'?'✅':(j+1)}</span><span><b>${(c.shorts&&c.shorts[j])||('Question '+(j+1))}</b><small>${sub}</small></span><span class="tm">${medal}</span></button>`;
   }).join('');
 }
+
+// ══════════════════════ DAILY SPECIAL (3 questions, ~10 minutes) ══════════════════════
+function todayStr(){ return new Date().toLocaleDateString('en-CA'); }
+function yesterdayStr(){ const d=new Date(); d.setDate(d.getDate()-1); return d.toLocaleDateString('en-CA'); }
+function pickDaily(){
+  const chs=currentChapters(), all=[];
+  chs.forEach((c,i)=>c.qs.forEach((q,j)=>all.push({i:i,j:j,qid:qidOf(c,i,j),st:qStatus(c,i,j)})));
+  const unfinished=all.filter(x=>x.st==='started').concat(all.filter(x=>x.st==='new'));
+  const done=all.filter(x=>x.st==='done');
+  const picks=[], units=new Set();
+  const take=(arr,n)=>{ for(let k=0;k<n;k++){ const a=arr.find(x=>!picks.includes(x)&&!units.has(x.i))||arr.find(x=>!picks.includes(x)); if(!a) break; picks.push(a); units.add(a.i); } };
+  take(unfinished,2);
+  const fridge=done.filter(x=>{ const s=melState.stars&&melState.stars[x.qid]; return s==null||s>0; });
+  const before=picks.length;
+  take(fridge.length?fridge:done,1);
+  if(picks.length<3) take(unfinished,3-picks.length);
+  if(picks.length<3) take(done,3-picks.length);
+  return picks.map(x=>x.qid);
+}
+function ensureDaily(){
+  const t=todayStr();
+  if(!melState.daily||melState.daily.date!==t){
+    melState.daily={date:t,picks:pickDaily(),doneToday:[],stamped:false};
+    saveMelState();
+  }
+  return melState.daily;
+}
+function locate(qid){
+  const chs=currentChapters();
+  for(let i=0;i<chs.length;i++) for(let j=0;j<chs[i].qs.length;j++) if(qidOf(chs[i],i,j)===qid) return [i,j];
+  return null;
+}
+function dailyTick(qid){
+  const d=ensureDaily();
+  if(!d.picks.includes(qid)||d.doneToday.includes(qid)) return;
+  d.doneToday.push(qid);
+  if(d.doneToday.length>=d.picks.length&&!d.stamped){
+    d.stamped=true; xp+=20;
+    const st=melState.streak||{last:null,count:0};
+    st.count=(st.last===yesterdayStr())?st.count+1:1; st.last=todayStr(); melState.streak=st;
+    renderXP();
+  }
+  saveMelState();
+}
+function swapDaily(){
+  const d=ensureDaily(); if(d.doneToday.length) return;
+  melState.daily=null; const cur=d.picks.join(); 
+  const nd=ensureDaily(); 
+  if(nd.picks.join()===cur&&nd.picks.length>1){ nd.picks.push(nd.picks.shift()); saveMelState(); }
+  refreshProgress();
+}
+function dailyHtml(){
+  const d=ensureDaily(), chs=currentChapters();
+  if(!d.picks.length) return '';
+  const rows=d.picks.map(qid=>{
+    const loc=locate(qid); if(!loc) return '';
+    const c=chs[loc[0]], st=qStatus(c,loc[0],loc[1]);
+    const doneT=d.doneToday.includes(qid);
+    const tag=doneT?'':(st==='done'?'🥬 FRIDGE — redo with fewer helpers':(st==='started'?'✏️ CONTINUE':'🆕 NEW'));
+    return `<button class="drow ${doneT?'dd':''}" onclick="openQ(${loc[0]},${loc[1]})"><span>${doneT?'✅':'⬜'}</span><span><b>${(c.shorts&&c.shorts[loc[1]])||'Question'}</b><small>${doneT?'Done today!':tag}</small></span><span>→</span></button>`;
+  }).join('');
+  const n=d.doneToday.length, tot=d.picks.length, sk=(melState.streak&&melState.streak.count)||0;
+  const streak=sk?` · 🔥 ${sk}-day streak`:'';
+  return `<div class="daily ${d.stamped?'stamped':''}">
+    <div class="dhead"><b>🍽️ Daily Special</b><span>${n}/${tot}${streak}</span></div>
+    <div class="barcap" style="margin:0 0 6px">3 dishes · about 10 minutes · then you are DONE for today!</div>
+    ${rows}
+    ${d.stamped?'<div class="stampmsg">🌟 FINISHED FOR TODAY! +20 XP — see you tomorrow, Chef!</div>':(n===0?'<button class="swap" onclick="swapDaily()">🔄 Different menu</button>':'')}
+  </div>`;
+}
+
 function nextUp(chs){
   for(let i=0;i<chs.length;i++) for(let j=0;j<chs[i].qs.length;j++) if(!doneIds.has(qidOf(chs[i],i,j))) return [i,j];
   return null;
@@ -544,7 +642,9 @@ function overallInner(chs){
     <div class="pbar"><div style="width:${pct}%"></div></div>
     <div class="medrow">🥇 ${med[0]} &nbsp; 🥈 ${med[1]} &nbsp; 🥉 ${med[2]} &nbsp;·&nbsp; ⭐ ${xp} XP</div>
     <div class="barcap" style="margin:6px 0">No need to do everything at once. Pick ONE tile — 5 minutes is a win! 🔪</div>
-    ${nx?`<button class="nextup" onclick="openQ(${nx[0]},${nx[1]})">🎯 Next up: ${chs[nx[0]].icon} ${(chs[nx[0]].shorts&&chs[nx[0]].shorts[nx[1]])||('Q'+(nx[1]+1))} →</button>`:`<div class="banner show">🏆 ALL DONE, Master Chef! Now try the lower levels for 🥇</div>`}`;
+    ${dailyHtml()}
+    ${examCardHtml()}
+    ${nx?`<button class="nextup" onclick="openQ(${nx[0]},${nx[1]})">🎯 Or just continue: ${chs[nx[0]].icon} ${(chs[nx[0]].shorts&&chs[nx[0]].shorts[nx[1]])||('Q'+(nx[1]+1))} →</button>`:`<div class="banner show">🏆 ALL DONE, Master Chef! Now try the lower levels for 🥇</div>`}`;
 }
 function renderBigChapter(c,i){
   const total=c.qs.length, done=c.qs.filter((q,j)=>doneIds.has(qidOf(c,i,j))).length;
@@ -590,7 +690,7 @@ function openQ(i,j){
   if(!ov){ ov=document.createElement('div'); ov.id='qview'; document.body.appendChild(ov); }
   const last=j>=c.qs.length-1;
   ov.innerHTML=`<div class="qbar"><button onclick="closeQ()">← All questions</button><span>${c.icon} ${c.name} · Q${j+1} of ${c.qs.length}</span><span id="xpTag2">⭐ ${xp}</span></div>
-    <div class="qbody">${renderQBlock(c,i,j)}
+    <div class="qbody">${(doneIds.has(qidOf(c,i,j))&&ensureDaily().picks.includes(qidOf(c,i,j)))?'<div class="fridge">🥬 Fridge revisit: you cooked this already. Try a LOWER helper level (⚫ Dots or 🧊 Exam) to win a better medal!</div>':''}${renderQBlock(c,i,j)}
       <div class="qfoot" id="qfoot">
         <button class="bigbtn go" onclick="finishQ()">✅ I finished this one!</button>
         ${last?'':`<button class="bigbtn" onclick="openQ(${i},${j+1})">Skip to next →</button>`}
@@ -613,13 +713,205 @@ function finishQ(){
   if(!openCtx) return;
   const i=openCtx.i, j=openCtx.j, c=currentChapters()[i], qid=qidOf(c,i,j);
   const first=!doneIds.has(qid);
-  giveCheckXP(qid); markDone(qid,i,c.qs.length);
+  giveCheckXP(qid); markDone(qid,i,c.qs.length); dailyTick(qid);
   const foot=document.getElementById('qfoot'); if(!foot) return;
-  const nx=nextUp(currentChapters());
-  foot.innerHTML=`<div class="cheer">🎉 ${first?'Dish cooked! +5 XP':'Already cooked — nice revisit!'}</div>
-    ${nx?`<button class="bigbtn go" onclick="openQ(${nx[0]},${nx[1]})">🎯 Next: ${(currentChapters()[nx[0]].shorts&&currentChapters()[nx[0]].shorts[nx[1]])||'next question'} →</button>`:'<div class="cheer">🏆 Every question finished!</div>'}
+  const dd=ensureDaily();
+  let nx=null; const rest=dd.picks.filter(x=>!dd.doneToday.includes(x));
+  if(rest.length) nx=locate(rest[0]); else if(!dd.stamped||true) nx=nextUp(currentChapters());
+  const stamp=dd.stamped&&dd.doneToday.includes(qid)&&dd.doneToday[dd.doneToday.length-1]===qid?'<div class="stampmsg">🌟 Daily Special complete! +20 XP — you can stop for today!</div>':'';
+  foot.innerHTML=stamp+`<div class="cheer">🎉 ${first?'Dish cooked! +5 XP':'Already cooked — nice revisit!'}</div>
+    ${nx?`<button class="bigbtn go" onclick="openQ(${nx[0]},${nx[1]})">🎯 ${rest.length?'Daily Special next':'Bonus — next'}: ${(currentChapters()[nx[0]].shorts&&currentChapters()[nx[0]].shorts[nx[1]])||'next question'} →</button>`:'<div class="cheer">🏆 Every question finished!</div>'}
     <button class="bigbtn" onclick="closeQ()">☕ Take a break — back to the list</button>`;
   foot.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ══════════════════════ EXAM DAY MODE (timed mini-paper from all 4 units) ══════════════════════
+const EXAM_LEN={mini:{per:1,mins:20,label:'Mini paper',desc:'4 questions · 20 minutes'},full:{per:2,mins:40,label:'Full paper',desc:'8 questions · 40 minutes'}};
+let examTimer=null, examCur=0, examSel={len:'mini',lvl:0};
+const fmtT=ms=>{ const s=Math.max(0,Math.ceil(ms/1000)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); };
+const exKey=(i,j)=>i+'-'+j;
+const exQid=(att,i,j)=>'ex'+att.id+'x'+i+'x'+j;
+const exTotal=(c,j)=>((c.qs[j].draw&&c.qs[j].draw.pills)||[]).length;
+
+function examQuestions(per){
+  const chs=currentChapters();
+  const lastH=(melState.examHist||[]).slice(-1)[0]; const last=new Set((lastH&&lastH.qs)||[]);
+  const out=[];
+  chs.forEach((c,i)=>{
+    const idx=c.qs.map((q,j)=>j).filter(j=>exTotal(c,j)>0);
+    const fresh=idx.filter(j=>!last.has(exKey(i,j)));
+    const pool=(fresh.length>=per?fresh:idx).slice(), picked=[];
+    while(picked.length<per&&pool.length) picked.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+    picked.sort((a,b)=>a-b).forEach(j=>out.push([i,j]));
+  });
+  return out;
+}
+function examCardHtml(){
+  const att=melState.exam, h=melState.examHist||[];
+  let btn, extra='';
+  if(att&&att.stage==='running') btn=`<button class="nextup" onclick="openExam()">⏱ Resume exam — ${fmtT(att.end-Date.now())} left</button>`;
+  else if(att&&att.stage==='marking') btn=`<button class="nextup" onclick="openExam()">📋 Mark your paper (you handed it in)</button>`;
+  else btn=`<button class="nextup" onclick="openExam()">📝 Start Exam Day</button>`;
+  if(h.length){ const l=h[h.length-1], best=h.reduce((m,x)=>Math.max(m,x.score/x.total),0); extra=`<div class="barcap" style="margin-top:6px">Last: <b>${l.score}/${l.total}</b> (${Math.round(l.score/l.total*100)}%) · Best: ${Math.round(best*100)}% · Papers done: ${h.length}</div>`; }
+  return `<div class="daily examcard"><div class="dhead"><b>📝 Exam Day Mode</b><span>real conditions</span></div>
+    <div class="barcap" style="margin:0 0 6px">A timed paper from all 4 units. Blank page, no hints — then mark it yourself like a teacher.</div>${btn}${extra}</div>`;
+}
+function ensureExamView(){
+  let ov=document.getElementById('examview');
+  if(!ov){ ov=document.createElement('div'); ov.id='examview'; document.body.appendChild(ov); }
+  return ov;
+}
+function openExam(){
+  const ov=ensureExamView(); ov.classList.add('show'); document.body.style.overflow='hidden';
+  const att=melState.exam;
+  if(att&&att.stage==='running'){
+    if(att.end-Date.now()<=0){ examHandIn(true); return; }
+    examGo(Math.min(examCur,att.qs.length-1)); return;
+  }
+  if(att&&att.stage==='marking'){ renderMarking(); return; }
+  renderExamSetup();
+}
+function exitExam(){
+  clearInterval(examTimer); examTimer=null;
+  const ov=document.getElementById('examview'); if(ov){ ov.classList.remove('show'); ov.innerHTML=''; }
+  document.body.style.overflow=''; refreshProgress();
+}
+function renderExamSetup(){
+  const ov=ensureExamView();
+  const lenBtn=k=>`<button class="bigbtn ${examSel.len===k?'go':''}" onclick="examSel.len='${k}';renderExamSetup()">${k==='mini'?'⚡':'🍽️'} ${EXAM_LEN[k].label}<br><small>${EXAM_LEN[k].desc}</small></button>`;
+  const lvlBtn=(v,t)=>`<button class="bigbtn ${examSel.lvl===v?'go':''}" onclick="examSel.lvl=${v};renderExamSetup()">${t}</button>`;
+  ov.innerHTML=`<div class="qbar"><button onclick="exitExam()">← Back</button><span>📝 Exam Day Mode</span><span></span></div>
+   <div class="qbody"><div class="card">
+     <h2 style="margin:0 0 6px">Ready, Chef? 🔪</h2>
+     <p style="margin:6px 0">• The clock runs like a real exam.<br>• No hints, no answers, no pills.<br>• Every question: <b>write SOMETHING first</b> — method marks are real marks!<br>• After handing in, you mark your own paper and see which kind of marks you lose.</p>
+     <div class="barcap">1️⃣ How long?</div><div class="qfoot">${lenBtn('mini')}${lenBtn('full')}</div>
+     <div class="barcap" style="margin-top:10px">2️⃣ Which paper?</div><div class="qfoot">${lvlBtn(0,'🧊 Blank paper — the real thing (🥇 level)')}${lvlBtn(2,'┄ Faint trace helper — training wheels')}</div>
+     <div class="qfoot" style="margin-top:14px"><button class="bigbtn go" onclick="examBegin()">▶️ Start the clock!</button></div>
+   </div></div>`;
+}
+function examBegin(){
+  const L=EXAM_LEN[examSel.len], now=Date.now();
+  const att={id:now.toString(36),len:examSel.len,mins:L.mins,level:examSel.lvl,start:now,end:now+L.mins*60000,qs:examQuestions(L.per),stage:'running',marks:{}};
+  Object.keys(sketches).forEach(k=>{ if(k.indexOf('ex')===0) delete sketches[k]; });
+  if(melState.glev) Object.keys(melState.glev).forEach(k=>{ if(k.indexOf('ex')===0) delete melState.glev[k]; });
+  melState.exam=att; saveMelState(); examCur=0; examGo(0);
+}
+function flushExamPad(){
+  const att=melState.exam; if(!att||att.stage!=='running') return;
+  const q=att.qs[examCur]; if(!q) return;
+  const pid=exQid(att,q[0],q[1])+'pad', st=padState[pid];
+  if(st){ clearTimeout(st.timer); persistBig(pid,false); }
+}
+function examGo(k){
+  const att=melState.exam; if(!att) return;
+  flushExamPad(); examCur=k;
+  const ov=ensureExamView(); ov.classList.add('show'); document.body.style.overflow='hidden';
+  const chs=currentChapters(), [i,j]=att.qs[k], c=chs[i], q=c.qs[j], qid=exQid(att,i,j);
+  melState.glev=melState.glev||{}; melState.glev[qid]=att.level;
+  const tabs=att.qs.map((x,n)=>{ const sk=sketches[exQid(att,x[0],x[1])+'pad']; return `<button class="${n===k?'on':''} ${sk&&sk.strokes&&sk.strokes.length?'has':''}" onclick="examGo(${n})">${n+1}</button>`; }).join('');
+  const marks=exTotal(c,j);
+  ov.innerHTML=`<div class="qbar"><button onclick="examLeave()">✕ Leave</button><span id="extime">⏱ ${fmtT(att.end-Date.now())}</span><span>Q ${k+1}/${att.qs.length}</span></div>
+   <div class="qbody"><div class="extabs">${tabs}</div>
+    <div class="exwarn" id="exwarn"></div>
+    <div class="q" style="border-top:none;margin-top:0;padding-top:0">
+     <div class="qhead"><div class="qicon">${q.icon||'🔬'}</div><p class="stem"><b>[${marks} marks]</b> ${q.stem}</p></div>
+     ${renderBigPad(c,i,j,q,qid)}
+    </div>
+    <div class="qfoot">${k<att.qs.length-1?`<button class="bigbtn go" onclick="examGo(${k+1})">Next question →</button>`:''}${k>0?`<button class="bigbtn" onclick="examGo(${k-1})">← Previous question</button>`:''}<button class="bigbtn" onclick="examHandIn(false)">🏁 Hand in my paper</button></div>
+   </div>`;
+  initBigPadsIn(ov); ov.scrollTop=0;
+  clearInterval(examTimer); examTimer=setInterval(examTick,1000); examTick();
+}
+function examTick(){
+  const att=melState.exam; if(!att||att.stage!=='running'){ clearInterval(examTimer); return; }
+  const left=att.end-Date.now(), el=document.getElementById('extime');
+  if(el){ el.textContent='⏱ '+fmtT(left); el.style.color=left<300000?'#ffe0e0':''; el.style.fontWeight=900; }
+  const w=document.getElementById('exwarn');
+  if(w) w.textContent=left<300000?'⚠️ 5 minutes left — write SOMETHING on every question (method marks!)':'';
+  if(left<=0) examHandIn(true);
+}
+function examLeave(){
+  if(!confirm('Leave the paper? The clock KEEPS running like in a real exam.')) return;
+  flushExamPad(); exitExam();
+}
+function examHandIn(force){
+  const att=melState.exam; if(!att||att.stage!=='running') return;
+  if(!force&&!confirm('Hand in now? You still have '+fmtT(att.end-Date.now())+' left.')) return;
+  flushExamPad(); clearInterval(examTimer); examTimer=null;
+  att.stage='marking'; att.submitted=Date.now(); saveMelState();
+  const ov=ensureExamView(); ov.classList.add('show'); document.body.style.overflow='hidden';
+  renderMarking(force?'⏰ Time is up! Pens down.':'');
+}
+function strokesImg(pid,targetW){
+  const sk=sketches[pid]; if(!sk||!sk.strokes||!sk.strokes.length) return null;
+  const w0=sk.w||700; let maxY=0;
+  sk.strokes.forEach(s=>s.p.forEach(p=>{ if(p[1]>maxY) maxY=p[1]; }));
+  const h0=Math.max(120,Math.min(sk.h||2000,maxY+40)), k=(2*targetW)/w0;
+  const ink=document.createElement('canvas'); ink.width=Math.round(w0*k); ink.height=Math.round(h0*k);
+  const x=ink.getContext('2d'); x.scale(k,k);
+  sk.strokes.forEach(s=>{
+    strokeStyleSet(x,s);
+    if(s.p.length===1){ x.beginPath(); x.moveTo(s.p[0][0],s.p[0][1]); x.lineTo(s.p[0][0]+0.01,s.p[0][1]+0.01); x.stroke(); return; }
+    for(let n=1;n<s.p.length;n++){ x.beginPath(); x.moveTo(s.p[n-1][0],s.p[n-1][1]); x.lineTo(s.p[n][0],s.p[n][1]); x.stroke(); }
+  });
+  const out=document.createElement('canvas'); out.width=ink.width; out.height=ink.height;
+  const ox=out.getContext('2d'); ox.fillStyle='#fffaf0'; ox.fillRect(0,0,out.width,out.height); ox.drawImage(ink,0,0);
+  return out.toDataURL('image/png');
+}
+function exScore(att){
+  const chs=currentChapters(), by={M:[0,0],A:[0,0],R:[0,0]}; let sc=0,tot=0;
+  att.qs.forEach(([i,j])=>{
+    const pills=(chs[i].qs[j].draw&&chs[i].qs[j].draw.pills)||[], got=new Set(att.marks[exKey(i,j)]||[]);
+    pills.forEach((p,n)=>{ tot++; by[p.k][1]++; if(got.has(n)){ sc++; by[p.k][0]++; } });
+  });
+  return {sc:sc,tot:tot,by:by};
+}
+function exSummaryHtml(att){
+  const r=exScore(att), names={M:'Method',A:'Answer',R:'Reason'};
+  const pct=r.tot?Math.round(r.sc/r.tot*100):0;
+  let worst=null,wp=2;
+  ['M','A','R'].forEach(k=>{ if(r.by[k][1]){ const p=r.by[k][0]/r.by[k][1]; if(p<wp){wp=p;worst=k;} } });
+  const tips={M:'Method marks: ALWAYS write the calculation or the picture, even if you are not sure of the answer.',A:'Answer marks: re-check the final number, the unit (cm, °) and simplest form.',R:'Reason marks: write the reason words! "angles on a straight line add to 180°", "same remainder repeats", "every one has an equal chance".'};
+  return `<h2 style="margin:0">🏆 Your score: <span style="color:var(--gold)">${r.sc} / ${r.tot}</span> (${pct}%)</h2>
+   <div class="pbar"><div style="width:${pct}%"></div></div>
+   <div class="medrow">${['M','A','R'].map(k=>`${names[k]} ${r.by[k][0]}/${r.by[k][1]}`).join(' &nbsp;·&nbsp; ')}</div>
+   ${worst&&wp<1?`<div class="barcap" style="margin-top:8px">🎯 Most marks lost: <b>${names[worst]}</b>. ${tips[worst]}</div>`:'<div class="barcap" style="margin-top:8px">🌟 Every mark earned — amazing!</div>'}`;
+}
+function renderMarking(msg){
+  const att=melState.exam, ov=ensureExamView(), chs=currentChapters();
+  ov.classList.add('show');
+  const w=Math.min(680,(ov.clientWidth||700)-40);
+  const blocks=att.qs.map(([i,j],n)=>{
+    const c=chs[i], q=c.qs[j], key=exKey(i,j), pills=(q.draw&&q.draw.pills)||[], got=new Set(att.marks[key]||[]);
+    const img=strokesImg(exQid(att,i,j)+'pad',w);
+    const model=(q.draw&&q.draw.ghost)?`<div class="barcap">🖼️ Chef's model (green = what the teacher wants to see):</div><div class="paper static">${ghostSVG(q.draw.ghost,3,true)}</div>`:'';
+    return `<div class="card"><div class="dhead"><b>Q${n+1} · ${(c.shorts&&c.shorts[j])||c.name}</b><span id="mqs_${key}">${got.size}/${pills.length}</span></div>
+      <div class="barcap">✏️ Your page:</div>${img?`<img src="${img}" style="width:100%;border-radius:8px;border:2px solid #d9c7a3;background:#fffaf0">`:'<div class="exwarn" style="display:block">Blank page — next time write SOMETHING first!</div>'}
+      ${model}<div class="barcap" style="margin-top:6px"><b>Answer:</b> ${q.ans}</div>
+      <div class="marks"><div class="marks-h"><span>👩‍🏫 Be the teacher: tap a pill ONLY if it is really on your page</span></div><div class="pills">${pills.map((p,k)=>`<button class="pill ${got.has(k)?'on':''}" onclick="exMark('${key}',${k},this)"><b class="${p.k}">${p.k}</b><span>${p.t}</span></button>`).join('')}</div></div></div>`;
+  }).join('');
+  ov.innerHTML=`<div class="qbar"><button onclick="exitExam()">← Later</button><span>📋 Mark your paper</span><span></span></div>
+   <div class="qbody">${msg?`<div class="cheer">${msg}</div>`:''}<div class="card" id="exsummary">${exSummaryHtml(att)}</div>${blocks}
+   <div class="qfoot"><button class="bigbtn go" onclick="examFinish()">✅ Finish marking — save my score</button></div></div>`;
+  ov.scrollTop=0;
+}
+function exMark(key,k,btn){
+  const att=melState.exam; att.marks[key]=att.marks[key]||[];
+  const a=att.marks[key], at=a.indexOf(k);
+  if(at>=0){ a.splice(at,1); btn.classList.remove('on'); } else { a.push(k); btn.classList.add('on'); }
+  const [i,j]=key.split('-').map(Number), c=currentChapters()[i];
+  const e=document.getElementById('mqs_'+key); if(e) e.textContent=a.length+'/'+exTotal(c,j);
+  const s=document.getElementById('exsummary'); if(s) s.innerHTML=exSummaryHtml(att);
+  saveMelState();
+}
+function examFinish(){
+  const att=melState.exam; if(!att) return;
+  const r=exScore(att);
+  if(!att.xpGiven){
+    att.xpGiven=true; xp+=r.sc*2; renderXP();
+    melState.examHist=(melState.examHist||[]).concat([{date:todayStr(),score:r.sc,total:r.tot,mins:att.mins,qs:att.qs.map(x=>exKey(x[0],x[1]))}]).slice(-8);
+  }
+  att.stage='done'; saveMelState(); exitExam();
 }
 
 // ══════════════════════ YEAR 8 · TERM 1 FINAL — Units 5–8 ══════════════════════
@@ -925,7 +1217,7 @@ publishActiveExamForHub();
 
 function saveMelState(){
   let ok=true;
-  try{ localStorage.setItem(stateKey(currentExamId), JSON.stringify({xp, done:[...doneIds], sketches, pills:melState.pills, stars:melState.stars, glev:melState.glev})); }catch(e){ ok=false; }
+  try{ localStorage.setItem(stateKey(currentExamId), JSON.stringify({xp, done:[...doneIds], sketches, pills:melState.pills, stars:melState.stars, glev:melState.glev, daily:melState.daily, streak:melState.streak, exam:melState.exam, examHist:melState.examHist})); }catch(e){ ok=false; }
   try{ updateAggregateState(); }catch(e){}
   return ok;
 }
