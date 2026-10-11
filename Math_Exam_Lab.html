@@ -69,6 +69,58 @@ h3{font-family:'Bangers',cursive;font-size:1.1rem;letter-spacing:1px;margin-bott
 .close{float:right;background:none;border:none;font-size:1.2rem;color:var(--muted);}
 small.hint{color:var(--muted);}
 .backlink{display:inline-block;color:#fff;opacity:.85;font-size:.75rem;text-decoration:none;margin-bottom:4px;}
+/* ── Term 1 Final: big paper, ghost hints, mark pills ── */
+.marks{background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:14px;padding:10px;margin:10px 0 6px;}
+.marks-h{font-size:.78rem;font-weight:800;color:var(--gold);margin-bottom:8px;display:flex;justify-content:space-between;gap:8px;}
+.pills{display:flex;flex-wrap:wrap;gap:6px;}
+.pill{display:inline-flex;gap:6px;align-items:center;text-align:left;font-family:inherit;font-size:.78rem;font-weight:700;padding:7px 10px;border-radius:14px;border:1.5px dashed var(--muted);background:transparent;color:var(--text);line-height:1.25;}
+.pill b{font-size:.65rem;border-radius:6px;padding:1px 6px;color:#201410;flex:0 0 auto;}
+.pill b.M{background:#7fb2ff;}.pill b.A{background:#6fd3a0;}.pill b.R{background:#ffb26b;}
+.pill.on{border-style:solid;border-color:var(--accent);background:var(--good);}
+.pill.on span::before{content:'✓ ';color:var(--accent);font-weight:900;}
+.marklegend{font-size:.68rem;color:var(--muted);margin-top:6px;}
+.padbar{margin-top:8px;}
+.seg{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;}
+.seg button{flex:1 1 70px;font-size:.74rem;padding:7px 4px;border-radius:10px;border:1px solid var(--muted);background:none;color:var(--muted);font-weight:800;}
+.seg button.on{background:var(--gold);color:#201410;border-color:var(--gold);}
+.tools{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.swatch{width:26px;height:26px;border-radius:50%;border:2px solid #fffaf0;padding:0;}
+.clearbtn.hot{background:var(--accent);color:#fff;border-color:var(--accent);}
+.paper{position:relative;width:100%;background:#fffaf0;border:2px solid #d9c7a3;border-radius:10px;overflow:hidden;margin-top:6px;}
+.paper.lines{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 35px,#e7dcc3 35px,#e7dcc3 36px);}
+.paper.static{height:auto;padding:8px;}
+.gbox{position:absolute;top:6px;left:6px;width:min(62%,480px);pointer-events:none;z-index:1;}
+.bigpad{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block;z-index:2;}
+.pathcap{font-size:.74rem;color:var(--gold);margin-top:5px;font-weight:700;min-height:14px;}
+.starmark{font-size:1rem;margin-left:4px;}
+/* ── tap-in tiles ── */
+.pbar{height:12px;background:rgba(0,0,0,.3);border-radius:8px;overflow:hidden;margin:8px 0 10px;}
+.pbar div{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .4s;}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px;}
+@media (max-width:480px){.tiles{grid-template-columns:1fr;}}
+.tile{display:flex;gap:10px;align-items:center;text-align:left;padding:12px;border-radius:14px;border:2px solid var(--border);background:rgba(0,0,0,.2);color:var(--text);font-family:inherit;min-height:76px;}
+.tile .tn{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;flex:0 0 auto;}
+.tile b{display:block;font-size:.86rem;line-height:1.2;}
+.tile small{color:var(--muted);font-size:.7rem;font-weight:700;}
+.tile .tm{margin-left:auto;font-size:1.4rem;}
+.tile.done{border-color:var(--accent);background:var(--good);}
+.tile.started{border-color:var(--gold);}
+details.notes{margin:4px 0;}
+details.notes summary{cursor:pointer;font-weight:800;color:var(--gold);font-size:.84rem;padding:6px 0;}
+.bigcount{font-size:1.05rem;margin:2px 0;}.bigcount b{font-size:1.8rem;color:var(--gold);}
+.medrow{font-weight:800;font-size:.9rem;}
+.nextup{width:100%;margin-top:6px;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:900;font-size:.95rem;font-family:inherit;}
+#qview{display:none;position:fixed;inset:0;z-index:8;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#qview.show{display:block;}
+.qbar{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;font-size:.85rem;}
+.qbar button{background:rgba(0,0,0,.28);border:none;color:#fff;border-radius:12px;padding:9px 12px;font-weight:800;font-family:inherit;}
+.qbody{max-width:720px;margin:0 auto;padding:14px 14px 90px;}
+.qfoot{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+.bigbtn{padding:14px;border-radius:14px;border:1px solid var(--border);background:rgba(0,0,0,.25);color:var(--text);font-weight:800;font-size:.92rem;font-family:inherit;}
+.bigbtn.go{background:linear-gradient(135deg,var(--accent),#168a5f);color:#fff;border:none;}
+.cheer{text-align:center;font-weight:900;color:var(--gold);font-size:1.1rem;padding:6px;}
+.fab{z-index:9;}
+
 </style>
 </head>
 <body>
@@ -121,7 +173,8 @@ const STARTERS = [
 // for right now. Move the flag to the new entry when a new exam becomes
 // current; the Kitchen Ninja HQ hub and the ★ marker below both read this.
 const EXAMS = [
- {id:'y8_t1_mid', label:'Year 8 · Term 1 Midterm', short:'T1 Midterm', active:true}
+ {id:'y8_t1_mid', label:'Year 8 · Term 1 Midterm', short:'T1 Midterm', active:false},
+ {id:'y8_t1_final', label:'Year 8 · Term 1 Final', short:'T1 Final', active:true}
 ];
 function activeExamMeta(){ return EXAMS.find(e=>e.active) || EXAMS[0]; }
 
@@ -209,6 +262,611 @@ const CHAPTERS = [
  ]}
 ];
 
+// ══════════════════════ BIG PAPER · draw-first engine (Term 1 Final) ══════════════════════
+// Big draw pad (½ / 1 / 2 pages) + "training wheels" ghost picture (dots → trace → label spots)
+// + teacher's mark pills (M = method, A = answer, R = reason). Strokes are saved per question.
+const S=(p,c,h)=>({p:p,c:c?1:0,h:h?1:0});
+const GL_NAMES=['🧊 Exam','⚫ Dots','┄ Trace','💡 Spots'];
+const PAD_COLORS=['#2b1d15','#1d4ed8','#c81e1e','#15803d'];
+const SIZES=['half','full','two'];
+const SIZE_LBL={half:'📄 ½ page',full:'📄 1 page',two:'📄📄 2 pages'};
+let padMode='draw', palmGuard=false;
+const ghostReg={}, padState={};
+
+function paperH(size){
+  const vh=window.innerHeight||900;
+  if(size==='full') return Math.max(760,Math.round(vh*0.95));
+  if(size==='two') return Math.max(1500,Math.round(vh*1.9));
+  return Math.max(430,Math.round(vh*0.55));
+}
+
+function ghostSVG(sp,lv,model){
+  const W=(sp.vb||[600,340])[0], H=(sp.vb||[600,340])[1];
+  const GC='#c98a4b', GT='#a8742f', INKC='#2b1d15', OK='#0f7a55';
+  const num={}; let cnt=0;
+  (sp.pts||[]).forEach((p,i)=>{ if(p[2]!==0) num[i]=++cnt; });
+  const T=(t,defCol,op)=>`<text x="${t[0]}" y="${t[1]}" font-size="${t[4]||(String(t[2]).length>3?12:16)}" font-weight="700" fill="${t[3]||defCol}" text-anchor="${t[5]||'middle'}" opacity="${op}" font-family="Nunito,sans-serif">${t[2]}</text>`;
+  let o='';
+  if(sp.grid){
+    let gs='';
+    for(let x=0;x<=W;x+=sp.grid) gs+=`<line x1="${x}" y1="0" x2="${x}" y2="${H}"/>`;
+    for(let y=0;y<=H;y+=sp.grid) gs+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}"/>`;
+    o+=`<g stroke="#d9cdb0" stroke-width="1">${gs}</g>`;
+  }
+  const show2=model||lv>=2, show3=model||lv>=3;
+  const dash=`stroke="${GC}" stroke-width="2.2" stroke-dasharray="7 6" opacity="0.8"`;
+  if(show3&&sp.f) sp.f.forEach(f=>{ o+=`<rect x="${f[0]}" y="${f[1]}" width="${f[2]}" height="${f[3]}" fill="${f[4]}" opacity="${model?0.5:0.14}"/>`; });
+  if(show2){
+    (sp.g||[]).forEach(g=>{ o+=`<line x1="${g[0]}" y1="${g[1]}" x2="${g[2]}" y2="${g[3]}" ${model?'stroke="#6b5a40" stroke-width="1.6"':'stroke="'+GC+'" stroke-width="1.8" stroke-dasharray="5 5" opacity="0.8"'}/>`; });
+    (sp.sh||[]).forEach(s=>{
+      const pts=s.p.map(k=>sp.pts[k][0]+','+sp.pts[k][1]).join(' ');
+      const tag=s.c?'polygon':'polyline';
+      o+=`<${tag} points="${pts}" fill="none" ${model?`stroke="${INKC}" stroke-width="2.6"${s.h?' stroke-dasharray="6 5"':''}`:dash} stroke-linejoin="round" stroke-linecap="round"/>`;
+    });
+    (sp.e||[]).forEach(d=>{ o+=`<path d="${d}" fill="none" ${model?'stroke="#1d4ed8" stroke-width="1.8"':dash}/>`; });
+  }
+  if(model&&sp.m) o+=sp.m.join('');
+  if(show3&&sp.n) sp.n.forEach(t=>{ o+=T(t,model?INKC:GT,model?1:0.8); });
+  if(!model&&lv>=3&&sp.s) sp.s.forEach(s=>{ o+=`<ellipse cx="${s[0]}" cy="${s[1]-4}" rx="24" ry="13" fill="none" stroke="${GC}" stroke-dasharray="3 3"/><text x="${s[0]}" y="${s[1]}" font-size="12" font-weight="700" fill="${GT}" text-anchor="middle" opacity="0.8" font-family="Nunito,sans-serif">${s[2]}</text>`; });
+  if(model&&sp.l) sp.l.forEach(t=>{ o+=T(t,OK,1); });
+  if(!model&&lv>=1){
+    if(lv===1) (sp.g||[]).forEach(g=>{ o+=`<circle cx="${g[0]}" cy="${g[1]}" r="2.5" fill="${GC}"/><circle cx="${g[2]}" cy="${g[3]}" r="2.5" fill="${GC}"/>`; });
+    (sp.pts||[]).forEach((p,i)=>{ if(num[i]) o+=`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${INKC}"/><text x="${p[0]+7}" y="${p[1]-7}" font-size="14" font-weight="800" fill="#8a5a2b" font-family="Nunito,sans-serif">${num[i]}</text>`; });
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block" font-family="Nunito,sans-serif">${o}</svg>`;
+}
+
+function pathCaption(sp){
+  const num={}; let c=0;
+  (sp.pts||[]).forEach((p,i)=>{ if(p[2]!==0) num[i]=++c; });
+  return (sp.sh||[]).map(s=>s.p.map(k=>num[k]).join('→')+(s.c?'→'+num[s.p[0]]:'')).join('  ·  lift pen  ·  ');
+}
+function capFor(sp,lv){
+  if(!sp) return '';
+  if(lv===0) return '🧊 Exam mode — blank page, just like the real paper. You can do it!';
+  let t='';
+  if(lv>=1) t='🔵 Join the dots in order: '+pathCaption(sp);
+  if(lv>=2&&sp.e&&sp.e.length) t+='  ·  also trace the dashed curves';
+  if(lv>=2) t+='  (dashed = the way)';
+  if(lv>=3) t+='  ·  the dotted ovals show where to write numbers';
+  return t;
+}
+
+function medalFor(lev){ return lev===0?'🥇':(lev===1?'🥈':'🥉'); }
+function starHtml(qid){
+  const s=melState.stars&&melState.stars[qid];
+  return s==null?'':medalFor(s);
+}
+
+function renderBigPad(c,i,j,q,qid){
+  const pid=qid+'pad', d=q.draw||{}, g=d.ghost||null, pills=d.pills||[];
+  ghostReg[pid]=g;
+  const saved=sketches[pid];
+  const lev=(melState.glev&&melState.glev[qid]!=null)?melState.glev[qid]:2;
+  const on=new Set((melState.pills&&melState.pills[qid])||[]);
+  const size=(saved&&saved.size)||'half';
+  const strokes=(saved&&Array.isArray(saved.strokes)&&saved.strokes.length&&!Array.isArray(saved.strokes[0]))?saved.strokes:[];
+  padState[pid]={qid:qid,ci:i,ct:c.qs.length,level:lev,size:size,color:PAD_COLORS[0],width:3,erase:false,lines:false,strokes:strokes,timer:null};
+  const pillHtml=pills.length?`<div class="marks"><div class="marks-h"><span>🎯 Teacher's mark pills — put each one in your picture, then tap it</span><span id="pc_${qid}">${on.size}/${pills.length}</span></div><div class="pills">${pills.map((p,k)=>`<button class="pill ${on.has(k)?'on':''}" onclick="togglePill('${qid}',${k},${pills.length},this)"><b class="${p.k}">${p.k}</b><span>${p.t}</span></button>`).join('')}</div><div class="marklegend">M = method mark · A = answer mark · R = reason mark · all pills = a medal 🏅</div></div>`:'';
+  const lvHtml=g?`<div class="seg" id="seg_${pid}">${GL_NAMES.map((n,k)=>`<button class="${k===lev?'on':''}" onclick="setGhost('${pid}',${k})">${n}</button>`).join('')}</div>`:'';
+  const tools=`<div class="tools">${PAD_COLORS.map(col=>`<button class="swatch" style="background:${col}" onclick="padColor('${pid}','${col}')"></button>`).join('')}
+    <button class="clearbtn" id="er_${pid}" onclick="padEraser('${pid}')">🧽 Rub out</button>
+    <button class="clearbtn" id="th_${pid}" onclick="padThick('${pid}')">✏️ Pen: medium</button>
+    <button class="clearbtn" onclick="undoBig('${pid}')">↩️ Undo</button>
+    <button class="clearbtn" onclick="clearBig('${pid}')">Clear</button>
+    <button class="clearbtn" id="sz_${pid}" onclick="padSize('${pid}')">${SIZE_LBL[size]}</button>
+    <button class="clearbtn" onclick="padLines('${pid}')">📝 Lines</button>
+    <button class="clearbtn btn-scroll" onclick="toggleScroll()">✋ Scroll mode: off</button>
+    <button class="clearbtn btn-palm" onclick="togglePalm()">🖐️ Palm guard: off</button>
+    <button class="clearbtn" onclick="exportBig('${pid}')">📷 Photo</button>
+    <button class="clearbtn savebtn" onclick="saveBig('${pid}')">🫙 Save</button></div>`;
+  return `${pillHtml}
+    <div class="padbar">${lvHtml}${tools}</div>
+    <div class="paper" id="paper_${pid}" style="height:${paperH(size)}px">
+      ${g?`<div class="gbox" id="ghost_${pid}">${ghostSVG(g,lev,false)}</div>`:''}
+      <canvas class="bigpad" id="${pid}"></canvas>
+    </div>
+    <div class="pathcap" id="cap_${pid}">${capFor(g,lev)}</div>
+    <div class="savenote" id="note_${pid}"></div>`;
+}
+
+function modelHtmlFor(q){
+  if(!(q.draw&&q.draw.ghost)) return '';
+  return `<div class="barcap" style="margin-top:8px">🖼️ Chef's model picture — compare with yours (green = what the teacher wants to see):</div><div class="paper static">${ghostSVG(q.draw.ghost,3,true)}</div>`;
+}
+function giveCheckXP(qid){ if(!doneIds.has(qid)) saveXP(5); }
+
+function setGhost(pid,k){
+  const st=padState[pid]; if(!st) return;
+  st.level=k;
+  melState.glev=melState.glev||{}; melState.glev[st.qid]=k;
+  const gb=document.getElementById('ghost_'+pid); if(gb) gb.innerHTML=ghostSVG(ghostReg[pid],k,false);
+  const seg=document.getElementById('seg_'+pid); if(seg) [...seg.children].forEach((b,n)=>b.classList.toggle('on',n===k));
+  const cap=document.getElementById('cap_'+pid); if(cap) cap.textContent=capFor(ghostReg[pid],k);
+  saveMelState();
+}
+
+function togglePill(qid,k,total,btn){
+  melState.pills=melState.pills||{};
+  const arr=new Set(melState.pills[qid]||[]);
+  if(arr.has(k)){arr.delete(k);btn.classList.remove('on');} else {arr.add(k);btn.classList.add('on');}
+  melState.pills[qid]=[...arr];
+  const pc=document.getElementById('pc_'+qid); if(pc) pc.textContent=arr.size+'/'+total;
+  if(arr.size===total) awardStar(qid);
+  saveMelState();
+}
+function awardStar(qid){
+  const pid=qid+'pad', st=padState[pid], lev=st?st.level:2;
+  melState.stars=melState.stars||{};
+  const prev=melState.stars[qid];
+  if(st) markDone(qid,st.ci,st.ct);
+  if(prev==null||lev<prev){
+    const bonus=10+(3-lev)*5;
+    melState.stars[qid]=lev; xp+=bonus; renderXP();
+    const sp=document.getElementById('star_'+qid); if(sp) sp.textContent=medalFor(lev);
+    const note=document.getElementById('note_'+pid);
+    if(note){ note.textContent=`${medalFor(lev)} All pills done! +${bonus} XP`+(lev>0?' — next time try one level lower 🔥':' — GOLD, exam-mode master!'); note.classList.add('flash'); }
+  }
+}
+
+function sizeBig(cv){
+  const r=cv.parentElement.getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+  cv.width=Math.max(10,Math.round(r.width*dpr)); cv.height=Math.max(10,Math.round(r.height*dpr));
+  cv._dpr=dpr; redrawBig(cv);
+}
+function strokeStyleSet(ctx,s){
+  ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=s.w;
+  if(s.e){ ctx.globalCompositeOperation='destination-out'; ctx.strokeStyle='#000'; }
+  else { ctx.globalCompositeOperation='source-over'; ctx.strokeStyle=s.c; }
+}
+function ctxOf(cv){ const x=cv.getContext('2d'); x.setTransform(cv._dpr||1,0,0,cv._dpr||1,0,0); return x; }
+function drawSeg(cv,s,a,b){ const x=ctxOf(cv); strokeStyleSet(x,s); x.beginPath(); x.moveTo(a[0],a[1]); x.lineTo(b[0],b[1]); x.stroke(); }
+function drawDotB(cv,s,p){ drawSeg(cv,s,p,[p[0]+0.01,p[1]+0.01]); }
+function redrawBig(cv){
+  const st=padState[cv.id]; if(!st) return;
+  const x=ctxOf(cv); x.save(); x.setTransform(1,0,0,1,0,0); x.clearRect(0,0,cv.width,cv.height); x.restore();
+  st.strokes.forEach(s=>{
+    if(s.p.length===1){ drawDotB(cv,s,s.p[0]); return; }
+    for(let k=1;k<s.p.length;k++) drawSeg(cv,s,s.p[k-1],s.p[k]);
+  });
+}
+function bp(cv,e){ const r=cv.getBoundingClientRect(); return [Math.round((e.clientX-r.left)*10)/10, Math.round((e.clientY-r.top)*10)/10]; }
+
+function initBigPadsIn(root){
+  root.querySelectorAll('canvas.bigpad').forEach(cv=>{
+    if(cv.dataset.inited) return; cv.dataset.inited='1';
+    const st=padState[cv.id]; if(!st) return;
+    sizeBig(cv);
+    let drawing=false, cur=null, last=null;
+    cv.addEventListener('pointerdown',e=>{
+      if(padMode!=='draw') return;
+      if(palmGuard&&e.pointerType==='touch') return;
+      e.preventDefault(); drawing=true;
+      const p=bp(cv,e);
+      cur={c:st.color,w:st.erase?st.width*6:st.width,e:st.erase?1:0,p:[p]};
+      st.strokes.push(cur); last=p;
+      try{cv.setPointerCapture(e.pointerId);}catch(err){}
+      drawDotB(cv,cur,p);
+    });
+    cv.addEventListener('pointermove',e=>{
+      if(!drawing) return;
+      const evs=(e.getCoalescedEvents&&e.getCoalescedEvents().length)?e.getCoalescedEvents():[e];
+      evs.forEach(ev=>{
+        const p=bp(cv,ev);
+        if(Math.hypot(p[0]-last[0],p[1]-last[1])<1.2) return;
+        drawSeg(cv,cur,last,p); cur.p.push(p); last=p;
+      });
+    });
+    const end=()=>{ if(drawing){ drawing=false; scheduleAutosave(cv.id); } };
+    ['pointerup','pointercancel','pointerleave'].forEach(ev=>cv.addEventListener(ev,end));
+  });
+  applyMode();
+}
+
+function applyMode(){
+  document.querySelectorAll('canvas.bigpad').forEach(cv=>{ cv.style.pointerEvents=padMode==='draw'?'auto':'none'; });
+  document.querySelectorAll('.btn-scroll').forEach(b=>{ b.textContent=padMode==='draw'?'✋ Scroll mode: off':'✏️ Back to drawing'; b.classList.toggle('hot',padMode!=='draw'); });
+  document.querySelectorAll('.btn-palm').forEach(b=>{ b.textContent='🖐️ Palm guard: '+(palmGuard?'ON (pencil only)':'off'); b.classList.toggle('hot',palmGuard); });
+}
+function toggleScroll(){ padMode=padMode==='draw'?'scroll':'draw'; applyMode(); }
+function togglePalm(){ palmGuard=!palmGuard; applyMode(); }
+
+function padColor(pid,col){ const st=padState[pid]; st.color=col; st.erase=false; const b=document.getElementById('er_'+pid); if(b) b.classList.remove('hot'); }
+function padEraser(pid){ const st=padState[pid]; st.erase=!st.erase; const b=document.getElementById('er_'+pid); if(b) b.classList.toggle('hot',st.erase); }
+function padThick(pid){
+  const st=padState[pid]; st.width=st.width===3?6:(st.width===6?2:3);
+  const b=document.getElementById('th_'+pid); if(b) b.textContent='✏️ Pen: '+(st.width===2?'thin':st.width===3?'medium':'thick');
+}
+function padLines(pid){ const st=padState[pid]; st.lines=!st.lines; document.getElementById('paper_'+pid).classList.toggle('lines',st.lines); }
+function padSize(pid){
+  const st=padState[pid]; st.size=SIZES[(SIZES.indexOf(st.size)+1)%SIZES.length];
+  document.getElementById('paper_'+pid).style.height=paperH(st.size)+'px';
+  document.getElementById('sz_'+pid).textContent=SIZE_LBL[st.size];
+  sizeBig(document.getElementById(pid)); scheduleAutosave(pid);
+}
+function undoBig(pid){ const st=padState[pid]; st.strokes.pop(); redrawBig(document.getElementById(pid)); scheduleAutosave(pid); }
+function clearBig(pid){
+  const st=padState[pid]; if(!st.strokes.length) return;
+  if(!confirm('Clear the whole page?')) return;
+  st.strokes.length=0; redrawBig(document.getElementById(pid)); scheduleAutosave(pid);
+}
+function persistBig(pid,manual){
+  const st=padState[pid]; if(!st) return;
+  sketches[pid]={strokes:st.strokes,savedAt:Date.now(),size:st.size};
+  const ok=saveMelState();
+  const note=document.getElementById('note_'+pid);
+  if(note){
+    const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    note.textContent=ok===false?'⚠️ Storage is full — tap 📷 Photo to keep this page':((manual?'✅ Saved ':'💾 Auto-saved ')+t);
+    note.classList.add('flash');
+  }
+}
+function saveBig(pid){ persistBig(pid,true); }
+function scheduleAutosave(pid){ const st=padState[pid]; clearTimeout(st.timer); st.timer=setTimeout(()=>persistBig(pid,false),1200); }
+function exportBig(pid){
+  const cv=document.getElementById(pid); const o=document.createElement('canvas'); o.width=cv.width; o.height=cv.height;
+  const x=o.getContext('2d'); x.fillStyle='#fffaf0'; x.fillRect(0,0,o.width,o.height); x.drawImage(cv,0,0);
+  o.toBlob(b=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='math-sketch-'+pid+'.png'; document.body.appendChild(a); a.click(); a.remove(); },'image/png');
+}
+let _rz; window.addEventListener('resize',()=>{ clearTimeout(_rz); _rz=setTimeout(()=>document.querySelectorAll('canvas.bigpad').forEach(sizeBig),250); });
+
+// ══════════════════════ TAP-IN QUESTIONS (one question at a time) ══════════════════════
+function qidOf(c,i,j){ return `${c.id}${i}q${j}`; }
+function qStatus(c,i,j){
+  const qid=qidOf(c,i,j);
+  if(doneIds.has(qid)) return 'done';
+  const sk=sketches[qid+'pad'];
+  const np=(melState.pills&&melState.pills[qid]||[]).length;
+  if(np>0||(sk&&sk.strokes&&sk.strokes.length)) return 'started';
+  return 'new';
+}
+function tilesHtml(c,i){
+  return c.qs.map((q,j)=>{
+    const st=qStatus(c,i,j), qid=qidOf(c,i,j);
+    const np=(melState.pills&&melState.pills[qid]||[]).length, tot=(q.draw&&q.draw.pills||[]).length;
+    const sub=st==='done'?'Finished!':(st==='started'?`In progress${tot?' · '+np+'/'+tot+' pills':''}`:'Tap to start');
+    const medal=st==='done'?starHtml(qid):(st==='started'?'✏️':'');
+    return `<button class="tile ${st}" onclick="openQ(${i},${j})"><span class="tn">${st==='done'?'✅':(j+1)}</span><span><b>${(c.shorts&&c.shorts[j])||('Question '+(j+1))}</b><small>${sub}</small></span><span class="tm">${medal}</span></button>`;
+  }).join('');
+}
+function nextUp(chs){
+  for(let i=0;i<chs.length;i++) for(let j=0;j<chs[i].qs.length;j++) if(!doneIds.has(qidOf(chs[i],i,j))) return [i,j];
+  return null;
+}
+function overallInner(chs){
+  let tot=0,done=0; chs.forEach((c,i)=>c.qs.forEach((q,j)=>{ tot++; if(doneIds.has(qidOf(c,i,j))) done++; }));
+  const med=[0,0,0]; Object.values(melState.stars||{}).forEach(v=>{ med[v===0?0:(v===1?1:2)]++; });
+  const nx=nextUp(chs);
+  const pct=tot?Math.round(done/tot*100):0;
+  return `<h2 style="margin:0 0 6px">🍳 Term 1 Final — Dishes Cooked</h2>
+    <div class="bigcount"><b>${done}</b> / ${tot} questions finished</div>
+    <div class="pbar"><div style="width:${pct}%"></div></div>
+    <div class="medrow">🥇 ${med[0]} &nbsp; 🥈 ${med[1]} &nbsp; 🥉 ${med[2]} &nbsp;·&nbsp; ⭐ ${xp} XP</div>
+    <div class="barcap" style="margin:6px 0">No need to do everything at once. Pick ONE tile — 5 minutes is a win! 🔪</div>
+    ${nx?`<button class="nextup" onclick="openQ(${nx[0]},${nx[1]})">🎯 Next up: ${chs[nx[0]].icon} ${(chs[nx[0]].shorts&&chs[nx[0]].shorts[nx[1]])||('Q'+(nx[1]+1))} →</button>`:`<div class="banner show">🏆 ALL DONE, Master Chef! Now try the lower levels for 🥇</div>`}`;
+}
+function renderBigChapter(c,i){
+  const total=c.qs.length, done=c.qs.filter((q,j)=>doneIds.has(qidOf(c,i,j))).length;
+  return `<section id="sec${i}"><div class="card">
+    <span class="tag">${c.title}</span>
+    <h2 style="margin:4px 0">${c.icon} ${c.name} <small id="prog${i}" style="font-weight:400;color:var(--muted);font-size:.8rem;">(${done}/${total} completed)</small></h2>
+    <div class="pbar"><div id="pfill${i}" style="width:${Math.round(done/total*100)}%"></div></div>
+    <details class="notes"><summary>📖 Chef's notes: word logic + Singapore method (tap to read)</summary><p style="margin:6px 0">${c.intro}</p><div class="method">${c.method}</div></details>
+    <div class="tiles" id="tiles${i}">${tilesHtml(c,i)}</div>
+    <div class="banner ${done===total?'show':''}" id="banner${i}">🎉 Chapter complete, Chef! Great experimenting.</div>
+  </div></section>`;
+}
+function refreshProgress(){
+  const chs=currentChapters(); if(!chs.length||!chs[0].big) return;
+  chs.forEach((c,i)=>{
+    const t=document.getElementById('tiles'+i); if(t) t.innerHTML=tilesHtml(c,i);
+    const total=c.qs.length, done=c.qs.filter((q,j)=>doneIds.has(qidOf(c,i,j))).length;
+    const p=document.getElementById('prog'+i); if(p) p.textContent=`(${done}/${total} completed)`;
+    const f=document.getElementById('pfill'+i); if(f) f.style.width=Math.round(done/total*100)+'%';
+    const b=document.getElementById('banner'+i); if(b) b.classList.toggle('show',done===total);
+  });
+  const o=document.getElementById('overall'); if(o) o.innerHTML=overallInner(chs);
+}
+function renderQBlock(c,i,j){
+  const q=c.qs[j], qid=qidOf(c,i,j);
+  const stepsBtns=q.steps.map((s,k)=>`<button onclick="toggleStep('${qid}s${k}')">Hint ${k+1}</button>`).join('');
+  const stepsDivs=q.steps.map((s,k)=>`<div class="reveal" id="${qid}s${k}">${s}${q.visual?renderVisualPartial(q.visual,k):''}</div>`).join('');
+  const visualHtml=q.visual?renderVisual(q.visual):'';
+  return `<div class="q" style="border-top:none;margin-top:0;padding-top:0">
+    <div class="qhead"><div class="qicon">${q.icon||'🔬'}</div><p class="stem">${q.stem} <span class="donemark" id="mark_${qid}">${doneIds.has(qid)?'✅':''}</span><span class="starmark" id="star_${qid}">${starHtml(qid)}</span></p></div>
+    ${renderBigPad(c,i,j,q,qid)}
+    <div class="steps">${stepsBtns}<button style="background:var(--accent2);color:#fff;border-color:var(--accent2);" onclick="toggleStep('${qid}ans')">👀 Check Answer</button></div>
+    ${stepsDivs}
+    <div class="reveal" id="${qid}ans"><strong>Answer:</strong> ${q.ans}${visualHtml}${modelHtmlFor(q)}</div>
+  </div>`;
+}
+let openCtx=null;
+function openQ(i,j){
+  const c=currentChapters()[i]; if(!c) return;
+  if(openCtx) flushOpenPad();
+  openCtx={i:i,j:j};
+  let ov=document.getElementById('qview');
+  if(!ov){ ov=document.createElement('div'); ov.id='qview'; document.body.appendChild(ov); }
+  const last=j>=c.qs.length-1;
+  ov.innerHTML=`<div class="qbar"><button onclick="closeQ()">← All questions</button><span>${c.icon} ${c.name} · Q${j+1} of ${c.qs.length}</span><span id="xpTag2">⭐ ${xp}</span></div>
+    <div class="qbody">${renderQBlock(c,i,j)}
+      <div class="qfoot" id="qfoot">
+        <button class="bigbtn go" onclick="finishQ()">✅ I finished this one!</button>
+        ${last?'':`<button class="bigbtn" onclick="openQ(${i},${j+1})">Skip to next →</button>`}
+      </div></div>`;
+  ov.classList.add('show'); ov.scrollTop=0; document.body.style.overflow='hidden';
+  initBigPadsIn(ov);
+}
+function flushOpenPad(){
+  if(!openCtx) return;
+  const c=currentChapters()[openCtx.i], pid=qidOf(c,openCtx.i,openCtx.j)+'pad', st=padState[pid];
+  if(st){ clearTimeout(st.timer); persistBig(pid,false); }
+}
+function closeQ(){
+  flushOpenPad(); openCtx=null;
+  const ov=document.getElementById('qview'); if(ov){ ov.classList.remove('show'); ov.innerHTML=''; }
+  document.body.style.overflow='';
+  refreshProgress();
+}
+function finishQ(){
+  if(!openCtx) return;
+  const i=openCtx.i, j=openCtx.j, c=currentChapters()[i], qid=qidOf(c,i,j);
+  const first=!doneIds.has(qid);
+  giveCheckXP(qid); markDone(qid,i,c.qs.length);
+  const foot=document.getElementById('qfoot'); if(!foot) return;
+  const nx=nextUp(currentChapters());
+  foot.innerHTML=`<div class="cheer">🎉 ${first?'Dish cooked! +5 XP':'Already cooked — nice revisit!'}</div>
+    ${nx?`<button class="bigbtn go" onclick="openQ(${nx[0]},${nx[1]})">🎯 Next: ${(currentChapters()[nx[0]].shorts&&currentChapters()[nx[0]].shorts[nx[1]])||'next question'} →</button>`:'<div class="cheer">🏆 Every question finished!</div>'}
+    <button class="bigbtn" onclick="closeQ()">☕ Take a break — back to the list</button>`;
+  foot.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ══════════════════════ YEAR 8 · TERM 1 FINAL — Units 5–8 ══════════════════════
+STARTERS.push(
+  "Angles on a straight line add to 180°, so ∠… = 180° − …° = …°",
+  "Angles in a triangle add to 180°, so ∠… = 180° − …° − …° = …°",
+  "AB ∥ CD, so … angles are equal because they are corresponding / alternate. Co-interior angles add to 180°.",
+  "A fair sample is chosen at random, so every … has an equal chance.",
+  "Common denominator first: LCM of … and … is … so …/… = …/…",
+  "Circumference = π × diameter = π × … = … (2 d.p.)"
+);
+const bars=(n,v,l,c1,c2)=>Array.from({length:n},(_,k)=>({v:v,cls:k%2?c1:c2,l:l}));
+
+CHAPTERS.push(
+// ───────────── UNIT 5 ─────────────
+{examSet:'y8_t1_final', id:'angles', icon:'📐', name:'Angle Kitchen', title:'Unit 5 · Angles & Constructions', big:true, shorts:['Parallel lines: F, Z, U','Bento tray trapezium','Pretzel bow tie (x and y)','Show it is isosceles','Cheese board + bisector','Perpendicular bisector'],
+ intro:`Angles are the cuts a chef makes in a pizza! 🍕<br>🔤 <b>Word logic:</b><br>• <i>para-llel</i> = "beside each other" (they never meet).<br>• <i>co-interior</i> = "co" (together) + "interior" (inside).<br>• <i>ex-terior</i> = "ex" (out) → the OUTSIDE angle.<br>• <i>iso-sceles</i> = "iso" (equal) + "skelos" (legs) → two equal legs.<br>• <i>bi-sect</i> = "bi" (two) + "sect" (cut) → cut in two.<br>• <i>per-pendicular</i> = hangs straight down like a plumb line → 90°.`,
+ method:`🥣 Draw a straight line as ONE <b>180° bar</b>. Cut it into the part you know and the part you don't.<br>Write 3 things every time: <b>FACT → SUM → REASON</b>.<br>Example: "∠B = 180° − 64° = 116° (angles on a straight line add to 180°)". The teacher gives marks for the reason words, so never leave them out!<br>💡 In the real exam you draw the picture yourself. Start with the dots, then try the blank page.`,
+ qs:[
+  {icon:'🥖', stem:`Two breadsticks lie side by side — they are PARALLEL (the arrow marks show it). A knife cuts across both. Trace an <b>F</b>, a <b>Z</b> and a <b>U</b> on your picture. Name each pair of angles and say if they are <b>equal</b> or <b>add to 180°</b>.`,
+   steps:[`F-shape → the angles sit in the same corner at each line.`,`Z-shape → the angles are on opposite sides of the knife, between the lines.`,`U (or C) shape → both inside, on the same side of the knife.`],
+   ans:`F = corresponding (equal). Z = alternate (equal). U/C = co-interior (add to 180°).`,
+   visual:{type:'bar',parts:[{v:65,cls:'a',l:'65°'},{v:115,cls:'b',l:'115° (co-interior)'}],cap:`A co-interior pair is a 180° bar: 65° + 115° = 180°.`},
+   draw:{ghost:{pts:[[40,90],[560,90],[40,250],[560,250],[170,20],[400,320]],sh:[S([0,1]),S([2,3]),S([4,5])],
+     s:[[250,120,'?'],[372,282,'?'],[310,230,'?'],[390,232,'?']],
+     l:[[85,80,'»',null,18],[85,240,'»',null,18],[250,120,'65°'],[372,282,'65°  F'],[310,230,'65°  Z'],[392,232,'115°  U'],[300,334,'F: corresponding (=)  ·  Z: alternate (=)  ·  U: co-interior (add to 180°)',null,12]]},
+    pills:[{k:'M',t:`Draw the parallel arrow marks » on both lines`},{k:'R',t:`Trace an F and write the angle name (equal)`},{k:'R',t:`Trace a Z and write the angle name (equal)`},{k:'R',t:`Trace a U and write the angle name (adds to 180°)`},{k:'A',t:`Write a size on each of the four marked angles`}]}},
+
+  {icon:'🍱', stem:`A bento tray <b>ABCD</b> is a trapezium. The arrow marks show AB ∥ CD. The OUTSIDE angle at B is <b>64°</b> and the OUTSIDE angle at D is <b>105°</b>. Redraw the tray, work out all four angles <b>inside</b> it, and give a reason for each.`,
+   steps:[`Outside angle + inside angle sit on a straight line → a 180° bar.`,`∠B inside = 180° − 64° = 116°. ∠D inside = 180° − 105° = 75°.`,`AB ∥ CD, so angles between the two lines on the same side add to 180° (co-interior): ∠C = 180° − 116° = 64°, ∠A = 180° − 75° = 105°.`,`Check: the 4 angles of any quadrilateral add to 360°: 116 + 64 + 75 + 105 = 360 ✓`],
+   ans:`∠A = 105°, ∠B = 116°, ∠C = 64°, ∠D = 75°. (B and D: angles on a straight line = 180°. A and C: co-interior angles add to 180°.)`,
+   visual:{type:'bar',parts:[{v:64,cls:'a',l:'64° outside'},{v:116,cls:'b',l:'∠B = ?'}],cap:`A straight line is a 180° bar: 64 + ? = 180.`},
+   draw:{ghost:{pts:[[150,80],[480,80],[430,250],[220,250],[60,80],[545,80],[60,250],[545,250]],
+     sh:[S([0,1,2,3],1),S([4,5]),S([6,7])],
+     n:[[134,68,'C'],[503,60,'D'],[440,274,'A'],[204,274,'B'],[165,236,'64°'],[512,114,'105°']],
+     s:[[240,218,'?'],[402,222,'?'],[182,112,'?'],[452,110,'?']],
+     l:[[88,72,'«',null,18],[88,242,'«',null,18],[240,218,'116°'],[402,222,'105°'],[182,112,'64°'],[452,110,'75°'],[300,318,'64+116=180 · 105+75=180 · all four add to 360°',null,12]]},
+    pills:[{k:'M',t:`Redraw the tray with arrow marks on AB and CD`},{k:'M',t:`Write the given outside angles 64° and 105°`},{k:'M',t:`Work: 180° − outside angle (for B and D)`},{k:'R',t:`Reason words: "angles on a straight line add to 180°"`},{k:'A',t:`Write the sizes of ∠B and ∠D inside the tray`},{k:'R',t:`Reason words for A and C: "co-interior angles add to 180°"`},{k:'A',t:`Write the sizes of ∠A and ∠C`},{k:'M',t:`Check: all 4 angles add to 360°`}]}},
+
+  {icon:'🥨', stem:`Two pretzel sticks cross and make two triangles (a "bow tie"). The angles <b>50°, 118° and 60°</b> are given. Redraw it, then work out <b>x</b> and <b>y</b>. Give a reason for each step.`,
+   steps:[`118° and the angle next to it sit on a straight line: 180° − 118° = 62°.`,`The angle on the other side of the crossing is "vertically opposite" → also 62°.`,`Left triangle: x = 180° − 50° − 62° = 68°.`,`Right triangle: y = 180° − 60° − 62° = 58°.`],
+   ans:`x = 68°, y = 58°.`,
+   visual:{type:'bar',parts:[{v:50,cls:'a',l:'50°'},{v:68,cls:'u',l:'x = ?'},{v:62,cls:'b',l:'62°'}],cap:`Triangle bar (not to scale): 50 + x + 62 = 180.`},
+   draw:{ghost:{pts:[[170,20],[50,250],[560,128],[399,320],[300,190,0]],sh:[S([0,1,2,3],1)],
+     n:[[176,52,'50°'],[300,158,'118°'],[520,142,'60°'],[90,222,'x'],[392,298,'y']],
+     s:[[256,196,'?'],[344,196,'?']],
+     l:[[124,222,'= 68°',null,16,'start'],[410,300,'= 58°',null,16,'start'],[256,196,'62°'],[344,196,'62°'],[300,334,'180−118=62  ·  180−50−62=68  ·  180−60−62=58',null,12]]},
+    pills:[{k:'M',t:`Redraw the bow tie and write 50°, 118°, 60°`},{k:'M',t:`Work: 180° − 118° for the angle at the crossing`},{k:'R',t:`Reason: angles on a straight line add to 180°`},{k:'R',t:`Reason: vertically opposite angles are equal`},{k:'M',t:`Work for x: 180° − 50° − (crossing angle)`},{k:'A',t:`Write the value of x`},{k:'M',t:`Work for y: 180° − 60° − (crossing angle)`},{k:'A',t:`Write the value of y`},{k:'R',t:`Reason: angles in a triangle add to 180°`}]}},
+
+  {icon:'🧈', stem:`Show that triangle <b>ABC</b> is <b>isosceles</b>. AB ∥ CD (arrows), BCE is a straight line, ∠ACD = <b>40°</b> and ∠DCE = <b>70°</b>. Redraw the diagram and give a reason for every angle.`,
+   steps:[`Angles on the straight line BCE: ∠ACB = 180° − 40° − 70° = 70°.`,`AB ∥ CD, so ∠ABC = ∠DCE = 70° (corresponding angles).`,`Two angles are equal (70° and 70°) → the sides opposite them are equal: AB = AC. ✔ isosceles`],
+   ans:`∠ACB = 70° and ∠ABC = 70°. Two equal angles → triangle ABC is isosceles (AB = AC).`,
+   visual:{type:'bar',parts:[{v:40,cls:'a',l:'40°'},{v:70,cls:'b',l:'70°'},{v:70,cls:'u',l:'∠ACB = ?'}],cap:`Straight line = 180° bar: 40 + 70 + ? = 180.`},
+   draw:{ghost:{pts:[[208,30],[118,280],[300,280],[390,30],[520,280]],sh:[S([0,1,2],1),S([2,3]),S([2,4])],
+     n:[[208,20,'A'],[100,298,'B'],[292,300,'C'],[392,20,'D'],[528,298,'E'],[300,222,'40°'],[348,262,'70°']],
+     s:[[262,262,'?'],[150,258,'?']],
+     l:[[262,262,'70°'],[150,258,'70°'],[163,155,'▲',null,11],[345,155,'▲',null,11],[300,334,'∠ACB = 180−40−70 = 70°  ·  ∠ABC = ∠DCE = 70°  →  isosceles',null,12]]},
+    pills:[{k:'M',t:`Redraw: AB ∥ CD with arrow marks, B-C-E in a straight line`},{k:'M',t:`Write 40° and 70° on the diagram`},{k:'M',t:`Work: 180° − 40° − 70° for ∠ACB`},{k:'R',t:`Reason: angles on a straight line add to 180°`},{k:'M',t:`Find ∠ABC by using ∠DCE`},{k:'R',t:`Reason: corresponding angles (AB ∥ CD)`},{k:'A',t:`Write both angle sizes inside the triangle`},{k:'R',t:`Conclusion words: two equal angles → isosceles`}]}},
+
+  {icon:'🧀', stem:`A triangular cheese board has sides <b>5.1 cm, 6.8 cm and 8.5 cm</b>. (a) Draw the triangle. (b) Construct the <b>bisector</b> of the smallest angle. (c) The bisector cuts the opposite side into two parts. How long is each part?`,
+   steps:[`Draw the longest side first: AB = 8.5 cm.`,`Compass: arc radius 6.8 cm from A, arc radius 5.1 cm from B. They cross at C. Keep your arcs!`,`Smallest angle = opposite the SHORTEST side (5.1 cm) → that is angle A.`,`Bisect: compass at A cuts both sides; from each cut draw equal arcs that cross; join A to the crossing; it meets BC at D.`,`Measure BD and CD with a ruler. They add up to 5.1 cm.`],
+   ans:`BD ≈ 2.8 cm and CD ≈ 2.3 cm (they must add to 5.1 cm — check yours!).`,
+   visual:{type:'bar',parts:[{v:5.1,cls:'a',l:'5.1'},{v:6.8,cls:'b',l:'6.8'},{v:8.5,cls:'u',l:'8.5 (longest)'}],cap:`Line the sides up like bars. The shortest side is opposite the smallest angle.`},
+   draw:{ghost:{pts:[[100,270],[440,270],[318,107]],sh:[S([0,1,2],1)],g:[[100,270,372,179.3]],
+     e:[`M344.5 150.8 A272 272 0 0 0 282 67.9`,`M363.6 80.9 A204 204 0 0 0 279.2 144.4`,`M200 270 A100 100 0 0 0 180 210`,`M260.6 235 A70 70 0 0 0 235 209.4`,`M243.4 239.6 A70 70 0 0 0 248.9 197.8`],
+     n:[[80,288,'A'],[450,288,'B'],[318,94,'C'],[386,178,'D'],[270,292,'8.5 cm'],[185,172,'6.8 cm'],[418,222,'5.1 cm']],
+     l:[[480,258,'BD ≈ 2.8 cm',null,12],[440,150,'CD ≈ 2.3 cm',null,12],[130,252,'smallest ∠',null,11]]},
+    pills:[{k:'M',t:`Draw the longest side AB = 8.5 cm with a ruler`},{k:'M',t:`Arc radius 6.8 cm from A and arc radius 5.1 cm from B`},{k:'A',t:`Join A–C and B–C and keep every arc`},{k:'M',t:`Say which angle is smallest (opposite the shortest side)`},{k:'M',t:`Compass at the angle: arc across both sides, then two equal arcs that cross`},{k:'A',t:`Draw the bisector and mark D on BC`},{k:'A',t:`Measure and write BD and CD`}]}},
+
+  {icon:'🍕', stem:`Draw triangle <b>ABC</b> accurately: AB = 6 cm, ∠B = 75°, BC = 8 cm. (b) Construct the <b>perpendicular bisector</b> of AC. It meets BC at P. (c) Measure PC.`,
+   steps:[`Draw BC = 8 cm. At B use the protractor to make 75°. Mark A, 6 cm along that line.`,`Perpendicular bisector = cuts AC in half at 90°. Open the compass MORE than half of AC.`,`Draw arcs from A and from C (same width!) so they cross above and below AC. Join the crossings.`,`Where this line meets BC, mark P. Measure PC with a ruler.`],
+   ans:`PC ≈ 5.8 cm (a small measuring tolerance is fine).`,
+   draw:{ghost:{pts:[[136,71],[80,280],[368,280]],sh:[S([0,1,2],1)],g:[[352,64,150,290]],
+     e:[`M204.3 259.3 A200 200 0 0 0 333.9 43.6`,`M419.8 86.8 A200 200 0 0 0 168.8 297.4`],
+     n:[[122,62,'A'],[62,298,'B'],[378,298,'C'],[88,170,'6 cm'],[225,300,'8 cm'],[118,258,'75°']],
+     m:[`<circle cx="158" cy="280" r="4" fill="#c81e1e"/>`,`<circle cx="252" cy="176" r="3" fill="#2b1d15"/>`],
+     l:[[158,318,'P',null,16],[258,168,'M',null,14],[290,196,'90°'],[265,268,'PC ≈ 5.8 cm',null,13]]},
+    pills:[{k:'M',t:`Draw BC = 8 cm, then 75° at B with the protractor`},{k:'A',t:`Mark A at 6 cm and join AC`},{k:'M',t:`Compass wider than half of AC — arcs from A and from C with the SAME width`},{k:'M',t:`Join the two crossing points`},{k:'A',t:`Mark P where the line meets BC`},{k:'A',t:`Measure and write PC`}]}}
+ ]},
+
+// ───────────── UNIT 6 ─────────────
+{examSet:'y8_t1_final', id:'data', icon:'📋', name:'Survey Kitchen', title:'Unit 6 · Collecting Data', big:true, shorts:['Pancake data table','Zalika and 200 cars','250 cupcakes sample','School lunch sample','Why results differ'],
+ intro:`Data = "given things" (facts you collect). 🥄<br>🔤 <b>Word logic:</b><br>• <i>primary</i> data = "prime" = FIRST-hand: you collect it yourself.<br>• <i>secondary</i> data = second-hand: someone else collected it first.<br>• <b>Population</b> = the whole soup pot 🍲. <b>Sample</b> = one taste-spoon.<br>• A good spoon is taken after STIRRING (<i>random</i>). Only the top of the pot = <i>biased</i> ("tilted").<br>• <i>conjecture</i> = "con" (together) + "ject" (throw) → an idea thrown out to be tested.<br>⚠️ Names of sampling methods can differ — check the words with your teacher.`,
+ method:`🥣 Draw the whole pot as ONE long bar and the sample as a small block. Ask: <b>does my block come from ALL parts of the bar?</b> Spread out = fair.<br>Sentence frame: "One advantage is … because …. One disadvantage is … because …."<br>For "explain why": Method → Reason → Example.`,
+ qs:[
+  {icon:'🥞', stem:`Chef Mai asks: <i>"Are girls or boys better at flipping a pancake into a pan? Does height make a difference?"</i> (a) What data would you collect and what TYPE is it? (b) How would you collect it? Draw your data collection table.`,
+   steps:[`Collect: boy/girl, height, and how many flips out of 10 land in the pan.`,`Types: boy/girl = categorical (words). Flips landed = discrete (counted). Height = continuous (measured).`,`Fair test: same pan, same pancake, same 10 tries for everybody. You collect it yourself = primary data.`],
+   ans:`Table: Name | Boy/Girl | Height (cm) | Flips landed /10. Primary data; categorical (boy/girl), discrete (flips), continuous (height).`,
+   draw:{ghost:{pts:[[40,30],[560,30],[560,300],[40,300]],sh:[S([0,1,2,3],1)],
+     g:[[170,30,170,300],[300,30,300,300],[430,30,430,300],[40,80,560,80],[40,135,560,135],[40,190,560,190],[40,245,560,245]],
+     n:[[105,62,'Name'],[235,62,'Boy / Girl',null,13],[365,62,'Height (cm)',null,13],[495,62,'Flips /10',null,13]],
+     l:[[105,113,'Mai'],[235,113,'G'],[365,113,'152'],[495,113,'7'],[105,168,'Tom'],[235,168,'B'],[365,168,'160'],[495,168,'5'],[235,320,'categorical',null,11],[365,320,'continuous',null,11],[495,320,'discrete',null,11]]},
+    pills:[{k:'M',t:`Give the table a title`},{k:'M',t:`4 columns: Name | Boy/Girl | Height | Flips landed out of 10`},{k:'M',t:`Say it is a fair test: same pan, same pancake, same 10 tries`},{k:'A',t:`Label each data type: categorical / discrete / continuous`},{k:'A',t:`Say: primary data (you collect it yourself)`},{k:'M',t:`Leave many rows — bigger sample = more reliable`}]}},
+
+  {icon:'🚗', stem:`Zalika counts the people in each car that passes the food truck. She predicts most cars have only the driver. She starts at <b>08:00</b> and watches the first <b>200 cars</b>. (a) Give one advantage and one disadvantage of her method. (b) Describe a better way to sample 200 cars and explain why it is better.`,
+   steps:[`Advantage: quick and easy — all in one go.`,`Disadvantage: 08:00 is rush hour (school and work runs) — not like the rest of the day, so the sample is biased.`,`Better: spread out — e.g. every 10th car at different times of day and on different days.`],
+   ans:`Advantage: easy/quick. Disadvantage: only rush hour — not representative. Better: sample across the whole day (e.g. every 10th car, or random times) so every part of the day is included.`,
+   visual:{type:'bar',parts:[{v:2,cls:'a',l:'08:00 only'},{v:10,cls:'n',l:'rest of the day — never sampled'}],cap:`Her spoon only tastes the top of the pot.`},
+   draw:{pills:[{k:'A',t:`Write ONE advantage with a "because"`},{k:'A',t:`Write ONE disadvantage with a "because" (rush hour)`},{k:'M',t:`Describe a better method (spread over the day / several days)`},{k:'M',t:`Give a number or rule, e.g. every 10th car`},{k:'R',t:`Explain why it is better: covers the whole population, so fairer`}]}},
+
+  {icon:'🧁', stem:`Chef Nam made <b>250 cupcakes</b>. To check quality she will re-taste a sample of <b>10</b>. (a) Describe THREE different ways of choosing the 10. (b) Which is best? Explain why.`,
+   steps:[`Singapore bar: draw 250 as one long bar. 250 ÷ 10 = 25 per block.`,`Way 1 (every 25th): take cupcake 25, 50, 75 …`,`Way 2 (random): pick 10 numbers between 1 and 250 from a hat or a random-number button.`,`Way 3 (easy but risky): just the first 10 — maybe all baked at the same time.`,`Best = random: every cupcake has an equal chance, so no bias.`],
+   ans:`Random numbers, every 25th, or the first 10. Random is best because every cupcake has an equal chance (no bias).`,
+   visual:{type:'bar',parts:bars(10,1,'25','a','b'),cap:`250 cupcakes = 10 blocks of 25.`},
+   draw:{ghost:{pts:[[40,120],[560,120],[560,190],[40,190]],sh:[S([0,1,2,3],1)],
+     g:Array.from({length:9},(_,k)=>[92+52*k,120,92+52*k,190]),
+     n:[[300,100,'250 cupcakes',null,14]],
+     l:[...Array.from({length:10},(_,k)=>[66+52*k,160,'25',null,12]),[300,232,'Every 25th: 250 ÷ 10 = 25 → cupcake 25, 50, 75 …',null,13],[300,264,'Random: pull 10 numbers from a hat (1 to 250)',null,13],[300,296,'First 10 only: easy but may be biased ✗','#c81e1e',13]]},
+    pills:[{k:'M',t:`Draw 250 as a bar cut into 10 equal blocks`},{k:'A',t:`Write Method 1 clearly`},{k:'A',t:`Write Method 2 clearly`},{k:'A',t:`Write Method 3 clearly`},{k:'R',t:`Say which is best and WHY (equal chance → fair)`}]}},
+
+  {icon:'🏫', stem:`The Chef Club wants to know if students like a new school lunch menu. You will ask about <b>50 students</b>. Explain how you will choose your sample and why you chose this method.`,
+   steps:[`Think "stirred pot": every student must have an equal chance.`,`Idea 1: give every student a number from the school register and pick 50 random numbers.`,`Idea 2: ask a few students from EACH year group so nobody is left out.`,`Justify: asking only my friends or only the lunch queue would be biased.`],
+   ans:`Random sample using register numbers (or some from each year group). Fair because every student has an equal chance; asking only friends would be biased.`,
+   visual:{type:'bar',parts:[{v:1,cls:'a',l:'sample 50'},{v:9,cls:'n',l:'rest of school'}],cap:`Your 50 must come from ALL parts of the bar.`},
+   draw:{pills:[{k:'M',t:`Name the method (random numbers from the register, or from each year group)`},{k:'M',t:`Say how you choose them step by step`},{k:'R',t:`Why: every student has an equal chance → fair, not biased`},{k:'R',t:`Say what would be BAD (only my friends / only the lunch queue)`}]}},
+
+  {icon:'🍜', stem:`Two chefs each ask 50 customers: <i>"Is the soup too spicy / about right / too mild?"</i> Their results are different. Give a possible reason.`,
+   steps:[`Different people were asked — so a different sample.`,`Maybe a different time or place (lunch vs dinner).`,`Small samples bounce around; a bigger sample is more reliable.`],
+   ans:`They sampled different customers (different times/places), and small samples vary. A larger sample would be more reliable.`,
+   draw:{pills:[{k:'R',t:`Reason 1: different customers in each sample`},{k:'R',t:`Reason 2: different time or place of asking`},{k:'R',t:`Reason 3: samples of 50 are small, so results vary`},{k:'M',t:`Suggest a fix (bigger or random sample)`}]}}
+ ]},
+
+// ───────────── UNIT 7 ─────────────
+{examSet:'y8_t1_final', id:'fractions', icon:'🍰', name:'Fraction Pantry', title:'Unit 7 · Fractions', big:true, shorts:['Recurring decimals','Freezer order','6 3/4 − 2 5/6','4 5/6 × 9','3 ÷ 3/4 cakes','Mental fractions','Marcus made a mistake'],
+ intro:`Fractions are how a chef shares a pizza. 🍕<br>🔤 <b>Word logic:</b><br>• <i>numer-ator</i> = "number-er": counts the slices.<br>• <i>denomin-ator</i> = "name-er": names the slice size.<br>• <i>terminating</i> = it "terminates" (ends).<br>• <i>recurring</i> = "re-occurring": happens again and again.<br>• <i>reciprocal</i> = flip it upside down.<br>• <i>integer</i> = whole number ("untouched").<br>• <i>improper</i> fraction = top bigger than bottom.`,
+ method:`🥣 <b>Bar model:</b> draw ONE whole bar, cut it into equal pieces, shade, count.<br>Dividing by a fraction asks: <b>"how many slices of that size fit?"</b> Draw the bars and circle the groups.<br>Subtracting mixed numbers: if the top fraction is too small, <b>borrow 1 whole</b> (e.g. 1 = 12/12).<br>Always check with decimals!`,
+ qs:[
+  {icon:'🍰', stem:`Use a written method (bus-stop short division) to turn <b>3/8</b> and <b>4/9</b> into decimals. Say if each is <b>terminating</b> or <b>recurring</b>.`,
+   steps:[`3/8 means 3 ÷ 8. Write 3.000 and divide: 30 ÷ 8 = 3 r6, 60 ÷ 8 = 7 r4, 40 ÷ 8 = 5 r0.`,`Remainder 0 → it stops → 0.375 → terminating.`,`4/9 = 4 ÷ 9. 40 ÷ 9 = 4 r4 — the remainder 4 keeps coming back!`,`So 4/9 = 0.444… = 0.4̇ (dot above the 4) → recurring.`],
+   ans:`3/8 = 0.375 (terminating). 4/9 = 0.4̇ = 0.444… (recurring).`,
+   visual:{type:'chain',steps:['4 ÷ 9','40 ÷ 9 = 4 r4','40 ÷ 9 = 4 r4','…again & again','0.4̇'],cap:`Same remainder → same digit → repeats forever.`},
+   draw:{ghost:{pts:[[100,200],[100,110],[280,110],[380,200],[380,110],[560,110]],sh:[S([0,1,2]),S([3,4,5])],
+     n:[[75,170,'8',null,18],[355,170,'9',null,18],[118,150,'3 . 0 0 0',null,18,'start'],[398,150,'4 . 0 0 0 0',null,18,'start']],
+     l:[[118,96,'0 . 3 7 5','#b8860b',18,'start'],[398,96,'0 . 4 4 4 4 …','#b8860b',18,'start'],[160,184,'r6   r4   r0',null,12,'start'],[440,184,'r4  r4  r4  r4',null,12,'start'],[60,242,'3/8 = 0.375 → TERMINATING (it stops)',null,14,'start'],[60,272,'4/9 = 0.444… = 0.4̇ → RECURRING (remainder 4 repeats)','#c81e1e',14,'start'],[60,300,'the dot goes above the repeating digit','#8a5a2b',12,'start']]},
+    pills:[{k:'M',t:`Write 3.000 and 4.000 with extra zeros`},{k:'M',t:`Write the remainder after each step`},{k:'A',t:`Write the decimal for 3/8`},{k:'R',t:`Say why it stops (remainder 0) → terminating`},{k:'A',t:`Write the decimal for 4/9`},{k:'R',t:`Say why it repeats (remainder comes back) → recurring, dot above the digit`}]}},
+
+  {icon:'🧊', stem:`Four freezers show these (negative) temperatures in °C: <b>−12/5, −27/10, −17/6, −38/15</b>. Put them in order, coldest (smallest) first.`,
+   steps:[`Make a common denominator: the LCM of 5, 10, 6 and 15 is 30.`,`−12/5 = −72/30, −27/10 = −81/30, −17/6 = −85/30, −38/15 = −76/30.`,`Negatives: the bigger number after the minus sign is COLDER (further left). −85 < −81 < −76 < −72.`,`Check with decimals: −2.83, −2.7, −2.53, −2.4.`],
+   ans:`−17/6, −27/10, −38/15, −12/5.`,
+   visual:{type:'chain',steps:['−17/6 (−2.83)','−27/10 (−2.7)','−38/15 (−2.53)','−12/5 (−2.4)'],cap:`Coldest → warmest = left → right on the number line.`},
+   draw:{ghost:{pts:[[60,170],[540,170]],sh:[S([0,1])],
+     g:Array.from({length:11},(_,k)=>[60+48*k,160,60+48*k,180]),
+     n:[[60,205,'−3'],[300,205,'−2.5'],[540,205,'−2']],
+     m:[140,204,284,348].map(x=>`<circle cx="${x}" cy="170" r="5" fill="#c81e1e"/>`),
+     l:[[140,140,'−17/6',null,13],[204,122,'−27/10',null,13],[284,140,'−38/15',null,13],[348,122,'−12/5',null,13],[300,250,'÷30:  −85/30 < −81/30 < −76/30 < −72/30',null,13],[300,284,'smallest first: −17/6, −27/10, −38/15, −12/5','#b8860b',14]]},
+    pills:[{k:'M',t:`Write the LCM of the denominators`},{k:'M',t:`Rewrite all four with the common denominator`},{k:'M',t:`Write the negative rule (bigger digits = further left)`},{k:'A',t:`Write the final order, smallest first`},{k:'M',t:`Check with decimals`}]}},
+
+  {icon:'🍰', stem:`Work out <b>6 3/4 − 2 5/6</b>. Show a bar model and your working.`,
+   steps:[`Common denominator 12: 6 9/12 − 2 10/12.`,`9/12 is smaller than 10/12 — you can't take away! Borrow 1 whole from the 6: 1 whole = 12/12.`,`6 9/12 = 5 21/12. Now 5 21/12 − 2 10/12.`,`Wholes: 5 − 2 = 3. Fractions: 21/12 − 10/12 = 11/12.`],
+   ans:`3 11/12`,
+   visual:{type:'chain',steps:['6 9/12','= 5 21/12','− 2 10/12','= 3 11/12'],cap:`Borrow 1 whole = 12/12.`},
+   draw:{ghost:{pts:[[55,60],[545,60],[545,110],[55,110],[55,150],[545,150],[545,200],[55,200]],sh:[S([0,1,2,3],1),S([4,5,6,7],1)],
+     g:[125,195,265,335,405,475].flatMap(x=>[[x,60,x,110],[x,150,x,200]]),
+     f:[[55,60,472.5,50,'#e0a52a'],[55,150,198.3,50,'#2a9d8f']],
+     n:[[300,48,'6 3/4',null,15],[300,222,'2 5/6',null,15]],
+     l:[[300,255,'9/12 < 10/12 → borrow 1 whole = 12/12','#c81e1e',13],[300,282,'5 21/12 − 2 10/12 = 3 11/12',null,14],[300,312,'Answer: 3 11/12','#b8860b',16]]},
+    pills:[{k:'M',t:`Write both fractions with a common denominator`},{k:'M',t:`Notice the top fraction is smaller → borrow 1 whole = 12/12`},{k:'M',t:`Rewrite 6 9/12 as 5 ?/12`},{k:'M',t:`Subtract the wholes and the fractions separately`},{k:'A',t:`Write the final mixed number`},{k:'M',t:`Check with decimals`}]}},
+
+  {icon:'🥧', stem:`A pie needs <b>4 5/6 cups</b> of flour per batch. You bake <b>9</b> batches. How much flour? Work out 4 5/6 × 9.`,
+   steps:[`Split the mixed number: 4 5/6 = 4 + 5/6.`,`9 × 4 = 36.`,`9 × 5/6 = 45/6 = 7 1/2.`,`36 + 7 1/2 = 43 1/2.`],
+   ans:`43 1/2 cups.`,
+   visual:{type:'bar',parts:[{v:36,cls:'a',l:'9 × 4 = 36'},{v:7.5,cls:'b',l:'9 × 5/6 = 7 1/2'}],cap:`Area model: two pieces added together.`},
+   draw:{ghost:{pts:[[120,40],[480,40],[480,300],[120,300]],sh:[S([0,1,2,3],1)],g:[[120,255,480,255]],
+     f:[[120,40,360,215,'#e0a52a'],[120,255,360,45,'#2a9d8f']],
+     n:[[300,30,'9'],[100,150,'4'],[90,282,'5/6']],
+     l:[[300,150,'9 × 4 = 36'],[300,284,'9 × 5/6 = 7 1/2'],[500,170,'36 + 7 1/2','#b8860b',14,'start'],[500,194,'= 43 1/2','#b8860b',16,'start']]},
+    pills:[{k:'M',t:`Split 4 5/6 into 4 + 5/6 (draw 2 rows)`},{k:'M',t:`Work 9 × 4`},{k:'M',t:`Work 9 × 5/6 and write it as a mixed number`},{k:'A',t:`Add the two parts`},{k:'M',t:`Check with the improper-fraction way`}]}},
+
+  {icon:'🎂', stem:`You have <b>3 bags of flour</b>. Each cake needs <b>3/4 of a bag</b>. How many cakes can you bake? Work out 3 ÷ 3/4 with a bar model, then check with the reciprocal.`,
+   steps:[`Draw 3 equal bars (3 bags). Cut each into 4 quarters → 12 quarters.`,`One cake = 3 quarters. Circle groups of 3 quarters.`,`You can circle 4 groups → 4 cakes.`,`Reciprocal check: flip 3/4 → 4/3 and multiply: 3 × 4/3 = 12/3 = 4 ✓`],
+   ans:`4 cakes.`,
+   visual:{type:'bar',parts:bars(4,3,'1 cake','a','b'),cap:`12 quarters ÷ 3 quarters = 4 groups.`},
+   draw:{ghost:{pts:[[40,100],[520,100],[520,170],[40,170]],sh:[S([0,1,2,3],1)],
+     g:Array.from({length:11},(_,k)=>[80+40*k,100,80+40*k,170]),
+     f:[[40,100,120,70,'#e0a52a'],[160,100,120,70,'#2a9d8f'],[280,100,120,70,'#e0a52a'],[400,100,120,70,'#2a9d8f']],
+     n:[[120,88,'bag 1'],[280,88,'bag 2'],[440,88,'bag 3']],
+     l:[[100,195,'cake 1'],[220,195,'cake 2'],[340,195,'cake 3'],[460,195,'cake 4'],[280,240,'12 quarters ÷ 3 quarters = 4 cakes',null,14],[280,276,'3 ÷ 3/4 = 3 × 4/3 = 12/3 = 4','#b8860b',15]]},
+    pills:[{k:'M',t:`Draw 3 equal bars (bags) and cut each into quarters`},{k:'M',t:`Circle groups of one cake's amount`},{k:'A',t:`Count the groups and write the answer`},{k:'M',t:`Reciprocal check: flip the fraction and multiply`}]}},
+
+  {icon:'🧮', stem:`Work out <b>mentally</b> (write quick working if you need it): (a) 2/5 + 3/10  (b) 6/7 − 2/3  (c) 4 ÷ 2/7  (d) 9 × (3/4 − 1/3)  (e) 8 ÷ 3/5`,
+   steps:[`(a) tenths: 4/10 + 3/10.`,`(b) common denominator 21: 18/21 − 14/21.`,`(c) flip 2/7 → 7/2: 4 × 7/2 = 14.`,`(d) brackets first: 3/4 − 1/3 = 9/12 − 4/12 = 5/12, then 9 × 5/12 = 45/12 = 3 3/4.`,`(e) 8 × 5/3 = 40/3 = 13 1/3.`],
+   ans:`(a) 7/10  (b) 4/21  (c) 14  (d) 3 3/4  (e) 13 1/3`,
+   draw:{pills:[{k:'M',t:`Common denominators written for (a) and (b)`},{k:'M',t:`Reciprocal (flip) shown for (c) and (e)`},{k:'M',t:`Brackets first in (d)`},{k:'A',t:`All five answers in simplest form (mixed numbers where needed)`}]}},
+
+  {icon:'🔎', stem:`Marcus works out <b>1/3 × (5/6 − 1/2)</b> like this: "First I work out 5/6 − 1/2 which equals 4/4, which cancels to 1. Then 1/3 × 1 = 1/3." (a) Explain his mistake. (b) Work out the correct answer.`,
+   steps:[`Marcus subtracted the tops (5 − 1) AND the bottoms (6 − 2). Wrong!`,`Different denominators need a COMMON denominator first: 1/2 = 3/6.`,`5/6 − 3/6 = 2/6 = 1/3.`,`Then 1/3 × 1/3 = 1/9.`],
+   ans:`(a) He subtracted the tops and the bottoms — you need a common denominator. (b) 1/9.`,
+   visual:{type:'bar',parts:[{v:2,cls:'a',l:'2/6 left'},{v:3,cls:'b',l:'3/6 = 1/2 taken'},{v:1,cls:'n',l:'1/6'}],cap:`5/6 minus 1/2 on a bar of sixths.`},
+   draw:{ghost:{pts:[[60,100],[540,100],[540,160],[60,160]],sh:[S([0,1,2,3],1)],
+     g:[140,220,300,380,460].map(x=>[x,100,x,160]),
+     f:[[60,100,160,60,'#e0a52a'],[220,100,240,60,'#c81e1e']],
+     n:[[260,85,'5/6 shaded']],
+     l:[[340,184,'− 1/2 = − 3/6','#c81e1e',13],[140,184,'left: 2/6 = 1/3',null,13],[300,236,'Marcus: 5/6 − 1/2 = 4/4 ✗ (tops AND bottoms)','#c81e1e',13],[300,278,'Correct: 5/6 − 3/6 = 2/6 = 1/3  →  1/3 × 1/3 = 1/9',null,14]]},
+    pills:[{k:'R',t:`Say what Marcus did wrong`},{k:'M',t:`Write a common denominator for 5/6 − 1/2`},{k:'A',t:`Write 5/6 − 1/2 correctly`},{k:'M',t:`Then multiply by 1/3`},{k:'A',t:`Write the final answer`}]}}
+ ]},
+
+// ───────────── UNIT 8 ─────────────
+{examSet:'y8_t1_final', id:'shapes', icon:'🔺', name:'Shape Workshop', title:'Unit 8 · Shapes & Symmetry', big:true, shorts:['Regular pentagon','True or False: rhombus','Pizza pan circumference','Half-circle perimeter','Cake box views'],
+ intro:`Shapes are in every kitchen: round pizzas, boxes, trays! 📦<br>🔤 <b>Word logic:</b><br>• <i>quadri-lateral</i> = "four" + "sides".<br>• <i>poly-gon</i> = "many" + "angles". <i>penta</i> = 5.<br>• <i>circum-ference</i> = "carry around" → the distance ALL the way round.<br>• <i>dia-meter</i> = "across" + "measure".<br>• <i>sym-metry</i> = "same measure" on both sides.<br>• <i>plan</i> = looking down from above (like into a pot). <i>elevation</i> = the view lifted to the side.`,
+ method:`🥣 <b>Ribbon trick:</b> wrap a ribbon round a pizza. It is 3 diameters and a little bit more (0.14…). That "little bit" is part of π. So C = π × d.<br>Semicircle perimeter = curved part + the straight edge (don't forget it!).<br>Plan and elevations: <b>scale 1:4 means divide every length by 4</b>. Draw each view as a rectangle on 1 cm squares and write the sizes.`,
+ qs:[
+  {icon:'🥧', stem:`A regular pentagon pie has <b>___ sides</b> of equal length, <b>___ lines of symmetry</b> and rotational symmetry of order <b>___</b>. Draw it and show your answers.`,
+   steps:[`Penta = 5. A regular shape has equal sides AND equal angles.`,`Lines of symmetry: one from each corner to the middle of the opposite side → 5.`,`Rotational order = how many times it looks the same in one full turn: 5 (each turn is 360° ÷ 5 = 72°).`],
+   ans:`5 sides, 5 lines of symmetry, rotational symmetry of order 5.`,
+   visual:{type:'chain',steps:['360°','÷ 5','= 72° per turn'],cap:`Order 5 = it fits 5 times in one full turn.`},
+   draw:{ghost:{pts:[[300,40],[423.6,129.8],[376.4,275.2],[223.6,275.2],[176.4,129.8]],sh:[S([0,1,2,3,4],1)],
+     g:[[300,40,300,275.2],[423.6,129.8,200,202.5],[376.4,275.2,238.2,84.9],[223.6,275.2,361.8,84.9],[176.4,129.8,400,202.5]],
+     l:[[300,22,'5 equal sides',null,13],[505,70,'5 lines of symmetry',null,13],[300,320,'rotational symmetry: order 5 (a 72° turn fits 5 times)',null,13]]},
+    pills:[{k:'A',t:`Write the number of sides`},{k:'M',t:`Tick marks on every side (equal length)`},{k:'A',t:`Draw every line of symmetry`},{k:'A',t:`Write the number of lines of symmetry`},{k:'A',t:`Write the order of rotational symmetry`},{k:'M',t:`Show how: 360° ÷ number of turns`}]}},
+
+  {icon:'🍫', stem:`True or False? (a) A square is a special rectangle. (b) A trapezium is a special parallelogram. (c) A rhombus is a special parallelogram. (d) A rhombus is a special kite. Draw a rhombus to help you decide.`,
+   steps:[`Rhombus = 4 equal sides. Opposite sides are parallel → parallelogram ✓. Two pairs of equal neighbours → kite ✓.`,`A square = a rectangle with 4 equal sides → ✓.`,`A trapezium needs only ONE pair of parallel sides. A parallelogram needs TWO pairs. So a trapezium is NOT a special parallelogram.`],
+   ans:`(a) True  (b) False  (c) True  (d) True`,
+   draw:{ghost:{pts:[[300,40],[460,170],[300,300],[140,170]],sh:[S([0,1,2,3],1)],g:[[300,40,300,300],[140,170,460,170]],
+     l:[[300,326,'4 equal sides · opposite sides parallel · diagonals cross at 90°',null,12],[588,66,'special parallelogram ✓',null,12,'end'],[588,88,'special kite ✓',null,12,'end'],[12,66,'(a) T  (b) F',null,12,'start'],[12,88,'(c) T  (d) T',null,12,'start']]},
+    pills:[{k:'M',t:`Draw a rhombus with tick marks on all 4 sides`},{k:'M',t:`Arrow marks on the two pairs of parallel sides`},{k:'R',t:`Say: special parallelogram — both pairs of opposite sides parallel`},{k:'R',t:`Say: special kite — two pairs of equal neighbouring sides`},{k:'A',t:`Write True or False for (a), (b), (c), (d)`},{k:'R',t:`Explain (b): a trapezium has only ONE pair of parallel sides`}]}},
+
+  {icon:'🍕', stem:`A round pizza pan has diameter <b>13 cm</b>. (a) Work out the circumference (use the π button, 2 d.p.). (b) A ribbon 27 cm long goes exactly around a cake tin. Work out the tin's diameter to the nearest mm.`,
+   steps:[`Circumference = π × diameter (the ribbon trick: 3 diameters and a little bit more).`,`(a) π × 13 = 40.84 cm (2 d.p.).`,`(b) Reverse the recipe: d = C ÷ π = 27 ÷ π = 8.594…`,`Nearest mm = 1 decimal place in cm: 8.6 cm.`],
+   ans:`(a) 40.84 cm   (b) 8.6 cm`,
+   visual:{type:'bar',parts:[{v:1,cls:'a',l:'d'},{v:1,cls:'b',l:'d'},{v:1,cls:'a',l:'d'},{v:0.4,cls:'u',l:'.14d'}],cap:`The ribbon is about 3 diameters + a little bit (not to scale).`},
+   draw:{ghost:{pts:[[300,170],[180,170],[420,170]],sh:[S([1,2])],e:[`M180 170 A120 120 0 1 0 420 170 A120 120 0 1 0 180 170`],
+     n:[[300,140,'d = 13 cm',null,14]],
+     l:[[300,205,'C = π × d',null,16],[300,230,'= π × 13',null,16],[300,256,'= 40.84 cm','#b8860b',17],[585,324,'reverse: d = C ÷ π = 27 ÷ π ≈ 8.6 cm',null,12,'end']]},
+    pills:[{k:'M',t:`Mark the centre and the diameter on the circle`},{k:'M',t:`Write the formula C = π × d`},{k:'M',t:`Substitute the number (use the π button)`},{k:'A',t:`Write the answer rounded as asked (2 d.p.)`},{k:'R',t:`Write the unit (cm)`},{k:'M',t:`For part (b) write d = C ÷ π`}]}},
+
+  {icon:'🥧', stem:`A half-circle pie dish has a straight edge (the diameter) of <b>16 cm</b>. (a) Work out its perimeter — the whole way around (π button, 2 d.p.). (b) Is the perimeter of a semicircle with diameter <b>15 m</b> bigger than a quarter-circle with radius <b>10 m</b>? Show working.`,
+   steps:[`Perimeter = curved part + straight part.`,`Curved part = half of the circumference = π × 16 ÷ 2 = 25.13 cm.`,`Straight part = the diameter = 16 cm. Total = 25.13 + 16 = 41.13 cm.`,`(b) Semicircle d = 15: π × 15 ÷ 2 + 15 = 38.56 m. Quarter circle r = 10: π × 20 ÷ 4 + 10 + 10 = 35.71 m. So the semicircle is bigger.`],
+   ans:`(a) 41.13 cm   (b) Semicircle 38.56 m is bigger than quarter-circle 35.71 m.`,
+   visual:{type:'bar',parts:[{v:25.13,cls:'a',l:'curved 25.13'},{v:16,cls:'b',l:'straight 16'}],cap:`Perimeter = two pieces added: curved + straight.`},
+   draw:{ghost:{pts:[[140,230],[460,230],[300,230,0]],sh:[S([0,1])],e:[`M140 230 A160 160 0 0 1 460 230`],
+     n:[[300,252,'d = 16 cm',null,14]],
+     l:[[300,150,'curved: π × 16 ÷ 2 = 25.13',null,14],[300,276,'straight: 16',null,14],[300,312,'P = 25.13 + 16 = 41.13 cm','#b8860b',16]]},
+    pills:[{k:'M',t:`Mark the diameter on the half circle`},{k:'M',t:`Curved part = π × d ÷ 2`},{k:'A',t:`Write the curved length`},{k:'M',t:`Don't forget the straight edge!`},{k:'A',t:`Write the perimeter with units`},{k:'R',t:`Quarter circle: ¼ of the circumference + TWO radii`}]}},
+
+  {icon:'📦', stem:`A cuboid cake box is <b>16 cm long, 12 cm wide and 6 cm high</b>. Draw the <b>plan view</b>, <b>front elevation</b> and <b>side elevation</b> on 1 cm squared paper using a scale of <b>1 : 4</b>.`,
+   steps:[`Scale 1:4 → divide every length by 4: 16 → 4 cm, 12 → 3 cm, 6 → 1.5 cm.`,`Plan = view from ABOVE: length × width = 4 × 3.`,`Front elevation = view from the front: length × height = 4 × 1.5.`,`Side elevation = view from the side: width × height = 3 × 1.5.`],
+   ans:`Plan 4 cm × 3 cm; front elevation 4 cm × 1.5 cm; side elevation 3 cm × 1.5 cm (all rectangles).`,
+   visual:{type:'chain',steps:['16 cm','÷ 4','4 cm'],cap:`Every length is divided by 4.`},
+   draw:{ghost:{grid:40,pts:[[40,40],[200,40],[200,160],[40,160],[40,200],[200,200],[200,260],[40,260],[280,200],[400,200],[400,260],[280,260]],
+     sh:[S([0,1,2,3],1),S([4,5,6,7],1),S([8,9,10,11],1)],
+     n:[[120,28,'PLAN (from above)',null,12],[120,278,'FRONT elevation',null,12],[340,278,'SIDE elevation',null,12]],
+     l:[[120,105,'4 × 3 cm'],[120,235,'4 × 1.5 cm'],[340,235,'3 × 1.5 cm'],[260,60,'scale 1:4 → ÷ 4 every length',null,13,'start'],[260,84,'16 → 4 cm',null,13,'start'],[260,106,'12 → 3 cm',null,13,'start'],[260,128,'6 → 1.5 cm',null,13,'start']]},
+    pills:[{k:'M',t:`Write the scale rule: divide every length by 4`},{k:'A',t:`Draw and label the PLAN (view from above)`},{k:'A',t:`Draw and label the FRONT elevation`},{k:'A',t:`Draw and label the SIDE elevation`},{k:'M',t:`Write each size on the sides (cm)`}]}}
+ ]}
+);
+
 function stateKey(examId){ return 'mathExamLab_'+examId+'_v1'; }
 
 // One-time migration: if this is the very first exam set and old progress was
@@ -227,6 +885,7 @@ function stateKey(examId){ return 'mathExamLab_'+examId+'_v1'; }
 
 let currentExamId = localStorage.getItem('mathExamLabCurrentExam');
 if(!EXAMS.some(e=>e.id===currentExamId)) currentExamId = activeExamMeta().id;
+if(localStorage.getItem('mathExamLabSeenActive')!==activeExamMeta().id){ currentExamId=activeExamMeta().id; try{localStorage.setItem('mathExamLabCurrentExam',currentExamId);localStorage.setItem('mathExamLabSeenActive',currentExamId);}catch(e){} }
 
 let melState, xp, doneIds, sketches;
 function loadExamState(examId){
@@ -235,6 +894,7 @@ function loadExamState(examId){
   xp = Number(melState.xp||0);
   doneIds = new Set(melState.done||[]);
   sketches = melState.sketches || {};
+  melState.pills = melState.pills || {}; melState.stars = melState.stars || {}; melState.glev = melState.glev || {};
 }
 loadExamState(currentExamId);
 
@@ -264,8 +924,10 @@ function publishActiveExamForHub(){
 publishActiveExamForHub();
 
 function saveMelState(){
-  localStorage.setItem(stateKey(currentExamId), JSON.stringify({xp, done:[...doneIds], sketches}));
-  updateAggregateState();
+  let ok=true;
+  try{ localStorage.setItem(stateKey(currentExamId), JSON.stringify({xp, done:[...doneIds], sketches, pills:melState.pills, stars:melState.stars, glev:melState.glev})); }catch(e){ ok=false; }
+  try{ updateAggregateState(); }catch(e){}
+  return ok;
 }
 function chapterComplete(c,i){
   return c.qs.every((q,j)=>doneIds.has(`${c.id}${i}q${j}`));
@@ -274,6 +936,7 @@ function saveXP(n){xp+=n;saveMelState();renderXP();}
 function renderXP(){
   let el=document.getElementById('xpTag');
   if(el) el.textContent = '⭐ '+xp+' XP';
+  const e2=document.getElementById('xpTag2'); if(e2) e2.textContent='⭐ '+xp;
 }
 function currentChapters(){
   return CHAPTERS.filter(c=>c.examSet===currentExamId);
@@ -308,11 +971,11 @@ function build(){
   const chapters=currentChapters();
   nav.innerHTML = chapters.map((c,i)=>`<button data-i="${i}" class="${i===0?'active':''}">${c.icon} ${c.name}${chapterComplete(c,i)?' ✅':''}</button>`).join('')
     + `<button id="xpTag" style="margin-left:auto;background:none;border:none;color:var(--gold);font-weight:800;">⭐ ${xp} XP</button>`;
-  main.innerHTML = chapters.map((c,i)=>renderChapter(c,i)).join('');
+  main.innerHTML = (chapters.length&&chapters[0].big?'<div class="card overall" id="overall">'+overallInner(chapters)+'</div>':'')+chapters.map((c,i)=>renderChapter(c,i)).join('');
   nav.querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>{
     document.getElementById('sec'+b.dataset.i).scrollIntoView({behavior:'smooth'});
   });
-  initPadsIn(main);
+  initPadsIn(main);initBigPadsIn(main);
   if('IntersectionObserver' in window){
     const obs=new IntersectionObserver(entries=>{
       entries.forEach(en=>{
@@ -329,6 +992,7 @@ function build(){
 }
 
 function renderChapter(c,i){
+  if(c.big) return renderBigChapter(c,i);
   let qs = c.qs.map((q,j)=>{
     let stepsBtns = q.steps.map((s,k)=>`<button onclick="toggleStep('${c.id}${i}q${j}s${k}')">Hint ${k+1}</button>`).join('');
     let stepsDivs = q.steps.map((s,k)=>{
@@ -339,13 +1003,13 @@ function renderChapter(c,i){
     let visualHtml = q.visual ? renderVisual(q.visual) : '';
     let qid = `${c.id}${i}q${j}`;
     return `<div class="q">
-      <div class="qhead"><div class="qicon">${q.icon||'🔬'}</div><p class="stem">Q${j+1}. ${q.stem} <span class="donemark" id="mark_${qid}">${doneIds.has(qid)?'✅':''}</span></p></div>
-      <div class="drawrow"><small>✏️ Sketch your bar model or working here first — the real exam won't have pictures!</small><button class="clearbtn" onclick="undoPad('${padId}')">↩️ Undo</button><button class="clearbtn" onclick="clearPad('${padId}')">Clear</button><button class="clearbtn savebtn" onclick="savePad('${padId}')">🫙 Save</button></div>
+      <div class="qhead"><div class="qicon">${q.icon||'🔬'}</div><p class="stem">Q${j+1}. ${q.stem} <span class="donemark" id="mark_${qid}">${doneIds.has(qid)?'✅':''}</span><span class="starmark" id="star_${qid}">${starHtml(qid)}</span></p></div>
+      ${(c.big||q.draw)?renderBigPad(c,i,j,q,qid):`<div class="drawrow"><small>✏️ Sketch your bar model or working here first — the real exam won't have pictures!</small><button class="clearbtn" onclick="undoPad('${padId}')">↩️ Undo</button><button class="clearbtn" onclick="clearPad('${padId}')">Clear</button><button class="clearbtn savebtn" onclick="savePad('${padId}')">🫙 Save</button></div>
       <canvas class="drawpad" id="${padId}"></canvas>
-      <div class="savenote" id="note_${padId}"></div>
-      <div class="steps">${stepsBtns}<button style="background:var(--accent2);color:#fff;border-color:var(--accent2);" onclick="toggleStep('${c.id}${i}q${j}ans');saveXP(5);markDone('${qid}',${i},${c.qs.length})">✅ Check Answer (+5 XP)</button></div>
+      <div class="savenote" id="note_${padId}"></div>`}
+      <div class="steps">${stepsBtns}<button style="background:var(--accent2);color:#fff;border-color:var(--accent2);" onclick="toggleStep('${c.id}${i}q${j}ans');giveCheckXP('${qid}');markDone('${qid}',${i},${c.qs.length})">✅ Check Answer (+5 XP)</button></div>
       ${stepsDivs}
-      <div class="reveal" id="${c.id}${i}q${j}ans"><strong>Answer:</strong> ${q.ans}${visualHtml}</div>
+      <div class="reveal" id="${c.id}${i}q${j}ans"><strong>Answer:</strong> ${q.ans}${visualHtml}${modelHtmlFor(q)}</div>
     </div>`;
   }).join('');
   let doneCount = c.qs.filter((q,j)=>doneIds.has(`${c.id}${i}q${j}`)).length;
@@ -364,21 +1028,17 @@ function renderChapter(c,i){
 function toggleStep(id){document.getElementById(id).classList.toggle('show');}
 
 function markDone(qid,i,total){
-  if(!doneIds.has(qid)){
-    doneIds.add(qid);
-    saveMelState();
-  }
-  const mark=document.getElementById('mark_'+qid);
-  if(mark) mark.textContent='✅';
-  const doneCount=[...document.querySelectorAll(`#sec${i} .donemark`)].filter(m=>m.textContent==='✅').length;
-  const prog=document.getElementById('prog'+i);
-  if(prog) prog.textContent=`(${doneCount}/${total} completed)`;
+  if(!doneIds.has(qid)){ doneIds.add(qid); saveMelState(); }
+  const mark=document.getElementById('mark_'+qid); if(mark) mark.textContent='✅';
+  const c=currentChapters()[i];
+  const doneCount=c.qs.filter((q,j)=>doneIds.has(c.id+i+'q'+j)).length;
+  const prog=document.getElementById('prog'+i); if(prog) prog.textContent='('+doneCount+'/'+total+' completed)';
   if(doneCount===total){
-    const banner=document.getElementById('banner'+i);
-    if(banner) banner.classList.add('show');
-    const navBtn=document.querySelector(`nav button[data-i="${i}"]`);
+    const banner=document.getElementById('banner'+i); if(banner) banner.classList.add('show');
+    const navBtn=document.querySelector('nav button[data-i="'+i+'"]');
     if(navBtn && !navBtn.textContent.includes('✅')) navBtn.textContent+=' ✅';
   }
+  if(typeof refreshProgress==='function') refreshProgress();
 }
 
 function renderBar(parts,cap){
