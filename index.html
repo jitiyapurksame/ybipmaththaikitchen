@@ -410,6 +410,14 @@
         </div>
         <div class="station-arrow">›</div>
       </a>
+      <div class="station-season-label">Today · 5 minutes</div>
+      <div class="station-parts">
+        <a class="station-part-chip new" href="math-daily-special.html" style="flex:1">
+          <div class="station-part-label">🍽️ Daily Special</div>
+          <div class="station-part-sub">Mystery Box · Fix-it · Fridge</div>
+          <span class="station-part-count" id="dailyStatus"></span>
+        </a>
+      </div>
       <div class="station-season-label">Season 1 · Year 8 ✅</div>
       <div class="station-parts">
         <a class="station-part-chip" href="math-part1-foundations.html">
@@ -453,7 +461,7 @@
         <div class="station-icon">🧪</div>
         <div class="station-text">
           <div class="station-title">Math Exam Lab</div>
-          <div class="station-desc">Midterm survival kitchen — bar models, sketch pads, and panic-button hints.</div>
+          <div class="station-desc">Term 1 Final + Midterm survival kitchen — tap-in questions, big drawing pages, Daily Special and a timed Exam Day.</div>
           <div class="station-progress" id="examProgress"></div>
           <div class="station-active-exam" id="examActiveTag"></div>
         </div>
@@ -526,9 +534,10 @@
 <div class="modal-overlay" id="backup-overlay">
   <div class="modal-box">
     <div class="modal-title">💾 Backup / Restore</div>
-    <p class="modal-desc">Generate one code that carries ALL 3 apps' progress. Copy it on this device, then paste it into "Restore" on another device (or save it somewhere safe like Notes, in case you ever need to reinstall).</p>
+    <p class="modal-desc">Generate one code that carries ALL apps' progress — including Math Exam Lab (medals, mark pills, Daily Special, Exam Day scores). Copy it on this device, then paste it into "Restore" on another device (or save it somewhere safe like Notes, in case you ever need to reinstall).</p>
 
     <p class="modal-desc" style="font-size:0.78rem; margin-bottom:6px;">Generate a code from progress on this device:</p>
+    <label class="modal-desc" style="display:flex;gap:8px;align-items:flex-start;font-size:0.78rem;margin-bottom:8px;"><input type="checkbox" id="backup-with-drawings" style="margin-top:3px"> <span>Also include my Math Exam Lab <b>drawings</b> (the code gets MUCH longer — leave this off for a normal backup).</span></label>
     <textarea class="modal-textarea" id="backup-export-box" readonly placeholder="Tap Generate Code below..."></textarea>
     <button class="modal-btn" onclick="generateBackupCode()">Generate Code</button>
     <button class="modal-btn" onclick="copyBackupCode()">Copy Code</button>
@@ -590,6 +599,35 @@
     });
   }
 
+  // Math XP = level-app XP + Daily Special bonus XP (the Daily Special keeps its own save key)
+  function showMathXP() {
+    try {
+      const raw = localStorage.getItem('math-complete-state');
+      const main = raw ? JSON.parse(raw) : null;
+      const dRaw = localStorage.getItem('mathDailySpecialState_v1');
+      const bonus = dRaw ? (JSON.parse(dRaw).bonusXP || 0) : 0;
+      if (!main && !bonus) return;
+      const el = document.getElementById('mathProgress');
+      el.textContent = ((main && main.xp) || 0) + bonus + ' XP so far';
+      el.classList.add('show');
+    } catch (e) { /* ignore */ }
+  }
+  function showDailyStatus() {
+    try {
+      const dRaw = localStorage.getItem('mathDailySpecialState_v1');
+      const el = document.getElementById('dailyStatus');
+      if (!el) return;
+      const pad = n => String(n).padStart(2, '0');
+      const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+      const today = ymd(new Date());
+      const y = new Date(); y.setDate(y.getDate() - 1);
+      const ds = dRaw ? JSON.parse(dRaw) : null;
+      const done = ds && ds.daily && ds.daily.date === today && ds.daily.done;
+      const streak = ds && ds.streak && (ds.streak.last === today || ds.streak.last === ymd(y)) ? ds.streak.count : 0;
+      el.textContent = (done ? '✅ done today' : '👉 not done yet') + (streak ? ' · 🔥' + streak : '');
+    } catch (e) { /* ignore */ }
+  }
+
   // Best-effort progress preview. If the browser keeps these files on
   // separate storage origins, this silently does nothing — the links
   // above still work regardless.
@@ -605,11 +643,12 @@
       el.classList.add('show');
     } catch (e) { /* ignore */ }
   }
-  tryShowProgress('math-complete-state', 'mathProgress', 'xp');
+  showMathXP();
+  showDailyStatus();
   tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
   tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
   tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
-  tryShowProgress('mathExamLabState_v1', 'examProgress', 'xp');
+  showExamLabProgress();
 
   // Chinese Kitchen tracks per-lesson done-flags, not XP, so it gets its own preview.
   function tryShowChineseProgress() {
@@ -677,6 +716,99 @@
   }
   showPartCounts();
 
+  // ══════════════════════ MATH EXAM LAB STATE (one key per exam set) ══════════════════════
+  const EL_PREFIX = 'mathExamLab_';
+  function examLabKeys() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.indexOf(EL_PREFIX) === 0 && /_v1$/.test(k) && k.length > EL_PREFIX.length + 3) keys.push(k);
+    }
+    return keys;
+  }
+  function collectExamLabStates(withDrawings) {
+    const out = {};
+    examLabKeys().forEach(k => {
+      try {
+        const st = JSON.parse(localStorage.getItem(k) || 'null');
+        if (!st) return;
+        if (!withDrawings) delete st.sketches;
+        out[k] = st;
+      } catch (e) {}
+    });
+    return out;
+  }
+  // Restoring never loses progress: XP = max, finished = union, pills = union, medals = best,
+  // newest Daily Special / Exam Day paper wins, drawings keep the most recently saved version.
+  function mergeExamLab(a, b) {
+    if (!a) return b;
+    if (!b) return a;
+    const m = Object.assign({}, b, a);
+    m.xp = Math.max(a.xp || 0, b.xp || 0);
+    m.done = Array.from(new Set([].concat(a.done || [], b.done || [])));
+    m.pills = {};
+    new Set(Object.keys(a.pills || {}).concat(Object.keys(b.pills || {}))).forEach(q => {
+      m.pills[q] = Array.from(new Set([].concat((a.pills || {})[q] || [], (b.pills || {})[q] || [])));
+    });
+    m.stars = Object.assign({}, b.stars || {}, a.stars || {});
+    Object.keys(b.stars || {}).forEach(q => {
+      const x = (a.stars || {})[q], y = b.stars[q];
+      m.stars[q] = (x == null) ? y : Math.min(x, y);
+    });
+    m.glev = Object.assign({}, b.glev || {}, a.glev || {});
+    const da = a.daily, db = b.daily;
+    if (!da) m.daily = db;
+    else if (!db) m.daily = da;
+    else if (db.date > da.date) m.daily = db;
+    else if (db.date === da.date) m.daily = Object.assign({}, da, { doneToday: Array.from(new Set([].concat(da.doneToday || [], db.doneToday || []))), stamped: !!(da.stamped || db.stamped) });
+    else m.daily = da;
+    const sa = a.streak, sb = b.streak;
+    if (!sa) m.streak = sb;
+    else if (!sb) m.streak = sa;
+    else m.streak = (sb.last > sa.last || (sb.last === sa.last && sb.count > sa.count)) ? sb : sa;
+    const ea = a.exam, eb = b.exam, rank = { running: 1, marking: 2, done: 3 };
+    if (!ea) m.exam = eb;
+    else if (!eb) m.exam = ea;
+    else if (ea.id === eb.id) {
+      const hi = (rank[eb.stage] || 0) > (rank[ea.stage] || 0) ? eb : ea;
+      m.exam = Object.assign({}, hi, { marks: Object.assign({}, eb.marks || {}, ea.marks || {}) });
+    } else m.exam = ((eb.start || 0) > (ea.start || 0)) ? eb : ea;
+    const seen = {}, hist = [];
+    [].concat(a.examHist || [], b.examHist || []).forEach(h => { const key = JSON.stringify(h); if (!seen[key]) { seen[key] = 1; hist.push(h); } });
+    m.examHist = hist.slice(-8);
+    m.sketches = Object.assign({}, b.sketches || {}, a.sketches || {});
+    Object.keys(b.sketches || {}).forEach(p => {
+      const x = (a.sketches || {})[p], y = b.sketches[p];
+      if (!x || ((y.savedAt || 0) > (x.savedAt || 0))) m.sketches[p] = y;
+    });
+    return m;
+  }
+  // The hub tile (and old Exam Lab code) read the combined total in 'mathExamLabState_v1'.
+  function rebuildExamAggregate() {
+    let xp = 0, done = [];
+    examLabKeys().forEach(k => {
+      const id = k.slice(EL_PREFIX.length, -3);
+      try {
+        const st = JSON.parse(localStorage.getItem(k) || 'null');
+        if (!st) return;
+        xp += Number(st.xp || 0);
+        done = done.concat((st.done || []).map(d => id + '::' + d));
+      } catch (e) {}
+    });
+    localStorage.setItem('mathExamLabState_v1', JSON.stringify({ xp: xp, done: done }));
+  }
+  function showExamLabProgress() {
+    try {
+      const raw = localStorage.getItem('mathExamLabState_v1');
+      if (!raw) return;
+      const st = JSON.parse(raw);
+      if (!st || typeof st.xp !== 'number') return;
+      const el = document.getElementById('examProgress');
+      el.textContent = st.xp + ' XP so far' + ((st.done && st.done.length) ? ' · ' + st.done.length + ' questions finished' : '');
+      el.classList.add('show');
+    } catch (e) {}
+  }
+
   // ══════════════════════ COMBINED BACKUP / RESTORE ══════════════════════
   function openBackupModal() { document.getElementById('backup-overlay').classList.add('show'); }
   function closeBackupModal() { document.getElementById('backup-overlay').classList.remove('show'); }
@@ -693,6 +825,10 @@
         litSketches: JSON.parse(localStorage.getItem('thaiKitchenSketchbook_v1') || 'null'),
         chinese: JSON.parse(localStorage.getItem('chinese-kitchen-state') || 'null'),
         examLab: JSON.parse(localStorage.getItem('mathExamLabState_v1') || 'null'),
+        daily: JSON.parse(localStorage.getItem('mathDailySpecialState_v1') || 'null'),
+        // Math Exam Lab keeps its real progress in one key PER exam set (mathExamLab_<exam>_v1);
+        // 'mathExamLabState_v1' above is only a combined XP/done total for the hub tile.
+        examLabExams: collectExamLabStates(!!(document.getElementById('backup-with-drawings') || {}).checked),
       };
       box.value = btoa(encodeURIComponent(JSON.stringify(bundle)));
       status.className = 'modal-error ok';
@@ -740,14 +876,26 @@
       if (bundle.lit) localStorage.setItem('thaiKitchenState_v1', JSON.stringify(bundle.lit));
       if (bundle.litSketches) localStorage.setItem('thaiKitchenSketchbook_v1', JSON.stringify(bundle.litSketches));
       if (bundle.chinese) localStorage.setItem('chinese-kitchen-state', JSON.stringify(bundle.chinese));
-      if (bundle.examLab) localStorage.setItem('mathExamLabState_v1', JSON.stringify(bundle.examLab));
+      if (bundle.examLabExams && typeof bundle.examLabExams === 'object') {
+        Object.keys(bundle.examLabExams).forEach(k => {
+          if (k.indexOf(EL_PREFIX) !== 0 || !/_v1$/.test(k)) return;
+          let local = null;
+          try { local = JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) {}
+          localStorage.setItem(k, JSON.stringify(mergeExamLab(local, bundle.examLabExams[k])));
+        });
+        rebuildExamAggregate();
+      } else if (bundle.examLab && !examLabKeys().length) {
+        localStorage.setItem('mathExamLabState_v1', JSON.stringify(bundle.examLab));
+      }
+      if (bundle.daily) localStorage.setItem('mathDailySpecialState_v1', JSON.stringify(bundle.daily));
       status.className = 'modal-error ok';
       status.textContent = '✓ Progress restored! Reopen an app to see it.';
-      tryShowProgress('math-complete-state', 'mathProgress', 'xp');
+      showMathXP();
+      showDailyStatus();
       tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
       tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
       tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
-      tryShowProgress('mathExamLabState_v1', 'examProgress', 'xp');
+      showExamLabProgress();
       tryShowChineseProgress();
     } catch (e) {
       status.className = 'modal-error err';
