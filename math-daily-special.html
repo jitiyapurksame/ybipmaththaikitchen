@@ -80,6 +80,145 @@
   .section-label { margin:18px 20px 0; font-size:.7rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
   .toast { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--gold); color:#1a1a00; font-family:'Bangers',cursive; font-size:1.7rem; letter-spacing:2px; padding:12px 26px; border-radius:16px; z-index:999; pointer-events:none; box-shadow:0 0 40px rgba(251,191,36,.6); display:none; }
   .toast.show { display:block; }
+  /* ── SYNC ── */
+  .sync-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .sync-badge.synced { color: var(--green); border-color: var(--green); }
+  .sync-badge.offline { color: var(--gold); border-color: var(--gold2); }
+  .home-link {
+    display: inline-block;
+    margin-top: 8px;
+    margin-left: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+  .home-link:active { transform: scale(0.97); }
+
+  .sync-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 1100;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .sync-overlay.show { display: flex; }
+  .sync-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 22px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+  }
+  .sync-modal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .sync-desc { color: var(--muted); font-size: 0.85rem; margin-bottom: 14px; line-height: 1.4; }
+  .sync-btn {
+    display: block;
+    width: 100%;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .sync-btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: white; }
+  .sync-btn-danger { color: var(--red); border-color: var(--red); background: transparent; }
+  .sync-close { background: none; border: none; color: var(--muted); font-size: 0.85rem; margin-top: 6px; cursor: pointer; text-decoration: underline; }
+  /* ── WORKING SPACE (ThHTO column tool) ── */
+  .wt-desc { color: var(--muted); font-size: 0.8rem; margin-bottom: 12px; line-height: 1.4; }
+  .wt-setup-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .wt-setup-input {
+    flex: 1; min-width: 0; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 8px; color: var(--text); font-size: 0.95rem; text-align: center;
+  }
+  .wt-op-toggle { display: flex; gap: 3px; }
+  .wt-op-btn {
+    width: 30px; height: 34px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--muted); font-size: 1rem; font-weight: 800; cursor: pointer;
+  }
+  .wt-op-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .wt-btn-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .wt-btn-row .sync-btn { margin-bottom: 0; font-size: 0.78rem; padding: 9px 6px; }
+  .wt-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; table-layout: fixed; }
+  .wt-table td { text-align: center; padding: 3px 1px; }
+  .wt-op-cell { width: 24px; font-size: 1.3rem; font-weight: 800; color: var(--blue); }
+  .wt-header td { font-weight: 800; color: var(--gold); font-size: 0.8rem; }
+  .wt-num1 td, .wt-num2 td, .wt-header td, .wt-borrow td { border-right: 2px solid var(--green); }
+  .wt-num1 td:last-child, .wt-num2 td:last-child, .wt-header td:last-child, .wt-borrow td:last-child { border-right: none; }
+  .wt-digit-input, .wt-answer-input {
+    width: 100%; max-width: 40px; text-align: center; background: transparent; border: none; color: var(--text);
+  }
+  .wt-note-cell {
+    min-height: 18px; font-size: 0.68rem; font-weight: 800; text-align: center;
+    color: var(--muted); border-bottom: 1px dashed var(--border); outline: none; line-height: 1.4; letter-spacing: 0.5px;
+  }
+  .wt-mark-carry { color: var(--blue); }
+  .wt-mark-borrow { color: var(--pink); }
+  .wt-digit-input, .wt-answer-input {
+    height: 36px; font-size: 1.25rem; font-weight: 700; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .wt-answer-input { border-color: var(--gold); }
+  .wt-digit-input.wt-strike { text-decoration: line-through; opacity: 0.55; }
+  .wt-msg { font-size: 0.76rem; color: var(--pink); text-align: center; margin: -4px 0 8px; min-height: 14px; }
+  .wt-divider hr { border: none; border-top: 2px solid var(--text); margin: 3px 0; }
+  .wt-tip { color: var(--muted); font-size: 0.76rem; line-height: 1.4; background: var(--surface2); border-radius: 10px; padding: 8px 10px; margin-bottom: 10px; }
+
+
+  .tools { display:flex; gap:8px; } .tools .hint-btn { flex:1; }
+  .choices { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px; }
+  .ch-btn { background:var(--surface); border:2px solid var(--border); border-radius:12px; padding:14px 8px; color:var(--text); font-family:'Courier New',monospace; font-size:1.15rem; font-weight:800; cursor:pointer; }
+  .ch-btn:active { transform:scale(.97); }
+  .ch-btn.ok { border-color:var(--green); background:rgba(124,181,24,.18); color:var(--green); opacity:1; }
+  .ch-btn.no { border-color:var(--red); background:rgba(215,38,61,.12); color:var(--muted); text-decoration:line-through; opacity:.6; }
+  .ch-btn:disabled { cursor:default; }
+  .ch-msg { font-size:.78rem; color:var(--pink); margin-top:6px; min-height:14px; text-align:center; }
+  .ws-modal { max-width:560px !important; max-height:92vh; overflow-y:auto; }
+  .ws-tabs { display:flex; gap:6px; margin-bottom:12px; }
+  .ws-tab { flex:1; background:var(--surface2); border:1.5px solid var(--border); border-radius:12px; padding:10px 4px; color:var(--muted); font-family:inherit; font-size:.8rem; font-weight:800; cursor:pointer; }
+  .ws-tab.active { border-color:var(--accent2); color:var(--text); background:rgba(255,140,63,.14); }
+  .step-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+  .step-n { width:20px; color:var(--muted); font-weight:800; font-size:.8rem; }
+  .step-in { flex:1; min-width:0; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:11px 10px; color:var(--text); font-family:'Courier New',monospace; font-size:1.05rem; font-weight:700; outline:none; user-select:text; -webkit-user-select:text; }
+  .step-in:focus { border-color:var(--accent2); }
+  .step-x { background:none; border:none; color:var(--muted); font-size:1rem; cursor:pointer; padding:6px; }
+  .keys { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 10px; justify-content:center; }
+  .key { min-width:40px; height:38px; border-radius:10px; border:1px solid var(--border); background:var(--surface2); color:var(--gold); font-size:1.05rem; font-weight:800; cursor:pointer; font-family:inherit; }
+  .key:active { background:var(--border); }
+  .dtools { display:flex; gap:8px; align-items:center; justify-content:center; margin-bottom:8px; }
+  .dcol { width:30px; height:30px; border-radius:50%; border:3px solid var(--border); cursor:pointer; }
+  .dcol.on { border-color:#fff; }
+  .dbtn { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:7px 12px; color:var(--muted); font-family:inherit; font-weight:800; font-size:.8rem; cursor:pointer; }
+  #ws-canvas { width:100%; aspect-ratio:8/5; background:var(--surface2); border:1px solid var(--border); border-radius:12px; touch-action:none; display:block; }
 </style>
 </head>
 <body>
@@ -88,7 +227,7 @@
 
 <div id="boxpick" class="screen">
   <div class="hdr"><button class="hdr-btn" onclick="goHome()">← Back</button><div class="hdr-title">🎁 Mystery Box</div></div>
-  <div class="card" style="margin-top:14px"><p style="margin-top:0">Pick any <b>Cooked</b> dish. You get 5 fresh questions with brand-new numbers. 3 right = ⭐, 4 right = ⭐⭐, 5 right = ⭐⭐⭐. Stars never go away!</p></div>
+  <div class="card" style="margin-top:14px"><p style="margin-top:0">Pick any <b>Cooked</b> dish. You get 5 fresh questions with brand-new numbers. 3 right = ⭐, 4 right = ⭐⭐, 5 right = ⭐⭐⭐. Stars never go away! (Answers picked from the hint choices give half XP and do not count for stars.)</p></div>
   <div class="picker" id="boxlist"></div>
 </div>
 
@@ -99,6 +238,56 @@
 </div>
 
 <div id="done" class="screen"><div class="result" id="donebox"></div></div>
+<div class="sync-overlay" id="workspace-overlay">
+  <div class="sync-modal ws-modal">
+    <div class="sync-modal-title">📝 Working Space</div>
+    <p class="wt-desc">Your scrap paper. Write <b>something</b> first, even a tiny step, because steps earn marks! It clears itself on the next question.</p>
+    <div class="ws-tabs">
+      <button class="ws-tab" id="wst-steps" onclick="wsTab('steps')">✏️ Steps</button>
+      <button class="ws-tab" id="wst-cols" onclick="wsTab('cols')">🧮 Columns</button>
+      <button class="ws-tab" id="wst-draw" onclick="wsTab('draw')">🎨 Draw</button>
+    </div>
+    <div id="wsp-steps">
+      <div class="steps" id="ws-steps"></div>
+      <div class="keys" id="ws-keys"></div>
+      <div class="wt-btn-row"><button class="sync-btn" style="flex:1" onclick="wsAddStep('')">＋ Add a line</button><button class="sync-btn" style="flex:1" onclick="wsResetSteps()">🔄 Start again</button></div>
+    </div>
+    <div id="wsp-cols" style="display:none">
+<div class="wt-setup-row">
+      <input type="text" id="wt-input-1" class="wt-setup-input" placeholder="First number" inputmode="numeric">
+      <div class="wt-op-toggle">
+        <button class="wt-op-btn active" id="wt-op-plus" onclick="setWtOperator('+')">+</button>
+        <button class="wt-op-btn" id="wt-op-minus" onclick="setWtOperator('−')">−</button>
+        <button class="wt-op-btn" id="wt-op-times" onclick="setWtOperator('×')">×</button>
+        <button class="wt-op-btn" id="wt-op-divide" onclick="setWtOperator('÷')">÷</button>
+      </div>
+      <input type="text" id="wt-input-2" class="wt-setup-input" placeholder="Second number" inputmode="numeric">
+    </div>
+    <div class="wt-btn-row">
+      <button class="sync-btn" style="flex:1" onclick="wtLoadNumbers()">▶ Solve &amp; Show Working</button>
+      <button class="sync-btn" style="flex:0 0 44px" onclick="wtAddColumn()">+ col</button>
+      <button class="sync-btn" style="flex:0 0 44px" onclick="wtRemoveColumn()">− col</button>
+    </div>
+    <div class="wt-msg" id="wt-msg"></div>
+
+    <table class="wt-table"><tbody id="wt-grid"></tbody></table>
+
+    <div class="wt-tip">💡 <span style="color:var(--pink);font-weight:800">Pink</span> = borrowing (subtraction): the column lent 10, so the column it borrowed from shows <span style="color:var(--pink);font-weight:800">−1</span> and gets crossed out. <span style="color:var(--blue);font-weight:800">Blue</span> = carrying (addition/multiplication) or a "bring-down" remainder (division). This is the same "regroup ten" / "bring down" trick from primary school — just typed instead of handwritten.</div>
+
+    <div class="wt-btn-row">
+      <button class="sync-btn" style="flex:1" onclick="wtSolve()">🧮 Recompute</button>
+      <button class="sync-btn" style="flex:1" onclick="wtClear()">🔄 Clear Grid</button>
+    </div>
+    
+    </div>
+    <div id="wsp-draw" style="display:none">
+      <div class="dtools" id="ws-dcols"></div>
+      <canvas id="ws-canvas" width="640" height="400"></canvas>
+      <div class="wt-tip" style="margin-top:8px">Draw a bar model, a factor tree, or a quick picture. Finger or Apple Pencil!</div>
+    </div>
+    <button class="sync-close" onclick="closeWorkspace()">Close</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1449,11 +1638,11 @@ function renderHome() {
 
 // ══════════════════════ QUIZ ENGINE ══════════════════════
 let QZ = null;
-function startQuiz(kind, title, items, onDone) { QZ = { kind, title, items, i: 0, correct: 0, hint: 0, answered: false, onDone }; show('quiz'); renderQ(); }
+function startQuiz(kind, title, items, onDone) { QZ = { kind, title, items, i: 0, correct: 0, hint: 0, assisted: 0, ch: null, answered: false, onDone }; show('quiz'); renderQ(); }
 function quitQuiz() { if (confirm('Stop now? Your answers so far still count for the dishes you tasted.')) goHome(); }
 function hintTiers(m) { const h = m.hint; if (!h) return []; if (typeof h === 'string') return [{ l: '💡 Hint', c: h }]; const t = []; if (h.setup) t.push({ l: '✏️ Set it up', c: h.setup }); if (h.formula) t.push({ l: '📐 Key idea', c: h.formula }); return t; }
 function renderQ() {
-  const it = QZ.items[QZ.i], m = it.mission; QZ.hint = 0; QZ.answered = false;
+  const it = QZ.items[QZ.i], m = it.mission; QZ.hint = 0; QZ.answered = false; QZ.ch = makeChoices(m); wsFresh = true; closeWorkspace();
   $('qtitle').textContent = QZ.title; $('qcount').textContent = `${QZ.i + 1} / ${QZ.items.length}`; $('qbar').style.width = (QZ.i / QZ.items.length * 100) + '%';
   const vis = m.visual || (m.hint && typeof m.hint === 'object' && m.hint.visual) || '';
   const tiers = hintTiers(m);
@@ -1464,27 +1653,33 @@ function renderQ() {
     <div class="prob">${String(m.problem).replace(/\n/g, '<br>')}</div>
     <div class="row"><input class="inp" id="qin" type="text" placeholder="Your answer" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false"><button class="chk" onclick="checkQ()">Check</button></div>
     <div class="fb" id="qfb"></div>
-    ${tiers.length ? `<button class="hint-btn" id="qhint" onclick="showHint()">💡 Need a hint?</button>` : ''}
+    <div class="tools">${(tiers.length || QZ.ch) ? `<button class="hint-btn" id="qhint" onclick="showHint()">${hintLabel(tiers)}</button>` : ''}<button class="hint-btn" onclick="wsOpen()">📝 Working space</button></div>
     <div class="hint-panel" id="qhp"></div>
     <div class="nav"><button class="btn green" id="qnext" onclick="nextQ()" disabled>${QZ.i === QZ.items.length - 1 ? 'Finish ✓' : 'Next →'}</button></div>
   </div>`;
   const inp = $('qin'); inp.addEventListener('keypress', e => { if (e.key === 'Enter') checkQ(); }); setTimeout(() => inp.focus(), 80);
 }
+function hintLabel(t) { const total = t.length + (QZ.ch ? 1 : 0); if (QZ.hint >= total) return null; if (QZ.hint < t.length) return QZ.hint === 0 ? '💡 Need a hint?' : '💡 Show me more'; return '🎯 Give me choices'; }
 function showHint() {
-  const m = QZ.items[QZ.i].mission, t = hintTiers(m); if (QZ.hint < t.length) QZ.hint++;
-  const p = $('qhp'); p.classList.add('open'); p.innerHTML = t.slice(0, QZ.hint).map(x => `<div class="hint-tier"><div class="hint-lab">${x.l}</div><div>${x.c}</div></div>`).join('');
-  if (QZ.hint >= t.length) $('qhint').style.display = 'none'; else $('qhint').textContent = '💡 Show me more';
+  const m = QZ.items[QZ.i].mission, t = hintTiers(m), total = t.length + (QZ.ch ? 1 : 0); if (QZ.hint < total) QZ.hint++;
+  const p = $('qhp'); p.classList.add('open');
+  p.innerHTML = t.slice(0, Math.min(QZ.hint, t.length)).map(x => `<div class="hint-tier"><div class="hint-lab">${x.l}</div><div>${x.c}</div></div>`).join('') + (QZ.hint > t.length && QZ.ch ? choicesHtml() : '');
+  const lab = hintLabel(t); if (lab) $('qhint').textContent = lab; else $('qhint').style.display = 'none';
+}
+function settle(ok, assisted) {
+  const it = QZ.items[QZ.i], m = it.mission, inp = $('qin');
+  QZ.answered = true; inp.disabled = true; inp.classList.add(ok ? 'correct' : 'wrong');
+  document.querySelectorAll('.ch-btn').forEach(b => { b.disabled = true; });
+  const fb = $('qfb'); fb.className = 'fb show ' + (ok ? 'correct' : 'wrong');
+  fb.innerHTML = ok ? (assisted ? '<div>✅</div><div>Yes, that is it! Try without the choices next time for full XP ⭐</div>' : '<div>✅</div><div>Correct! Nice slice.</div>') : `<div>💡</div><div>Not quite — the answer is <strong>${String(m.answer).split('|')[0]}</strong>. That’s how we learn!</div>`;
+  if (ok) QZ.correct++; if (ok && assisted) QZ.assisted++;
+  DS.lastSeen[it.level] = Date.now();
+  if (ok && !assisted && QZ.kind === 'fix' && it.fixIdx != null) { const arr = DS.fixed[it.level] = DS.fixed[it.level] || []; if (!arr.includes(it.fixIdx)) arr.push(it.fixIdx); }
+  saveDS(); $('qnext').disabled = false;
 }
 function checkQ() {
-  if (QZ.answered) return; const it = QZ.items[QZ.i], m = it.mission, inp = $('qin');
-  if (!inp.value.trim()) return;
-  const ok = answerMatches(inp.value, m.answer, m.type); QZ.answered = true; inp.disabled = true; inp.classList.add(ok ? 'correct' : 'wrong');
-  const fb = $('qfb'); fb.className = 'fb show ' + (ok ? 'correct' : 'wrong');
-  fb.innerHTML = ok ? '<div>✅</div><div>Correct! Nice slice.</div>' : `<div>💡</div><div>Not quite — the answer is <strong>${String(m.answer).split('|')[0]}</strong>. That’s how we learn!</div>`;
-  if (ok) QZ.correct++;
-  DS.lastSeen[it.level] = Date.now();
-  if (ok && QZ.kind === 'fix' && it.fixIdx != null) { const arr = DS.fixed[it.level] = DS.fixed[it.level] || []; if (!arr.includes(it.fixIdx)) arr.push(it.fixIdx); }
-  saveDS(); $('qnext').disabled = false; $('qnext').focus && 0;
+  if (QZ.answered) return; const m = QZ.items[QZ.i].mission, inp = $('qin'); if (!inp.value.trim()) return;
+  settle(answerMatches(inp.value, m.answer, m.type), false);
 }
 function nextQ() { QZ.i++; if (QZ.i >= QZ.items.length) finishQuiz(); else renderQ(); }
 let toastTimer = null;
@@ -1517,7 +1712,7 @@ function startFix() {
 function finishQuiz() {
   const c = QZ.correct, n = QZ.items.length; let xp = 0, extra = '', emoji = '🍽️', head = 'Nicely done!';
   if (QZ.kind === 'daily') {
-    xp = c * 20; const first = !dailyDoneToday();
+    const a = QZ.assisted || 0; xp = (c - a) * 20 + a * 10; const first = !dailyDoneToday();
     if (first) {
       xp += 30; const t = todayStr(); DS.streak = { count: (DS.streak.last === yesterdayStr() ? DS.streak.count : (DS.streak.last === t ? DS.streak.count : 0)) + 1, last: t };
       DS.daily = { date: t, done: true, correct: c, total: n };
@@ -1525,18 +1720,347 @@ function finishQuiz() {
     }
     head = c >= 4 ? 'Chef’s kiss! 🤌' : c >= 2 ? 'Well seasoned!' : 'Every taste counts!'; emoji = '🍽️';
   } else if (QZ.kind.startsWith('box:')) {
-    const l = Number(QZ.kind.slice(4)), earned = c >= 5 ? 3 : c === 4 ? 2 : c === 3 ? 1 : 0, had = starsOf(l);
-    xp = c * 25; if (earned > had) { xp += 50 * (earned - had); DS.stars[l] = earned; extra = `<div class="big">New record! ${starStr(earned)}</div>`; }
+    const l = Number(QZ.kind.slice(4)), cu = c - (QZ.assisted || 0), earned = cu >= 5 ? 3 : cu === 4 ? 2 : cu === 3 ? 1 : 0, had = starsOf(l);
+    xp = cu * 25 + (c - cu) * 12; if (earned > had) { xp += 50 * (earned - had); DS.stars[l] = earned; extra = `<div class="big">New record! ${starStr(earned)}</div>`; }
     else extra = `<div class="big">Your best: ${starStr(had)}${had < 3 ? ' — try again for more!' : ' — perfect!'}</div>`;
     head = earned ? 'The box is open!' : 'Almost! Try another box'; emoji = '🎁';
   } else if (QZ.kind === 'fix') {
-    xp = c * 20; extra = `<div class="big">${c} recipe${c === 1 ? '' : 's'} fixed 🔧</div>`; head = c ? 'Recipe repaired!' : 'Keep polishing'; emoji = '🔧';
+    xp = (c - (QZ.assisted || 0)) * 20 + (QZ.assisted || 0) * 10; extra = `<div class="big">${c} recipe${c === 1 ? '' : 's'} fixed 🔧</div>`; head = c ? 'Recipe repaired!' : 'Keep polishing'; emoji = '🔧';
   }
   DS.bonusXP += xp; saveDS();
-  $('donebox').innerHTML = `<div class="emoji">${emoji}</div><h1>${head}</h1><div class="big"><b>${c} / ${n}</b> correct</div><div class="big">+<b>${xp}</b> bonus XP ✨</div>${extra}
+  $('donebox').innerHTML = `<div class="emoji">${emoji}</div><h1>${head}</h1><div class="big"><b>${c} / ${n}</b> correct</div><div class="big">+<b>${xp}</b> bonus XP ✨</div>${QZ.assisted ? `<div class="big" style="font-size:.85rem">🎯 ${QZ.assisted} answered with choices (half XP)</div>` : ''}${extra}
     <div style="width:100%;max-width:320px;margin-top:10px"><button class="btn green" onclick="goHome()">🏠 Back to the kitchen</button></div>`;
   show('done');
 }
+
+// ══════════════════════ WORKING SPACE (ThHTO column tool) ══════════════════════
+let wtCols = 4;
+let wtOperator = '+';
+let wtScalar = null; // the single-digit multiplier/divisor for × and ÷
+
+function openWorkspace() {
+  wtCols = 4;
+  wtScalar = null;
+  document.getElementById('workspace-overlay').classList.add('show');
+  const i1 = document.getElementById('wt-input-1'), i2 = document.getElementById('wt-input-2');
+  if (i1) i1.value = '';
+  if (i2) i2.value = '';
+  renderWorkspaceGrid();
+  setWtOperator('+');
+}
+
+function closeWorkspace() {
+  document.getElementById('workspace-overlay').classList.remove('show');
+}
+
+function wtColLabels(n) {
+  const all = ['HTh', 'TTh', 'Th', 'H', 'T', 'O'];
+  return all.slice(all.length - n);
+}
+
+function renderWorkspaceGrid() {
+  const labels = wtColLabels(wtCols);
+  const grid = document.getElementById('wt-grid');
+  const digitCells = (cls) => labels.map(() => `<td><input class="${cls}" maxlength="1" inputmode="numeric"></td>`).join('');
+  const msg = document.getElementById('wt-msg');
+  if (msg) msg.textContent = '';
+
+  const isScalarOp = wtOperator === '×' || wtOperator === '÷';
+  const num2Row = isScalarOp
+    ? `<tr class="wt-num2-label"><td class="wt-op-cell" id="wt-op-symbol">${wtOperator}</td><td colspan="${labels.length}" style="text-align:left; padding:8px 0 8px 6px; font-weight:800; color:var(--gold); font-size:1.1rem">${wtScalar != null ? wtScalar : '?'}</td></tr>`
+    : `<tr class="wt-num2"><td class="wt-op-cell" id="wt-op-symbol">${wtOperator}</td>${digitCells('wt-digit-input')}</tr>`;
+
+  grid.innerHTML = `
+    <tr class="wt-header"><td class="wt-op-cell"></td>${labels.map(l => `<td>${l}</td>`).join('')}</tr>
+    <tr class="wt-borrow"><td class="wt-op-cell"></td>${labels.map(() => `<td><div class="wt-note-cell" contenteditable="true"></div></td>`).join('')}</tr>
+    <tr class="wt-num1"><td class="wt-op-cell"></td>${digitCells('wt-digit-input')}</tr>
+    ${num2Row}
+    <tr class="wt-divider"><td colspan="${labels.length + 1}"><hr></td></tr>
+    <tr class="wt-answer"><td class="wt-op-cell"></td>${digitCells('wt-answer-input')}</tr>
+  `;
+}
+
+// Auto-add / auto-borrow / auto-carry / auto-bring-down engine. Colors the working with the
+// same marks taught in primary school: blue = carry (addition/multiplication) or bring-down
+// remainder (division), pink = borrow (subtraction) — and the original digit that got
+// adjusted is struck through (not overwritten) so the starting numbers are still visible.
+// num1 row is always the "main" multi-digit number (augend/minuend/multiplicand/dividend).
+// For + and −, num2 row is the second multi-digit number. For × and ÷, wtScalar is the
+// single-digit multiplier/divisor instead (short multiplication / short "bus-stop" division).
+function wtSolve() {
+  const num1Inputs = Array.from(document.querySelectorAll('#wt-grid .wt-num1 .wt-digit-input'));
+  const noteCells = Array.from(document.querySelectorAll('#wt-grid .wt-borrow .wt-note-cell'));
+  const answerInputs = Array.from(document.querySelectorAll('#wt-grid .wt-answer-input'));
+  const n = num1Inputs.length;
+  const msg = document.getElementById('wt-msg');
+  if (msg) msg.textContent = '';
+
+  num1Inputs.forEach(inp => inp.classList.remove('wt-strike'));
+  noteCells.forEach(c => c.innerHTML = '');
+  answerInputs.forEach(inp => inp.value = '');
+
+  const d1 = num1Inputs.map(i => i.value === '' ? 0 : parseInt(i.value, 10));
+
+  if (wtOperator === '+' || wtOperator === '−') {
+    const num2Inputs = Array.from(document.querySelectorAll('#wt-grid .wt-num2 .wt-digit-input'));
+    const d2 = num2Inputs.map(i => i.value === '' ? 0 : parseInt(i.value, 10));
+
+    if (wtOperator === '+') {
+      let carry = 0;
+      for (let i = n - 1; i >= 0; i--) {
+        let sum = d1[i] + d2[i] + carry;
+        carry = sum >= 10 ? 1 : 0;
+        if (sum >= 10) sum -= 10;
+        answerInputs[i].value = sum;
+        if (carry && i > 0) {
+          noteCells[i - 1].innerHTML += `<span class="wt-mark-carry">+1</span>`;
+        } else if (carry && i === 0) {
+          if (msg) msg.textContent = 'Answer needs one more column on the left — tap "+ col" and Solve again.';
+        }
+      }
+    } else {
+      const total1 = parseInt(d1.join(''), 10);
+      const total2 = parseInt(d2.join(''), 10);
+      if (total2 > total1) {
+        if (msg) msg.textContent = 'The first number is smaller than the second — subtraction needs the first number to be bigger.';
+        return;
+      }
+      const top = d1.slice();
+      for (let i = n - 1; i >= 0; i--) {
+        if (top[i] < d2[i]) {
+          let j = i - 1;
+          while (j >= 0 && top[j] === 0) {
+            top[j] = 9;
+            num1Inputs[j].classList.add('wt-strike');
+            noteCells[j].innerHTML += `<span class="wt-mark-borrow">9</span>`;
+            j--;
+          }
+          if (j >= 0) {
+            top[j] -= 1;
+            num1Inputs[j].classList.add('wt-strike');
+            noteCells[j].innerHTML += `<span class="wt-mark-borrow">${top[j]}</span>`;
+          }
+          top[i] += 10;
+          noteCells[i].innerHTML += `<span class="wt-mark-borrow">+10</span>`;
+        }
+        answerInputs[i].value = top[i] - d2[i];
+      }
+    }
+  } else if (wtOperator === '×') {
+    if (wtScalar == null) { if (msg) msg.textContent = 'Enter a number to multiply by first.'; return; }
+    let carry = 0;
+    for (let i = n - 1; i >= 0; i--) {
+      const product = d1[i] * wtScalar + carry;
+      const digit = product % 10;
+      carry = Math.floor(product / 10);
+      answerInputs[i].value = digit;
+      if (carry > 0 && i > 0) {
+        noteCells[i - 1].innerHTML += `<span class="wt-mark-carry">+${carry}</span>`;
+      } else if (carry > 0 && i === 0) {
+        if (msg) msg.textContent = 'Answer needs another column on the left — tap "+ col" and Solve again.';
+      }
+    }
+  } else if (wtOperator === '÷') {
+    if (wtScalar == null) { if (msg) msg.textContent = 'Enter a number to divide by first.'; return; }
+    if (wtScalar === 0) { if (msg) msg.textContent = "Can't divide by 0."; return; }
+    let remainder = 0;
+    for (let i = 0; i < n; i++) {
+      const value = remainder * 10 + d1[i];
+      const qDigit = Math.floor(value / wtScalar);
+      remainder = value % wtScalar;
+      answerInputs[i].value = qDigit;
+      if (remainder > 0 && i < n - 1) {
+        noteCells[i + 1].innerHTML += `<span class="wt-mark-carry">${remainder}↓</span>`;
+      }
+    }
+    if (msg) msg.textContent = remainder > 0 ? `Remainder: ${remainder} (blue notes show it being brought down to the next column)` : 'No remainder — divides exactly!';
+  }
+}
+
+function setWtOperator(op) {
+  wtOperator = op;
+  const buttonIds = { '+': 'wt-op-plus', '−': 'wt-op-minus', '×': 'wt-op-times', '÷': 'wt-op-divide' };
+  Object.keys(buttonIds).forEach(k => {
+    const btn = document.getElementById(buttonIds[k]);
+    if (btn) btn.classList.toggle('active', k === op);
+  });
+  const sym = document.getElementById('wt-op-symbol');
+  if (sym) sym.textContent = op;
+  const input2 = document.getElementById('wt-input-2');
+  if (input2) {
+    if (op === '×') input2.placeholder = 'Multiply by (0–9)';
+    else if (op === '÷') input2.placeholder = 'Divide by (0–9)';
+    else input2.placeholder = 'Second number';
+  }
+}
+
+function wtAddColumn() {
+  if (wtCols < 6) {
+    // preserve currently-entered digits when growing the grid
+    const n1 = Array.from(document.querySelectorAll('#wt-grid .wt-num1 .wt-digit-input')).map(i => i.value).join('');
+    const num2Els = document.querySelectorAll('#wt-grid .wt-num2 .wt-digit-input');
+    const n2 = num2Els.length ? Array.from(num2Els).map(i => i.value).join('') : '';
+    wtCols++;
+    renderWorkspaceGrid();
+    setWtOperator(wtOperator);
+    wtPlaceDigits(n1, n2);
+  }
+}
+function wtRemoveColumn() {
+  if (wtCols > 2) { wtCols--; renderWorkspaceGrid(); setWtOperator(wtOperator); }
+}
+function wtClear() {
+  renderWorkspaceGrid();
+  setWtOperator(wtOperator);
+}
+
+function wtPlaceDigits(n1, n2) {
+  const place = (rowSelector, numStr) => {
+    const inputs = document.querySelectorAll(rowSelector + ' .wt-digit-input');
+    if (!inputs.length) return;
+    const padded = numStr.padStart(inputs.length, ' ');
+    inputs.forEach((inp, i) => { inp.value = padded[i].trim(); });
+  };
+  place('#wt-grid .wt-num1', n1);
+  place('#wt-grid .wt-num2', n2);
+}
+
+function wtLoadNumbers() {
+  const n1 = (document.getElementById('wt-input-1').value.match(/\d+/) || [''])[0];
+  const n2raw = document.getElementById('wt-input-2').value;
+  const n2 = (n2raw.match(/\d+/) || [''])[0];
+  const msg = document.getElementById('wt-msg');
+  if (msg) msg.textContent = '';
+
+  if (wtOperator === '×' || wtOperator === '÷') {
+    if (!n1 || !n2) {
+      if (msg) msg.textContent = 'Fill in both numbers first.';
+      return;
+    }
+    if (n2.length > 1) {
+      if (msg) msg.textContent = `For now, Working Space only ${wtOperator === '×' ? 'multiplies' : 'divides'} by a single digit (0–9) — try short ${wtOperator === '×' ? 'multiplication' : 'division'} problems here.`;
+      return;
+    }
+    wtScalar = parseInt(n2, 10);
+    const extraCols = wtOperator === '×' ? 2 : 0;
+    wtCols = Math.min(6, n1.length + extraCols);
+    renderWorkspaceGrid();
+    setWtOperator(wtOperator);
+    wtPlaceDigits(n1, '');
+    wtSolve();
+  } else {
+    // +1 spare column so an addition carry-out always has somewhere to land
+    const maxLen = Math.max(n1.length, n2.length, 2, 3) + 1;
+    wtCols = Math.min(6, maxLen);
+    renderWorkspaceGrid();
+    setWtOperator(wtOperator);
+    wtPlaceDigits(n1, n2);
+    wtSolve();
+  }
+}
+
+document.addEventListener('input', function (e) {
+  const t = e.target;
+  if (!t.classList) return;
+  if (t.classList.contains('wt-digit-input') || t.classList.contains('wt-answer-input')) {
+    t.value = t.value.replace(/[^0-9]/g, '');
+    if (t.value.length >= 1) {
+      const cell = t.closest('td');
+      const nextInput = cell && cell.nextElementSibling && cell.nextElementSibling.querySelector('input');
+      if (nextInput) nextInput.focus();
+    }
+  }
+});
+
+
+// ══════════════════════ CHOICES: multiple-choice help inside the hints ══════════════════════
+const WORD_SETS = [['co-interior', 'alternate', 'corresponding', 'vertically opposite'], ['reflection', 'rotation', 'translation', 'enlargement'], ['positive', 'negative', 'none'], ['smile', 'frown'], ['a', 'b'], ['and', 'or'], ['arithmetic', 'geometric'], ['yes', 'no'], ['true', 'false'], ['increase', 'decrease'], ['compasses', 'protractor', 'ruler', 'set square']];
+function makeChoices(m) {
+  const ans = String(m.answer).split('|')[0].replace(/−/g, '-').trim(); if (!ans) return null;
+  const norm = normalizeAnswer(ans); let pool = [];
+  const mm = ans.match(/^([£$€]?)(-?\d+(?:\.\d+)?)(%?)$/);
+  if (mm) {
+    const pre = mm[1], suf = mm[3], v = parseFloat(mm[2]), dp = (mm[2].split('.')[1] || '').length, isInt = dp === 0;
+    const pad = isInt && /^0\d/.test(mm[2]) ? mm[2].length : 0;
+    const f = x => pre + (isInt ? (pad ? String(Math.round(x)).padStart(pad, '0') : String(Math.round(x))) : String(+x.toFixed(dp + 1))) + suf;
+    const ok = x => Number.isFinite(x) && x !== v && (v < 0 || x >= 0 || (x === -v && !pad)) && (!isInt || Number.isInteger(x)) && (!pad || x <= 360);
+    const step = isInt ? 1 : Math.pow(10, -dp);
+    const near = shuffle([v + 1, v - 1, v + step, v - step, v + 2 * step, v - 2 * step]).filter(ok);
+    const errs = shuffle([-v, v * 2, v / 2, v * 10, v / 10, v + 10, v - 10]).filter(ok);
+    pool = near.slice(0, 2).concat(errs, near.slice(2)).map(f);
+  } else if (/\d/.test(ans)) {
+    [...ans.matchAll(/\d+(?:\.\d+)?/g)].forEach(t => {
+      const s = t[0], i = t.index, isDen = ans[i - 1] === '/', isIntTok = !s.includes('.');
+      [+s + 1, +s - 1, +s + 2, +s - 2, +s * 2].forEach(x => { if (x < (isDen ? 1 : 0)) return; const sx = isIntTok ? String(x).padStart(s.length, '0') : String(+x.toFixed(6)); pool.push(ans.slice(0, i) + sx + ans.slice(i + s.length)); });
+      const p = ans[i - 1]; if (p === '+' || p === '-') pool.push(ans.slice(0, i - 1) + (p === '+' ? '-' : '+') + ans.slice(i));
+    });
+    pool = shuffle(pool);
+    const fr = ans.match(/^(\d+)\/(\d+)$/); if (fr) pool.unshift(fr[2] + '/' + fr[1]);
+  } else {
+    const key = norm.replace('cointerior', 'co-interior'), set = WORD_SETS.find(s => s.includes(key));
+    if (set) { const up = /^[A-Z]/.test(ans); pool = shuffle(set.filter(w => w !== key)).map(w => up ? w[0].toUpperCase() + w.slice(1) : w); }
+  }
+  const seen = new Set([norm]), out = [];
+  for (const c of pool) { const k = normalizeAnswer(c); if (!seen.has(k) && !answerMatches(c, m.answer, m.type)) { seen.add(k); out.push(c); } if (out.length === 3) break; }
+  return out.length ? shuffle([ans, ...out]) : null;
+}
+const chLabel = c => c.replace(/\^(\d+)/g, '<sup>$1</sup>');
+function choicesHtml() {
+  return `<div class="hint-tier"><div class="hint-lab">🎯 Tap the one you think is right</div><div class="choices">${QZ.ch.map((c, k) => `<button class="ch-btn" data-k="${k}" ${QZ.answered ? 'disabled' : ''} onclick="pickChoice(${k})">${chLabel(c)}</button>`).join('')}</div><div class="ch-msg" id="chmsg">Wrong tap? No stress. Cross it out and try another.</div></div>`;
+}
+function pickChoice(k) {
+  if (QZ.answered) return; const m = QZ.items[QZ.i].mission, s = QZ.ch[k], b = document.querySelector(`.ch-btn[data-k="${k}"]`);
+  if (answerMatches(s, m.answer, m.type)) { $('qin').value = s; b.classList.add('ok'); settle(true, true); }
+  else { b.classList.add('no'); b.disabled = true; $('chmsg').textContent = 'Not that one ✂️ Try another!'; }
+}
+
+// ══════════════════════ WORKING SPACE: steps, columns, drawing ══════════════════════
+let wsFresh = true, wsLast = null, wsStrokes = [], wsCur = null, wsColor = '#fbeee0';
+const WS_KEYS = ['+', '−', '×', '÷', '=', '(', ')', '²', '³', '√', 'π', '/', '.', ':', 'x'];
+const WS_COLS = ['#fbeee0', '#f4b400', '#2a9d8f', '#e8482c'];
+function wsPlain(h) { const d = document.createElement('div'); d.innerHTML = String(h).replace(/<sup>(.*?)<\/sup>/g, '^$1').replace(/<br\s*\/?>|\n/g, '  '); return d.textContent.trim(); }
+function wsTab(n) {
+  ['steps', 'cols', 'draw'].forEach(t => { $('wsp-' + t).style.display = t === n ? 'block' : 'none'; $('wst-' + t).classList.toggle('active', t === n); });
+  if (n === 'draw') wsRedraw();
+}
+function wsAddStep(txt) {
+  const box = $('ws-steps'), row = document.createElement('div'); row.className = 'step-row';
+  row.innerHTML = `<span class="step-n"></span><input class="step-in" type="text" autocomplete="off" autocorrect="off" spellcheck="false"><button class="step-x" title="remove" onclick="this.parentNode.remove();wsNumber()">✕</button>`;
+  const inp = row.querySelector('input'); inp.value = txt || ''; inp.addEventListener('focus', () => { wsLast = inp; });
+  box.appendChild(row); wsNumber(); if (txt === '') inp.focus();
+}
+function wsNumber() { document.querySelectorAll('#ws-steps .step-n').forEach((s, i) => { s.textContent = i + 1; }); }
+function wsResetSteps() {
+  $('ws-steps').innerHTML = ''; const q = QZ && QZ.items[QZ.i] ? wsPlain(QZ.items[QZ.i].mission.problem) : '';
+  wsAddStep(q); wsAddStep(' '); wsAddStep(' '); document.querySelectorAll('#ws-steps .step-in').forEach((x, i) => { if (i) x.value = ''; });
+}
+function wsKey(ch) {
+  const inp = wsLast || document.querySelector('#ws-steps .step-in:last-child') || document.querySelector('#ws-steps .step-in'); if (!inp) return;
+  const a = inp.selectionStart == null ? inp.value.length : inp.selectionStart, b = inp.selectionEnd == null ? a : inp.selectionEnd;
+  inp.value = inp.value.slice(0, a) + ch + inp.value.slice(b); inp.focus(); const p = a + ch.length; try { inp.setSelectionRange(p, p); } catch (e) {}
+}
+function wsRedraw() {
+  const c = $('ws-canvas'), g = c.getContext && c.getContext('2d'); if (!g) return; g.clearRect(0, 0, c.width, c.height); g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = 4;
+  wsStrokes.forEach(s => { g.strokeStyle = s.c; g.beginPath(); s.p.forEach((q, i) => i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); if (s.p.length === 1) g.lineTo(s.p[0][0] + .1, s.p[0][1]); g.stroke(); });
+}
+function wsColorSet(c) { wsColor = c; document.querySelectorAll('.dcol').forEach(d => d.classList.toggle('on', d.dataset.c === c)); }
+function wsInit() {
+  $('ws-keys').innerHTML = WS_KEYS.map(k => `<button class="key" onpointerdown="event.preventDefault()" onclick="wsKey('${k}')">${k}</button>`).join('');
+  $('ws-dcols').innerHTML = WS_COLS.map(c => `<span class="dcol" data-c="${c}" style="background:${c}" onclick="wsColorSet('${c}')"></span>`).join('') + '<button class="dbtn" onclick="wsStrokes.pop();wsRedraw()">↩ Undo</button><button class="dbtn" onclick="wsStrokes=[];wsRedraw()">🗑 Clear</button>';
+  wsColorSet(wsColor);
+  const c = $('ws-canvas'), pt = e => { const r = c.getBoundingClientRect(); return [(e.clientX - r.left) * c.width / r.width, (e.clientY - r.top) * c.height / r.height]; };
+  c.addEventListener('pointerdown', e => { e.preventDefault(); try { c.setPointerCapture(e.pointerId); } catch (x) {} wsCur = { c: wsColor, p: [pt(e)] }; wsStrokes.push(wsCur); wsRedraw(); });
+  c.addEventListener('pointermove', e => { if (wsCur) { wsCur.p.push(pt(e)); wsRedraw(); } });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => c.addEventListener(ev, () => { wsCur = null; }));
+}
+function wsOpen() {
+  if (wsFresh) {
+    wsFresh = false; wtCols = 4; wtScalar = null; $('wt-input-1').value = ''; $('wt-input-2').value = ''; renderWorkspaceGrid(); setWtOperator('+');
+    wsResetSteps(); wsStrokes = []; wsRedraw(); wsTab('steps');
+  }
+  $('workspace-overlay').classList.add('show');
+}
+wsInit();
 
 loadAll(); renderHome(); syncOnLoad();
 </script>

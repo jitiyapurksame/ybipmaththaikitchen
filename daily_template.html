@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Math Kitchen Ninja — Daily Special</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&display=swap');
+  :root { --bg:#1b120d; --surface:#2b1d15; --surface2:#3a2818; --border:#5a3d26; --text:#fbeee0; --muted:#b9a488; --accent:#e8482c; --accent2:#ff8c3f; --gold:#f4b400; --gold2:#d68a00; --green:#7cb518; --red:#d7263d; --blue:#2a9d8f; --pink:#ff5fa8; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; user-select:none; }
+  .screen { display:none; min-height:100vh; flex-direction:column; }
+  .screen.active { display:flex; }
+  #home { background: radial-gradient(ellipse at top, #3a2412 0%, #1b120d 60%); padding-bottom:30px; }
+  .home-header { padding:24px 22px 6px; text-align:center; }
+  .home-title { font-family:'Bangers',cursive; font-size:2.3rem; letter-spacing:2px; background:linear-gradient(135deg,#ff8c3f,#f4b400); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1.1; }
+  .home-sub { font-size:.78rem; color:var(--muted); margin-top:4px; letter-spacing:1px; text-transform:uppercase; }
+  .pill-row { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .pill { background:var(--surface); border:1px solid var(--border); border-radius:999px; padding:5px 13px; font-size:.74rem; font-weight:800; color:var(--muted); text-decoration:none; }
+  .pill b { color:var(--gold); }
+  .card { margin:12px 20px 0; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px 18px; position:relative; }
+  .card.big { border-color:var(--accent2); background:linear-gradient(135deg,#3a2412,#2b1d15); }
+  .card.done { border-color:var(--green); }
+  .card h2 { font-family:'Bangers',cursive; letter-spacing:1px; font-size:1.25rem; color:var(--gold); }
+  .card p { font-size:.82rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+  .btn { display:block; width:100%; margin-top:12px; border:none; border-radius:14px; padding:14px; font-family:inherit; font-weight:900; font-size:.95rem; cursor:pointer; color:#fff; background:linear-gradient(135deg,var(--accent),var(--accent2)); }
+  .btn:active { opacity:.85; }
+  .btn.green { background:linear-gradient(135deg,var(--green),#059669); }
+  .btn.ghost { background:var(--surface2); color:var(--muted); border:1px solid var(--border); }
+  .btn:disabled { opacity:.4; pointer-events:none; }
+  .stamp { display:inline-block; transform:rotate(-6deg); border:3px solid var(--green); color:var(--green); border-radius:12px; padding:4px 12px; font-family:'Bangers',cursive; letter-spacing:2px; font-size:1.2rem; margin-top:8px; }
+  .fridge-list { margin-top:10px; display:flex; flex-direction:column; gap:6px; }
+  .fridge-item { display:flex; align-items:center; gap:10px; background:var(--surface2); border-radius:12px; padding:8px 12px; font-size:.82rem; font-weight:700; }
+  .fridge-item small { color:var(--muted); font-weight:600; margin-left:auto; text-align:right; }
+  .back-link { display:block; text-align:center; margin:18px 0 0; color:var(--muted); font-size:.8rem; font-weight:700; text-decoration:underline; }
+  .hdr { display:flex; align-items:center; gap:12px; padding:16px 18px 10px; border-bottom:1px solid var(--border); }
+  .hdr-btn { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:8px 14px; color:var(--text); font-family:inherit; font-size:.88rem; font-weight:700; cursor:pointer; }
+  .hdr-title { flex:1; font-family:'Bangers',cursive; letter-spacing:1px; font-size:1.15rem; }
+  .hdr-count { font-size:.78rem; color:var(--muted); font-weight:800; }
+  .progress { height:8px; background:var(--border); margin:0 18px; border-radius:999px; overflow:hidden; margin-top:10px; }
+  .progress > div { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:999px; transition:width .4s; }
+  .qwrap { flex:1; padding:14px 18px 20px; display:flex; flex-direction:column; }
+  .qcard { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:20px 18px; flex:1; display:flex; flex-direction:column; }
+  .tag { align-self:flex-start; border-radius:999px; padding:4px 12px; font-size:.7rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin-bottom:12px; background:var(--surface2); }
+  .tag.fridge { color:var(--green); background:rgba(124,181,24,.14); }
+  .tag.new { color:var(--accent2); }
+  .tag.fix { color:var(--pink); background:rgba(255,95,168,.12); }
+  .tag.box { color:var(--gold); background:rgba(244,180,0,.12); }
+  .ins { font-size:.95rem; font-weight:700; line-height:1.4; margin-bottom:12px; }
+  .vis { background:#fff8ec; border-radius:14px; padding:12px 10px 4px; margin-bottom:12px; }
+  .prob { font-size:1.6rem; font-weight:900; font-family:'Courier New',monospace; text-align:center; background:var(--surface2); border-radius:14px; padding:18px 12px; margin-bottom:16px; line-height:1.4; }
+  .row { display:flex; gap:10px; margin-bottom:12px; }
+  .inp { flex:1; min-width:0; background:var(--surface2); border:2px solid var(--border); border-radius:14px; padding:14px; color:var(--text); font-family:'Courier New',monospace; font-size:1.25rem; font-weight:800; text-align:center; outline:none; }
+  .inp:focus { border-color:var(--accent2); }
+  .inp.correct { border-color:var(--green); background:rgba(124,181,24,.1); }
+  .inp.wrong { border-color:var(--red); background:rgba(215,38,61,.1); }
+  .chk { background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; border-radius:14px; padding:0 22px; color:#fff; font-weight:900; cursor:pointer; font-family:inherit; }
+  .fb { display:none; border-radius:14px; padding:12px 14px; margin-bottom:12px; font-size:.9rem; font-weight:700; gap:10px; align-items:center; }
+  .fb.show { display:flex; }
+  .fb.correct { background:rgba(124,181,24,.12); color:var(--green); border:1px solid rgba(124,181,24,.3); }
+  .fb.wrong { background:rgba(215,38,61,.12); color:var(--red); border:1px solid rgba(215,38,61,.3); }
+  .hint-btn { background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.3); border-radius:12px; padding:10px 14px; color:var(--gold); font-size:.85rem; font-weight:700; cursor:pointer; font-family:inherit; margin-bottom:10px; }
+  .hint-panel { display:none; background:var(--surface2); border:1px solid rgba(251,191,36,.3); border-radius:12px; padding:12px 14px; margin-bottom:10px; font-size:.85rem; line-height:1.5; color:var(--gold); }
+  .hint-panel.open { display:block; }
+  .hint-panel svg { max-width:100%; }
+  .hint-tier { margin-bottom:8px; }
+  .hint-lab { font-size:.7rem; font-weight:800; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+  .nav { margin-top:auto; padding-top:8px; }
+  .result { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; gap:10px; }
+  .result .emoji { font-size:4rem; }
+  .result h1 { font-family:'Bangers',cursive; font-size:2.1rem; letter-spacing:2px; color:var(--gold); }
+  .result .big { font-size:1.1rem; color:var(--muted); }
+  .result .big b { color:var(--gold); font-size:1.4rem; }
+  .picker { margin:12px 20px 0; display:flex; flex-direction:column; gap:8px; }
+  .pick-item { display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:12px 14px; cursor:pointer; }
+  .pick-item:active { transform:scale(.98); }
+  .pick-num { width:38px; height:38px; border-radius:10px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-family:'Bangers',cursive; color:var(--accent2); }
+  .pick-title { flex:1; font-weight:800; font-size:.9rem; }
+  .pick-stars { font-size:.95rem; letter-spacing:1px; }
+  .section-label { margin:18px 20px 0; font-size:.7rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+  .toast { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--gold); color:#1a1a00; font-family:'Bangers',cursive; font-size:1.7rem; letter-spacing:2px; padding:12px 26px; border-radius:16px; z-index:999; pointer-events:none; box-shadow:0 0 40px rgba(251,191,36,.6); display:none; }
+  .toast.show { display:block; }
+  /* ── SYNC ── */
+  .sync-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .sync-badge.synced { color: var(--green); border-color: var(--green); }
+  .sync-badge.offline { color: var(--gold); border-color: var(--gold2); }
+  .home-link {
+    display: inline-block;
+    margin-top: 8px;
+    margin-left: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+  .home-link:active { transform: scale(0.97); }
+
+  .sync-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 1100;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .sync-overlay.show { display: flex; }
+  .sync-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 22px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+  }
+  .sync-modal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .sync-desc { color: var(--muted); font-size: 0.85rem; margin-bottom: 14px; line-height: 1.4; }
+  .sync-btn {
+    display: block;
+    width: 100%;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .sync-btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: white; }
+  .sync-btn-danger { color: var(--red); border-color: var(--red); background: transparent; }
+  .sync-close { background: none; border: none; color: var(--muted); font-size: 0.85rem; margin-top: 6px; cursor: pointer; text-decoration: underline; }
+  /* ── WORKING SPACE (ThHTO column tool) ── */
+  .wt-desc { color: var(--muted); font-size: 0.8rem; margin-bottom: 12px; line-height: 1.4; }
+  .wt-setup-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .wt-setup-input {
+    flex: 1; min-width: 0; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 8px; color: var(--text); font-size: 0.95rem; text-align: center;
+  }
+  .wt-op-toggle { display: flex; gap: 3px; }
+  .wt-op-btn {
+    width: 30px; height: 34px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--muted); font-size: 1rem; font-weight: 800; cursor: pointer;
+  }
+  .wt-op-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .wt-btn-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .wt-btn-row .sync-btn { margin-bottom: 0; font-size: 0.78rem; padding: 9px 6px; }
+  .wt-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; table-layout: fixed; }
+  .wt-table td { text-align: center; padding: 3px 1px; }
+  .wt-op-cell { width: 24px; font-size: 1.3rem; font-weight: 800; color: var(--blue); }
+  .wt-header td { font-weight: 800; color: var(--gold); font-size: 0.8rem; }
+  .wt-num1 td, .wt-num2 td, .wt-header td, .wt-borrow td { border-right: 2px solid var(--green); }
+  .wt-num1 td:last-child, .wt-num2 td:last-child, .wt-header td:last-child, .wt-borrow td:last-child { border-right: none; }
+  .wt-digit-input, .wt-answer-input {
+    width: 100%; max-width: 40px; text-align: center; background: transparent; border: none; color: var(--text);
+  }
+  .wt-note-cell {
+    min-height: 18px; font-size: 0.68rem; font-weight: 800; text-align: center;
+    color: var(--muted); border-bottom: 1px dashed var(--border); outline: none; line-height: 1.4; letter-spacing: 0.5px;
+  }
+  .wt-mark-carry { color: var(--blue); }
+  .wt-mark-borrow { color: var(--pink); }
+  .wt-digit-input, .wt-answer-input {
+    height: 36px; font-size: 1.25rem; font-weight: 700; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .wt-answer-input { border-color: var(--gold); }
+  .wt-digit-input.wt-strike { text-decoration: line-through; opacity: 0.55; }
+  .wt-msg { font-size: 0.76rem; color: var(--pink); text-align: center; margin: -4px 0 8px; min-height: 14px; }
+  .wt-divider hr { border: none; border-top: 2px solid var(--text); margin: 3px 0; }
+  .wt-tip { color: var(--muted); font-size: 0.76rem; line-height: 1.4; background: var(--surface2); border-radius: 10px; padding: 8px 10px; margin-bottom: 10px; }
+
+
+  .tools { display:flex; gap:8px; } .tools .hint-btn { flex:1; }
+  .choices { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px; }
+  .ch-btn { background:var(--surface); border:2px solid var(--border); border-radius:12px; padding:14px 8px; color:var(--text); font-family:'Courier New',monospace; font-size:1.15rem; font-weight:800; cursor:pointer; }
+  .ch-btn:active { transform:scale(.97); }
+  .ch-btn.ok { border-color:var(--green); background:rgba(124,181,24,.18); color:var(--green); opacity:1; }
+  .ch-btn.no { border-color:var(--red); background:rgba(215,38,61,.12); color:var(--muted); text-decoration:line-through; opacity:.6; }
+  .ch-btn:disabled { cursor:default; }
+  .ch-msg { font-size:.78rem; color:var(--pink); margin-top:6px; min-height:14px; text-align:center; }
+  .ws-modal { max-width:560px !important; max-height:92vh; overflow-y:auto; }
+  .ws-tabs { display:flex; gap:6px; margin-bottom:12px; }
+  .ws-tab { flex:1; background:var(--surface2); border:1.5px solid var(--border); border-radius:12px; padding:10px 4px; color:var(--muted); font-family:inherit; font-size:.8rem; font-weight:800; cursor:pointer; }
+  .ws-tab.active { border-color:var(--accent2); color:var(--text); background:rgba(255,140,63,.14); }
+  .step-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+  .step-n { width:20px; color:var(--muted); font-weight:800; font-size:.8rem; }
+  .step-in { flex:1; min-width:0; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:11px 10px; color:var(--text); font-family:'Courier New',monospace; font-size:1.05rem; font-weight:700; outline:none; user-select:text; -webkit-user-select:text; }
+  .step-in:focus { border-color:var(--accent2); }
+  .step-x { background:none; border:none; color:var(--muted); font-size:1rem; cursor:pointer; padding:6px; }
+  .keys { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 10px; justify-content:center; }
+  .key { min-width:40px; height:38px; border-radius:10px; border:1px solid var(--border); background:var(--surface2); color:var(--gold); font-size:1.05rem; font-weight:800; cursor:pointer; font-family:inherit; }
+  .key:active { background:var(--border); }
+  .dtools { display:flex; gap:8px; align-items:center; justify-content:center; margin-bottom:8px; }
+  .dcol { width:30px; height:30px; border-radius:50%; border:3px solid var(--border); cursor:pointer; }
+  .dcol.on { border-color:#fff; }
+  .dbtn { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:7px 12px; color:var(--muted); font-family:inherit; font-weight:800; font-size:.8rem; cursor:pointer; }
+  #ws-canvas { width:100%; aspect-ratio:8/5; background:var(--surface2); border:1px solid var(--border); border-radius:12px; touch-action:none; display:block; }
+</style>
+</head>
+<body>
+
+<div id="home" class="screen active"></div>
+
+<div id="boxpick" class="screen">
+  <div class="hdr"><button class="hdr-btn" onclick="goHome()">← Back</button><div class="hdr-title">🎁 Mystery Box</div></div>
+  <div class="card" style="margin-top:14px"><p style="margin-top:0">Pick any <b>Cooked</b> dish. You get 5 fresh questions with brand-new numbers. 3 right = ⭐, 4 right = ⭐⭐, 5 right = ⭐⭐⭐. Stars never go away! (Answers picked from the hint choices give half XP and do not count for stars.)</p></div>
+  <div class="picker" id="boxlist"></div>
+</div>
+
+<div id="quiz" class="screen">
+  <div class="hdr"><button class="hdr-btn" onclick="quitQuiz()">✕ Stop</button><div class="hdr-title" id="qtitle">Daily Special</div><div class="hdr-count" id="qcount">1 / 5</div></div>
+  <div class="progress"><div id="qbar" style="width:0%"></div></div>
+  <div class="qwrap" id="qwrap"></div>
+</div>
+
+<div id="done" class="screen"><div class="result" id="donebox"></div></div>
+<div class="sync-overlay" id="workspace-overlay">
+  <div class="sync-modal ws-modal">
+    <div class="sync-modal-title">📝 Working Space</div>
+    <p class="wt-desc">Your scrap paper. Write <b>something</b> first, even a tiny step, because steps earn marks! It clears itself on the next question.</p>
+    <div class="ws-tabs">
+      <button class="ws-tab" id="wst-steps" onclick="wsTab('steps')">✏️ Steps</button>
+      <button class="ws-tab" id="wst-cols" onclick="wsTab('cols')">🧮 Columns</button>
+      <button class="ws-tab" id="wst-draw" onclick="wsTab('draw')">🎨 Draw</button>
+    </div>
+    <div id="wsp-steps">
+      <div class="steps" id="ws-steps"></div>
+      <div class="keys" id="ws-keys"></div>
+      <div class="wt-btn-row"><button class="sync-btn" style="flex:1" onclick="wsAddStep('')">＋ Add a line</button><button class="sync-btn" style="flex:1" onclick="wsResetSteps()">🔄 Start again</button></div>
+    </div>
+    <div id="wsp-cols" style="display:none">
+<div class="wt-setup-row">
+      <input type="text" id="wt-input-1" class="wt-setup-input" placeholder="First number" inputmode="numeric">
+      <div class="wt-op-toggle">
+        <button class="wt-op-btn active" id="wt-op-plus" onclick="setWtOperator('+')">+</button>
+        <button class="wt-op-btn" id="wt-op-minus" onclick="setWtOperator('−')">−</button>
+        <button class="wt-op-btn" id="wt-op-times" onclick="setWtOperator('×')">×</button>
+        <button class="wt-op-btn" id="wt-op-divide" onclick="setWtOperator('÷')">÷</button>
+      </div>
+      <input type="text" id="wt-input-2" class="wt-setup-input" placeholder="Second number" inputmode="numeric">
+    </div>
+    <div class="wt-btn-row">
+      <button class="sync-btn" style="flex:1" onclick="wtLoadNumbers()">▶ Solve &amp; Show Working</button>
+      <button class="sync-btn" style="flex:0 0 44px" onclick="wtAddColumn()">+ col</button>
+      <button class="sync-btn" style="flex:0 0 44px" onclick="wtRemoveColumn()">− col</button>
+    </div>
+    <div class="wt-msg" id="wt-msg"></div>
+
+    <table class="wt-table"><tbody id="wt-grid"></tbody></table>
+
+    <div class="wt-tip">💡 <span style="color:var(--pink);font-weight:800">Pink</span> = borrowing (subtraction): the column lent 10, so the column it borrowed from shows <span style="color:var(--pink);font-weight:800">−1</span> and gets crossed out. <span style="color:var(--blue);font-weight:800">Blue</span> = carrying (addition/multiplication) or a "bring-down" remainder (division). This is the same "regroup ten" / "bring down" trick from primary school — just typed instead of handwritten.</div>
+
+    <div class="wt-btn-row">
+      <button class="sync-btn" style="flex:1" onclick="wtSolve()">🧮 Recompute</button>
+      <button class="sync-btn" style="flex:1" onclick="wtClear()">🔄 Clear Grid</button>
+    </div>
+    
+    </div>
+    <div id="wsp-draw" style="display:none">
+      <div class="dtools" id="ws-dcols"></div>
+      <canvas id="ws-canvas" width="640" height="400"></canvas>
+      <div class="wt-tip" style="margin-top:8px">Draw a bar model, a factor tree, or a quick picture. Finger or Apple Pencil!</div>
+    </div>
+    <button class="sync-close" onclick="closeWorkspace()">Close</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/*__SVG__*/
+/*__GENS__*/
+
+// ══════════════════════ SEASON 1 GENERATOR BANK (fresh numbers for Levels 1–28) ══════════════════════
+const m3 = a => a < 0 ? '−' + (-a) : String(a);
+const frac = (n, d) => { const g = gcd(Math.abs(n), d); return d / g === 1 ? String(n / g) : `${n / g}/${d / g}`; };
+const GEN1 = {
+  1: [() => { const a = rnd(2, 15), b = a + rnd(2, 20); return Q('Solve for x', `x + ${a} = ${b}`, b - a, H(`Subtract ${a} from both sides.`)); }],
+  2: [() => { const x = rnd(-12, 12) || 3, y = rnd(2, 15), op = pick(['+', '−']); return Q('Solve it (picture the number line!)', `${m3(x)} ${op} ${y}`, op === '+' ? x + y : x - y, H('Plus = move right. Minus = move left.', null, numberLineSVG(x, op === '+' ? y : -y))); }],
+  3: [() => { const a = rnd(2, 9), b = rnd(2, 9), c = rnd(2, 9), t = rnd(0, 2); if (t === 0) return Q('BIDMAS: × before +', `${a} + ${b} × ${c}`, a + b * c, H(`${b} × ${c} first.`)); if (t === 1) return Q('BIDMAS: brackets first', `(${a} + ${b}) × ${c}`, (a + b) * c, H('Brackets first.')); const big = rnd(30, 50); return Q('BIDMAS: × before −', `${big} − ${b} × ${c}`, big - b * c, H(`${b} × ${c} first.`)); }],
+  4: [() => { const x = rnd(2, 15), a = rnd(2, 9), t = rnd(0, 2); if (t === 0) return Q('Solve for x', `x + ${a} = ${x + a}`, x, H(`Subtract ${a}.`)); if (t === 1) return Q('Solve for x', `${a}x = ${a * x}`, x, H(`Divide by ${a}.`)); return Q('Solve for x', `x ÷ ${a} = ${x}`, a * x, H(`Multiply by ${a}.`)); }],
+  5: [() => { const x = rnd(2, 12), a = rnd(2, 8), b = rnd(1, 12), t = rnd(0, 2); if (t === 0) return Q('Solve for x (2 steps)', `${a}x + ${b} = ${a * x + b}`, x, H(`Subtract ${b}, then divide by ${a}.`)); if (t === 1) return Q('Solve for x (2 steps)', `${a}x − ${b} = ${a * x - b}`, x, H(`Add ${b}, then divide by ${a}.`)); return Q('Solve for x (brackets)', `${a}(x + ${b}) = ${a * (x + b)}`, x, H(`Divide by ${a}, then subtract ${b}.`)); }],
+  6: [() => { const [b, d] = pick([[2, 3], [3, 4], [2, 5], [4, 6], [3, 6], [4, 8], [2, 6], [5, 10]]); let op = pick(['+', '−']); const a = rnd(1, b - 1), c = rnd(1, d - 1), L = lcm(b, d); let n = a * (L / b) + (op === '+' ? 1 : -1) * c * (L / d); if (n <= 0) { op = '+'; n = a * (L / b) + c * (L / d); } return Q('Add or subtract. Simplify. Type like 5/6 (a top-heavy fraction is fine)', `${a}/${b} ${op} ${c}/${d}`, frac(n, L), H(`Common denominator ${L}.`, `${a * (L / b)}/${L} ${op} ${c * (L / d)}/${L}`, fractionPizzaRow([[a, b], [c, d]], op))); }],
+  7: [() => { const a = rnd(11, 99) / 10, b = rnd(11, 99) / 10, t = rnd(0, 2); if (t === 0) return Q('Add the decimals', `${a} + ${b}`, n2(a + b), H('Line up the decimal points.')); if (t === 1) return Q('Subtract the decimals', `${Math.max(a, b)} − ${Math.min(a, b)}`, n2(Math.max(a, b) - Math.min(a, b)), H('Line up the decimal points.')); return Q('Multiply', `${a} × ${rnd(2, 9)}`, null, null); }],
+  8: [() => { const p = pick([5, 10, 15, 20, 25, 30, 40, 50, 75]), n = pick([40, 60, 80, 120, 160, 200, 240]); return Q(`Find ${p}% of ${n}`, `${p}% of ${n}`, n2(n * p / 100), H(`10% of ${n} is ${n / 10}. Build ${p}% from that.`, null, pieChartSVG(p))); }],
+  9: [() => { const [p, q] = pick([[2, 3], [3, 5], [1, 4], [2, 5], [3, 4]]), k = rnd(4, 20); return Q(`Share ${(p + q) * k} in the ratio ${p}:${q}. How much is the SECOND share?`, `${p}:${q}, total ${(p + q) * k}`, q * k, H(`${p} + ${q} = ${p + q} boxes. One box = ${k}.`, null, ratioBarSVG([p, q]))); }],
+  10: [() => { const a = rnd(30, 80), b = rnd(30, 80); return Q('Angles in a triangle add to 180°. Find the missing angle', `${a}° + ${b}° + ? = 180°`, 180 - a - b, H('180 minus the two angles.', null, triangleAngleSVG(a + '°', b + '°', '?'))); }, () => { const n = rnd(5, 10); return Q('Sum of the interior angles of a polygon', `${n} sides`, (n - 2) * 180, H('(n − 2) × 180')); }],
+  11: [() => { const l = rnd(4, 15), w = rnd(3, 9); return Q('Area of the rectangle', `${l} × ${w}`, l * w, H('length × width', null, rectangleSVG(l, w, 'area'))); }, () => { const l = rnd(4, 15), w = rnd(3, 9); return Q('Perimeter of the rectangle', `${l} by ${w}`, 2 * (l + w), H('Add all four sides.', null, rectangleSVG(l, w, 'perimeter'))); }, () => { const b = 2 * rnd(3, 8), h = rnd(3, 9); return Q('Area of the triangle', `base ${b}, height ${h}`, b * h / 2, H('½ × base × height', null, triangleShapeSVG(b, h))); }],
+  12: [() => { const a = rnd(30, 150); return Q('Angles on a straight line add to 180°', `${a}° + ? = 180°`, 180 - a, H('180 minus the angle.', null, straightLineAngleSVG(a + '°', '?'))); }, () => { const a = rnd(40, 140); return Q('Alternate angles are equal. Find x', `Parallel lines, alternate angle to ${a}°`, a, H('Z-shape: alternate angles are equal.', null, parallelAnglesSVG('alternate', a + '°', 'x'))); }],
+  13: [() => { const m = rnd(2, 5), c = rnd(-3, 6), x = rnd(2, 6); return Q(`Find y when x = ${x}`, `y = ${m}x ${c < 0 ? '−' : '+'} ${Math.abs(c)}`, m * x + c, H(`Put ${x} in for x.`)); }, () => { const m = rnd(1, 5), x1 = rnd(0, 3), y1 = rnd(0, 4), d = rnd(1, 3); return Q('Find the gradient (rise ÷ run)', `(${x1}, ${y1}) and (${x1 + d}, ${y1 + m * d})`, m, H('Rise ÷ run.')); }],
+  14: [() => { const n = rnd(8, 20), r = rnd(2, n - 3); return Q('A bag has ' + r + ' red out of ' + n + ' sweets. P(red)? Type like 3/10', `${r} out of ${n}`, fr(r, n), H('wanted ÷ total, simplified.')); }, () => { const p = pick([0.2, 0.35, 0.4, 0.65, 0.7]); return Q('P(not A) = 1 − P(A)', `P(A) = ${p}`, n2(1 - p), H('Probabilities add to 1.')); }],
+  15: [() => { const e = rnd(2, 6), b = rnd(3, 9); return Q(`🍰 One batch uses ${e} eggs. You bake ${b} batches. How many eggs?`, `${e} × ${b}`, e * b, H('Same amount each time → multiply.')); }, () => { const n = rnd(3, 6), c = rnd(4, 12) * n; return Q(`🍕 ${n} friends share a £${c} bill equally. How much each?`, `${c} ÷ ${n}`, c / n, H('Share equally → divide.')); }],
+  16: [() => { const a = rnd(2, 20), d = rnd(2, 9); return Q('Next number in the sequence', [a, a + d, a + 2 * d, a + 3 * d].join(', ') + ', ?', a + 4 * d, H(`Add ${d} each time.`)); }, () => { const d = rnd(2, 6), b = rnd(-2, 5); return Q('What is the 10th term? nth term =', `${d}n ${b < 0 ? '−' : '+'} ${Math.abs(b)}`, d * 10 + b, H('Put n = 10.')); }],
+  17: [() => { const a = rnd(2, 10), d = rnd(2, 9), n = rnd(6, 12); return Q('Arithmetic sequence: find the nth term using a + (n−1)d', `a = ${a}, d = ${d}, n = ${n}`, a + (n - 1) * d, H(`${a} + ${n - 1} × ${d}`)); }, () => { const a = rnd(2, 4), r = rnd(2, 4); return Q('Geometric sequence: next term', [a, a * r, a * r * r].join(', ') + ', ?', a * r ** 3, H(`Multiply by ${r}.`)); }],
+  18: [() => { const b = rnd(2, 9), e = rnd(2, 3); return Q('Evaluate the power', `${b}<sup>${e}</sup>`, b ** e, H(`${b} multiplied by itself ${e} times.`)); }, () => { const r = rnd(3, 15); return Q('Square root', `√${r * r}`, r, H('What number times itself?', null, squareAreaSVG(r * r))); }, () => { const a = rnd(3, 8), b = rnd(2, 5); return Q('Add the powers when multiplying', `x<sup>${a}</sup> × x<sup>${b}</sup> = x<sup>?</sup>`, a + b, H(`${a} + ${b}`)); }],
+  19: [() => { const a = rnd(3, 9), b = rnd(2, 6), c = rnd(1, 3); return Q('Collect like terms. Type like 5x+3y', `${a}x + ${b}y + ${c}x`, `${a + c}x+${b}y|${b}y+${a + c}x`, H('x-terms together, y-terms together.')); }, () => { const a = rnd(2, 7), b = rnd(1, 9); return Q('Expand. Type like 3x+12', `${a}(x + ${b})`, `${a}x+${a * b}|${a * b}+${a}x`, H(`${a} × everything inside.`)); }, () => { const a = rnd(2, 6), x = rnd(2, 7), b = rnd(1, 9); return Q(`Substitute x = ${x}`, `${a}x + ${b}`, a * x + b, H(`${a} × ${x} + ${b}`)); }],
+  20: [() => { const r = rnd(2, 12); return Q('Circumference = 2πr. Use π = 3.14', `radius ${r}`, n2(2 * 3.14 * r), H('2 × 3.14 × r', null, circleMeasureSVG('r=' + r, 'radius'))); }, () => { const r = rnd(2, 10); return Q('Area = πr². Use π = 3.14', `radius ${r}`, n2(3.14 * r * r), H('Square r first.', null, circleMeasureSVG('r=' + r, 'radius'))); }],
+  21: [() => { const l = rnd(3, 10), w = rnd(2, 6), h = rnd(2, 6); return Q('Volume of the lunchbox', `${l} × ${w} × ${h}`, l * w * h, H('length × width × height', null, boxSVG(l, w, h))); }, () => { const r = rnd(2, 5), h = rnd(3, 10); return Q('Cylinder volume = πr²h. π = 3.14', `r = ${r}, h = ${h}`, n2(3.14 * r * r * h), H('Circle area × height.', null, cylinderSVG('r=' + r, 'h=' + h))); }],
+  22: [() => { const v = Array.from({ length: 5 }, () => rnd(2, 20)); const s = v.reduce((a, b) => a + b, 0); v[0] += (5 - s % 5) % 5; const t = rnd(0, 2); if (t === 0) return Q('Find the mean', v.join(', '), v.reduce((a, b) => a + b, 0) / 5, H('Add up, ÷ 5.')); const so = [...v].sort((a, b) => a - b); if (t === 1) return Q('Find the median', v.join(', '), so[2], H('Sort, take the middle.')); return Q('Find the range', v.join(', '), so[4] - so[0], H('Biggest − smallest.')); }],
+  23: [() => { const [a, b, c] = pick([[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15]]); return Q('Find the hypotenuse', `a = ${a}, b = ${b}`, c, H('a² + b² = c²', null, rightTriangleSVG('a=' + a, 'b=' + b, 'c=?'))); }],
+  24: [() => { const x = rnd(1, 6), y = rnd(1, 6); return Q('Reflect in the x-axis. Type like (3,-4)', `(${x}, ${y})`, `(${x},${-y})`, H('x stays. y flips sign.')); }, () => { const x = rnd(1, 6), y = rnd(1, 6); return Q('Reflect in the y-axis. Type like (-2,5)', `(${x}, ${y})`, `(${-x},${y})`, H('y stays. x flips sign.')); }, () => { const x = rnd(-3, 4), y = rnd(-3, 4), dx = rnd(1, 4), dy = rnd(-3, 3); return Q('Translate by the vector. Type like (4,1)', `(${x}, ${y}) + (${dx}, ${dy})`, `(${x + dx},${y + dy})`, H('Add the vector to each coordinate.')); }],
+  25: [() => { const s = pick([40, 50, 60, 80]), t = rnd(2, 5); return Q('Speed = distance ÷ time. Find the speed (km/h)', `${s * t} km in ${t} h`, s, H('distance ÷ time')); }, () => { const s = pick([40, 50, 60]), t = rnd(2, 5); return Q('Distance = speed × time (km)', `${s} km/h for ${t} h`, s * t, H('speed × time')); }],
+  26: [() => GEN1[pick([4, 5, 8, 9, 11, 14, 22, 23])][0]()],
+  27: [() => { const a = pick([19, 21, 29, 31, 39, 41]), b = pick([11, 19, 21, 29, 31]); return Q('Estimate: round each to the nearest 10 first', `${a} × ${b}`, Math.round(a / 10) * 10 * Math.round(b / 10) * 10, H('Round, then multiply.')); }],
+  28: [() => GEN1[pick([2, 3, 5, 8, 9, 11, 23])][0]()]
+};
+// fix: a couple of S1 entries above return a placeholder when their branch is unused; patch the decimal-multiply branch
+GEN1[7].push(() => { const a = rnd(11, 49) / 10, b = rnd(2, 9); return Q('Multiply the decimal', `${a} × ${b}`, n2(a * b), H(`${Math.round(a * 10)} × ${b} = ${Math.round(a * 10) * b}. Put the point back.`)); });
+GEN1[7][0] = () => { const a = rnd(11, 99) / 10, b = rnd(11, 99) / 10; return rnd(0, 1) ? Q('Add the decimals', `${a} + ${b}`, n2(a + b), H('Line up the decimal points.')) : Q('Subtract the decimals', `${Math.max(a, b)} − ${Math.min(a, b)}`, n2(Math.max(a, b) - Math.min(a, b)), H('Line up the decimal points.')); };
+
+const S1EMO = ['🧑‍🍳', '🌡️', '📋', '⚖️', '🍳', '🍕', '🥄', '🧁', '🥣', '🍪', '🧇', '🔪', '📈', '🎲', '📝', '🥧', '🎂', '🌶️', '🧾', '🍩', '🧊', '🍽️', '📐', '🥞', '⏱️', '🍲', '🔥', '👨‍🍳'];
+const S1NAMES = ["Don't Panic!", 'Positive & Negative Numbers', 'Order of Operations', 'One-Step Equations', 'Two-Step Equations', 'Fractions', 'Decimals', 'Percentages', 'Ratio', 'Geometry', 'Area & Perimeter', 'Angles', 'Graphs', 'Probability', 'Word Problems', 'Algebra Patterns', 'Sequences', 'Powers, Roots & Indices', 'Algebraic Expressions', 'Circles', 'Volume & Surface Area', 'Averages & Range', "Pythagoras' Theorem", 'Transformations', 'Speed, Distance & Time', 'Mixed Challenge', 'Exam Survival', 'Master Chef Showdown'];
+const GENS2 = Object.assign({}, LEVELS_A, LEVELS_B, LEVELS_C);
+const S2_LEVELS = Object.keys(GENS2).map(Number).sort((a, b) => a - b);
+const S1_LEVELS = Array.from({ length: 28 }, (_, i) => i + 1);
+const meta = l => l > 100 ? { title: GENS2[l].title, emoji: GENS2[l].emoji } : { title: S1NAMES[l - 1], emoji: S1EMO[l - 1] };
+function freshMission(l, idx) {
+  if (l > 100) { const g = GENS2[l]; const i = (idx == null || idx >= 9) ? rnd(0, 8) : idx; return Object.assign(g.gens[i](), { code: g.code }); }
+  const bank = GEN1[l]; return bank[rnd(0, bank.length - 1)]();
+}
+
+// ══════════════════════ STATE (main progress is READ-ONLY; Daily Special has its own key) ══════════════════════
+const MKEY = 'math-complete-state', SKEY = 'mathDailySpecialState_v1';
+let MS = { xp: 0, levelProgress: {}, levelMissionResults: {} };
+const defaultDS = () => ({ v: 1, bonusXP: 0, stars: {}, lastSeen: {}, fixed: {}, streak: { count: 0, last: '' }, daily: { date: '', done: false, correct: 0, total: 5 } });
+let DS = defaultDS();
+const ymd = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const todayStr = () => ymd(new Date());
+const yesterdayStr = () => { const d = new Date(); d.setDate(d.getDate() - 1); return ymd(d); };
+function loadAll() {
+  try { const r = localStorage.getItem(MKEY); if (r) MS = Object.assign(MS, JSON.parse(r)); } catch (e) {}
+  try { const r = localStorage.getItem(SKEY); if (r) DS = Object.assign(defaultDS(), JSON.parse(r)); } catch (e) {}
+}
+function saveDS() { try { localStorage.setItem(SKEY, JSON.stringify(DS)); } catch (e) {} scheduleCloudPush(); }
+const prog = l => (MS.levelProgress || {})[l] || 0;
+const cooked = l => prog(l) >= 10;
+const starsOf = l => DS.stars[l] || 0;
+const totalStars = () => Object.values(DS.stars).reduce((a, b) => a + b, 0);
+const starTitle = n => n >= 60 ? '3-Star Michelin Chef' : n >= 30 ? '2-Star Michelin Chef' : n >= 15 ? '1-Star Michelin Chef' : n >= 5 ? 'Rising Star' : n >= 1 ? 'Taster' : 'No stars yet';
+const starStr = n => '⭐'.repeat(n) + '☆'.repeat(3 - n);
+const dailyDoneToday = () => DS.daily.date === todayStr() && DS.daily.done;
+const streakNow = () => (DS.streak.last === todayStr() || DS.streak.last === yesterdayStr()) ? DS.streak.count : 0;
+
+// ══════════════════════ CLOUD SYNC (same Family Code as the other apps, own bucket path) ══════════════════════
+const KVDB_BASE = 'https://kvdb.io', KN_SYNC_KEY = 'kn-sync-code';
+let syncTimer = null;
+const getSyncCode = () => localStorage.getItem(KN_SYNC_KEY) || '';
+function mergeDaily(a, b) {
+  a = a || {}; b = b || {};
+  const m = defaultDS(); m.bonusXP = Math.max(a.bonusXP || 0, b.bonusXP || 0);
+  [['stars'], ['lastSeen']].forEach(([k]) => { const keys = new Set([...Object.keys(a[k] || {}), ...Object.keys(b[k] || {})]); keys.forEach(x => { m[k][x] = Math.max((a[k] || {})[x] || 0, (b[k] || {})[x] || 0); }); });
+  const fk = new Set([...Object.keys(a.fixed || {}), ...Object.keys(b.fixed || {})]);
+  fk.forEach(x => { m.fixed[x] = [...new Set([...((a.fixed || {})[x] || []), ...((b.fixed || {})[x] || [])])]; });
+  const sa = a.streak || { count: 0, last: '' }, sb = b.streak || { count: 0, last: '' };
+  m.streak = (sa.last > sb.last || (sa.last === sb.last && sa.count >= sb.count)) ? sa : sb;
+  const da = a.daily || {}, db = b.daily || {};
+  m.daily = (da.date || '') > (db.date || '') ? da : (db.date || '') > (da.date || '') ? db : Object.assign({}, da, { done: !!(da.done || db.done) });
+  if (!m.daily.total) m.daily.total = 5;
+  return m;
+}
+async function syncOnLoad() {
+  const code = getSyncCode(); if (!code) return;
+  try {
+    const res = await fetch(`${KVDB_BASE}/${encodeURIComponent(code)}/math-daily`);
+    if (res.ok) { const t = await res.text(); if (t) { DS = mergeDaily(DS, JSON.parse(t)); try { localStorage.setItem(SKEY, JSON.stringify(DS)); } catch (e) {} renderHome(); } }
+    await fetch(`${KVDB_BASE}/${encodeURIComponent(code)}/math-daily`, { method: 'POST', body: JSON.stringify(DS) });
+  } catch (e) { console.warn('daily sync failed', e); }
+}
+function scheduleCloudPush() {
+  const code = getSyncCode(); if (!code) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => { fetch(`${KVDB_BASE}/${encodeURIComponent(code)}/math-daily`, { method: 'POST', body: JSON.stringify(DS) }).catch(() => {}); }, 600);
+}
+
+// ══════════════════════ ANSWER CHECKING (same rules as the level apps) ══════════════════════
+const normalizeAnswer = s => String(s).trim().toLowerCase().replace(/\s+/g, '').replace(/−/g, '-');
+function numericValue(s) { const c = s.replace(/[£$€,]/g, '').replace(/%$/, ''); if (c === '' || c === '-' || isNaN(c)) return null; const n = Number(c); return Number.isFinite(n) ? n : null; }
+function answerMatches(userRaw, correctRaw, type) {
+  const u = normalizeAnswer(userRaw), c = normalizeAnswer(correctRaw);
+  if (type === 'identify') {
+    const eq = (a, b) => a === b || (numericValue(a) !== null && numericValue(b) !== null && Math.abs(numericValue(a) - numericValue(b)) < 1e-9);
+    const up = u.split(',').filter(Boolean).sort(), cp = c.split(',').filter(Boolean).sort();
+    return up.length === cp.length && up.every((p, i) => eq(p, cp[i]));
+  }
+  const acc = c.split('|'); if (acc.includes(u)) return true;
+  const un = numericValue(u); if (un !== null) return acc.some(a => { const an = numericValue(a); return an !== null && Math.abs(an - un) < 1e-9; });
+  return false;
+}
+
+// ══════════════════════ HOME ══════════════════════
+const $ = id => document.getElementById(id);
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); window.scrollTo(0, 0); }
+function goHome() { renderHome(); show('home'); }
+function currentLevel() {
+  const inProgress = S2_LEVELS.find(l => prog(l) > 0 && prog(l) < 10); if (inProgress) return inProgress;
+  const next = S2_LEVELS.find(l => prog(l) < 10); return next || pick(S2_LEVELS);
+}
+function fridgeList() {
+  const fin = [...S1_LEVELS, ...S2_LEVELS].filter(cooked);
+  return fin.sort((a, b) => (DS.lastSeen[a] || 0) - (DS.lastSeen[b] || 0) || a - b);
+}
+function ageText(l) {
+  const t = DS.lastSeen[l]; if (!t) return l > 100 ? 'not tasted since cooking' : 'not tasted since Year 8';
+  const d = Math.floor((Date.now() - t) / 86400000); return d <= 0 ? 'tasted today' : d + ' day' + (d > 1 ? 's' : '') + ' ago';
+}
+function wrongList() {
+  const out = [];
+  Object.keys(MS.levelMissionResults || {}).forEach(k => { const l = Number(k); (MS.levelMissionResults[k] || []).forEach((r, i) => { if (r === 'wrong' && !((DS.fixed[l] || []).includes(i))) out.push({ level: l, idx: i }); }); });
+  return out;
+}
+function renderHome() {
+  const done = dailyDoneToday(), st = streakNow(), stars = totalStars(), fx = wrongList().length, fr = fridgeList();
+  const fridgeHtml = fr.length ? fr.slice(0, 4).map(l => `<div class="fridge-item"><span>${meta(l).emoji} ${meta(l).title}</span><small>${ageText(l)}</small></div>`).join('') : `<p>Nothing in the fridge yet — finish a level in the other apps and it will show up here.</p>`;
+  $('home').innerHTML = `
+    <div class="home-header">
+      <div class="home-title">🍽️ DAILY SPECIAL</div>
+      <div class="home-sub">5 minutes · then you're done for today</div>
+      <div class="pill-row">
+        <span class="pill">🔥 Streak <b>${st}</b></span>
+        <span class="pill">⭐ Stars <b>${stars}</b></span>
+        <span class="pill">✨ Bonus XP <b>${DS.bonusXP}</b></span>
+        <a class="pill" href="index.html">🏠 HQ</a>
+      </div>
+      <div class="home-sub" style="margin-top:8px;text-transform:none;letter-spacing:0">${starTitle(stars)}</div>
+    </div>
+    <div class="card big ${done ? 'done' : ''}">
+      <h2>${done ? '✅ Today’s special is served!' : '🍽️ Today’s Daily Special'}</h2>
+      ${done ? `<div class="stamp">DONE TODAY</div><p>You got ${DS.daily.correct} / ${DS.daily.total}. See you tomorrow, Chef! You can still open a Mystery Box or fix a recipe below.</p>`
+        : `<p>3 fresh dishes from your new menu + 2 old ingredients from the Fridge. Short and sweet.</p><button class="btn" onclick="startDaily()">Start the special →</button>`}
+    </div>
+    <div class="card">
+      <h2>🎁 Mystery Box</h2>
+      <p>Pick a finished dish. 5 new questions, new numbers. Win up to ⭐⭐⭐ — stars stay forever.</p>
+      <button class="btn ghost" onclick="openBoxPicker()">Open a box</button>
+    </div>
+    <div class="card">
+      <h2>🔧 Fix the Recipe</h2>
+      <p>${fx ? `${fx} dish${fx > 1 ? 'es' : ''} to polish. Fresh numbers, same skill. Fix them for bonus XP!` : 'No slip-ups to fix. Clean kitchen! 🎉'}</p>
+      <button class="btn ghost" ${fx ? '' : 'disabled'} onclick="startFix()">Fix up to 5</button>
+    </div>
+    <div class="card">
+      <h2>🥬 The Fridge</h2>
+      <p>Skills that haven’t been tasted for the longest. Use them before they spoil!</p>
+      <div class="fridge-list">${fridgeHtml}</div>
+    </div>
+    <a class="back-link" href="index.html">← Back to Kitchen Ninja HQ</a>`;
+}
+
+// ══════════════════════ QUIZ ENGINE ══════════════════════
+let QZ = null;
+function startQuiz(kind, title, items, onDone) { QZ = { kind, title, items, i: 0, correct: 0, hint: 0, assisted: 0, ch: null, answered: false, onDone }; show('quiz'); renderQ(); }
+function quitQuiz() { if (confirm('Stop now? Your answers so far still count for the dishes you tasted.')) goHome(); }
+function hintTiers(m) { const h = m.hint; if (!h) return []; if (typeof h === 'string') return [{ l: '💡 Hint', c: h }]; const t = []; if (h.setup) t.push({ l: '✏️ Set it up', c: h.setup }); if (h.formula) t.push({ l: '📐 Key idea', c: h.formula }); return t; }
+function renderQ() {
+  const it = QZ.items[QZ.i], m = it.mission; QZ.hint = 0; QZ.answered = false; QZ.ch = makeChoices(m); wsFresh = true; closeWorkspace();
+  $('qtitle').textContent = QZ.title; $('qcount').textContent = `${QZ.i + 1} / ${QZ.items.length}`; $('qbar').style.width = (QZ.i / QZ.items.length * 100) + '%';
+  const vis = m.visual || (m.hint && typeof m.hint === 'object' && m.hint.visual) || '';
+  const tiers = hintTiers(m);
+  $('qwrap').innerHTML = `<div class="qcard">
+    <div class="tag ${it.cls}">${it.tag}</div>
+    <div class="ins">${m.instruction}</div>
+    ${vis ? `<div class="vis">${vis}</div>` : ''}
+    <div class="prob">${String(m.problem).replace(/\n/g, '<br>')}</div>
+    <div class="row"><input class="inp" id="qin" type="text" placeholder="Your answer" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false"><button class="chk" onclick="checkQ()">Check</button></div>
+    <div class="fb" id="qfb"></div>
+    <div class="tools">${(tiers.length || QZ.ch) ? `<button class="hint-btn" id="qhint" onclick="showHint()">${hintLabel(tiers)}</button>` : ''}<button class="hint-btn" onclick="wsOpen()">📝 Working space</button></div>
+    <div class="hint-panel" id="qhp"></div>
+    <div class="nav"><button class="btn green" id="qnext" onclick="nextQ()" disabled>${QZ.i === QZ.items.length - 1 ? 'Finish ✓' : 'Next →'}</button></div>
+  </div>`;
+  const inp = $('qin'); inp.addEventListener('keypress', e => { if (e.key === 'Enter') checkQ(); }); setTimeout(() => inp.focus(), 80);
+}
+function hintLabel(t) { const total = t.length + (QZ.ch ? 1 : 0); if (QZ.hint >= total) return null; if (QZ.hint < t.length) return QZ.hint === 0 ? '💡 Need a hint?' : '💡 Show me more'; return '🎯 Give me choices'; }
+function showHint() {
+  const m = QZ.items[QZ.i].mission, t = hintTiers(m), total = t.length + (QZ.ch ? 1 : 0); if (QZ.hint < total) QZ.hint++;
+  const p = $('qhp'); p.classList.add('open');
+  p.innerHTML = t.slice(0, Math.min(QZ.hint, t.length)).map(x => `<div class="hint-tier"><div class="hint-lab">${x.l}</div><div>${x.c}</div></div>`).join('') + (QZ.hint > t.length && QZ.ch ? choicesHtml() : '');
+  const lab = hintLabel(t); if (lab) $('qhint').textContent = lab; else $('qhint').style.display = 'none';
+}
+function settle(ok, assisted) {
+  const it = QZ.items[QZ.i], m = it.mission, inp = $('qin');
+  QZ.answered = true; inp.disabled = true; inp.classList.add(ok ? 'correct' : 'wrong');
+  document.querySelectorAll('.ch-btn').forEach(b => { b.disabled = true; });
+  const fb = $('qfb'); fb.className = 'fb show ' + (ok ? 'correct' : 'wrong');
+  fb.innerHTML = ok ? (assisted ? '<div>✅</div><div>Yes, that is it! Try without the choices next time for full XP ⭐</div>' : '<div>✅</div><div>Correct! Nice slice.</div>') : `<div>💡</div><div>Not quite — the answer is <strong>${String(m.answer).split('|')[0]}</strong>. That’s how we learn!</div>`;
+  if (ok) QZ.correct++; if (ok && assisted) QZ.assisted++;
+  DS.lastSeen[it.level] = Date.now();
+  if (ok && !assisted && QZ.kind === 'fix' && it.fixIdx != null) { const arr = DS.fixed[it.level] = DS.fixed[it.level] || []; if (!arr.includes(it.fixIdx)) arr.push(it.fixIdx); }
+  saveDS(); $('qnext').disabled = false;
+}
+function checkQ() {
+  if (QZ.answered) return; const m = QZ.items[QZ.i].mission, inp = $('qin'); if (!inp.value.trim()) return;
+  settle(answerMatches(inp.value, m.answer, m.type), false);
+}
+function nextQ() { QZ.i++; if (QZ.i >= QZ.items.length) finishQuiz(); else renderQ(); }
+let toastTimer = null;
+function toast(t) { const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 1400); }
+
+// ══════════════════════ THE THREE MODES ══════════════════════
+function startDaily() {
+  const cur = currentLevel(), idx = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8]).slice(0, 3);
+  const cands = fridgeList().filter(l => l !== cur).slice(0, 6); let fr = shuffle(cands).slice(0, 2);
+  if (fr.length < 2) { const more = shuffle(S1_LEVELS.filter(l => !fr.includes(l) && l !== cur)).slice(0, 2 - fr.length); fr = fr.concat(more); }
+  const mk = (l, i, tag, cls) => ({ level: l, mission: freshMission(l, i), tag, cls });
+  const items = [mk(cur, idx[0], '🍳 Fresh dish · ' + meta(cur).title, 'new'), mk(fr[0], null, '🥬 From the Fridge · ' + meta(fr[0]).title, 'fridge'), mk(cur, idx[1], '🍳 Fresh dish · ' + meta(cur).title, 'new'), mk(fr[1], null, '🥬 From the Fridge · ' + meta(fr[1]).title, 'fridge'), mk(cur, idx[2], '🍳 Fresh dish · ' + meta(cur).title, 'new')];
+  startQuiz('daily', 'Daily Special', items);
+}
+function openBoxPicker() {
+  const list = [...S1_LEVELS, ...S2_LEVELS].filter(cooked);
+  $('boxlist').innerHTML = list.length ? list.map(l => `<div class="pick-item" onclick="startBox(${l})"><div class="pick-num">${l}</div><div class="pick-title">${meta(l).emoji} ${meta(l).title}</div><div class="pick-stars">${starStr(starsOf(l))}</div></div>`).join('') : '<div class="card"><p>No finished dishes yet. Cook a level in the other apps first, then come back for stars!</p></div>';
+  show('boxpick');
+}
+function startBox(l) {
+  let items;
+  if (l > 100) items = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8]).slice(0, 5).map(i => ({ level: l, mission: freshMission(l, i), tag: '🎁 Mystery Box', cls: 'box' }));
+  else { const bank = GEN1[l]; items = Array.from({ length: 5 }, (_, k) => ({ level: l, mission: bank[k % bank.length](), tag: '🎁 Mystery Box', cls: 'box' })); }
+  startQuiz('box:' + l, meta(l).title, items);
+}
+function startFix() {
+  const w = shuffle(wrongList()).slice(0, 5); if (!w.length) return;
+  startQuiz('fix', 'Fix the Recipe', w.map(x => ({ level: x.level, fixIdx: x.idx, mission: freshMission(x.level, x.idx), tag: '🔧 Fix · Level ' + x.level + ' ' + meta(x.level).title, cls: 'fix' })));
+}
+function finishQuiz() {
+  const c = QZ.correct, n = QZ.items.length; let xp = 0, extra = '', emoji = '🍽️', head = 'Nicely done!';
+  if (QZ.kind === 'daily') {
+    const a = QZ.assisted || 0; xp = (c - a) * 20 + a * 10; const first = !dailyDoneToday();
+    if (first) {
+      xp += 30; const t = todayStr(); DS.streak = { count: (DS.streak.last === yesterdayStr() ? DS.streak.count : (DS.streak.last === t ? DS.streak.count : 0)) + 1, last: t };
+      DS.daily = { date: t, done: true, correct: c, total: n };
+      extra = `<div class="stamp">DONE TODAY</div><div class="big">🔥 Streak: <b>${DS.streak.count}</b> day${DS.streak.count > 1 ? 's' : ''}</div>`;
+    }
+    head = c >= 4 ? 'Chef’s kiss! 🤌' : c >= 2 ? 'Well seasoned!' : 'Every taste counts!'; emoji = '🍽️';
+  } else if (QZ.kind.startsWith('box:')) {
+    const l = Number(QZ.kind.slice(4)), cu = c - (QZ.assisted || 0), earned = cu >= 5 ? 3 : cu === 4 ? 2 : cu === 3 ? 1 : 0, had = starsOf(l);
+    xp = cu * 25 + (c - cu) * 12; if (earned > had) { xp += 50 * (earned - had); DS.stars[l] = earned; extra = `<div class="big">New record! ${starStr(earned)}</div>`; }
+    else extra = `<div class="big">Your best: ${starStr(had)}${had < 3 ? ' — try again for more!' : ' — perfect!'}</div>`;
+    head = earned ? 'The box is open!' : 'Almost! Try another box'; emoji = '🎁';
+  } else if (QZ.kind === 'fix') {
+    xp = (c - (QZ.assisted || 0)) * 20 + (QZ.assisted || 0) * 10; extra = `<div class="big">${c} recipe${c === 1 ? '' : 's'} fixed 🔧</div>`; head = c ? 'Recipe repaired!' : 'Keep polishing'; emoji = '🔧';
+  }
+  DS.bonusXP += xp; saveDS();
+  $('donebox').innerHTML = `<div class="emoji">${emoji}</div><h1>${head}</h1><div class="big"><b>${c} / ${n}</b> correct</div><div class="big">+<b>${xp}</b> bonus XP ✨</div>${QZ.assisted ? `<div class="big" style="font-size:.85rem">🎯 ${QZ.assisted} answered with choices (half XP)</div>` : ''}${extra}
+    <div style="width:100%;max-width:320px;margin-top:10px"><button class="btn green" onclick="goHome()">🏠 Back to the kitchen</button></div>`;
+  show('done');
+}
+
+// ══════════════════════ WORKING SPACE (ThHTO column tool) ══════════════════════
+let wtCols = 4;
+let wtOperator = '+';
+let wtScalar = null; // the single-digit multiplier/divisor for × and ÷
+
+function openWorkspace() {
+  wtCols = 4;
+  wtScalar = null;
+  document.getElementById('workspace-overlay').classList.add('show');
+  const i1 = document.getElementById('wt-input-1'), i2 = document.getElementById('wt-input-2');
+  if (i1) i1.value = '';
+  if (i2) i2.value = '';
+  renderWorkspaceGrid();
+  setWtOperator('+');
+}
+
+function closeWorkspace() {
+  document.getElementById('workspace-overlay').classList.remove('show');
+}
+
+function wtColLabels(n) {
+  const all = ['HTh', 'TTh', 'Th', 'H', 'T', 'O'];
+  return all.slice(all.length - n);
+}
+
+function renderWorkspaceGrid() {
+  const labels = wtColLabels(wtCols);
+  const grid = document.getElementById('wt-grid');
+  const digitCells = (cls) => labels.map(() => `<td><input class="${cls}" maxlength="1" inputmode="numeric"></td>`).join('');
+  const msg = document.getElementById('wt-msg');
+  if (msg) msg.textContent = '';
+
+  const isScalarOp = wtOperator === '×' || wtOperator === '÷';
+  const num2Row = isScalarOp
+    ? `<tr class="wt-num2-label"><td class="wt-op-cell" id="wt-op-symbol">${wtOperator}</td><td colspan="${labels.length}" style="text-align:left; padding:8px 0 8px 6px; font-weight:800; color:var(--gold); font-size:1.1rem">${wtScalar != null ? wtScalar : '?'}</td></tr>`
+    : `<tr class="wt-num2"><td class="wt-op-cell" id="wt-op-symbol">${wtOperator}</td>${digitCells('wt-digit-input')}</tr>`;
+
+  grid.innerHTML = `
+    <tr class="wt-header"><td class="wt-op-cell"></td>${labels.map(l => `<td>${l}</td>`).join('')}</tr>
+    <tr class="wt-borrow"><td class="wt-op-cell"></td>${labels.map(() => `<td><div class="wt-note-cell" contenteditable="true"></div></td>`).join('')}</tr>
+    <tr class="wt-num1"><td class="wt-op-cell"></td>${digitCells('wt-digit-input')}</tr>
+    ${num2Row}
+    <tr class="wt-divider"><td colspan="${labels.length + 1}"><hr></td></tr>
+    <tr class="wt-answer"><td class="wt-op-cell"></td>${digitCells('wt-answer-input')}</tr>
+  `;
+}
+
+// Auto-add / auto-borrow / auto-carry / auto-bring-down engine. Colors the working with the
+// same marks taught in primary school: blue = carry (addition/multiplication) or bring-down
+// remainder (division), pink = borrow (subtraction) — and the original digit that got
+// adjusted is struck through (not overwritten) so the starting numbers are still visible.
+// num1 row is always the "main" multi-digit number (augend/minuend/multiplicand/dividend).
+// For + and −, num2 row is the second multi-digit number. For × and ÷, wtScalar is the
+// single-digit multiplier/divisor instead (short multiplication / short "bus-stop" division).
+function wtSolve() {
+  const num1Inputs = Array.from(document.querySelectorAll('#wt-grid .wt-num1 .wt-digit-input'));
+  const noteCells = Array.from(document.querySelectorAll('#wt-grid .wt-borrow .wt-note-cell'));
+  const answerInputs = Array.from(document.querySelectorAll('#wt-grid .wt-answer-input'));
+  const n = num1Inputs.length;
+  const msg = document.getElementById('wt-msg');
+  if (msg) msg.textContent = '';
+
+  num1Inputs.forEach(inp => inp.classList.remove('wt-strike'));
+  noteCells.forEach(c => c.innerHTML = '');
+  answerInputs.forEach(inp => inp.value = '');
+
+  const d1 = num1Inputs.map(i => i.value === '' ? 0 : parseInt(i.value, 10));
+
+  if (wtOperator === '+' || wtOperator === '−') {
+    const num2Inputs = Array.from(document.querySelectorAll('#wt-grid .wt-num2 .wt-digit-input'));
+    const d2 = num2Inputs.map(i => i.value === '' ? 0 : parseInt(i.value, 10));
+
+    if (wtOperator === '+') {
+      let carry = 0;
+      for (let i = n - 1; i >= 0; i--) {
+        let sum = d1[i] + d2[i] + carry;
+        carry = sum >= 10 ? 1 : 0;
+        if (sum >= 10) sum -= 10;
+        answerInputs[i].value = sum;
+        if (carry && i > 0) {
+          noteCells[i - 1].innerHTML += `<span class="wt-mark-carry">+1</span>`;
+        } else if (carry && i === 0) {
+          if (msg) msg.textContent = 'Answer needs one more column on the left — tap "+ col" and Solve again.';
+        }
+      }
+    } else {
+      const total1 = parseInt(d1.join(''), 10);
+      const total2 = parseInt(d2.join(''), 10);
+      if (total2 > total1) {
+        if (msg) msg.textContent = 'The first number is smaller than the second — subtraction needs the first number to be bigger.';
+        return;
+      }
+      const top = d1.slice();
+      for (let i = n - 1; i >= 0; i--) {
+        if (top[i] < d2[i]) {
+          let j = i - 1;
+          while (j >= 0 && top[j] === 0) {
+            top[j] = 9;
+            num1Inputs[j].classList.add('wt-strike');
+            noteCells[j].innerHTML += `<span class="wt-mark-borrow">9</span>`;
+            j--;
+          }
+          if (j >= 0) {
+            top[j] -= 1;
+            num1Inputs[j].classList.add('wt-strike');
+            noteCells[j].innerHTML += `<span class="wt-mark-borrow">${top[j]}</span>`;
+          }
+          top[i] += 10;
+          noteCells[i].innerHTML += `<span class="wt-mark-borrow">+10</span>`;
+        }
+        answerInputs[i].value = top[i] - d2[i];
+      }
+    }
+  } else if (wtOperator === '×') {
+    if (wtScalar == null) { if (msg) msg.textContent = 'Enter a number to multiply by first.'; return; }
+    let carry = 0;
+    for (let i = n - 1; i >= 0; i--) {
+      const product = d1[i] * wtScalar + carry;
+      const digit = product % 10;
+      carry = Math.floor(product / 10);
+      answerInputs[i].value = digit;
+      if (carry > 0 && i > 0) {
+        noteCells[i - 1].innerHTML += `<span class="wt-mark-carry">+${carry}</span>`;
+      } else if (carry > 0 && i === 0) {
+        if (msg) msg.textContent = 'Answer needs another column on the left — tap "+ col" and Solve again.';
+      }
+    }
+  } else if (wtOperator === '÷') {
+    if (wtScalar == null) { if (msg) msg.textContent = 'Enter a number to divide by first.'; return; }
+    if (wtScalar === 0) { if (msg) msg.textContent = "Can't divide by 0."; return; }
+    let remainder = 0;
+    for (let i = 0; i < n; i++) {
+      const value = remainder * 10 + d1[i];
+      const qDigit = Math.floor(value / wtScalar);
+      remainder = value % wtScalar;
+      answerInputs[i].value = qDigit;
+      if (remainder > 0 && i < n - 1) {
+        noteCells[i + 1].innerHTML += `<span class="wt-mark-carry">${remainder}↓</span>`;
+      }
+    }
+    if (msg) msg.textContent = remainder > 0 ? `Remainder: ${remainder} (blue notes show it being brought down to the next column)` : 'No remainder — divides exactly!';
+  }
+}
+
+function setWtOperator(op) {
+  wtOperator = op;
+  const buttonIds = { '+': 'wt-op-plus', '−': 'wt-op-minus', '×': 'wt-op-times', '÷': 'wt-op-divide' };
+  Object.keys(buttonIds).forEach(k => {
+    const btn = document.getElementById(buttonIds[k]);
+    if (btn) btn.classList.toggle('active', k === op);
+  });
+  const sym = document.getElementById('wt-op-symbol');
+  if (sym) sym.textContent = op;
+  const input2 = document.getElementById('wt-input-2');
+  if (input2) {
+    if (op === '×') input2.placeholder = 'Multiply by (0–9)';
+    else if (op === '÷') input2.placeholder = 'Divide by (0–9)';
+    else input2.placeholder = 'Second number';
+  }
+}
+
+function wtAddColumn() {
+  if (wtCols < 6) {
+    // preserve currently-entered digits when growing the grid
+    const n1 = Array.from(document.querySelectorAll('#wt-grid .wt-num1 .wt-digit-input')).map(i => i.value).join('');
+    const num2Els = document.querySelectorAll('#wt-grid .wt-num2 .wt-digit-input');
+    const n2 = num2Els.length ? Array.from(num2Els).map(i => i.value).join('') : '';
+    wtCols++;
+    renderWorkspaceGrid();
+    setWtOperator(wtOperator);
+    wtPlaceDigits(n1, n2);
+  }
+}
+function wtRemoveColumn() {
+  if (wtCols > 2) { wtCols--; renderWorkspaceGrid(); setWtOperator(wtOperator); }
+}
+function wtClear() {
+  renderWorkspaceGrid();
+  setWtOperator(wtOperator);
+}
+
+function wtPlaceDigits(n1, n2) {
+  const place = (rowSelector, numStr) => {
+    const inputs = document.querySelectorAll(rowSelector + ' .wt-digit-input');
+    if (!inputs.length) return;
+    const padded = numStr.padStart(inputs.length, ' ');
+    inputs.forEach((inp, i) => { inp.value = padded[i].trim(); });
+  };
+  place('#wt-grid .wt-num1', n1);
+  place('#wt-grid .wt-num2', n2);
+}
+
+function wtLoadNumbers() {
+  const n1 = (document.getElementById('wt-input-1').value.match(/\d+/) || [''])[0];
+  const n2raw = document.getElementById('wt-input-2').value;
+  const n2 = (n2raw.match(/\d+/) || [''])[0];
+  const msg = document.getElementById('wt-msg');
+  if (msg) msg.textContent = '';
+
+  if (wtOperator === '×' || wtOperator === '÷') {
+    if (!n1 || !n2) {
+      if (msg) msg.textContent = 'Fill in both numbers first.';
+      return;
+    }
+    if (n2.length > 1) {
+      if (msg) msg.textContent = `For now, Working Space only ${wtOperator === '×' ? 'multiplies' : 'divides'} by a single digit (0–9) — try short ${wtOperator === '×' ? 'multiplication' : 'division'} problems here.`;
+      return;
+    }
+    wtScalar = parseInt(n2, 10);
+    const extraCols = wtOperator === '×' ? 2 : 0;
+    wtCols = Math.min(6, n1.length + extraCols);
+    renderWorkspaceGrid();
+    setWtOperator(wtOperator);
+    wtPlaceDigits(n1, '');
+    wtSolve();
+  } else {
+    // +1 spare column so an addition carry-out always has somewhere to land
+    const maxLen = Math.max(n1.length, n2.length, 2, 3) + 1;
+    wtCols = Math.min(6, maxLen);
+    renderWorkspaceGrid();
+    setWtOperator(wtOperator);
+    wtPlaceDigits(n1, n2);
+    wtSolve();
+  }
+}
+
+document.addEventListener('input', function (e) {
+  const t = e.target;
+  if (!t.classList) return;
+  if (t.classList.contains('wt-digit-input') || t.classList.contains('wt-answer-input')) {
+    t.value = t.value.replace(/[^0-9]/g, '');
+    if (t.value.length >= 1) {
+      const cell = t.closest('td');
+      const nextInput = cell && cell.nextElementSibling && cell.nextElementSibling.querySelector('input');
+      if (nextInput) nextInput.focus();
+    }
+  }
+});
+
+
+// ══════════════════════ CHOICES: multiple-choice help inside the hints ══════════════════════
+const WORD_SETS = [['co-interior', 'alternate', 'corresponding', 'vertically opposite'], ['reflection', 'rotation', 'translation', 'enlargement'], ['positive', 'negative', 'none'], ['smile', 'frown'], ['a', 'b'], ['and', 'or'], ['arithmetic', 'geometric'], ['yes', 'no'], ['true', 'false'], ['increase', 'decrease'], ['compasses', 'protractor', 'ruler', 'set square']];
+function makeChoices(m) {
+  const ans = String(m.answer).split('|')[0].replace(/−/g, '-').trim(); if (!ans) return null;
+  const norm = normalizeAnswer(ans); let pool = [];
+  const mm = ans.match(/^([£$€]?)(-?\d+(?:\.\d+)?)(%?)$/);
+  if (mm) {
+    const pre = mm[1], suf = mm[3], v = parseFloat(mm[2]), dp = (mm[2].split('.')[1] || '').length, isInt = dp === 0;
+    const pad = isInt && /^0\d/.test(mm[2]) ? mm[2].length : 0;
+    const f = x => pre + (isInt ? (pad ? String(Math.round(x)).padStart(pad, '0') : String(Math.round(x))) : String(+x.toFixed(dp + 1))) + suf;
+    const ok = x => Number.isFinite(x) && x !== v && (v < 0 || x >= 0 || (x === -v && !pad)) && (!isInt || Number.isInteger(x)) && (!pad || x <= 360);
+    const step = isInt ? 1 : Math.pow(10, -dp);
+    const near = shuffle([v + 1, v - 1, v + step, v - step, v + 2 * step, v - 2 * step]).filter(ok);
+    const errs = shuffle([-v, v * 2, v / 2, v * 10, v / 10, v + 10, v - 10]).filter(ok);
+    pool = near.slice(0, 2).concat(errs, near.slice(2)).map(f);
+  } else if (/\d/.test(ans)) {
+    [...ans.matchAll(/\d+(?:\.\d+)?/g)].forEach(t => {
+      const s = t[0], i = t.index, isDen = ans[i - 1] === '/', isIntTok = !s.includes('.');
+      [+s + 1, +s - 1, +s + 2, +s - 2, +s * 2].forEach(x => { if (x < (isDen ? 1 : 0)) return; const sx = isIntTok ? String(x).padStart(s.length, '0') : String(+x.toFixed(6)); pool.push(ans.slice(0, i) + sx + ans.slice(i + s.length)); });
+      const p = ans[i - 1]; if (p === '+' || p === '-') pool.push(ans.slice(0, i - 1) + (p === '+' ? '-' : '+') + ans.slice(i));
+    });
+    pool = shuffle(pool);
+    const fr = ans.match(/^(\d+)\/(\d+)$/); if (fr) pool.unshift(fr[2] + '/' + fr[1]);
+  } else {
+    const key = norm.replace('cointerior', 'co-interior'), set = WORD_SETS.find(s => s.includes(key));
+    if (set) { const up = /^[A-Z]/.test(ans); pool = shuffle(set.filter(w => w !== key)).map(w => up ? w[0].toUpperCase() + w.slice(1) : w); }
+  }
+  const seen = new Set([norm]), out = [];
+  for (const c of pool) { const k = normalizeAnswer(c); if (!seen.has(k) && !answerMatches(c, m.answer, m.type)) { seen.add(k); out.push(c); } if (out.length === 3) break; }
+  return out.length ? shuffle([ans, ...out]) : null;
+}
+const chLabel = c => c.replace(/\^(\d+)/g, '<sup>$1</sup>');
+function choicesHtml() {
+  return `<div class="hint-tier"><div class="hint-lab">🎯 Tap the one you think is right</div><div class="choices">${QZ.ch.map((c, k) => `<button class="ch-btn" data-k="${k}" ${QZ.answered ? 'disabled' : ''} onclick="pickChoice(${k})">${chLabel(c)}</button>`).join('')}</div><div class="ch-msg" id="chmsg">Wrong tap? No stress. Cross it out and try another.</div></div>`;
+}
+function pickChoice(k) {
+  if (QZ.answered) return; const m = QZ.items[QZ.i].mission, s = QZ.ch[k], b = document.querySelector(`.ch-btn[data-k="${k}"]`);
+  if (answerMatches(s, m.answer, m.type)) { $('qin').value = s; b.classList.add('ok'); settle(true, true); }
+  else { b.classList.add('no'); b.disabled = true; $('chmsg').textContent = 'Not that one ✂️ Try another!'; }
+}
+
+// ══════════════════════ WORKING SPACE: steps, columns, drawing ══════════════════════
+let wsFresh = true, wsLast = null, wsStrokes = [], wsCur = null, wsColor = '#fbeee0';
+const WS_KEYS = ['+', '−', '×', '÷', '=', '(', ')', '²', '³', '√', 'π', '/', '.', ':', 'x'];
+const WS_COLS = ['#fbeee0', '#f4b400', '#2a9d8f', '#e8482c'];
+function wsPlain(h) { const d = document.createElement('div'); d.innerHTML = String(h).replace(/<sup>(.*?)<\/sup>/g, '^$1').replace(/<br\s*\/?>|\n/g, '  '); return d.textContent.trim(); }
+function wsTab(n) {
+  ['steps', 'cols', 'draw'].forEach(t => { $('wsp-' + t).style.display = t === n ? 'block' : 'none'; $('wst-' + t).classList.toggle('active', t === n); });
+  if (n === 'draw') wsRedraw();
+}
+function wsAddStep(txt) {
+  const box = $('ws-steps'), row = document.createElement('div'); row.className = 'step-row';
+  row.innerHTML = `<span class="step-n"></span><input class="step-in" type="text" autocomplete="off" autocorrect="off" spellcheck="false"><button class="step-x" title="remove" onclick="this.parentNode.remove();wsNumber()">✕</button>`;
+  const inp = row.querySelector('input'); inp.value = txt || ''; inp.addEventListener('focus', () => { wsLast = inp; });
+  box.appendChild(row); wsNumber(); if (txt === '') inp.focus();
+}
+function wsNumber() { document.querySelectorAll('#ws-steps .step-n').forEach((s, i) => { s.textContent = i + 1; }); }
+function wsResetSteps() {
+  $('ws-steps').innerHTML = ''; const q = QZ && QZ.items[QZ.i] ? wsPlain(QZ.items[QZ.i].mission.problem) : '';
+  wsAddStep(q); wsAddStep(' '); wsAddStep(' '); document.querySelectorAll('#ws-steps .step-in').forEach((x, i) => { if (i) x.value = ''; });
+}
+function wsKey(ch) {
+  const inp = wsLast || document.querySelector('#ws-steps .step-in:last-child') || document.querySelector('#ws-steps .step-in'); if (!inp) return;
+  const a = inp.selectionStart == null ? inp.value.length : inp.selectionStart, b = inp.selectionEnd == null ? a : inp.selectionEnd;
+  inp.value = inp.value.slice(0, a) + ch + inp.value.slice(b); inp.focus(); const p = a + ch.length; try { inp.setSelectionRange(p, p); } catch (e) {}
+}
+function wsRedraw() {
+  const c = $('ws-canvas'), g = c.getContext && c.getContext('2d'); if (!g) return; g.clearRect(0, 0, c.width, c.height); g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = 4;
+  wsStrokes.forEach(s => { g.strokeStyle = s.c; g.beginPath(); s.p.forEach((q, i) => i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); if (s.p.length === 1) g.lineTo(s.p[0][0] + .1, s.p[0][1]); g.stroke(); });
+}
+function wsColorSet(c) { wsColor = c; document.querySelectorAll('.dcol').forEach(d => d.classList.toggle('on', d.dataset.c === c)); }
+function wsInit() {
+  $('ws-keys').innerHTML = WS_KEYS.map(k => `<button class="key" onpointerdown="event.preventDefault()" onclick="wsKey('${k}')">${k}</button>`).join('');
+  $('ws-dcols').innerHTML = WS_COLS.map(c => `<span class="dcol" data-c="${c}" style="background:${c}" onclick="wsColorSet('${c}')"></span>`).join('') + '<button class="dbtn" onclick="wsStrokes.pop();wsRedraw()">↩ Undo</button><button class="dbtn" onclick="wsStrokes=[];wsRedraw()">🗑 Clear</button>';
+  wsColorSet(wsColor);
+  const c = $('ws-canvas'), pt = e => { const r = c.getBoundingClientRect(); return [(e.clientX - r.left) * c.width / r.width, (e.clientY - r.top) * c.height / r.height]; };
+  c.addEventListener('pointerdown', e => { e.preventDefault(); try { c.setPointerCapture(e.pointerId); } catch (x) {} wsCur = { c: wsColor, p: [pt(e)] }; wsStrokes.push(wsCur); wsRedraw(); });
+  c.addEventListener('pointermove', e => { if (wsCur) { wsCur.p.push(pt(e)); wsRedraw(); } });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => c.addEventListener(ev, () => { wsCur = null; }));
+}
+function wsOpen() {
+  if (wsFresh) {
+    wsFresh = false; wtCols = 4; wtScalar = null; $('wt-input-1').value = ''; $('wt-input-2').value = ''; renderWorkspaceGrid(); setWtOperator('+');
+    wsResetSteps(); wsStrokes = []; wsRedraw(); wsTab('steps');
+  }
+  $('workspace-overlay').classList.add('show');
+}
+wsInit();
+
+loadAll(); renderHome(); syncOnLoad();
+</script>
+</body>
+</html>
