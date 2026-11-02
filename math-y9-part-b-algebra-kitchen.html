@@ -2025,7 +2025,7 @@ const LEVELS = {
 const LEVEL_NAMES = {};
 Object.keys(LEVELS).forEach(k => { LEVEL_NAMES[k] = LEVELS[k].title; });
 
-const TOTAL_LEVELS = 130;
+const TOTAL_LEVELS = 210;
 
 // ══════════════════════ MULTI-FILE NAVIGATION ══════════════════════
 // This app is split across 3 self-contained HTML files. Each file only
@@ -2041,11 +2041,17 @@ const FILE_MAP = [
   { min: 20, max: 28, file: 'math-part3-advanced-exam.html', label: 'Y8 · P3', sub: 'Advanced & Exam' },
   { min: 101, max: 110, file: 'math-y9-part-a-number-kitchen.html', label: 'Y9 · A', sub: 'Number Kitchen II' },
   { min: 111, max: 120, file: 'math-y9-part-b-algebra-kitchen.html', label: 'Y9 · B', sub: 'Algebra Kitchen II' },
-  { min: 121, max: 130, file: 'math-y9-part-c-shape-data-kitchen.html', label: 'Y9 · C', sub: 'Shape & Data II' }
+  { min: 121, max: 130, file: 'math-y9-part-c-shape-data-kitchen.html', label: 'Y9 · C', sub: 'Shape & Data II' },
+  { min: 201, max: 210, file: 'math-y10-part-a-algebra-kitchen.html', label: 'Y10 · A', sub: 'Algebra Kitchen III' }
 ];
 function fileForLevel(n) {
   const f = FILE_MAP.find(f => n >= f.min && n <= f.max);
   return f ? f.file : FILE_MAP[0].file;
+}
+function nextLevelAfter(n) {
+  if (FILE_MAP.some(f => n + 1 >= f.min && n + 1 <= f.max)) return n + 1;
+  const g = FILE_MAP.filter(f => f.min > n).sort((a, b) => a.min - b.min)[0];
+  return g ? g.min : null;
 }
 function goToContinue() {
   const cl = currentUnlockedLevel();
@@ -2787,8 +2793,8 @@ function completeLevel() {
   document.getElementById('mission-dots').innerHTML = '';
   document.getElementById('mission-counter').textContent = '✓ Complete';
 
-  const nextLevel = currentLevel + 1;
-  const hasNext = nextLevel <= TOTAL_LEVELS;
+  const nextLevel = nextLevelAfter(currentLevel);
+  const hasNext = !!nextLevel;
   const nextAction = LEVELS[nextLevel]
     ? `openLevel(${nextLevel})`
     : `location.href='${fileForLevel(nextLevel)}?level=${nextLevel}'`;

@@ -454,6 +454,25 @@
           <span class="station-part-count" id="mathPartCCount"></span>
         </a>
       </div>
+      <div class="station-season-label">Season 3 · Year 10 — Chef de Partie Menu 🔒</div>
+      <div class="station-parts">
+        <a class="station-part-chip locked" id="y10ChipA" href="#" data-href="math-y10-part-a-algebra-kitchen.html">
+          <div class="station-part-label">Part A</div>
+          <div class="station-part-sub">Algebra Kitchen III</div>
+          <span class="station-part-count" id="mathPartY10ACount">🔒</span>
+        </a>
+        <div class="station-part-chip locked">
+          <div class="station-part-label">Part B</div>
+          <div class="station-part-sub">Graphs &amp; Trig</div>
+          <span class="station-part-count">soon</span>
+        </div>
+        <div class="station-part-chip locked">
+          <div class="station-part-label">Part C</div>
+          <div class="station-part-sub">Shape &amp; Data III</div>
+          <span class="station-part-count">soon</span>
+        </div>
+      </div>
+      <div class="station-season-label" id="y10Hint" style="text-transform:none;letter-spacing:0;font-weight:700">🚪 This door opens when you clear Level 130 (Year 9 finale)</div>
     </div>
 
     <a class="station examlab" href="Math_Exam_Lab.html">
@@ -703,13 +722,16 @@
         { id: 'mathPart3Count', min: 20, max: 28 },
         { id: 'mathPartACount', min: 101, max: 110 },
         { id: 'mathPartBCount', min: 111, max: 120 },
-        { id: 'mathPartCCount', min: 121, max: 130 }
+        { id: 'mathPartCCount', min: 121, max: 130 },
+        { id: 'mathPartY10ACount', min: 201, max: 210 }
       ];
+      const y10open = (progress[130] || 0) >= 10, chip = document.getElementById('y10ChipA');
+      if (chip && y10open) { chip.classList.remove('locked'); chip.classList.add('new'); chip.href = chip.dataset.href; const hint = document.getElementById('y10Hint'); if (hint) hint.style.display = 'none'; }
       ranges.forEach(r => {
         let done = 0;
         for (let i = r.min; i <= r.max; i++) if ((progress[i] || 0) >= 10) done++;
         const el = document.getElementById(r.id);
-        if (el) el.textContent = `${done}/${r.max - r.min + 1}`;
+        if (el && !(r.id === 'mathPartY10ACount' && !y10open)) el.textContent = `${done}/${r.max - r.min + 1}`;
       });
     } catch (e) { /* ignore */ }
   }
