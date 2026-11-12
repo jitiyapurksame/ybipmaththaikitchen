@@ -540,6 +540,7 @@ let _rz; window.addEventListener('resize',()=>{ clearTimeout(_rz); _rz=setTimeou
 
 // ══════════════════════ TAP-IN QUESTIONS (one question at a time) ══════════════════════
 function qidOf(c,i,j){ return `${c.id}${i}q${j}`; }
+function isOff(c,j){ return c.off===true || (Array.isArray(c.off)&&c.off.includes(j)); }
 function qStatus(c,i,j){
   const qid=qidOf(c,i,j);
   if(doneIds.has(qid)) return 'done';
@@ -554,7 +555,7 @@ function tilesHtml(c,i){
     const np=(melState.pills&&melState.pills[qid]||[]).length, tot=(q.draw&&q.draw.pills||[]).length;
     const sub=st==='done'?'Finished!':(st==='started'?`In progress${tot?' · '+np+'/'+tot+' pills':''}`:'Tap to start');
     const medal=st==='done'?starHtml(qid):(st==='started'?'✏️':'');
-    return `<button class="tile ${st}" onclick="openQ(${i},${j})"><span class="tn">${st==='done'?'✅':(j+1)}</span><span><b>${(c.shorts&&c.shorts[j])||('Question '+(j+1))}</b><small>${sub}</small></span><span class="tm">${medal}</span></button>`;
+    return `<button class="tile ${st}" onclick="openQ(${i},${j})"><span class="tn">${st==='done'?'✅':(j+1)}</span><span><b>${isOff(c,j)?'⭐ ':''}${(c.shorts&&c.shorts[j])||('Question '+(j+1))}</b><small>${sub}${isOff(c,j)?' · bonus — NOT on the exam list':''}</small></span><span class="tm">${medal}</span></button>`;
   }).join('');
 }
 
@@ -563,7 +564,7 @@ function todayStr(){ return new Date().toLocaleDateString('en-CA'); }
 function yesterdayStr(){ const d=new Date(); d.setDate(d.getDate()-1); return d.toLocaleDateString('en-CA'); }
 function pickDaily(){
   const chs=currentChapters(), all=[];
-  chs.forEach((c,i)=>c.qs.forEach((q,j)=>all.push({i:i,j:j,qid:qidOf(c,i,j),st:qStatus(c,i,j)})));
+  chs.forEach((c,i)=>c.qs.forEach((q,j)=>!isOff(c,j)&&all.push({i:i,j:j,qid:qidOf(c,i,j),st:qStatus(c,i,j)})));
   const unfinished=all.filter(x=>x.st==='started').concat(all.filter(x=>x.st==='new'));
   const done=all.filter(x=>x.st==='done');
   const picks=[], units=new Set();
@@ -629,15 +630,18 @@ function dailyHtml(){
 }
 
 function nextUp(chs){
-  for(let i=0;i<chs.length;i++) for(let j=0;j<chs[i].qs.length;j++) if(!doneIds.has(qidOf(chs[i],i,j))) return [i,j];
+  for(let i=0;i<chs.length;i++) for(let j=0;j<chs[i].qs.length;j++) if(!isOff(chs[i],j)&&!doneIds.has(qidOf(chs[i],i,j))) return [i,j];
   return null;
 }
 function overallInner(chs){
-  let tot=0,done=0; chs.forEach((c,i)=>c.qs.forEach((q,j)=>{ tot++; if(doneIds.has(qidOf(c,i,j))) done++; }));
+  let tot=0,done=0; chs.forEach((c,i)=>c.qs.forEach((q,j)=>{ if(isOff(c,j)) return; tot++; if(doneIds.has(qidOf(c,i,j))) done++; }));
   const med=[0,0,0]; Object.values(melState.stars||{}).forEach(v=>{ med[v===0?0:(v===1?1:2)]++; });
   const nx=nextUp(chs);
   const pct=tot?Math.round(done/tot*100):0;
-  return `<h2 style="margin:0 0 6px">🍳 Term 1 Final — Dishes Cooked</h2>
+  const dl=Math.ceil((new Date('2026-11-23T00:00:00')-new Date())/86400000);
+  const cd=dl>0?`<div class="barcap" style="margin:0 0 6px">⏳ Exams on <b>23 &amp; 25 November</b> — ${dl} day${dl===1?'':'s'} to go. One tile a day is enough!</div>`:'';
+  const scope=`<details class="notes" style="margin:6px 0"><summary>📋 What is in the exam? (school's official list)</summary><p style="margin:6px 0"><b>Chapter 5 — Angles &amp; constructions:</b> parallel lines · exterior angle of a triangle · constructions<br><b>Chapter 7 — Fractions:</b> recurring decimals · ordering fractions · subtracting mixed numbers · integer × mixed number · integer ÷ fraction<br><b>Chapter 8 — Shapes &amp; symmetry:</b> quadrilaterals &amp; polygons · circumference of a circle<br><small>Tiles marked ⭐ are bonus — they are NOT on the list. Skip them unless you are bored.</small></p></details>`;
+  return `<h2 style="margin:0 0 6px">🍳 Term 1 Final — Dishes Cooked</h2>${cd}${scope}
     <div class="bigcount"><b>${done}</b> / ${tot} questions finished</div>
     <div class="pbar"><div style="width:${pct}%"></div></div>
     <div class="medrow">🥇 ${med[0]} &nbsp; 🥈 ${med[1]} &nbsp; 🥉 ${med[2]} &nbsp;·&nbsp; ⭐ ${xp} XP</div>
@@ -738,7 +742,7 @@ function examQuestions(per){
   const lastH=(melState.examHist||[]).slice(-1)[0]; const last=new Set((lastH&&lastH.qs)||[]);
   const out=[];
   chs.forEach((c,i)=>{
-    const idx=c.qs.map((q,j)=>j).filter(j=>exTotal(c,j)>0);
+    const idx=c.qs.map((q,j)=>j).filter(j=>exTotal(c,j)>0&&!isOff(c,j));
     const fresh=idx.filter(j=>!last.has(exKey(i,j)));
     const pool=(fresh.length>=per?fresh:idx).slice(), picked=[];
     while(picked.length<per&&pool.length) picked.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
@@ -1158,6 +1162,93 @@ CHAPTERS.push(
     pills:[{k:'M',t:`Write the scale rule: divide every length by 4`},{k:'A',t:`Draw and label the PLAN (view from above)`},{k:'A',t:`Draw and label the FRONT elevation`},{k:'A',t:`Draw and label the SIDE elevation`},{k:'M',t:`Write each size on the sides (cm)`}]}}
  ]}
 );
+
+
+// ───────── Updated to the school's official list (Final Exam 1/2026, exam 23 & 25 Nov) ─────────
+(function(){
+  const F=id=>CHAPTERS.find(c=>c.examSet==='y8_t1_final'&&c.id===id);
+  // 1) Not on the official list → keep as bonus (indexes unchanged so saved progress stays)
+  const data=F('data'); data.off=true; data.title='⭐ Bonus · Unit 6 Collecting Data (NOT on the Term 1 list)';
+  const fr=F('fractions'); fr.off=[5,6];   // "making calculations easier" + Marcus bracket question
+  const sh=F('shapes'); sh.off=[4];        // 3D views (cake box)
+  // 2) NEW questions, added at the END so old progress is safe
+  const an=F('angles');
+  an.shorts.push('Exterior angle: pizza slice','Exterior angle: find x');
+  an.qs.push(
+  {icon:'🍕', stem:`A triangular pizza slice <b>ABC</b>. The side <b>BC</b> is extended in a straight line to <b>D</b>. ∠A = <b>48°</b> and ∠B = <b>62°</b>. (a) Work out the <b>exterior angle</b> ∠ACD the long way. (b) Show the shortcut.`,
+   steps:[`Exterior angle = the angle OUTSIDE the triangle, made by extending one side.`,`Long way: inside angle ∠ACB = 180° − 48° − 62° = 70° (angles in a triangle add to 180°).`,`∠ACD sits on a straight line with ∠ACB: 180° − 70° = 110°.`,`Shortcut: exterior angle = the two FAR-AWAY inside angles added together: 48° + 62° = 110°. ✔`],
+   ans:`∠ACD = 110°. Shortcut: exterior angle = sum of the two opposite interior angles (48° + 62°).`,
+   visual:{type:'bar',parts:[{v:48,cls:'a',l:'48°'},{v:62,cls:'b',l:'62°'},{v:70,cls:'u',l:'?'}],cap:`Exterior angle = 48 + 62 = 110°. (The two inside angles "slide round" onto the outside.)`},
+   draw:{ghost:{pts:[[200,60],[80,250],[330,250],[530,250]],sh:[S([0,1,2],1),S([2,3])],
+     n:[[200,48,'A'],[62,270,'B'],[328,272,'C'],[540,272,'D'],[200,100,'48°'],[130,232,'62°']],
+     s:[[372,232,'?']],
+     l:[[372,232,'110°'],[290,232,'70°'],[300,310,'exterior = 48 + 62 = 110°  ·  or 180 − 70 = 110°',null,13]]},
+    pills:[{k:'M',t:`Draw triangle ABC and extend BC to D with a straight line`},{k:'M',t:`Write 48° and 62° on the picture`},{k:'M',t:`Work: 180° − 48° − 62° = 70° for ∠ACB`},{k:'R',t:`Reason: angles in a triangle add to 180°`},{k:'M',t:`Work: 180° − 70° = 110°`},{k:'R',t:`Reason: angles on a straight line add to 180°`},{k:'A',t:`Write ∠ACD = 110°`},{k:'R',t:`Say the shortcut: exterior angle = sum of the two opposite interior angles`}]}},
+
+  {icon:'🥪', stem:`A triangular sandwich. One <b>exterior angle</b> is <b>125°</b>. One of the two opposite inside angles is <b>50°</b>. Find the <b>other</b> opposite inside angle <b>x</b>, then find the inside angle that sits next to the 125°. Check that all three inside angles add to 180°.`,
+   steps:[`Exterior angle = the two opposite inside angles added: 50° + x = 125°.`,`x = 125° − 50° = 75°.`,`Inside angle next to the exterior angle is on a straight line with it: 180° − 125° = 55°.`,`Check: 50° + 75° + 55° = 180° ✔`],
+   ans:`x = 75°. The inside angle next to the 125° is 55°. Check: 50 + 75 + 55 = 180.`,
+   visual:{type:'bar',parts:[{v:50,cls:'a',l:'50°'},{v:75,cls:'u',l:'x = ?'}],cap:`Exterior angle bar: 50 + x = 125.`},
+   draw:{pills:[{k:'M',t:`Draw a triangle and extend one side to show the exterior angle 125°`},{k:'M',t:`Write 50° on the opposite inside angle`},{k:'M',t:`Work: 125° − 50° = 75°`},{k:'R',t:`Reason: exterior angle = sum of the two opposite interior angles`},{k:'M',t:`Work: 180° − 125° = 55° for the angle next to it`},{k:'A',t:`Check: 50 + 75 + 55 = 180`}]}}
+  );
+
+  fr.shorts.push('Order fractions: sugar','Recurring: 5/6 and 2/11','Cups left: 5 1/3 − 2 3/4','6 × 2 3/4 and 5 ÷ 5/8');
+  fr.qs.push(
+  {icon:'🍪', stem:`Four cookie recipes need these amounts of sugar (cups): <b>3/4, 5/8, 2/3, 7/12</b>. Put them in order, <b>smallest first</b>. Show your common denominator.`,
+   steps:[`LCM of 4, 8, 3 and 12 is 24 (the smallest number they all fit into).`,`3/4 = 18/24, 5/8 = 15/24, 2/3 = 16/24, 7/12 = 14/24.`,`Smallest to biggest tops: 14, 15, 16, 18.`,`Write the ORIGINAL fractions in that order.`],
+   ans:`7/12, 5/8, 2/3, 3/4.`,
+   visual:{type:'chain',steps:['7/12 = 14/24','5/8 = 15/24','2/3 = 16/24','3/4 = 18/24'],cap:`Same slice size (24ths) → just compare the tops.`},
+   draw:{pills:[{k:'M',t:`Write the common denominator 24 and how you got it`},{k:'M',t:`Rewrite all four fractions over 24`},{k:'A',t:`Write the final order smallest first`},{k:'R',t:`Write the ORIGINAL fractions in the answer, not only the 24ths`}]}},
+
+  {icon:'🧪', stem:`Use bus-stop division to change <b>5/6</b> and <b>2/11</b> into decimals. Write each answer using the <b>recurring dot</b> notation.`,
+   steps:[`5/6 means 5 ÷ 6. Write 5.000…: 50 ÷ 6 = 8 r2, then 20 ÷ 6 = 3 r2, 20 ÷ 6 = 3 r2 … remainder 2 keeps coming back, so 3 repeats.`,`5/6 = 0.8333… = 0.83̇ (dot over the 3 that repeats).`,`2/11: 20 ÷ 11 = 1 r9, 90 ÷ 11 = 8 r2, then 20 ÷ 11 again … the remainders repeat, so the digits 1 and 8 repeat.`,`2/11 = 0.181818… = 0.1̇8̇ (dot over the FIRST and LAST digit of the repeating block).`],
+   ans:`5/6 = 0.83̇ (0.8333…). 2/11 = 0.1̇8̇ (0.181818…).`,
+   visual:{type:'chain',steps:['5 ÷ 6','50 ÷ 6 = 8 r2','20 ÷ 6 = 3 r2','…3 forever','0.83̇'],cap:`Same remainder again = the digits repeat.`},
+   draw:{pills:[{k:'M',t:`Write 5.000… and 2.000… with extra zeros`},{k:'M',t:`Write the remainder after each step`},{k:'R',t:`Say: the remainder repeats, so the digits repeat`},{k:'A',t:`Write 5/6 with the dot on the 3`},{k:'A',t:`Write 2/11 with dots on the 1 and the 8`}]}},
+
+  {icon:'🍰', stem:`A jar holds <b>5 1/3 cups</b> of flour. You use <b>2 3/4 cups</b>. How much is left? Draw a bar model and show the borrowing.`,
+   steps:[`Common denominator 12: 5 4/12 − 2 9/12.`,`4/12 is smaller than 9/12 — borrow 1 whole = 12/12 from the 5.`,`5 4/12 = 4 16/12. Now 4 16/12 − 2 9/12.`,`Wholes: 4 − 2 = 2. Fractions: 16/12 − 9/12 = 7/12. Answer 2 7/12.`,`Check: 2 7/12 + 2 9/12 = 4 16/12 = 5 4/12 ✔`],
+   ans:`2 7/12 cups.`,
+   visual:{type:'chain',steps:['5 4/12','= 4 16/12','− 2 9/12','= 2 7/12'],cap:`Borrow 1 whole = 12/12.`},
+   draw:{pills:[{k:'M',t:`Draw one long bar for 5 1/3 and mark the 2 3/4 part`},{k:'M',t:`Write both fractions over 12`},{k:'M',t:`Notice 4/12 < 9/12 → borrow 1 whole = 12/12`},{k:'M',t:`Rewrite 5 4/12 as 4 16/12`},{k:'A',t:`Subtract wholes and fractions separately`},{k:'A',t:`Write 2 7/12 cups with units`}]}},
+
+  {icon:'🧁', stem:`(a) One batch of muffins needs <b>2 3/4 cups</b> of milk. You bake <b>6 batches</b>. How much milk? Work out 6 × 2 3/4. (b) You have <b>5 litres</b> of syrup. Each bottle holds <b>5/8 litre</b>. How many bottles can you fill? Work out 5 ÷ 5/8.`,
+   steps:[`(a) Split the mixed number: 2 3/4 = 2 + 3/4. 6 × 2 = 12.`,`6 × 3/4 = 18/4 = 4 1/2. Add: 12 + 4 1/2 = 16 1/2.`,`(b) How many 5/8-slices fit in 5 wholes? Each litre = 8 eighths, so 5 litres = 40 eighths.`,`One bottle = 5 eighths. 40 ÷ 5 = 8 bottles. Check: flip and multiply: 5 × 8/5 = 8 ✔`],
+   ans:`(a) 16 1/2 cups. (b) 8 bottles.`,
+   visual:{type:'bar',parts:[{v:12,cls:'a',l:'6 × 2 = 12'},{v:4.5,cls:'b',l:'6 × 3/4 = 4 1/2'}],cap:`(a) Two pieces added: 12 + 4 1/2.`},
+   draw:{pills:[{k:'M',t:`(a) Split 2 3/4 into 2 + 3/4`},{k:'M',t:`(a) Work 6 × 2 and 6 × 3/4`},{k:'A',t:`(a) Add and write 16 1/2 cups`},{k:'M',t:`(b) Draw 5 bars, cut each into eighths (40 pieces)`},{k:'M',t:`(b) Circle groups of 5 eighths`},{k:'A',t:`(b) Write 8 bottles; check by flip and multiply`}]}}
+  );
+
+  sh.shorts.push('Kite and parallelogram angles','Polygon angle sums','Donut tray circumference');
+  sh.qs.push(
+  {icon:'🥐', stem:`(a) A kite-shaped tray <b>ABCD</b> has ∠A = <b>100°</b> and the two side angles ∠B = ∠D = <b>70°</b>. Find ∠C. (b) A parallelogram tray <b>PQRS</b> has ∠P = <b>65°</b>. Find ∠Q, ∠R and ∠S.`,
+   steps:[`Angles inside ANY quadrilateral add to 360° (it is 2 triangles: 2 × 180°).`,`(a) ∠C = 360° − 100° − 70° − 70° = 120°.`,`(b) In a parallelogram, opposite angles are equal: ∠R = ∠P = 65°.`,`Angles next to each other (co-interior) add to 180°: ∠Q = 180° − 65° = 115°, and ∠S = 115°.`,`Check: 65 + 115 + 65 + 115 = 360 ✔`],
+   ans:`(a) ∠C = 120°. (b) ∠Q = 115°, ∠R = 65°, ∠S = 115°.`,
+   visual:{type:'bar',parts:[{v:100,cls:'a',l:'100°'},{v:70,cls:'b',l:'70°'},{v:70,cls:'b',l:'70°'},{v:120,cls:'u',l:'∠C = ?'}],cap:`A quadrilateral is a 360° bar.`},
+   draw:{ghost:{pts:[[300,40],[460,150],[300,300],[140,150]],sh:[S([0,1,2,3],1)],
+     n:[[300,28,'A'],[478,150,'B'],[300,322,'C'],[122,150,'D'],[300,80,'100°'],[420,150,'70°'],[180,150,'70°']],
+     s:[[300,270,'?']],
+     l:[[300,270,'120°'],[300,200,'100+70+70+120 = 360°',null,13]]},
+    pills:[{k:'M',t:`Draw the kite and write 100°, 70°, 70°`},{k:'R',t:`Say: angles in a quadrilateral add to 360°`},{k:'M',t:`Work: 360° − 100° − 70° − 70°`},{k:'A',t:`Write ∠C = 120°`},{k:'R',t:`(b) Say: opposite angles of a parallelogram are equal`},{k:'M',t:`(b) Co-interior: 180° − 65° = 115°`},{k:'A',t:`(b) Write ∠Q, ∠R, ∠S`}]}},
+
+  {icon:'🔶', stem:`(a) Work out the <b>sum of the interior angles</b> of a hexagon. (b) A <b>regular</b> octagon has 8 equal angles. Find <b>each interior angle</b>. (c) Find each <b>exterior angle</b> of the regular octagon and check it with the interior angle.`,
+   steps:[`Pick one corner and draw lines to every other corner. This cuts an n-sided polygon into (n − 2) triangles.`,`(a) Hexagon: 6 − 2 = 4 triangles. 4 × 180° = 720°.`,`(b) Octagon: 6 triangles. 6 × 180° = 1080°. Equal angles: 1080° ÷ 8 = 135°.`,`(c) Exterior angles of any polygon add to 360°. Regular octagon: 360° ÷ 8 = 45°.`,`Check: interior + exterior = 135° + 45° = 180° (straight line) ✔`],
+   ans:`(a) 720°. (b) 135°. (c) 45° (135 + 45 = 180).`,
+   visual:{type:'chain',steps:['hexagon: 6 − 2 = 4 triangles','4 × 180° = 720°'],cap:`Triangles are the building blocks.`},
+   draw:{pills:[{k:'M',t:`Draw a hexagon and split it into triangles from one corner`},{k:'M',t:`Write the rule (n − 2) × 180°`},{k:'A',t:`(a) Write 720°`},{k:'M',t:`(b) Work 6 × 180° ÷ 8`},{k:'A',t:`(b) Write 135°`},{k:'M',t:`(c) Work 360° ÷ 8 = 45° and check 135 + 45 = 180`}]}},
+
+  {icon:'🍩', stem:`A round donut tray has radius <b>7 cm</b>. (a) Find the circumference (use the π button, 1 d.p.). (b) A food-cart wheel has circumference <b>157 cm</b>. Find its diameter to the nearest cm. (c) How far does the wheel roll in 10 full turns? Give your answer in metres.`,
+   steps:[`(a) Diameter = 2 × radius = 14 cm. C = π × d = π × 14 = 43.98… = 44.0 cm (1 d.p.).`,`(b) Reverse the recipe: d = C ÷ π = 157 ÷ π = 49.97… = 50 cm.`,`(c) One turn = one circumference = 157 cm. 10 turns = 1570 cm.`,`1570 cm ÷ 100 = 15.7 m.`],
+   ans:`(a) 44.0 cm  (b) 50 cm  (c) 15.7 m`,
+   visual:{type:'bar',parts:bars(10,1,'157 cm','a','b'),cap:`10 turns = 10 circumference-bars laid end to end.`},
+   draw:{pills:[{k:'M',t:`Mark the radius 7 cm and double it to get d = 14`},{k:'M',t:`Write C = π × d`},{k:'A',t:`(a) Write 44.0 cm`},{k:'M',t:`(b) Reverse: d = C ÷ π`},{k:'A',t:`(b) Write 50 cm`},{k:'M',t:`(c) 10 × 157 = 1570 cm → 15.7 m`}]}}
+  );
+
+  STARTERS.push(
+   "Exterior angle of a triangle = the sum of the two opposite interior angles = … + … = …°",
+   "Sum of the interior angles of an n-sided polygon = (n − 2) × 180° = …"
+  );
+})();
 
 function stateKey(examId){ return 'mathExamLab_'+examId+'_v1'; }
 
