@@ -269,6 +269,8 @@
     color: var(--muted);
   }
   .station-season-label + .station-parts { margin-top: 6px; }
+  .station-parts.wrap { flex-wrap: wrap; }
+  .station-parts.wrap .station-part-chip { flex: 1 1 calc(50% - 8px); }
   .station-part-chip.locked { opacity: 0.55; cursor: default; border-style: dashed; }
   .station-part-chip.new { border-color: var(--gold); }
 
@@ -624,6 +626,7 @@
   //   href      : file name (same folder)
   //   storeKey  : the localStorage key that app saves to (used for the XP preview)
   //   field     : which field of that save holds XP (default 'xp')
+  //   (a term with more than 3 apps wraps to 2 columns automatically)
   //   status    : 'soon' shows a dashed "coming soon" door instead of a link
   // To add Thai Year 8 Term 2: copy the term-1 files to ...-y8-t2.html, put NEW storage keys in them,
   // then replace the "Term 2 soon" entry below with real apps and add the new keys to BACKUP_KEYS.
@@ -635,6 +638,7 @@
           { label: 'Term 1', apps: [
             { label: 'Reading',      sub: 'Survival',        href: 'thai-reading-y8-t1.html',    storeKey: 'thai-reading-state' },
             { label: 'Read & Write', sub: 'Survival',        href: 'thai-readwrite-y8-t1.html',  storeKey: 'thai-rw-state' },
+            { label: 'Writing Types', sub: '10 genres',      href: 'thai-writing-types-y8-t1.html' },   // shares the Read & Write save, so no counter
             { label: 'Literature',   sub: '4 classic texts', href: 'thai-literature-y8-t1.html', storeKey: 'thaiKitchenState_v1' }
           ] },
           { label: 'Term 2', status: 'soon', apps: [] }
@@ -687,7 +691,7 @@
             <div class="station-part-sub">${escHtml(app.sub || '')}</div>
             <span class="station-part-count" data-store="${escHtml(app.storeKey || '')}" data-field="${escHtml(app.field || 'xp')}" data-kind="${escHtml(app.kind || 'xp')}"></span>
           </a>`).join('');
-        return `<div class="station-season-label">${escHtml(label)}</div><div class="station-parts">${chips}</div>`;
+        return `<div class="station-season-label">${escHtml(label)}</div><div class="station-parts${t.apps.length > 3 ? ' wrap' : ''}">${chips}</div>`;
       }).join('')).join('');
       return `
       <div class="station ${sub.cls}">
