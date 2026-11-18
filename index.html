@@ -461,18 +461,20 @@
           <div class="station-part-sub">Algebra Kitchen III</div>
           <span class="station-part-count" id="mathPartY10ACount">🔒</span>
         </a>
-        <div class="station-part-chip locked">
+        <a class="station-part-chip locked" id="y10ChipB" href="#" data-href="math-y10-part-b-graphs-trig-kitchen.html">
           <div class="station-part-label">Part B</div>
           <div class="station-part-sub">Graphs &amp; Trig</div>
-          <span class="station-part-count">soon</span>
-        </div>
-        <div class="station-part-chip locked">
+          <span class="station-part-count" id="mathPartY10BCount">🔒</span>
+        </a>
+        <a class="station-part-chip locked" id="y10ChipC" href="#" data-href="math-y10-part-c-shape-data-kitchen-3.html">
           <div class="station-part-label">Part C</div>
           <div class="station-part-sub">Shape &amp; Data III</div>
-          <span class="station-part-count">soon</span>
-        </div>
+          <span class="station-part-count" id="mathPartY10CCount">🔒</span>
+        </a>
       </div>
       <div class="station-season-label" id="y10Hint" style="text-transform:none;letter-spacing:0;font-weight:700">🚪 This door opens when you clear Level 130 (Year 9 finale)</div>
+      <div class="station-season-label" id="y10HintB" style="display:none;text-transform:none;letter-spacing:0;font-weight:700">🚪 Part B opens when you clear Level 210 (end of Part A)</div>
+      <div class="station-season-label" id="y10HintC" style="display:none;text-transform:none;letter-spacing:0;font-weight:700">🚪 Part C opens when you clear Level 220 (end of Part B)</div>
     </div>
 
     <a class="station examlab" href="Math_Exam_Lab.html">
@@ -723,15 +725,23 @@
         { id: 'mathPartACount', min: 101, max: 110 },
         { id: 'mathPartBCount', min: 111, max: 120 },
         { id: 'mathPartCCount', min: 121, max: 130 },
-        { id: 'mathPartY10ACount', min: 201, max: 210 }
+        { id: 'mathPartY10ACount', min: 201, max: 210 },
+        { id: 'mathPartY10BCount', min: 211, max: 220 },
+        { id: 'mathPartY10CCount', min: 221, max: 230 }
       ];
       const y10open = (progress[130] || 0) >= 10, chip = document.getElementById('y10ChipA');
       if (chip && y10open) { chip.classList.remove('locked'); chip.classList.add('new'); chip.href = chip.dataset.href; const hint = document.getElementById('y10Hint'); if (hint) hint.style.display = 'none'; }
+      const y10bOpen = y10open && (progress[210] || 0) >= 10, chipB = document.getElementById('y10ChipB');
+      if (chipB && y10bOpen) { chipB.classList.remove('locked'); chipB.classList.add('new'); chipB.href = chipB.dataset.href; }
+      const y10cOpen = y10bOpen && (progress[220] || 0) >= 10, chipC = document.getElementById('y10ChipC');
+      if (chipC && y10cOpen) { chipC.classList.remove('locked'); chipC.classList.add('new'); chipC.href = chipC.dataset.href; }
+      const hintC = document.getElementById('y10HintC'); if (hintC) hintC.style.display = (y10bOpen && !y10cOpen) ? '' : 'none';
+      const hintB = document.getElementById('y10HintB'); if (hintB) hintB.style.display = (y10open && !y10bOpen) ? '' : 'none';
       ranges.forEach(r => {
         let done = 0;
         for (let i = r.min; i <= r.max; i++) if ((progress[i] || 0) >= 10) done++;
         const el = document.getElementById(r.id);
-        if (el && !(r.id === 'mathPartY10ACount' && !y10open)) el.textContent = `${done}/${r.max - r.min + 1}`;
+        if (el && !(r.id === 'mathPartY10ACount' && !y10open) && !(r.id === 'mathPartY10BCount' && !y10bOpen) && !(r.id === 'mathPartY10CCount' && !y10cOpen)) el.textContent = `${done}/${r.max - r.min + 1}`;
       });
     } catch (e) { /* ignore */ }
   }
