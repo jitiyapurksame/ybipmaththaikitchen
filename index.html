@@ -396,7 +396,7 @@
   <header>
     <div class="kicker">Kitchen Ninja HQ</div>
     <h1>Pick Your Station</h1>
-    <p class="sub" id="motto">Two kitchens, one chef. Choose what you're practicing today.</p>
+    <p class="sub" id="motto">One chef, many kitchens. Choose what you're practicing today.</p>
   </header>
 
   <div class="stations">
@@ -477,12 +477,13 @@
       <div class="station-season-label" id="y10HintC" style="display:none;text-transform:none;letter-spacing:0;font-weight:700">🚪 Part C opens when you clear Level 220 (end of Part B)</div>
     </div>
 
-    <a class="station examlab" href="Math_Exam_Lab.html">
+    <!-- Math Exam Lab: ONE evolving app with an exam picker inside. Generic text; the exam name comes from the "Studying for" tag. -->
+    <a class="station examlab" href="math-exam-lab.html">
       <div class="station-inner">
         <div class="station-icon">🧪</div>
         <div class="station-text">
           <div class="station-title">Math Exam Lab</div>
-          <div class="station-desc">Midterm survival kitchen — bar models, sketch pads, and panic-button hints.</div>
+          <div class="station-desc">Exam survival kitchen — pick your exam inside. Bar models, sketch pads and panic-button hints.</div>
           <div class="station-progress" id="examProgress"></div>
           <div class="station-active-exam" id="examActiveTag"></div>
         </div>
@@ -490,72 +491,26 @@
       </div>
     </a>
 
-    <a class="station thai" href="Thai_Exam_Survival_-_Index.html">
-      <div class="station-inner">
-        <div class="station-icon">🍳</div>
-        <div class="station-text">
-          <div class="station-title">Thai Reading Survival</div>
-          <div class="station-desc">Cook up reading, vocab, and exam-day skills.</div>
-          <div class="station-progress" id="thaiProgress"></div>
-        </div>
-        <div class="station-arrow">›</div>
-      </div>
-    </a>
-
-    <a class="station thai" href="Thai_ReadWrite_Survival.html">
-      <div class="station-inner">
-        <div class="station-icon">🥢</div>
-        <div class="station-text">
-          <div class="station-title">Thai Read & Write Survival</div>
-          <div class="station-desc">Sound out letters and vowels like mixing ingredients — one bite at a time.</div>
-          <div class="station-progress" id="rwProgress"></div>
-        </div>
-        <div class="station-arrow">›</div>
-      </div>
-    </a>
-
-    <a class="station lit" href="Thai_Specialty_Kitchen.html">
-      <div class="station-inner">
-        <div class="station-icon">📜</div>
-        <div class="station-text">
-          <div class="station-title">Thai Literature Survival</div>
-          <div class="station-desc">Master 4 classic Thai texts, one secret recipe at a time.</div>
-          <div class="station-progress" id="litProgress"></div>
-        </div>
-        <div class="station-arrow">›</div>
-      </div>
-    </a>
-
-    <a class="station chi" href="Chinese_Kitchen_Cuisine.html">
-      <div class="station-inner">
-        <div class="station-icon">🥟</div>
-        <div class="station-text">
-          <div class="station-title">Chinese Kitchen</div>
-          <div class="station-desc">Prep ingredient cards and follow the recipe for Unit 1 dialogue.</div>
-          <div class="station-progress" id="chiProgress"></div>
-          <div class="station-active-exam" id="chiActiveTag"></div>
-        </div>
-        <div class="station-arrow">›</div>
-      </div>
-    </a>
+    <!-- Thai + Chinese stations are drawn from SUBJECTS (see script). To add a term or an app, edit SUBJECTS only. -->
+    <div id="registryStations" style="display:contents"></div>
   </div>
 
   <div class="tools">
     <div class="tool-btn" onclick="openBackupModal()">
       <span>💾 Backup / Restore Progress</span>
-      <span class="tool-status">all 6 apps</span>
+      <span class="tool-status">every app</span>
     </div>
   </div>
 
   <footer>
-    Keep this file in the same folder as the other apps (the 3 Math parts + Year 9 Part A + Thai Reading + Thai Read & Write + Literature + Chinese Kitchen) — tap a station to open it. Backup/Restore for all 5 apps is managed here.
+    Keep every file in the same folder (same website) — tap a station to open it. Backup / Restore covers every app listed in BACKUP_KEYS below.
   </footer>
 
 <!-- Backup Modal -->
 <div class="modal-overlay" id="backup-overlay">
   <div class="modal-box">
     <div class="modal-title">💾 Backup / Restore</div>
-    <p class="modal-desc">Generate one code that carries ALL 3 apps' progress. Copy it on this device, then paste it into "Restore" on another device (or save it somewhere safe like Notes, in case you ever need to reinstall).</p>
+    <p class="modal-desc">Generate one code that carries the progress of EVERY app. Copy it on this device, then paste it into "Restore" on another device (or save it somewhere safe like Notes, in case you ever need to reinstall).</p>
 
     <p class="modal-desc" style="font-size:0.78rem; margin-bottom:6px;">Generate a code from progress on this device:</p>
     <textarea class="modal-textarea" id="backup-export-box" readonly placeholder="Tap Generate Code below..."></textarea>
@@ -663,34 +618,121 @@
       el.classList.add('show');
     } catch (e) { /* ignore */ }
   }
+
+  // ══════════════════════ REGISTRY: edit THIS to add a term or an app ══════════════════════
+  // Subject → Year → Term → apps. One chip per app. File naming: <subject>-<app>-y<year>-t<term>.html
+  //   href      : file name (same folder)
+  //   storeKey  : the localStorage key that app saves to (used for the XP preview)
+  //   field     : which field of that save holds XP (default 'xp')
+  //   status    : 'soon' shows a dashed "coming soon" door instead of a link
+  // To add Thai Year 8 Term 2: copy the term-1 files to ...-y8-t2.html, put NEW storage keys in them,
+  // then replace the "Term 2 soon" entry below with real apps and add the new keys to BACKUP_KEYS.
+  const SUBJECTS = [
+    { id: 'thai', cls: 'thai', icon: '🍳', title: 'Thai Kitchen',
+      desc: 'Reading, writing and literature — cooked up term by term.',
+      years: [
+        { label: 'Year 8', terms: [
+          { label: 'Term 1', apps: [
+            { label: 'Reading',      sub: 'Survival',        href: 'thai-reading-y8-t1.html',    storeKey: 'thai-reading-state' },
+            { label: 'Read & Write', sub: 'Survival',        href: 'thai-readwrite-y8-t1.html',  storeKey: 'thai-rw-state' },
+            { label: 'Literature',   sub: '4 classic texts', href: 'thai-literature-y8-t1.html', storeKey: 'thaiKitchenState_v1' }
+          ] },
+          { label: 'Term 2', status: 'soon', apps: [] }
+        ] }
+      ] },
+    { id: 'chinese', cls: 'chi', icon: '🥟', title: 'Chinese Kitchen',
+      desc: 'Ingredient cards and recipes for every Chinese exam — one app, sorted by year and term.',
+      activeKey: 'chineseKitchenActiveExam',
+      years: [
+        { label: 'Year 8', terms: [
+          { label: 'Term 1', apps: [
+            { label: 'Chinese Kitchen', sub: 'Midterm + Final', href: 'chinese-kitchen.html', storeKey: 'chinese-kitchen-state', kind: 'chinese' }
+          ] },
+          { label: 'Term 2', status: 'soon', apps: [] }
+        ] }
+      ] }
+  ];
+
+  // Every localStorage key that must travel in the Backup code.  bundleName stays the same forever
+  // (old codes keep working). New app = add ONE line here.
+  const BACKUP_KEYS = {
+    math: 'math-complete-state',
+    thai: 'thai-reading-state',
+    rw: 'thai-rw-state',
+    lit: 'thaiKitchenState_v1',
+    litSketches: 'thaiKitchenSketchbook_v1',
+    chinese: 'chinese-kitchen-state',
+    examLab: 'mathExamLabState_v1',
+    daily: 'mathDailySpecialState_v1'
+  };
+  // Keys saved ONE PER EXAM (Math Exam Lab saves mathExamLab_<examId>_v1). Everything starting with the
+  // prefix travels in the backup, so a new exam needs no edit here.
+  const BACKUP_PREFIXES = { examLabSets: 'mathExamLab_' };
+
+  function escHtml(t) { return String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+  function renderSubjects() {
+    const host = document.getElementById('registryStations');
+    if (!host) return;
+    host.innerHTML = SUBJECTS.map(sub => {
+      const rows = sub.years.map(y => y.terms.map(t => {
+        const label = `${y.label} · ${t.label}`;
+        if (t.status === 'soon' || !t.apps.length) {
+          return `<div class="station-season-label">${escHtml(label)} 🔒</div>
+            <div class="station-parts"><div class="station-part-chip locked"><div class="station-part-label">Coming soon</div><div class="station-part-sub">new menu on the way</div></div></div>`;
+        }
+        const chips = t.apps.map(app => `
+          <a class="station-part-chip new" href="${escHtml(app.href)}">
+            <div class="station-part-label">${escHtml(app.label)}</div>
+            <div class="station-part-sub">${escHtml(app.sub || '')}</div>
+            <span class="station-part-count" data-store="${escHtml(app.storeKey || '')}" data-field="${escHtml(app.field || 'xp')}" data-kind="${escHtml(app.kind || 'xp')}"></span>
+          </a>`).join('');
+        return `<div class="station-season-label">${escHtml(label)}</div><div class="station-parts">${chips}</div>`;
+      }).join('')).join('');
+      return `
+      <div class="station ${sub.cls}">
+        <div class="station-inner">
+          <div class="station-icon">${sub.icon}</div>
+          <div class="station-text">
+            <div class="station-title">${escHtml(sub.title)}</div>
+            <div class="station-desc">${escHtml(sub.desc)}</div>
+            ${sub.activeKey ? `<div class="station-active-exam" id="active-${sub.id}" data-key="${escHtml(sub.activeKey)}"></div>` : ''}
+          </div>
+        </div>
+        ${rows}
+      </div>`;
+    }).join('');
+  }
+
+  // Fill every chip's small counter from that app's own save (silently skipped if nothing saved yet).
+  function fillSubjectProgress() {
+    document.querySelectorAll('#registryStations .station-part-count').forEach(el => {
+      try {
+        const raw = localStorage.getItem(el.dataset.store);
+        if (!raw) return;
+        const st = JSON.parse(raw);
+        if (el.dataset.kind === 'chinese') {
+          let done = 0, total = 0;
+          Object.keys(st || {}).forEach(id => { total += 2; if (st[id].vocabDone) done++; if (st[id].dialogueDone) done++; });
+          if (total) el.textContent = `${done}/${total} cooked`;
+        } else if (st && typeof st[el.dataset.field] === 'number') {
+          el.textContent = st[el.dataset.field] + ' XP';
+        }
+      } catch (e) { /* ignore */ }
+    });
+    document.querySelectorAll('#registryStations .station-active-exam').forEach(el => {
+      try {
+        const info = JSON.parse(localStorage.getItem(el.dataset.key) || 'null');
+        if (info && info.label) { el.textContent = `📌 Studying for: ${info.label}`; el.classList.add('show'); }
+      } catch (e) { /* ignore */ }
+    });
+  }
+  renderSubjects();
   showMathXP();
   showDailyStatus();
-  tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
-  tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
-  tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
   tryShowProgress('mathExamLabState_v1', 'examProgress', 'xp');
 
-  // Chinese Kitchen tracks per-lesson done-flags, not XP, so it gets its own preview.
-  function tryShowChineseProgress() {
-    try {
-      const raw = localStorage.getItem('chinese-kitchen-state');
-      if (!raw) return;
-      const state = JSON.parse(raw);
-      const ids = Object.keys(state || {});
-      if (!ids.length) return;
-      let done = 0, total = 0;
-      ids.forEach(id => {
-        const lp = state[id];
-        total += 2;
-        if (lp.vocabDone) done++;
-        if (lp.dialogueDone) done++;
-      });
-      const el = document.getElementById('chiProgress');
-      el.textContent = `${done}/${total} steps cooked`;
-      el.classList.add('show');
-    } catch (e) { /* ignore */ }
-  }
-  tryShowChineseProgress();
+  fillSubjectProgress();
 
   // Shows which exam period each exam-tagged app is currently prepping for,
   // so the son doesn't have to open an app just to check. Each app publishes
@@ -709,7 +751,6 @@
     } catch (e) { /* ignore */ }
   }
   tryShowActiveExam('mathExamLabActiveExam', 'examActiveTag');
-  tryShowActiveExam('chineseKitchenActiveExam', 'chiActiveTag');
 
   // Per-part completion counts for the Math quick-jump chips (1-9 / 10-19 / 20-28 / Y9 A 101-110)
   function showPartCounts() {
@@ -755,16 +796,16 @@
     const box = document.getElementById('backup-export-box');
     const status = document.getElementById('backup-export-status');
     try {
-      const bundle = {
-        math: JSON.parse(localStorage.getItem('math-complete-state') || 'null'),
-        thai: JSON.parse(localStorage.getItem('thai-reading-state') || 'null'),
-        rw: JSON.parse(localStorage.getItem('thai-rw-state') || 'null'),
-        lit: JSON.parse(localStorage.getItem('thaiKitchenState_v1') || 'null'),
-        litSketches: JSON.parse(localStorage.getItem('thaiKitchenSketchbook_v1') || 'null'),
-        chinese: JSON.parse(localStorage.getItem('chinese-kitchen-state') || 'null'),
-        examLab: JSON.parse(localStorage.getItem('mathExamLabState_v1') || 'null'),
-        daily: JSON.parse(localStorage.getItem('mathDailySpecialState_v1') || 'null'),
-      };
+      const bundle = {};
+      Object.keys(BACKUP_KEYS).forEach(name => { bundle[name] = JSON.parse(localStorage.getItem(BACKUP_KEYS[name]) || 'null'); });
+      Object.keys(BACKUP_PREFIXES).forEach(name => {
+        const group = {};
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k.indexOf(BACKUP_PREFIXES[name]) === 0) group[k] = JSON.parse(localStorage.getItem(k) || 'null');
+        }
+        bundle[name] = group;
+      });
       box.value = btoa(encodeURIComponent(JSON.stringify(bundle)));
       status.className = 'modal-error ok';
       status.textContent = '✓ Code ready — tap Copy Code';
@@ -805,23 +846,17 @@
     try {
       const bundle = JSON.parse(decodeURIComponent(atob(code)));
       if (typeof bundle !== 'object' || bundle === null) throw new Error('bad code');
-      if (bundle.math) localStorage.setItem('math-complete-state', JSON.stringify(bundle.math));
-      if (bundle.thai) localStorage.setItem('thai-reading-state', JSON.stringify(bundle.thai));
-      if (bundle.rw) localStorage.setItem('thai-rw-state', JSON.stringify(bundle.rw));
-      if (bundle.lit) localStorage.setItem('thaiKitchenState_v1', JSON.stringify(bundle.lit));
-      if (bundle.litSketches) localStorage.setItem('thaiKitchenSketchbook_v1', JSON.stringify(bundle.litSketches));
-      if (bundle.chinese) localStorage.setItem('chinese-kitchen-state', JSON.stringify(bundle.chinese));
-      if (bundle.examLab) localStorage.setItem('mathExamLabState_v1', JSON.stringify(bundle.examLab));
-      if (bundle.daily) localStorage.setItem('mathDailySpecialState_v1', JSON.stringify(bundle.daily));
+      Object.keys(BACKUP_KEYS).forEach(name => { if (bundle[name]) localStorage.setItem(BACKUP_KEYS[name], JSON.stringify(bundle[name])); });
+      Object.keys(BACKUP_PREFIXES).forEach(name => {
+        const group = bundle[name];
+        if (group && typeof group === 'object') Object.keys(group).forEach(k => { if (k.indexOf(BACKUP_PREFIXES[name]) === 0 && group[k]) localStorage.setItem(k, JSON.stringify(group[k])); });
+      });
       status.className = 'modal-error ok';
       status.textContent = '✓ Progress restored! Reopen an app to see it.';
       showMathXP();
       showDailyStatus();
-      tryShowProgress('thai-reading-state', 'thaiProgress', 'xp');
-      tryShowProgress('thai-rw-state', 'rwProgress', 'xp');
-      tryShowProgress('thaiKitchenState_v1', 'litProgress', 'xp');
       tryShowProgress('mathExamLabState_v1', 'examProgress', 'xp');
-      tryShowChineseProgress();
+      fillSubjectProgress();
     } catch (e) {
       status.className = 'modal-error err';
       status.textContent = 'That code looks invalid — check it was copied in full.';
