@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--
+  ╔══ KITCHEN NINJA APP CARD ═════════════════════════════════════════
+  ║ app id   : thai-writing-lab     subject: Thai
+  ║ year/term: Year 8 · Term 1   (file name pattern: <subject>-<app>-y<year>-t<term>.html)
+  ║ saves to : thai-writing-lab-state  (own key; {xp, done:{topicId:1}})
+  ║ Hub chip : Thai → Year 8 · Term 1 (SUBJECTS) + BACKUP_KEYS.writingLab. Back link → index.html.
+  ║ NEXT TERM: copy this file, give it a NEW storage key, replace the T topics (tiles are "thai|reading" joined by ";").
+  ║ NOTE: all Thai text is a first draft. A native speaker must check it before J.J. practises from it.
+  ╚═══════════════════════════════════════════════════════════════════
+-->
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Thai Writing Lab</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&family=Sarabun:wght@400;600;700;800&display=swap');
+:root{--bg:#201410;--surface:#32211a;--surface2:#291a13;--border:#5a3d26;--text:#fbeee0;--muted:#c2a68a;--gold:#f4b400;--accent:#e8482c;--ok:#16a34a;--c1:#38bdf8;--c2:#f97316;--c3:#a855f7;--c4:#16a34a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:16px;padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(28px,env(safe-area-inset-bottom));background:radial-gradient(ellipse at top,#2a3a1f 0%,var(--bg) 55%,#150d0a 100%) fixed;color:var(--text);font:17px/1.45 'Nunito','Sarabun',sans-serif;min-height:100vh}
+#app{max-width:620px;margin:0 auto}
+.th{font-family:'Sarabun','Thonburi','Sukhumvit Set','Noto Sans Thai',sans-serif}
+.badge{display:inline-block;font-size:12px;font-weight:800;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px 10px;margin-left:6px}
+h1{font-family:'Bangers',cursive;font-size:32px;letter-spacing:1.5px;margin:10px 0 2px;line-height:1.15;background:linear-gradient(135deg,#facc15,var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{margin:0 0 14px;font-weight:800;color:var(--muted)}
+a.back{display:inline-block;font-size:12px;font-weight:800;color:var(--muted);text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 11px}
+.card,.btn,.tile,.ty{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--border);background:var(--surface);border-radius:16px}
+.card:active,.btn:active,.tile:active,.ty:active{transform:scale(.98)}
+.card{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:14px 16px;margin:0 0 10px}
+.card .big{font-size:30px}
+.btn{display:block;width:100%;padding:14px;margin:12px 0 0;background:linear-gradient(135deg,var(--accent),#c2331b);border-color:#e8482c;color:#fff;font-weight:900;font-size:18px}
+.btn.alt{background:var(--surface);border-color:var(--border);color:var(--text)}
+.q{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin:10px 0}
+.q .th{font-size:24px;line-height:1.6;font-weight:700}
+.rom{font-size:13px;color:var(--muted);line-height:1.2}
+.en{font-size:14px;color:var(--muted)}
+.ty{display:block;width:100%;padding:13px 14px;margin:0 0 10px;text-align:left}
+.ty b{font-size:19px}
+.msg{padding:12px;border-radius:14px;background:#3a2b12;border:1px solid var(--gold);margin:10px 0;font-weight:800}
+.strip{display:flex;gap:8px;margin:8px 0}
+.strip span{flex:1;text-align:center;padding:6px 0;border-radius:12px;border:1px solid var(--border);background:var(--surface2);font-size:22px;opacity:.6}
+.strip span.on{background:#4a3410;border-color:var(--gold);opacity:1}.strip span.ok{background:#173d27;border-color:var(--ok);opacity:1}
+.line{min-height:78px;background:var(--surface2);border:2px dashed var(--border);border-radius:16px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin:10px 0}
+.pool{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.tile{padding:8px 14px;text-align:center}
+.tile .th{font-size:23px;display:block;line-height:1.5;font-weight:700}
+.tile .rom{display:block}
+.tile.put{background:#173d27;border-color:var(--ok);cursor:default}
+.shake{animation:sh .3s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media(prefers-reduced-motion:reduce){.shake{animation:none;background:#4a1f18}}
+.para p{margin:0 0 10px}.para .th{font-size:21px;line-height:1.7}
+#pv{position:fixed;inset:0;z-index:50;overflow:auto;background:#e9e2d8;color:#000;padding:max(12px,env(safe-area-inset-top)) 12px 24px}
+#pv .bar{display:flex;gap:10px;margin:0 auto 12px;max-width:620px}
+#pv .bar button{flex:1;font:inherit;font-weight:900;padding:12px;border-radius:14px;border:1px solid #5a3d26;background:#fff;color:#201410;cursor:pointer}
+#pv .bar button.go{background:#e8482c;color:#fff;border-color:#e8482c}
+#pv .sheet{max-width:620px;margin:0 auto;background:#fff;padding:18px;border-radius:8px;font-family:'Sarabun','Thonburi','Sukhumvit Set',sans-serif}
+#pv h2{font-size:18px;margin:0 0 6px}#pv .pq{font-size:22px;line-height:1.6}
+#pv .lab{font-size:13px;font-family:Arial,sans-serif;margin:14px 0 0}
+#pv .ln{border-bottom:2px solid #555;height:52px;line-height:52px;font-size:24px;white-space:nowrap;overflow:hidden}
+#pv .tr{color:#aaa}#pv .pr{font-size:11px;color:#666;font-family:Arial,sans-serif}
+#paper{display:none}
+@media print{
+ @page{size:A4;margin:14mm}
+ body>*:not(#paper){display:none!important}
+ body{background:#fff!important}
+ #paper{display:block;color:#000;font-family:'Sarabun','Thonburi','Sukhumvit Set','Noto Sans Thai',Tahoma,sans-serif}
+ #paper h2{font-size:15pt;margin:0 0 4mm}
+ #paper .pq{font-size:17pt;line-height:1.6;margin-bottom:2mm}
+ #paper .lab{font-size:10pt;font-family:Arial,sans-serif;margin:5mm 0 0}
+ #paper .ln{border-bottom:1.5px solid #555;height:13mm;line-height:13mm;font-size:20pt;white-space:nowrap;overflow:hidden}
+ #paper .tr{color:#aaa}
+ #paper .pr{font-size:8.5pt;color:#666;font-family:Arial,sans-serif;margin-top:1mm}
+}
+</style></head>
+<body><div id="app"></div><div id="paper"></div>
+<script>
+// Content: tiles are "thai|reading" joined by ";". Needs native-speaker review before use.
+const T=[
+{id:'t1',e:'📚',en:'Homework every day?',ty:'a',
+ q:'นักเรียนเห็นด้วยหรือไม่ว่าควรทำการบ้านทุกวัน',r:'nak-rian hen-duay rue-mai waa kuan tam gaan-baan took-wan',
+ s:[['ฉัน|chan;เห็นด้วย|hen-duay;กับ|gap;การทำการบ้าน|gaan-tam-gaan-baan;ทุกวัน|took-wan','I agree with homework every day.'],
+ ['เพราะ|pro;ช่วยให้|chuay-hai;ฉัน|chan;ทบทวน|top-tuan;บทเรียน|bot-rian','Because it helps me review lessons.'],
+ ['ตัวอย่างเช่น|dtua-yaang-chen;ฉัน|chan;จำ|jam;คำศัพท์|kam-sap;ได้ดีขึ้น|dai-dee-kuen','For example, I remember words better.'],
+ ['ดังนั้น|dang-nan;การบ้าน|gaan-baan;มี|mee;ประโยชน์|bpra-yot','So homework is useful.']]},
+{id:'t2',e:'🚢',en:'Lifeboats for everyone?',ty:'a',
+ q:'เห็นด้วยหรือไม่ว่าเรือควรมีเรือชูชีพให้ทุกคน',r:'hen-duay rue-mai waa ruea kuan mee ruea-choo-cheep hai took-kon',
+ s:[['ฉันเห็นด้วย|chan-hen-duay;ว่า|waa;เรือ|ruea;ควรมี|kuan-mee;เรือชูชีพ|ruea-choo-cheep;ให้ทุกคน|hai-took-kon','I agree that ships should have lifeboats for everyone.'],
+ ['เพราะ|pro;ทุกคน|took-kon;ต้องการ|dtong-gaan;ความปลอดภัย|kwaam-bplot-pai','Because everyone needs safety.'],
+ ['ตัวอย่างเช่น|dtua-yaang-chen;เรือไททานิก|ruea-tai-taa-nik;มีเรือชูชีพ|mee-ruea-choo-cheep;ไม่พอ|mai-por','For example, the Titanic did not have enough lifeboats.'],
+ ['ดังนั้น|dang-nan;เรือ|ruea;ควรเตรียม|kuan-dtriam;ให้พอ|hai-por','So ships should prepare enough.']]},
+{id:'t3',e:'🍄',en:'Best Mario power-up?',ty:'c',
+ q:'เลือกพลังพิเศษของมาริโอที่ชอบที่สุด เพราะอะไร',r:'lueak pa-lang pi-set kong maa-ri-o tee chop tee-sut pro a-rai',
+ s:[['ฉันเลือก|chan-lueak;ดอกไม้ไฟ|dok-mai-fai;มากที่สุด|maak-tee-sut','I choose the fire flower the most.'],
+ ['เพราะ|pro;ช่วยให้|chuay-hai;ฉัน|chan;สู้ศัตรู|soo-sat-dtroo;ได้|dai','Because it helps me fight enemies.'],
+ ['ตัวอย่างเช่น|dtua-yaang-chen;ฉัน|chan;ยิงลูกไฟ|ying-look-fai;ได้ไกล|dai-glai','For example, I can shoot fireballs far.'],
+ ['ดังนั้น|dang-nan;ดอกไม้ไฟ|dok-mai-fai;จึงเป็น|jueng-bpen;พลังที่ดี|pa-lang-tee-dee','So the fire flower is a good power.']]},
+{id:'t4',e:'❄️',en:'Hot food in the cold?',ty:'o',
+ q:'ในที่หนาว คุณคิดว่าอาหารร้อนดีหรือไม่ เพราะอะไร',r:'nai tee naao kun kit waa aa-haan ron dee rue-mai pro a-rai',
+ s:[['ฉันคิดว่า|chan-kit-waa;อาหารร้อน|aa-haan-ron;ดี|dee;เมื่ออากาศหนาว|muea-aa-gaat-naao','I think hot food is good when the weather is cold.'],
+ ['เพราะ|pro;ทำให้|tam-hai;ร่างกาย|raang-gaai;อบอุ่น|op-oon','Because it keeps the body warm.'],
+ ['ตัวอย่างเช่น|dtua-yaang-chen;ซุปร้อน|sup-ron;ช่วยให้|chuay-hai;แอนนา|aen-naa;หายหนาว|haai-naao','For example, hot soup helps Anna stop feeling cold.'],
+ ['ดังนั้น|dang-nan;ในที่หนาว|nai-tee-naao;ควรกิน|kuan-gin;อาหารร้อน|aa-haan-ron','So in the cold we should eat hot food.']]},
+{id:'t5',e:'🧠',en:'Is Sadness useful?',ty:'a',
+ q:'เห็นด้วยหรือไม่ว่าความเศร้ามีประโยชน์',r:'hen-duay rue-mai waa kwaam-sao mee bpra-yot',
+ s:[['ฉันเห็นด้วย|chan-hen-duay;ว่า|waa;ความเศร้า|kwaam-sao;มีประโยชน์|mee-bpra-yot','I agree that sadness is useful.'],
+ ['เพราะ|pro;ทำให้|tam-hai;เรา|rao;รู้ว่า|roo-waa;ต้องการ|dtong-gaan;ความช่วยเหลือ|kwaam-chuay-luea','Because it tells us we need help.'],
+ ['ตัวอย่างเช่น|dtua-yaang-chen;เพื่อน|puean;ช่วยปลอบ|chuay-bplop;เมื่อเราเศร้า|muea-rao-sao','For example, friends comfort us when we are sad.'],
+ ['ดังนั้น|dang-nan;ความเศร้า|kwaam-sao;ไม่ใช่|mai-chai;สิ่งที่ไม่ดี|sing-tee-mai-dee','So sadness is not a bad thing.']]},
+{id:'t6',e:'🍳',en:'Favourite thing to cook',ty:'c',
+ q:'อาหารที่ฉันชอบทำมากที่สุด เพราะอะไร',r:'aa-haan tee chan chop tam maak-tee-sut pro a-rai',
+ s:[['ฉันชอบทำ|chan-chop-tam;ไข่เจียว|kai-jiao;มากที่สุด|maak-tee-sut','I like cooking omelette the most.'],
+ ['เพราะ|pro;ทำง่าย|tam-ngaai;และ|lae;อร่อย|a-roi','Because it is easy and tasty.'],
+ ['ตัวอย่างเช่น|dtua-yaang-chen;ไข่สุก|kai-suk;เมื่อโดน|muea-doan;ความร้อน|kwaam-ron','For example, egg cooks when it meets heat.'],
+ ['ดังนั้น|dang-nan;ฉันจะ|chan-ja;ทำอีก|tam-eek;บ่อย ๆ|boi-boi','So I will cook it again often.']]}];
+const TY={o:['💭','Opinion','แสดงความคิดเห็น','Say what you think.'],a:['👍','Agree / Disagree','เห็นด้วยหรือไม่','Pick a side.'],c:['⭐','Choose','เลือกสิ่งที่ชอบ','Pick one thing.']};
+const L=[['🥪','Answer','ตอบ'],['🥬','Because','เหตุผล'],['🍅','Example','ตัวอย่าง'],['🍞','Closing','สรุป']];
+
+const A=document.getElementById('app'),PA=document.getElementById('paper');
+let S={xp:0,done:{}};
+try{S=Object.assign(S,JSON.parse(localStorage.getItem('thai-writing-lab-state')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('thai-writing-lab-state',JSON.stringify(S))}catch(e){}};
+const xp=n=>{S.xp+=n;save()};
+const P=i=>cur.s[i][0].split(';').map(x=>x.split('|'));
+const J=(t,l)=>t.map((x,i)=>x[0]+(l>1&&i==0?' ':'')).join('');
+const R=t=>t.map(x=>x[1]).join(' ');
+const para=()=>cur.s.map((_,i)=>J(P(i),i));
+let cur,ly,pool,put;
+
+function home(){
+ A.innerHTML=`<a class=back href="index.html">🏠 HQ</a><span class=badge>📅 Year 8 · Term 1</span><h1>🇹🇭 Thai Writing Lab</h1><p class=sub>⭐ ${S.xp} XP · Any try counts!</p>`+
+ T.map((t,i)=>`<button class=card onclick="go(${i})"><span class=big>${t.e}</span><span><b>${t.en}</b><br><span class="th en">${t.q}</span></span>${S.done[t.id]?'<span>✅</span>':''}</button>`).join('');
+}
+function go(i){cur=T[i];spot()}
+function qbox(){return `<div class=q><div class=th>${cur.q}</div><div class=rom>${cur.r}</div></div>`}
+function spot(){
+ A.innerHTML=`<a class=back href="#" onclick="home();return false">← Menu</a><h1>🔍 Spot it</h1><p class=sub>What does the question ask?</p>${qbox()}`+
+ Object.keys(TY).map(k=>`<button class=ty onclick="pick('${k}')">${TY[k][0]} <b>${TY[k][1]}</b> <span class="th en">${TY[k][2]}</span><br><span class=en>${TY[k][3]}</span></button>`).join('')+`<div id=fb></div>`;
+}
+function pick(k){
+ const ok=k==cur.ty;
+ document.getElementById('fb').innerHTML=`<div class=msg>${ok?'✅ Yes! Nice spot.':'👀 Good try! This one is: '+TY[cur.ty][0]+' '+TY[cur.ty][1]}</div><button class=btn onclick="xp(10);build(0)">Next: build it 🧩</button>`;
+}
+function strip(){return `<div class=strip>`+L.map((x,i)=>`<span class="${i<ly?'ok':i==ly?'on':''}">${x[0]}</span>`).join('')+`</div>`}
+function build(l){
+ ly=l;put=[];
+ const t=P(l).map((x,i)=>({x,i}));
+ pool=t.slice();
+ for(let n=0;n<9&&pool.length>1;n++){pool.sort(()=>Math.random()-.5);if(pool.some((p,i)=>p.i!=i))break}
+ draw();
+}
+function draw(){
+ const done=put.length==P(ly).length;
+ A.innerHTML=`<a class=back href="#" onclick="home();return false">← Menu</a><h1>🧩 Build it</h1>${strip()}<p class=sub>${L[ly][0]} ${L[ly][1]} <span class="th en">${L[ly][2]}</span></p>`+
+ `<div class=line>${put.map(p=>`<span class="tile put"><span class=th>${p.x[0]}</span><span class=rom>${p.x[1]}</span></span>`).join('')}</div>`+
+ (done?`<div class=msg>🎉 ${cur.s[ly][1]}</div><button class=btn onclick="next()">${ly<3?'Next layer →':'See my answer 🍽️'}</button>`:
+ `<div class=pool>${pool.map((p,k)=>`<button class=tile onclick="tap(${k},this)"><span class=th>${p.x[0]}</span><span class=rom>${p.x[1]}</span></button>`).join('')}</div><p class=en>Tap the words in order.</p>`);
+}
+function tap(k,el){
+ const need=P(ly)[put.length][0];
+ if(pool[k].x[0]==need){put.push(pool.splice(k,1)[0]);if(!pool.length)xp(10);draw()}
+ else{el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),350)}
+}
+function next(){ly<3?build(ly+1):fin()}
+function fin(){
+ if(!S.done[cur.id]){S.done[cur.id]=1;xp(20)}
+ const p=para();
+ A.innerHTML=`<h1>🍽️ Your answer</h1>${qbox()}<div class="q para">`+p.map((s,i)=>`<p>${L[i][0]} <span class=th>${s}</span><br><span class=rom>${R(P(i))}</span></p>`).join('')+`</div>`+
+ `<div class=msg>🎉 You built a full answer! Now write it by hand.</div>
+ <button class=btn onclick="pr('g')">🖨️ Print: trace + copy sheet</button>
+ <button class="btn alt" onclick="pr('e')">🖨️ Print: exam-style sheet</button>
+ <button class="btn alt" onclick="home()">Back to menu</button>`;
+}
+function pr(m){
+ const ln=n=>'<div class=ln></div>'.repeat(n);
+ let h=`<h2>Thai Writing Lab · ${cur.en}</h2><div class=pq>${cur.q}</div>`;
+ if(m=='g'){
+  para().forEach((s,i)=>{h+=`<div class=lab>${L[i][0]} ${L[i][1]} · ${L[i][2]} — trace, then copy</div><div class="ln tr">${s}</div><div class=pr>${R(P(i))}</div>${ln(2)}`});
+  h+=`<div class=lab>✍️ Now write all 4 from memory</div>${ln(6)}`;
+ }else{h+=`<div class=lab>Write your answer</div>${ln(10)}`}
+ PA.innerHTML=h;
+ let v=document.getElementById('pv');if(!v){v=document.createElement('div');v.id='pv';document.body.appendChild(v)}
+ v.innerHTML='<div class=bar><button class=go onclick="window.print()">🖨️ Print</button><button onclick="document.getElementById(\'pv\').remove()">✖ Close</button></div><div class=sheet>'+h+'</div><p class=en style="text-align:center;color:#555">No printer? Take a screenshot or use Share → Print → Save to Files.</p>';
+ v.scrollTop=0;
+}
+home();
+</script></body></html>

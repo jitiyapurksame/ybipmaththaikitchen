@@ -136,24 +136,6 @@
   .tipbox b{ color:var(--gold); }
   .draftnote{ background:rgba(215,38,61,0.12); border:1px dashed var(--red); border-radius:10px; padding:8px 12px; font-size:12.5px; color:var(--ink-light); margin:6px 0 12px; }
   .examhead{ font-family:'Bangers',cursive; font-size:20px; letter-spacing:1px; color:var(--gold); margin:22px 0 2px; }
-  details.sec{ background:var(--card); border:2px solid var(--line); border-radius:12px; margin:8px 0; padding:0; }
-  details.sec > summary{ cursor:pointer; padding:12px 14px; font-weight:800; font-size:14px; color:var(--gold); list-style:none; }
-  details.sec > summary::-webkit-details-marker{ display:none; }
-  details.sec[open] > summary{ border-bottom:1px dashed var(--line); }
-  details.sec .inner{ padding:10px 12px 4px; }
-  details.sec .dialogue-line{ margin-bottom:8px; }
-  .storybox{ font-size:13.5px; color:var(--ink-light); font-style:italic; margin:0 0 12px; line-height:1.45; }
-  .wbbig{ font-size:30px; font-weight:800; letter-spacing:.5px; }
-  .wbsm{ font-size:16px; color:var(--red-dark); font-weight:700; }
-  .wbq{ font-size:19px; line-height:1.5; text-align:center; }
-  .wbopts{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
-  .wbopt{ background:var(--card); color:var(--ink); border:2px solid var(--ink); border-radius:12px; padding:16px 8px; font-size:18px; font-weight:800; font-family:inherit; cursor:pointer; }
-  .wbopt:active{ background:var(--gold); color:#2b1810; }
-  .wbopt.right{ background:var(--green); border-color:var(--green); color:#fff; }
-  .wbopt.wrong{ background:var(--red); border-color:var(--red); color:#fff; }
-  .wbopt:disabled:not(.right){ opacity:.45; }
-  .wbfb{ margin-top:14px; text-align:center; }
-  .wbgood{ background:rgba(62,142,92,.18); border:2px solid var(--green); border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:14.5px; }
   .empty-note{ color:var(--ink-light); font-size:14px; padding:10px 2px; }
 </style>
 </head>
@@ -357,14 +339,6 @@ const STROKES = [
 ];
 
 
-/* Stroke-order rules from the textbook "Learn to write" pages (p40, p46) */
-const STROKE_RULES = [
-  {rule:"1. Horizontal line first, vertical line second; top to bottom.", examples:"王 打 客 家 球", kitchen:"🍳 Lay the pan flat first, then stand the handle up."},
-  {rule:"2. Left to right; the down-stroke to the LEFT before the one to the right.", examples:"大 不 见 叫 林", kitchen:"🥄 Read like a recipe: left side first, then right."},
-  {rule:"3. Middle comes before the two sides.", examples:"也 山 小", kitchen:"🥪 Build the middle of the sandwich first, then the sides."},
-  {rule:"4. Inside comes before the sealing stroke (close the box last).", examples:"日 国", kitchen:"📦 Fill the lunchbox, THEN put the lid on."}
-];
-
 /* ============ EXAM SETS (one evolving app, organised Year → Term → Exam) ============
    HOW TO ADD A NEW EXAM (e.g. Year 8 · Term 2 Midterm):
      1. Add one entry below: {id:'y8_t2_mid', year:8, term:2, kind:'Midterm', label:'Year 8 · Term 2 Midterm', unit:'...'}
@@ -375,376 +349,188 @@ const STROKE_RULES = [
    If this file ever passes ~150 KB, split a term into its own file (chinese-kitchen-y8-t2.html) and register it in index.html. */
 const EXAM_SETS = [
   {id:'y8_t1_mid',   year:8, term:1, kind:'Midterm', label:'Year 8 · Term 1 Midterm', unit:'Unit 1 · School, Classmates & Teachers', active:false},
-  {id:'y8_t1_final', year:8, term:1, kind:'Final',   label:'Year 8 · Term 1 Final',   unit:'Lessons 7–11 · Friends, Sports, Things, Money & Birthdays', active:true,
+  {id:'y8_t1_final', year:8, term:1, kind:'Final',   label:'Year 8 · Term 1 Final',   unit:'Lessons 7–11 · Family, Friends, Things & Birthdays', active:true,
    list:'School list: Lesson 7 他是谁 · 8 谁是你的好朋友 · 9 你有几张中文光盘 · 10 这是谁的钱包 · 11 祝你生日快乐 (textbook p35–63, workbook p23–42). Exam 23 & 25 Nov 2026.',
-   draft:'✅ Built from textbook p35–63 and workbook p23–41 (each lesson has a 🧪 Workbook Lab). Still to check: textbook p60–61 (Lesson 11 new words).'}
+   draft:'⚠️ Built from the lesson TITLES on the school list, not from the book pages. Compare each card with the real textbook and tell me what to fix.'}
 ];
 function activeExam(){ return EXAM_SETS.find(e=>e.active) || EXAM_SETS[0]; }
 try{ const a=activeExam(); localStorage.setItem('chineseKitchenActiveExam', JSON.stringify({id:a.id,label:a.label})); }catch(e){}
 LESSONS.forEach(l=>{ if(!l.exam) l.exam='y8_t1_mid'; });
 PATTERNS.forEach(p=>{ if(!p.exam) p.exam='y8_t1_mid'; });
 
-/* ===== Y8 T1 FINAL — transcribed from the son's textbook, Lessons 7–11 (p35–63) =====
-   Spelling follows the BOOK (e.g. 谁 = shuí). Lesson 11 "New words" page (p60–61) was not in the photos. */
 LESSONS.push(
   {
     id:"l7", exam:"y8_t1_final", num:7, title:"他是谁",
-    hanzi:"他是谁", pinyin:"tā shì shuí", meaning:"Who is he?",
-    story:"📖 Book story: David is playing football when Wang Jiaming walks by, so David waves to him. The coach asks David something about Wang Jiaming.",
+    hanzi:"他是谁", pinyin:"tā shì shéi", meaning:"Who is he?",
     vocab:[
-      {hanzi:"教练", pinyin:"jiàoliàn", english:"coach; instructor", type:"n."},
-      {hanzi:"谁", pinyin:"shuí", english:"who", type:"pron."},
-      {hanzi:"也", pinyin:"yě", english:"also; too", type:"adv."},
-      {hanzi:"打", pinyin:"dǎ", english:"play (a ball game)", type:"v."},
-      {hanzi:"橄榄球", pinyin:"gǎnlǎnqiú", english:"American football", type:"n."},
-      {hanzi:"篮球", pinyin:"lánqiú", english:"basketball", type:"n."},
-      {hanzi:"做", pinyin:"zuò", english:"do (workbook: Tāmen zuò shénme? = What are they doing?)", type:"v."}
+      {hanzi:"谁", pinyin:"shéi", english:"who", type:"pron."},
+      {hanzi:"爸爸", pinyin:"bàba", english:"dad / father", type:"n."},
+      {hanzi:"妈妈", pinyin:"māma", english:"mum / mother", type:"n."},
+      {hanzi:"哥哥", pinyin:"gēge", english:"elder brother", type:"n."},
+      {hanzi:"姐姐", pinyin:"jiějie", english:"elder sister", type:"n."},
+      {hanzi:"弟弟", pinyin:"dìdi", english:"younger brother", type:"n."},
+      {hanzi:"妹妹", pinyin:"mèimei", english:"younger sister", type:"n."},
+      {hanzi:"和", pinyin:"hé", english:"and", type:"conj."},
+      {hanzi:"家", pinyin:"jiā", english:"family; home", type:"n."}
     ],
     dialogue:[
-      {speaker:"教练 Jiàoliàn (coach)", hanzi:"他是谁？", pinyin:"Tā shì shuí?", english:"Who is he?"},
-      {speaker:"大卫 Dàwèi", hanzi:"他是我的朋友王家明。", pinyin:"Tā shì wǒ de péngyou Wáng Jiāmíng.", english:"He is my friend Wang Jiaming."},
-      {speaker:"教练 Jiàoliàn (coach)", hanzi:"他也打橄榄球吗？", pinyin:"Tā yě dǎ gǎnlǎnqiú ma?", english:"Does he also play American football?"},
-      {speaker:"大卫 Dàwèi", hanzi:"不，他不打橄榄球，他打篮球。", pinyin:"Bù, tā bù dǎ gǎnlǎnqiú, tā dǎ lánqiú.", english:"No, he does not play American football, he plays basketball."}
+      {speaker:"大卫 Dàwèi", hanzi:"他是谁？", pinyin:"Tā shì shéi?", english:"Who is he?"},
+      {speaker:"家明 Jiāmíng", hanzi:"他是我的哥哥。", pinyin:"Tā shì wǒ de gēge.", english:"He is my elder brother."},
+      {speaker:"大卫 Dàwèi", hanzi:"她是谁？", pinyin:"Tā shì shéi?", english:"Who is she?"},
+      {speaker:"家明 Jiāmíng", hanzi:"她是我的姐姐。", pinyin:"Tā shì wǒ de jiějie.", english:"She is my elder sister."},
+      {speaker:"大卫 Dàwèi", hanzi:"他们是谁？", pinyin:"Tāmen shì shéi?", english:"Who are they?"},
+      {speaker:"家明 Jiāmíng", hanzi:"他们是我的爸爸和妈妈。", pinyin:"Tāmen shì wǒ de bàba hé māma.", english:"They are my dad and mum."}
     ],
-    tip:"🍳 <b>English logic:</b> English moves the question word to the FRONT (“<i>Who</i> is he?”). Chinese leaves 谁 where the answer will sit: 他是<b>谁</b>？ = “He is <b>who</b>?” Swap 谁 for the answer and you have the reply.<br>🥄 <b>打 = hit/beat</b>, like beating eggs! Chinese says “hit a ball” for ball games: 打篮球. 篮球 is literally <b>basket</b>-ball, same as English. 橄榄 = olive, so 橄榄球 = “olive-shaped ball” (American football).<br>⚠️ 也 (also) goes <b>before the verb</b>: 他<b>也</b>打 = “he <b>also</b> plays”. 不 goes before the verb too: 他<b>不</b>打 = “he does <b>not</b> play”.",
-    sections:[
-      {title:"⚽ Read aloud: 打 + ball (p36)", items:[
-        {hanzi:"打网球", pinyin:"dǎ wǎngqiú", english:"play tennis (net-ball)"},
-        {hanzi:"打羽毛球", pinyin:"dǎ yǔmáoqiú", english:"play badminton (feather-ball)"},
-        {hanzi:"打冰球", pinyin:"dǎ bīngqiú", english:"play ice hockey (ice-ball)"},
-        {hanzi:"打棒球", pinyin:"dǎ bàngqiú", english:"play baseball"},
-        {hanzi:"打乒乓球", pinyin:"dǎ pīngpāngqiú", english:"play table tennis"},
-        {hanzi:"打排球", pinyin:"dǎ páiqiú", english:"play volleyball"}
-      ]},
-      {title:"🗣️ Practice talk (p37)", items:[
-        {hanzi:"A：他是谁？", pinyin:"Tā shì shuí?", english:"Who is he?"},
-        {hanzi:"B：他是我的朋友王家明。", pinyin:"Tā shì wǒ de péngyou Wáng Jiāmíng.", english:"He is my friend Wang Jiaming."},
-        {hanzi:"A：他也打网球吗？", pinyin:"Tā yě dǎ wǎngqiú ma?", english:"Does he also play tennis?"},
-        {hanzi:"B：是，他也打网球。", pinyin:"Shì, tā yě dǎ wǎngqiú.", english:"Yes, he also plays tennis."},
-        {hanzi:"Swap in →", pinyin:"Dàwèi + bàngqiú · Mǎlì + yǔmáoqiú · Lindá + páiqiú · Jiékè + bīngqiú", english:"David + baseball · Mary + badminton · Linda + volleyball · Jack + ice hockey"}
-      ]},
-      {title:"🏃 Class activity (p38)", items:[
-        {hanzi:"他是谁？他打什么球？", pinyin:"Tā shì shuí? Tā dǎ shénme qiú?", english:"Who is he? What ball game does he play?"}
-      ]},
-      {title:"✍️ Characters to write (p40)", items:[
-        {hanzi:"也 谁 打 球", pinyin:"yě shuí dǎ qiú", english:"also · who · play · ball"},
-        {hanzi:"橄 榄 篮", pinyin:"gǎn lǎn lán", english:"(橄榄球 olive-ball · 篮球 basket-ball)"}
-      ]}
-    ],
-    sounds:"🔊 <b>Sound lab (p38–39):</b> whole syllables <b>zhi · chi · shi · ri · zi · ci · si · er</b>.<br>Initials <b>zh ch sh r</b> (tongue curled back) and <b>z c s</b> (tongue flat), with finals <b>a ai ao an ang ou ong</b> — e.g. zha, zhai, zhao, zhan, zhang, zhou, zhong. Practise each in 4 tones.<br>👂 Tape quiz syllables: zā, cā, sā · sì, zǐ, cì · chén, shén, zhēn · zhàng, chàng, shàng · rǎo, shǎo, chǎo · cāi, zāi, sāi · zhòu, shòu, chòu · zōng, zhōng, chōng."
+    tip:"🍳 <b>English logic:</b> English moves the question word to the FRONT: “<i>Who</i> is he?” Chinese leaves 谁 in the spot where the answer will go: 他是<b>谁</b>？ = “He is <b>who</b>?” Swap 谁 for the answer and you have the answer sentence: 他是<b>我的哥哥</b>。<br>🥄 Family words: 哥哥/姐姐 = <b>older</b> (bigger spoon), 弟弟/妹妹 = <b>younger</b> (smaller spoon). The doubled sound (gēge, māma) is normal — just say it twice."
   },
   {
     id:"l8", exam:"y8_t1_final", num:8, title:"谁是你的好朋友",
-    hanzi:"谁是你的好朋友", pinyin:"shuí shì nǐ de hǎo péngyou", meaning:"Who is your good friend?",
-    story:"📖 Book story: Wang Jiaming is talking with his father about his friends.",
+    hanzi:"谁是你的好朋友", pinyin:"shéi shì nǐ de hǎo péngyou", meaning:"Who is your good friend?",
     vocab:[
-      {hanzi:"有", pinyin:"yǒu", english:"have", type:"v."},
-      {hanzi:"啊", pinyin:"a", english:"particle word (softens the tone, no meaning)", type:"pt."},
-      {hanzi:"都", pinyin:"dōu", english:"both; all", type:"adv."},
-      {hanzi:"学", pinyin:"xué", english:"learn; study", type:"v."},
-      {hanzi:"汉语", pinyin:"Hànyǔ", english:"the Chinese language", type:"n."},
-      {hanzi:"法语", pinyin:"Fǎyǔ", english:"the French language", type:"n."},
-      {hanzi:"艾米丽", pinyin:"Àimǐlì", english:"(name) Emily", type:"proper noun"}
+      {hanzi:"好朋友", pinyin:"hǎo péngyou", english:"good friend", type:"n."},
+      {hanzi:"你的", pinyin:"nǐ de", english:"your", type:"phrase"},
+      {hanzi:"我的", pinyin:"wǒ de", english:"my", type:"phrase"},
+      {hanzi:"他的", pinyin:"tā de", english:"his", type:"phrase"},
+      {hanzi:"她的", pinyin:"tā de", english:"her", type:"phrase"},
+      {hanzi:"也", pinyin:"yě", english:"also; too", type:"adv."},
+      {hanzi:"都", pinyin:"dōu", english:"all; both", type:"adv."}
     ],
     dialogue:[
-      {speaker:"爸爸 Bàba (Dad)", hanzi:"家明，你有好朋友吗？", pinyin:"Jiāmíng, nǐ yǒu hǎo péngyou ma?", english:"Jiaming, do you have good friends?"},
-      {speaker:"家明 Jiāmíng", hanzi:"有啊。", pinyin:"Yǒu a.", english:"Yes, I do."},
-      {speaker:"爸爸 Bàba (Dad)", hanzi:"谁是你的好朋友？", pinyin:"Shuí shì nǐ de hǎo péngyou?", english:"Who are your good friends?"},
-      {speaker:"家明 Jiāmíng", hanzi:"大卫是我的好朋友，玛丽和艾米丽也是我的好朋友。", pinyin:"Dàwèi shì wǒ de hǎo péngyou, Mǎlì hé Àimǐlì yě shì wǒ de hǎo péngyou.", english:"David is my good friend. Mary and Emily are also my good friends."},
-      {speaker:"爸爸 Bàba (Dad)", hanzi:"他们都学汉语吗？", pinyin:"Tāmen dōu xué Hànyǔ ma?", english:"Do they all study Chinese?"},
-      {speaker:"家明 Jiāmíng", hanzi:"不，艾米丽不学汉语，她学法语。", pinyin:"Bù, Àimǐlì bù xué Hànyǔ, tā xué Fǎyǔ.", english:"No, Emily does not study Chinese, she studies French."}
+      {speaker:"老师 Teacher", hanzi:"谁是你的好朋友？", pinyin:"Shéi shì nǐ de hǎo péngyou?", english:"Who is your good friend?"},
+      {speaker:"家明 Jiāmíng", hanzi:"大卫是我的好朋友。", pinyin:"Dàwèi shì wǒ de hǎo péngyou.", english:"David is my good friend."},
+      {speaker:"老师 Teacher", hanzi:"玛丽是你的好朋友吗？", pinyin:"Mǎlì shì nǐ de hǎo péngyou ma?", english:"Is Mary your good friend?"},
+      {speaker:"家明 Jiāmíng", hanzi:"玛丽也是我的好朋友。", pinyin:"Mǎlì yě shì wǒ de hǎo péngyou.", english:"Mary is my good friend too."},
+      {speaker:"老师 Teacher", hanzi:"他们都是你的好朋友吗？", pinyin:"Tāmen dōu shì nǐ de hǎo péngyou ma?", english:"Are they all your good friends?"},
+      {speaker:"家明 Jiāmíng", hanzi:"是，他们都是我的好朋友。", pinyin:"Shì, tāmen dōu shì wǒ de hǎo péngyou.", english:"Yes, they are all my good friends."}
     ],
-    tip:"🍳 <b>English logic:</b> to say “yes” to a question, Chinese often just <b>repeats the verb</b>: 你有好朋友吗？→ <b>有</b>啊。(= “Have!”). 啊 is just a soft tone, like a friendly “yeah~”.<br>🥄 <b>语 = language.</b> 汉语 = Han-language (Chinese), 法语 = France-language (French). Recipe: 学 + language → 学汉语.<br>⚠️ <b>Two ways to say NOT:</b> 不 + verb (不学 = not study), but 有 → <b>没有</b> (never 不有). 也 (also) and 都 (all/both) go <b>before the verb</b>: 他们<b>都</b>学 = “they <b>all</b> study”.<br>🥄 和 (hé) = “and” (玛丽<b>和</b>艾米丽 = Mary <b>and</b> Emily).",
-    sections:[
-      {title:"🌍 Read aloud: what language? (p42)", items:[
-        {hanzi:"汉语", pinyin:"Hànyǔ", english:"Chinese"},
-        {hanzi:"英语", pinyin:"Yīngyǔ", english:"English"},
-        {hanzi:"法语", pinyin:"Fǎyǔ", english:"French"},
-        {hanzi:"日语", pinyin:"Rìyǔ", english:"Japanese"},
-        {hanzi:"西班牙语", pinyin:"Xībānyáyǔ", english:"Spanish"}
-      ]},
-      {title:"🗣️ Practice talk (p43)", items:[
-        {hanzi:"A：你有好朋友吗？", pinyin:"Nǐ yǒu hǎo péngyou ma?", english:"Do you have good friends?"},
-        {hanzi:"B：有啊。王家明是我的好朋友，玛丽也是我的好朋友。", pinyin:"Yǒu a. Wáng Jiāmíng shì wǒ de hǎo péngyou, Mǎlì yě shì wǒ de hǎo péngyou.", english:"Yes. Wang Jiaming is my good friend, Mary is my good friend too."},
-        {hanzi:"A：他们都学汉语吗？", pinyin:"Tāmen dōu xué Hànyǔ ma?", english:"Do they all study Chinese?"},
-        {hanzi:"B：是，他们都学汉语。", pinyin:"Shì, tāmen dōu xué Hànyǔ.", english:"Yes, they all study Chinese."},
-        {hanzi:"Swap in →", pinyin:"Jim+Emma xué Fǎyǔ · Bob+Stanley xué Rìyǔ · Linda+Tom dǎ lánqiú · Henry+Alice dǎ wǎngqiú", english:"study French · study Japanese · play basketball · play tennis"}
-      ]},
-      {title:"🎒 On your own (p43): ask “Nǐ yǒu péngyou ma?” about these", items:[
-        {hanzi:"书包", pinyin:"shūbāo", english:"school bag"},
-        {hanzi:"文具盒", pinyin:"wénjùhé", english:"pencil case"},
-        {hanzi:"铅笔", pinyin:"qiānbǐ", english:"pencil"}
-      ]},
-      {title:"🧺 Class activity: possessions (p44)", items:[
-        {hanzi:"A：你有……吗？", pinyin:"Nǐ yǒu ... ma?", english:"Do you have ...?"},
-        {hanzi:"B：有，我有……", pinyin:"Yǒu, wǒ yǒu ...", english:"Yes, I have ..."},
-        {hanzi:"（没有，我没有……）", pinyin:"(Méiyǒu, wǒ méiyǒu ...)", english:"(No, I haven’t ...)"}
-      ]},
-      {title:"✍️ Characters to write (p46)", items:[
-        {hanzi:"都 汉 法 语 啊 有", pinyin:"dōu Hàn Fǎ yǔ a yǒu", english:"all · Han · France · language · (particle) · have"}
-      ]},
-      {title:"✍️ Stroke-order rules (p46)", items:[
-        {hanzi:"也 山 小", pinyin:"Middle first, then the two sides", english:"Middle precedes the two sides"},
-        {hanzi:"日 国", pinyin:"Inside first, then close the box", english:"Inside precedes the sealing stroke"}
-      ]}
-    ],
-    sounds:"🔊 <b>Sound lab (p45):</b> initials <b>zh ch sh r z c s</b> with finals <b>e ei en eng u ua uei(ui) uai uo uan uen(un) uang</b>.<br>Examples: zhe, zhen, zheng, zhu, zhua, zhui, zhuai, zhuo, zhuan, zhun, zhuang — and the same pattern with ch, sh, r, z, c, s (some boxes are empty in the table: not every pair is a real sound).<br>👂 Tape quiz syllables: cè, zhēn, zuì, zhuō · sè, shēn, shuì, chuō · rè, chén, ruì, shuō · zǔ, shū, zūn, cuàn · cū, shuā, chūn, zuān · rǔ, shuǎ, shùn, suàn."
+    tip:"🍳 <b>English logic:</b> 的 works like <b>’s</b> or “of”. 我的 = “me’s” = <b>my</b>. 大卫的朋友 = “David’s friend”. Owner first, thing second — same as English “David’s friend”.<br>🥄 好朋友 = good + friend, same order as English. <br>⚠️ 也 (also) and 都 (all) go <b>before the verb</b>: 我<b>也</b>是 = “I <b>also</b> am”; 他们<b>都</b>是 = “They <b>all</b> are”. Think: “also” and “all” jump into the pot BEFORE the verb."
   },
   {
     id:"l9", exam:"y8_t1_final", num:9, title:"你有几张中文光盘",
     hanzi:"你有几张中文光盘", pinyin:"nǐ yǒu jǐ zhāng Zhōngwén guāngpán", meaning:"How many Chinese CDs do you have?",
     vocab:[
-      {hanzi:"几", pinyin:"jǐ", english:"how many", type:"pron."},
-      {hanzi:"张", pinyin:"zhāng", english:"measure word (disks, paper, tickets…)", type:"m."},
-      {hanzi:"中文", pinyin:"Zhōngwén", english:"Chinese", type:"n."},
-      {hanzi:"光盘", pinyin:"guāngpán", english:"disks; CDs", type:"n."},
-      {hanzi:"没有", pinyin:"méiyǒu", english:"not to have; don’t have", type:"v."},
-      {hanzi:"个", pinyin:"gè", english:"all-round measure word (seen in the book’s “sān ge shūbāo” and workbook “jǐ gè lánqiú”)", type:"m."}
+      {hanzi:"有", pinyin:"yǒu", english:"to have", type:"v."},
+      {hanzi:"没有", pinyin:"méiyǒu", english:"do not have", type:"v."},
+      {hanzi:"几", pinyin:"jǐ", english:"how many (small numbers)", type:"pron."},
+      {hanzi:"张", pinyin:"zhāng", english:"measure word for flat things (paper, CD, pancake)", type:"m.w."},
+      {hanzi:"个", pinyin:"gè", english:"all-purpose measure word", type:"m.w."},
+      {hanzi:"本", pinyin:"běn", english:"measure word for books", type:"m.w."},
+      {hanzi:"中文", pinyin:"Zhōngwén", english:"Chinese (language)", type:"n."},
+      {hanzi:"光盘", pinyin:"guāngpán", english:"CD / disc", type:"n."},
+      {hanzi:"书", pinyin:"shū", english:"book", type:"n."}
     ],
-    numbers:"一 yī (1) · 二 èr (2) · 三 sān (3) · 四 sì (4) · 五 wǔ (5) · 六 liù (6) · 七 qī (7) · 八 bā (8) · 九 jiǔ (9) · 十 shí (10)<br>👍 The book shows how to count to 10 on ONE hand!",
+    numbers:"一 yī (1) · 二 èr (2) · 三 sān (3) · 四 sì (4) · 五 wǔ (5) · 六 liù (6) · 七 qī (7) · 八 bā (8) · 九 jiǔ (9) · 十 shí (10)",
     dialogue:[
-      {speaker:"家明 Jiāmíng", hanzi:"大卫，你有几张中文光盘？", pinyin:"Dàwèi, nǐ yǒu jǐ zhāng Zhōngwén guāngpán?", english:"David, how many Chinese CDs do you have?"},
-      {speaker:"大卫 Dàwèi", hanzi:"我有3张中文光盘。", pinyin:"Wǒ yǒu sān zhāng Zhōngwén guāngpán.", english:"I have 3 Chinese CDs."},
-      {speaker:"家明 Jiāmíng", hanzi:"杰克，你有几张？", pinyin:"Jiékè, nǐ yǒu jǐ zhāng?", english:"Jack, how many do you have?"},
-      {speaker:"杰克 Jiékè", hanzi:"我没有中文光盘。", pinyin:"Wǒ méiyǒu Zhōngwén guāngpán.", english:"I don’t have any Chinese CDs."}
+      {speaker:"大卫 Dàwèi", hanzi:"你有中文光盘吗？", pinyin:"Nǐ yǒu Zhōngwén guāngpán ma?", english:"Do you have Chinese CDs?"},
+      {speaker:"家明 Jiāmíng", hanzi:"有。", pinyin:"Yǒu.", english:"Yes, I do."},
+      {speaker:"大卫 Dàwèi", hanzi:"你有几张中文光盘？", pinyin:"Nǐ yǒu jǐ zhāng Zhōngwén guāngpán?", english:"How many Chinese CDs do you have?"},
+      {speaker:"家明 Jiāmíng", hanzi:"我有五张中文光盘。", pinyin:"Wǒ yǒu wǔ zhāng Zhōngwén guāngpán.", english:"I have five Chinese CDs."},
+      {speaker:"家明 Jiāmíng", hanzi:"你有中文书吗？", pinyin:"Nǐ yǒu Zhōngwén shū ma?", english:"Do you have Chinese books?"},
+      {speaker:"大卫 Dàwèi", hanzi:"没有，我没有中文书。", pinyin:"Méiyǒu, wǒ méiyǒu Zhōngwén shū.", english:"No, I don’t have Chinese books."}
     ],
-    tip:"🍳 <b>Measure words = measuring cups!</b> English does it too: a <i>slice</i> of cake, a <i>clove</i> of garlic, a <i>bowl</i> of rice. Chinese does it for EVERYTHING: <b>number + measuring cup + thing</b>.<br>三 + <b>张</b> + 光盘 = “three <i>sheets</i> of CD”. The book says 张 is used for disks, paper, tickets.<br>🥄 几 = “how many?” and it sits in the NUMBER’s spot: 你有<b>几</b>张光盘？→ 我有<b>3</b>张光盘。<br>⚠️ 没有 = “not have”. Say <b>没有</b>, never 不有.<br>📝 In the book’s example, 2 sheets is <b>liǎng</b> zhāng (有两张纸 Yǒu liǎng zhāng zhǐ), not èr zhāng. Check the 二 / 两 rule with your teacher.",
-    sections:[
-      {title:"🖼️ On your own (p49): ask “Yǒu jǐ zhāng …?”", items:[
-        {hanzi:"有几张纸？有两张纸。", pinyin:"Yǒu jǐ zhāng zhǐ? Yǒu liǎng zhāng zhǐ.", english:"How many sheets of paper? Two sheets."},
-        {hanzi:"画儿 · 光盘 · 照片", pinyin:"huàr · guāngpán · zhàopiàn", english:"picture · CD · photo"}
-      ]},
-      {title:"⚖️ Who has more? (p49)", items:[
-        {hanzi:"我有五张光盘。我有三个书包。我有四个文具盒。我有六个好朋友。", pinyin:"Wǒ yǒu wǔ zhāng guāngpán. Wǒ yǒu sān ge shūbāo. Wǒ yǒu sì ge wénjùhé. Wǒ yǒu liù ge hǎo péngyou.", english:"Person 1: 5 CDs, 3 school bags, 4 pencil cases, 6 good friends."},
-        {hanzi:"我有十张光盘。我有两个书包。我有八个文具盒。我有一个好朋友。", pinyin:"Wǒ yǒu shí zhāng guāngpán. Wǒ yǒu liǎng ge shūbāo. Wǒ yǒu bā ge wénjùhé. Wǒ yǒu yí ge hǎo péngyou.", english:"Person 2: 10 CDs, 2 school bags, 8 pencil cases, 1 good friend."},
-        {hanzi:"🧮 Your job", pinyin:"compare each pair", english:"CDs: 10 > 5 · bags: 3 > 2 · cases: 8 > 4 · friends: 6 > 1"}
-      ]},
-      {title:"🥤 Tone-sandhi: measure words for the kitchen (p50)", items:[
-        {hanzi:"一杯", pinyin:"yì bēi", english:"a glass of …"},
-        {hanzi:"一瓶", pinyin:"yì píng", english:"a bottle of …"},
-        {hanzi:"一碗", pinyin:"yì wǎn", english:"a bowl of …"},
-        {hanzi:"一座", pinyin:"yí zuò", english:"a measure word for mountains etc."},
-        {hanzi:"🔁 Pattern", pinyin:"一 = yí before a 4th tone, yì before tones 1, 2, 3", english:"zuò is 4th tone → yí. bēi, píng, wǎn → yì."}
-      ]},
-      {title:"🐸 Frog rap (p51)", items:[
-        {hanzi:"一只青蛙一张嘴，两只眼睛四条腿。", pinyin:"Yī zhī qīngwā yī zhāng zuǐ, liǎng zhī yǎnjing sì tiáo tuǐ.", english:"One frog, one mouth, two eyes, four legs."},
-        {hanzi:"两只青蛙两张嘴，四只眼睛八条腿。", pinyin:"Liǎng zhī qīngwā liǎng zhāng zuǐ, sì zhī yǎnjing bā tiáo tuǐ.", english:"Two frogs, two mouths, four eyes, eight legs."}
-      ]},
-      {title:"🧩 Character parts (p52–53)", items:[
-        {hanzi:"你 = 亻+ 尔", pinyin:"nǐ", english:"person-part + 尔"},
-        {hanzi:"明 = 日 + 月", pinyin:"míng", english:"sun + moon"},
-        {hanzi:"家 = 宀 + 豕", pinyin:"jiā", english:"roof-part + 豕"},
-        {hanzi:"谢 = 讠+ 身 + 寸", pinyin:"xiè", english:"speech-part + 身 + 寸"},
-        {hanzi:"张 ← 弓 · 没 ← 氵· 叫 ← 口 · 盘 ← 皿 · 他 ← 亻", pinyin:"zhāng · méi · jiào · pán · tā", english:"Book’s component table: each part sits inside the character."}
-      ]},
-      {title:"✍️ Characters to write (p51)", items:[
-        {hanzi:"几 文 张 没 光 盘", pinyin:"jǐ wén zhāng méi guāng pán", english:"how many · (文 in 中文) · measure word · not · light · disk"}
-      ]},
-      {title:"🙌 Classroom Chinese", items:[
-        {hanzi:"请举手！", pinyin:"Qǐng jǔ shǒu!", english:"Please raise your hand."},
-        {hanzi:"手放下！", pinyin:"Shǒu fàng xià!", english:"Please put down your hand."}
-      ]}
-    ],
-    sounds:"🔊 <b>Sound lab (p50):</b> compare <b>zh ch sh r</b> with <b>j q x</b>. Tip: j q x only go with i/ü-type finals (ji, qi, xi, jia, xie, jiao, jiu, jian, jin, jiang, jing, jiong…), while zh ch sh r go with a, e, u-type finals (zha, zhe, zhu, zhua, zhuo…)."
+    tip:"🍳 <b>Measure words = measuring cups!</b> English does it too: a <i>slice</i> of cake, a <i>clove</i> of garlic, a <i>bowl</i> of rice. Chinese does it for EVERYTHING: number + measuring word + thing.<br>五 + <b>张</b> + 光盘 = “five <i>sheets</i> of CD”. 张 = flat things (pancake, paper, CD). 本 = books. 个 = the all-purpose spoon when unsure.<br>🥄 几 = “how many?” and it sits in the NUMBER’s spot: 你有<b>几</b>张光盘？ → 我有<b>五</b>张光盘。(Use 几 for small numbers, up to about 10.)<br>⚠️ 没有 = “not have”. Like 不是 = “not be”. Say <b>没有</b>, never 不有."
   },
   {
     id:"l10", exam:"y8_t1_final", num:10, title:"这是谁的钱包",
-    hanzi:"这是谁的钱包", pinyin:"zhè shì shuí de qiánbāo", meaning:"Whose wallet is this?",
-    story:"📖 Book story: In the cafeteria, Wang Jiaming has just found a wallet on the floor.",
+    hanzi:"这是谁的钱包", pinyin:"zhè shì shéi de qiánbāo", meaning:"Whose wallet is this?",
     vocab:[
-      {hanzi:"那", pinyin:"nà", english:"that", type:"pron."},
-      {hanzi:"钱包", pinyin:"qiánbāo", english:"wallet; purse", type:"n."},
       {hanzi:"这", pinyin:"zhè", english:"this", type:"pron."},
-      {hanzi:"里", pinyin:"lǐ", english:"inside", type:"n."},
-      {hanzi:"多少", pinyin:"duōshao", english:"how much; how many", type:"pron."},
-      {hanzi:"钱", pinyin:"qián", english:"money", type:"n."},
-      {hanzi:"元", pinyin:"yuán", english:"measure word (Chinese money, similar to dollars)", type:"m."},
-      {hanzi:"对", pinyin:"duì", english:"yes; that’s right (confirming)", type:"adj."},
-      {hanzi:"给", pinyin:"gěi", english:"give", type:"v."}
+      {hanzi:"那", pinyin:"nà", english:"that", type:"pron."},
+      {hanzi:"谁的", pinyin:"shéi de", english:"whose", type:"phrase"},
+      {hanzi:"钱包", pinyin:"qiánbāo", english:"wallet", type:"n."},
+      {hanzi:"书包", pinyin:"shūbāo", english:"school bag", type:"n."},
+      {hanzi:"手机", pinyin:"shǒujī", english:"mobile phone", type:"n."}
     ],
     dialogue:[
-      {speaker:"店员 Diànyuán (shop worker)", hanzi:"那是什么？", pinyin:"Nà shì shénme?", english:"What is that?"},
-      {speaker:"家明 Jiāmíng", hanzi:"是钱包！这是谁的钱包？", pinyin:"Shì qiánbāo! Zhè shì shuí de qiánbāo?", english:"It’s a wallet! Whose wallet is this?"},
-      {speaker:"女孩 Nǚhái (girl)", hanzi:"是我的！", pinyin:"Shì wǒ de!", english:"It’s mine!"},
-      {speaker:"家明 Jiāmíng", hanzi:"钱包里有多少钱？", pinyin:"Qiánbāo lǐ yǒu duōshao qián?", english:"How much money is in the wallet?"},
-      {speaker:"女孩 Nǚhái (girl)", hanzi:"38元钱。对吗？", pinyin:"Sānshíbā yuán qián. Duì ma?", english:"38 yuan. Is that right?"},
-      {speaker:"家明 Jiāmíng", hanzi:"对，给你！", pinyin:"Duì, gěi nǐ!", english:"Yes, here you go!"},
-      {speaker:"女孩 Nǚhái (girl)", hanzi:"谢谢你！", pinyin:"Xièxie nǐ!", english:"Thank you!"},
-      {speaker:"家明 Jiāmíng", hanzi:"不客气！", pinyin:"Bú kèqi!", english:"You’re welcome!"}
+      {speaker:"老师 Teacher", hanzi:"这是谁的钱包？", pinyin:"Zhè shì shéi de qiánbāo?", english:"Whose wallet is this?"},
+      {speaker:"家明 Jiāmíng", hanzi:"是大卫的钱包。", pinyin:"Shì Dàwèi de qiánbāo.", english:"It is David’s wallet."},
+      {speaker:"老师 Teacher", hanzi:"那是谁的书包？", pinyin:"Nà shì shéi de shūbāo?", english:"Whose school bag is that?"},
+      {speaker:"大卫 Dàwèi", hanzi:"那不是我的书包，是玛丽的书包。", pinyin:"Nà bú shì wǒ de shūbāo, shì Mǎlì de shūbāo.", english:"That is not my school bag, it is Mary’s school bag."}
     ],
-    tip:"🍳 <b>English logic:</b> 谁的 = 谁 (who) + 的 (’s) = <b>who’s → whose</b>. Owner + 的 + thing: 我<b>的</b>钱包 = my wallet.<br>🥄 <b>里 = inside</b>, and it comes AFTER the thing: 钱包<b>里</b> = “wallet-inside” = <b>inside the wallet</b>. (English puts “inside” first, Chinese puts it last.)<br>👉 这 = this (the spoon in your hand), 那 = that (the pot across the kitchen).<br>🔢 <b>Number recipe up to 99:</b> 38 = 三十八 = 3 · 10 · 8 (three-ten-eight). 100 = 一百 yì bǎi. 多少 asks “how much?” for any size; 几 is for small numbers.",
-    sections:[
-      {title:"🔢 Games of numbers (p55)", items:[
-        {hanzi:"Count 1 → 99 → 100", pinyin:"yī, èr … shí, shíyī … èrshí … jiǔshíjiǔ, yì bǎi", english:"11 = 10+1 · 20 = 2×10 · 21 = 2×10+1"},
-        {hanzi:"Neighbouring numbers", pinyin:"Teacher says 7 → you say 6 and 8", english:"Say the number before and the number after."}
-      ]},
-      {title:"🧾 Complete the sentences (p56)", items:[
-        {hanzi:"这是什么？这是……", pinyin:"Zhè shì shénme? Zhè shì ...", english:"What is this? This is ..."},
-        {hanzi:"那是什么？那是……", pinyin:"Nà shì shénme? Nà shì ...", english:"What is that? That is ..."},
-        {hanzi:"……是一张光盘。", pinyin:"... shì yì zhāng guāngpán.", english:"... is a CD."},
-        {hanzi:"……是一百元钱。", pinyin:"... shì yì bǎi yuán qián.", english:"... is 100 yuan."}
-      ]},
-      {title:"➕ Add, then say the answer aloud (p56)", items:[
-        {hanzi:"20 + 35 = 55", pinyin:"wǔshíwǔ", english:"55"},
-        {hanzi:"42 + 36 = 78", pinyin:"qīshíbā", english:"78"},
-        {hanzi:"31 + 19 = 50", pinyin:"wǔshí", english:"50"},
-        {hanzi:"45 + 55 = 100", pinyin:"yì bǎi", english:"100"}
-      ]},
-      {title:"🗣️ Practice talk (p56)", items:[
-        {hanzi:"A：这是谁的钱包？", pinyin:"Zhè shì shuí de qiánbāo?", english:"Whose wallet is this?"},
-        {hanzi:"B：这是我的钱包。", pinyin:"Zhè shì wǒ de qiánbāo.", english:"This is my wallet."},
-        {hanzi:"C：不，这不是你的，这是我的。", pinyin:"Bù, zhè bú shì nǐ de, zhè shì wǒ de.", english:"No, this is not yours, this is mine."},
-        {hanzi:"Swap in →", pinyin:"guāngpán + tā · shūbāo + Mǎlì · qiānbǐ + Jiékè", english:"CD + he/she · school bag + Mary · pencil + Jack"}
-      ]},
-      {title:"🎲 Class game: Whose is it? (p57)", items:[
-        {hanzi:"橡皮 · 笔记本 · 书 · 文具盒 · 铅笔 · 文件夹", pinyin:"xiàngpí · bǐjìběn · shū · wénjùhé · qiānbǐ · wénjiànjiā", english:"eraser · notebook · book · pencil case · pencil · binder"},
-        {hanzi:"A：这是谁的文具盒？", pinyin:"Zhè shì shuí de wénjùhé?", english:"Whose pencil case is this?"},
-        {hanzi:"C：不对。这不是你的，这是……的。", pinyin:"Bú duì. Zhè bú shì nǐ de, zhè shì ... de.", english:"Wrong. This is not yours, this is ...’s."},
-        {hanzi:"D：对！这是我的。", pinyin:"Duì! Zhè shì wǒ de.", english:"Right! This is mine."}
-      ]},
-      {title:"👅 Tongue twister (p57): 14 vs 40", items:[
-        {hanzi:"十四是十四，四十是四十。", pinyin:"Shí sì shì shí sì, sì shí shì sì shí.", english:"Fourteen is fourteen, forty is forty."},
-        {hanzi:"别说四十是十四，别说十四是四十。", pinyin:"Bié shuō sì shí shì shí sì, bié shuō shí sì shì sì shí.", english:"Don’t say forty as fourteen. Don’t say fourteen as forty."},
-        {hanzi:"🧮 Maths check", pinyin:"十四 = 10 + 4 = 14 · 四十 = 4 × 10 = 40", english:"Order of the words tells you add or multiply!"}
-      ]},
-      {title:"✍️ Characters to write (p58)", items:[
-        {hanzi:"里 少 那 钱 对 给 多 元 包 这", pinyin:"lǐ shǎo nà qián duì gěi duō yuán bāo zhè", english:"inside · few · that · money · right · give · many · yuan · wrap · this"},
-        {hanzi:"钅→钱 · 女→她 · 子→好 · 门→们", pinyin:"component table", english:"metal-part in 钱 · woman in 她 · child in 好 · door in 们"}
-      ]},
-      {title:"🙌 Classroom Chinese", items:[
-        {hanzi:"很好！", pinyin:"Hěn hǎo!", english:"Very good."},
-        {hanzi:"非常好！", pinyin:"Fēicháng hǎo!", english:"Very good. / Great."}
-      ]}
-    ]
+    tip:"🍳 <b>English logic:</b> 谁的 = 谁 (who) + 的 (’s) = <b>who’s</b> → <b>whose</b>! English even spells it that way: who + ’s = whose.<br>🥄 Same recipe as before: owner + 的 + thing. 大卫<b>的</b>钱包 = David<b>’s</b> wallet.<br>👉 这 = this (close, like the spoon in your hand). 那 = that (far, like the pot across the kitchen)."
   },
   {
     id:"l11", exam:"y8_t1_final", num:11, title:"祝你生日快乐",
-    hanzi:"祝你生日快乐", pinyin:"zhù nǐ shēngrì kuàilè", meaning:"Happy birthday to you!",
-    story:"📖 Book story: At 12 o’clock the students are preparing a surprise birthday party for Wang Jiaming in the classroom. But when he walks in, only Mrs. Lin is there. Then David, Jack and Mary enter with a birthday cake.",
-    note:"✅ Workbook p40 confirms: zhǎo = find, hé = and, zhèlǐ = here, nǎlǐ = where, shēngrì = birthday, kuàilè = happy. Not yet confirmed (textbook p60–61 not photographed): 祝 zhù, 您 nín, 在 zài, 我们 wǒmen.",
+    hanzi:"祝你生日快乐", pinyin:"zhù nǐ shēngrì kuàilè", meaning:"Happy birthday!",
     vocab:[
       {hanzi:"祝", pinyin:"zhù", english:"to wish", type:"v."},
       {hanzi:"生日", pinyin:"shēngrì", english:"birthday", type:"n."},
       {hanzi:"快乐", pinyin:"kuàilè", english:"happy", type:"adj."},
-      {hanzi:"您", pinyin:"nín", english:"you (polite)", type:"pron."},
-      {hanzi:"找", pinyin:"zhǎo", english:"look for", type:"v."},
-      {hanzi:"和", pinyin:"hé", english:"and", type:"conj."},
-      {hanzi:"在", pinyin:"zài", english:"be at / be in", type:"v."},
-      {hanzi:"这里", pinyin:"zhèlǐ", english:"here", type:"pron."},
-      {hanzi:"哪里", pinyin:"nǎlǐ", english:"where", type:"pron."},
-      {hanzi:"我们", pinyin:"wǒmen", english:"we; us", type:"pron."},
-      {hanzi:"那里", pinyin:"nàlǐ", english:"there (workbook p41)", type:"pron."}
+      {hanzi:"今天", pinyin:"jīntiān", english:"today", type:"n."},
+      {hanzi:"今年", pinyin:"jīnnián", english:"this year", type:"n."},
+      {hanzi:"岁", pinyin:"suì", english:"years old", type:"m.w."},
+      {hanzi:"礼物", pinyin:"lǐwù", english:"gift", type:"n."},
+      {hanzi:"蛋糕", pinyin:"dàngāo", english:"cake", type:"n."}
     ],
     dialogue:[
-      {speaker:"王家明 Wáng Jiāmíng", hanzi:"林老师，您好！", pinyin:"Lín lǎoshī, nín hǎo!", english:"Hello, Teacher Lin!"},
-      {speaker:"林老师 Lín lǎoshī", hanzi:"你找谁？", pinyin:"Nǐ zhǎo shuí?", english:"Who are you looking for?"},
-      {speaker:"王家明 Wáng Jiāmíng", hanzi:"我找大卫和玛丽。", pinyin:"Wǒ zhǎo Dàwèi hé Mǎlì.", english:"I’m looking for David and Mary."},
-      {speaker:"林老师 Lín lǎoshī", hanzi:"他们不在这里。", pinyin:"Tāmen bú zài zhèlǐ.", english:"They are not here."},
-      {speaker:"王家明 Wáng Jiāmíng", hanzi:"他们在哪里？", pinyin:"Tāmen zài nǎlǐ?", english:"Where are they?"},
-      {speaker:"大卫、杰克、玛丽 David, Jack, Mary", hanzi:"我们在这里！", pinyin:"Wǒmen zài zhèlǐ!", english:"We are here!"},
-      {speaker:"大卫、杰克、玛丽 David, Jack, Mary", hanzi:"祝你生日快乐！", pinyin:"Zhù nǐ shēngrì kuàilè!", english:"Happy birthday to you!"}
+      {speaker:"家明 Jiāmíng", hanzi:"今天是我的生日。", pinyin:"Jīntiān shì wǒ de shēngrì.", english:"Today is my birthday."},
+      {speaker:"大卫 Dàwèi", hanzi:"祝你生日快乐！", pinyin:"Zhù nǐ shēngrì kuàilè!", english:"Happy birthday to you!"},
+      {speaker:"家明 Jiāmíng", hanzi:"谢谢！", pinyin:"Xièxie!", english:"Thank you!"},
+      {speaker:"大卫 Dàwèi", hanzi:"你今年几岁？", pinyin:"Nǐ jīnnián jǐ suì?", english:"How old are you this year?"},
+      {speaker:"家明 Jiāmíng", hanzi:"我今年十三岁。", pinyin:"Wǒ jīnnián shí sān suì.", english:"I am thirteen this year."},
+      {speaker:"大卫 Dàwèi", hanzi:"这是你的生日礼物。", pinyin:"Zhè shì nǐ de shēngrì lǐwù.", english:"This is your birthday present."},
+      {speaker:"家明 Jiāmíng", hanzi:"谢谢你！", pinyin:"Xièxie nǐ!", english:"Thank you!"},
+      {speaker:"大卫 Dàwèi", hanzi:"不客气。", pinyin:"Bú kèqi.", english:"You’re welcome."}
     ],
-    tip:"🍳 <b>English logic:</b> 祝你生日快乐 word by word = “<b>wish</b> you <b>birthday happy</b>”. The thing (birthday) comes first, then the feeling (happy).<br>🥄 <b>里 again!</b> 这里 = “this-inside” = <b>here</b>. 哪里 = “which-inside” = <b>where</b>. 在 = “be at”: 他们<b>在</b>这里 = “they are at here”. Add 不 before 在 to say NOT there.<br>💛 <b>您</b> = 你 + 心 (heart): the polite, respectful “you”, used to a teacher.<br>🍰 Question word stays in the answer spot (like 谁 before): 你找<b>谁</b>？→ 我找<b>大卫</b>。",
-    sections:[
-      {title:"🎵 Can you sing it? (p62)", items:[
-        {hanzi:"祝你生日快乐", pinyin:"zhù nǐ shēngrì kuàilè", english:"Happy birthday to you (the song, sung in Chinese)"}
-      ]},
-      {title:"📜 Ancient poem, count the numbers! (p62)", items:[
-        {hanzi:"一望二三里，烟村四五家。", pinyin:"Yī wàng èr sān lǐ, yān cūn sì wǔ jiā.", english:"At one glance you see two or three miles, four or five houses with smoking chimneys."},
-        {hanzi:"亭台六七座，八九十枝花。", pinyin:"Tíng tái liù qī zuò, bā jiǔ shí zhī huā.", english:"Six or seven pavilions, and eight, nine or ten flowers possibly."}
-      ]},
-      {title:"✍️ Characters to write (p63)", items:[
-        {hanzi:"乐 找 和 哪 祝 快 您 在", pinyin:"lè zhǎo hé nǎ zhù kuài nín zài", english:"happy · look for · and · which · wish · fast/happy · you (polite) · be at"},
-        {hanzi:"禾→和 · 心→您 · 忄→快 · 扌→找 · 礻→祝 · 讠→谁", pinyin:"component table", english:"grain-part in 和 · heart in 您 · heart-part in 快 · hand-part in 找 · 礻in 祝 · speech-part in 谁"}
-      ]},
-      {title:"👂 Listening tasks (p62)", items:[
-        {hanzi:"Tape story", pinyin:"Who does the boy want to find? Did he find the person he was looking for?", english:"Be ready to retell it in your own words."}
-      ]}
-    ]
+    extra:[
+      {hanzi:"生日蛋糕", pinyin:"shēngrì dàngāo", english:"birthday cake"},
+      {hanzi:"生日快乐！", pinyin:"Shēngrì kuàilè!", english:"Happy birthday!"}
+    ],
+    tip:"🍳 <b>English logic:</b> 祝你生日快乐 word by word = “<b>wish</b> you <b>birthday happy</b>”. Chinese puts the thing first (birthday), then the feeling (happy). Short form: 生日快乐！<br>🥄 今年几岁 = “this-year how-many years-old?” We use 几 again (small number, like a child’s age). Answer: 我今年<b>十三</b>岁 — the number goes where 几 was!<br>📆 Number recipe: 十三 = 十 (10) + 三 (3) = 13."
   }
 );
 
 PATTERNS.push(
-  {exam:"y8_t1_final", hanzi:"他是谁？他是……", pinyin:"tā shì shuí? tā shì...", meaning:"Asking and saying WHO someone is",
+  {exam:"y8_t1_final", hanzi:"……是谁？", pinyin:"...shì shéi?", meaning:"Asking WHO someone is",
    examples:[
-     {hanzi:"他是谁？他是我的朋友王家明。", pinyin:"Tā shì shuí? Tā shì wǒ de péngyou Wáng Jiāmíng.", english:"Who is he? He is my friend Wang Jiaming."}
+     {hanzi:"他是谁？他是我的哥哥。", pinyin:"Tā shì shéi? Tā shì wǒ de gēge.", english:"Who is he? He is my elder brother."},
+     {hanzi:"她是谁？她是我的姐姐。", pinyin:"Tā shì shéi? Tā shì wǒ de jiějie.", english:"Who is she? She is my elder sister."}
    ]},
-  {exam:"y8_t1_final", hanzi:"打 + 球", pinyin:"dǎ + qiú", meaning:"“hit” a ball = play a ball game",
+  {exam:"y8_t1_final", hanzi:"……也 / 都……", pinyin:"...yě / dōu...", meaning:"“also” and “all” — BEFORE the verb",
    examples:[
-     {hanzi:"他打篮球。", pinyin:"Tā dǎ lánqiú.", english:"He plays basketball."},
-     {hanzi:"他不打橄榄球。", pinyin:"Tā bù dǎ gǎnlǎnqiú.", english:"He does not play American football."},
-     {hanzi:"他也打网球吗？", pinyin:"Tā yě dǎ wǎngqiú ma?", english:"Does he also play tennis?"}
+     {hanzi:"玛丽也是我的好朋友。", pinyin:"Mǎlì yě shì wǒ de hǎo péngyou.", english:"Mary is my good friend too."},
+     {hanzi:"他们都是我的好朋友。", pinyin:"Tāmen dōu shì wǒ de hǎo péngyou.", english:"They are all my good friends."}
    ]},
-  {exam:"y8_t1_final", hanzi:"也 / 都 + verb", pinyin:"yě / dōu + verb", meaning:"“also” and “all” jump in BEFORE the verb",
+  {exam:"y8_t1_final", hanzi:"我有……/ 我没有……", pinyin:"wǒ yǒu... / wǒ méiyǒu...", meaning:"Having and NOT having",
    examples:[
-     {hanzi:"玛丽和艾米丽也是我的好朋友。", pinyin:"Mǎlì hé Àimǐlì yě shì wǒ de hǎo péngyou.", english:"Mary and Emily are also my good friends."},
-     {hanzi:"他们都学汉语吗？", pinyin:"Tāmen dōu xué Hànyǔ ma?", english:"Do they all study Chinese?"}
-   ]},
-  {exam:"y8_t1_final", hanzi:"你有……吗？ 有 / 没有", pinyin:"nǐ yǒu ... ma? yǒu / méiyǒu", meaning:"Having and NOT having (yes = repeat the verb)",
-   examples:[
-     {hanzi:"你有好朋友吗？有啊。", pinyin:"Nǐ yǒu hǎo péngyou ma? Yǒu a.", english:"Do you have good friends? Yes."},
+     {hanzi:"我有中文书。", pinyin:"Wǒ yǒu Zhōngwén shū.", english:"I have Chinese books."},
      {hanzi:"我没有中文光盘。", pinyin:"Wǒ méiyǒu Zhōngwén guāngpán.", english:"I don’t have Chinese CDs."}
    ]},
-  {exam:"y8_t1_final", hanzi:"学 + 语", pinyin:"xué + yǔ", meaning:"Studying a language (不 for NOT)",
+  {exam:"y8_t1_final", hanzi:"几 + 量词 + 东西", pinyin:"jǐ + measure word + thing", meaning:"“How many …?” (number + measuring cup + thing)",
    examples:[
-     {hanzi:"艾米丽不学汉语，她学法语。", pinyin:"Àimǐlì bù xué Hànyǔ, tā xué Fǎyǔ.", english:"Emily doesn’t study Chinese, she studies French."}
+     {hanzi:"你有几张光盘？我有五张。", pinyin:"Nǐ yǒu jǐ zhāng guāngpán? Wǒ yǒu wǔ zhāng.", english:"How many CDs do you have? I have five."},
+     {hanzi:"你有几本书？我有三本。", pinyin:"Nǐ yǒu jǐ běn shū? Wǒ yǒu sān běn.", english:"How many books do you have? I have three."}
    ]},
-  {exam:"y8_t1_final", hanzi:"几 + 张 + 东西", pinyin:"jǐ + zhāng + thing", meaning:"“How many …?” = number + measuring cup + thing",
+  {exam:"y8_t1_final", hanzi:"这是 / 那是……", pinyin:"zhè shì / nà shì...", meaning:"This is… / That is…",
    examples:[
-     {hanzi:"你有几张中文光盘？我有3张。", pinyin:"Nǐ yǒu jǐ zhāng Zhōngwén guāngpán? Wǒ yǒu sān zhāng.", english:"How many Chinese CDs do you have? I have 3."},
-     {hanzi:"我有三个书包。", pinyin:"Wǒ yǒu sān ge shūbāo.", english:"I have three school bags."}
+     {hanzi:"这是我的钱包。", pinyin:"Zhè shì wǒ de qiánbāo.", english:"This is my wallet."},
+     {hanzi:"那不是我的书包。", pinyin:"Nà bú shì wǒ de shūbāo.", english:"That is not my school bag."}
    ]},
-  {exam:"y8_t1_final", hanzi:"这是 / 那是 + 什么？", pinyin:"zhè shì / nà shì ... shénme?", meaning:"This is… / That is… / What is it?",
+  {exam:"y8_t1_final", hanzi:"谁的……？", pinyin:"shéi de...?", meaning:"Asking WHOSE (who + ’s)",
    examples:[
-     {hanzi:"那是什么？是钱包！", pinyin:"Nà shì shénme? Shì qiánbāo!", english:"What is that? It’s a wallet!"}
-   ]},
-  {exam:"y8_t1_final", hanzi:"这是谁的……？", pinyin:"zhè shì shuí de ...?", meaning:"Asking WHOSE (who + ’s)",
-   examples:[
-     {hanzi:"这是谁的钱包？是我的！", pinyin:"Zhè shì shuí de qiánbāo? Shì wǒ de!", english:"Whose wallet is this? It’s mine!"},
-     {hanzi:"不，这不是你的，这是我的。", pinyin:"Bù, zhè bú shì nǐ de, zhè shì wǒ de.", english:"No, this is not yours, this is mine."}
-   ]},
-  {exam:"y8_t1_final", hanzi:"……里有多少钱？", pinyin:"... lǐ yǒu duōshao qián?", meaning:"“inside” goes AFTER the thing; 多少 = how much",
-   examples:[
-     {hanzi:"钱包里有多少钱？38元钱。", pinyin:"Qiánbāo lǐ yǒu duōshao qián? Sānshíbā yuán qián.", english:"How much money is in the wallet? 38 yuan."}
-   ]},
-  {exam:"y8_t1_final", hanzi:"你找谁？", pinyin:"nǐ zhǎo shuí?", meaning:"Looking for someone",
-   examples:[
-     {hanzi:"我找大卫和玛丽。", pinyin:"Wǒ zhǎo Dàwèi hé Mǎlì.", english:"I’m looking for David and Mary."}
-   ]},
-  {exam:"y8_t1_final", hanzi:"在这里 / 在哪里", pinyin:"zài zhèlǐ / zài nǎlǐ", meaning:"Being here / asking where",
-   examples:[
-     {hanzi:"他们不在这里。他们在哪里？", pinyin:"Tāmen bú zài zhèlǐ. Tāmen zài nǎlǐ?", english:"They are not here. Where are they?"},
-     {hanzi:"我们在这里！", pinyin:"Wǒmen zài zhèlǐ!", english:"We are here!"}
+     {hanzi:"这是谁的钱包？", pinyin:"Zhè shì shéi de qiánbāo?", english:"Whose wallet is this?"},
+     {hanzi:"是大卫的钱包。", pinyin:"Shì Dàwèi de qiánbāo.", english:"It is David’s wallet."}
    ]},
   {exam:"y8_t1_final", hanzi:"祝你……快乐！", pinyin:"zhù nǐ ... kuàilè!", meaning:"Wishing someone a happy …",
    examples:[
      {hanzi:"祝你生日快乐！", pinyin:"Zhù nǐ shēngrì kuàilè!", english:"Happy birthday to you!"}
+   ]},
+  {exam:"y8_t1_final", hanzi:"你今年几岁？", pinyin:"nǐ jīnnián jǐ suì?", meaning:"Asking someone’s age (and answering)",
+   examples:[
+     {hanzi:"你今年几岁？我今年十三岁。", pinyin:"Nǐ jīnnián jǐ suì? Wǒ jīnnián shí sān suì.", english:"How old are you this year? I am thirteen."}
    ]}
 );
 
-/* Flavor Pairing bank: 28 pairs from the book. Each game round picks 10 at random, so it is never the same twice. */
 const MATCH_FINAL = [
-  {pinyin:"jiàoliàn", english:"coach"}, {pinyin:"shuí", english:"who"},
-  {pinyin:"yě", english:"also; too"}, {pinyin:"dǎ", english:"play (ball game)"},
-  {pinyin:"gǎnlǎnqiú", english:"American football"}, {pinyin:"lánqiú", english:"basketball"},
-  {pinyin:"yǒu", english:"have"}, {pinyin:"méiyǒu", english:"not have"},
-  {pinyin:"dōu", english:"both; all"}, {pinyin:"xué", english:"learn; study"},
-  {pinyin:"Hànyǔ", english:"Chinese language"}, {pinyin:"Fǎyǔ", english:"French language"},
-  {pinyin:"jǐ", english:"how many"}, {pinyin:"zhāng", english:"measure word (disks, paper)"},
-  {pinyin:"guāngpán", english:"CD; disk"}, {pinyin:"Zhōngwén", english:"Chinese"},
-  {pinyin:"nà", english:"that"}, {pinyin:"zhè", english:"this"},
-  {pinyin:"qiánbāo", english:"wallet"}, {pinyin:"duōshao", english:"how much; how many"},
-  {pinyin:"qián", english:"money"}, {pinyin:"yuán", english:"measure word (money)"},
-  {pinyin:"duì", english:"yes; that’s right"}, {pinyin:"gěi", english:"give"},
-  {pinyin:"zhǎo", english:"look for"}, {pinyin:"zài", english:"be at / in"},
-  {pinyin:"shēngrì", english:"birthday"}, {pinyin:"kuàilè", english:"happy"}
+  {pinyin:"bàba", english:"dad"}, {pinyin:"māma", english:"mum"},
+  {pinyin:"gēge", english:"elder brother"}, {pinyin:"jiějie", english:"elder sister"},
+  {pinyin:"shéi", english:"who"}, {pinyin:"yǒu", english:"to have"},
+  {pinyin:"jǐ", english:"how many"}, {pinyin:"zhāng", english:"measure word (flat things)"},
+  {pinyin:"qiánbāo", english:"wallet"}, {pinyin:"shēngrì", english:"birthday"},
+  {pinyin:"kuàilè", english:"happy"}, {pinyin:"lǐwù", english:"gift"}
 ];
 const MATCH_BY_EXAM = { y8_t1_mid: MATCH_PAIRS, y8_t1_final: MATCH_FINAL };   // add one line per new exam
-function matchPairsFor(examId){
-  const arr = MATCH_BY_EXAM[examId] || MATCH_PAIRS;
-  if(arr.length <= 10) return arr;
-  return arr.slice().sort(()=>Math.random()-0.5).slice(0,10);   // fresh round of 10 each time
-}
+function matchPairsFor(examId){ return MATCH_BY_EXAM[examId] || MATCH_PAIRS; }
 
 /* ============ STATE / PERSISTENCE ============ */
 const STORAGE_KEY = "chinese-kitchen-state";
@@ -768,254 +554,6 @@ function markDone(id, field){
 }
 function findLesson(id){ return LESSONS.find(l => l.id === id); }
 
-
-/* ============ WORKBOOK LAB — practice built from the son's exercise book (Unit Two, p23–41) ============
-   Question shape: {q, p?(hint), a(answer), o?(options), ex?(shown after a right answer)}.
-   If o is missing the options are made automatically (see wbOptions). Stroke counts were checked against a stroke database
-   (the 5 answers given in the workbook all matched). Picture questions are rebuilt as words. */
-const WB_INITIALS = [['b','p','m','f'],['d','t','n','l'],['g','k','h'],['j','q','x'],['zh','ch','sh','r'],['z','c','s']];
-function wbShuffle(a){ return a.slice().sort(()=>Math.random()-0.5); }
-function wbOptions(q, pool){
-  if(q.o) return wbShuffle(q.o);
-  if(q.kind==='init'){
-    const grp = WB_INITIALS.find(g=>g.includes(q.a)) || [];
-    let wrong = grp.filter(x=>x!==q.a);
-    const rest = wbShuffle(WB_INITIALS.flat().filter(x=>x!==q.a && !wrong.includes(x)));
-    wrong = wbShuffle(wrong).concat(rest).slice(0,3);
-    return wbShuffle([q.a].concat(wrong));
-  }
-  if(q.kind==='stroke'){
-    const n=+q.a, c=[n-2,n-1,n+1,n+2].filter(x=>x>0);
-    return wbShuffle([n].concat(wbShuffle(c).slice(0,3))).map(String);
-  }
-  if(pool){ return wbShuffle([q.a].concat(wbShuffle(pool.filter(x=>x!==q.a)).slice(0,3))); }
-  return [q.a];
-}
-const wbI = (blank,a,full,eng)=>({kind:'init', q:`<span class="wbbig">${blank}</span>`, p:'Which starting sound (initial) completes the word?', a, ex:`${full}${eng?' — '+eng:''}`});
-const wbS = (ch,py,n)=>({kind:'stroke', q:`<span class="wbbig">${ch}</span> <span class="wbsm">${py}</span>`, p:'How many strokes?', a:String(n), ex:`${ch} has ${n} strokes.`});
-const wbT = (plain,a,wrong)=>({q:`<span class="wbbig">${plain}</span>`, p:'Which one has the right tones?', a, o:[a].concat(wrong), ex:`${a}`});
-const wbD = (q,a,box,ex)=>({q, p:'Word box: '+box.join(' · '), a, o:box, ex:ex||''});
-const wbE = (py,a,pool)=>({q:`<span class="wbbig">${py}</span>`, p:'What does it mean?', a, pool});
-const wbBu = (w,ok,fix,why)=>({q:`<span class="wbbig">${w}</span>`, p:'Is the tone of 不 written correctly here?', a: ok?'✅ Correct':'❌ Wrong', o:['✅ Correct','❌ Wrong'], ex: ok? `Yes! ${why}` : `Should be <b>${fix}</b>. ${why}`});
-const WB_BU_RULE = '不 = <b>bú</b> before a 4th tone, <b>bù</b> before 1st / 2nd / 3rd.';
-const WB_NUM = ['yī','èr','sān','sì','wǔ','liù','qī','bā','jiǔ','shí'];
-
-const WORKBOOK = {
-  l7:[
-    {title:'🔤 Starting sounds', sub:'workbook p23', qs:[
-      wbI('__éng','p','péng','friend'), wbI('__uí','sh','shuí','who'), wbI('__iào','j','jiào','call'), wbI('__iàn','l','liàn','coach: jiàoliàn'),
-      wbI('__ē','h','hē','drink'), wbI('__ǎ','d','dǎ','play'), wbI('__ǎn','g','gǎn','gǎnlǎnqiú: American football'), wbI('__án','l','lán','basket: lánqiú'), wbI('__iú','q','qiú','ball')]},
-    {title:'🚫 Real sound or not?', sub:'workbook p24 · zh ch sh r z c s', qs:[
-      {q:'Which one is <b>NOT</b> a real sound?', a:'shong', o:['zhong','shong','chong','cong'], ex:'sh never goes with -ong. (zhong, chong, cong are real.)'},
-      {q:'Which one is <b>NOT</b> a real sound?', a:'rai', o:['ran','rou','rai','rong'], ex:'r has no “ai”. (ran, rou, rong are real.)'},
-      {q:'Which one is <b>NOT</b> a real sound?', a:'ra', o:['ra','sa','za','ca'], ex:'r has no plain “a”. (sa, za, ca are real.)'},
-      {q:'Which one <b>IS</b> a real sound?', a:'rou', o:['rai','shong','rou','ra'], ex:'rou is real. The other three are not.'}]},
-    {title:'🔁 Translate', sub:'workbook p24', qs:[
-      wbE('dǎ','play',['play','who','also','coach','school']), wbE('shuí','who',['play','who','also','coach','school']),
-      wbE('gǎnlǎnqiú','American football',['American football','basketball','tennis','school','table tennis']), wbE('jiàoliàn','coach',['play','who','also','coach','school']),
-      wbE('lánqiú','basketball',['American football','basketball','tennis','school','table tennis']), wbE('yě','also',['play','who','also','coach','school']), wbE('xuéxiào','school',['play','who','also','coach','school'])]},
-    {title:'💬 Fill the dialogue 1', sub:'workbook p25', qs:[
-      wbD('A: Tā <b>___</b> shuí?','shì',['shì','bù','ma','yě','dǎ'],'Tā shì shuí? = Who is he?'),
-      wbD('B: Tā <b>___</b> wǒ de péngyou Jiékè.','shì',['shì','bù','ma','yě','dǎ'],'He is my friend Jack.'),
-      wbD('A: Tā dǎ lánqiú <b>___</b>?','ma',['shì','bù','ma','yě','dǎ'],'ma ends a yes/no question.'),
-      wbD('B: Shì, tā <b>___</b> lánqiú.','dǎ',['shì','bù','ma','yě','dǎ'],'dǎ = play (“hit”) the ball.'),
-      wbD('A: Nǐ <b>___</b> dǎ lánqiú ma?','yě',['shì','bù','ma','yě','dǎ'],'yě = also, before the verb.'),
-      wbD('B: Bù, wǒ <b>___</b> dǎ lánqiú.','bù',['shì','bù','ma','yě','dǎ'],'bù + verb = do NOT.')]},
-    {title:'💬 Fill the dialogue 2', sub:'workbook p25', qs:[
-      wbD('A: Tā shì <b>___</b>?','shuí',['shì','de','yě','shuí'],'Question word sits where the answer goes.'),
-      wbD('B: Tā shì Wáng Jiāmíng <b>___</b> péngyou Linda.','de',['shì','de','yě','shuí'],'de = ’s (Wang Jiaming’s friend).'),
-      wbD('A: Tā <b>___</b> shì zhōngxuéshēng ma?','yě',['shì','de','yě','shuí'],'Is he also a secondary-school student?'),
-      wbD('B: <b>___</b>, tā yě shì zhōngxuéshēng.','Shì',['Shì','de','yě','shuí'],'Shì = yes.')]},
-    {title:'🖼️ Picture talk', sub:'workbook p24–25 (pictures rebuilt as words)', qs:[
-      {q:'📷 Two boys are playing basketball.<br>Tāmen zuò shénme?', p:'What are they doing?', a:'Tāmen dǎ lánqiú.', o:['Tāmen dǎ lánqiú.','Tāmen dǎ pīngpāngqiú.','Tāmen dǎ wǎngqiú.','Tāmen xué Hànyǔ.'], ex:'zuò shénme = “do what?” → dǎ lánqiú.'},
-      {q:'📷 Two boys are playing table tennis.<br>Tāmen dǎ pīngpāngqiú ma? Shì, ___', p:'Finish the answer.', a:'tāmen dǎ pīngpāngqiú.', o:['tāmen dǎ pīngpāngqiú.','tāmen dǎ lánqiú.','tāmen bù dǎ qiú.','tāmen xué Fǎyǔ.'], ex:'Yes → repeat the verb part.'}]},
-    {title:'✍️ Count the strokes', sub:'workbook p26', qs:[wbS('打','dǎ',5),wbS('谁','shuí',10),wbS('字','zì',6),wbS('橄','gǎn',15),wbS('明','míng',8),wbS('榄','lǎn',13),wbS('球','qiú',11)]}
-  ],
-  l8:[
-    {title:'🔤 Starting sounds', sub:'workbook p27', qs:[
-      wbI('__ìng','j','jìng'), wbI('__ǒu','f','fǒu'), wbI('__àn','h','hàn','Hànyǔ'), wbI('__ǐ','m','mǐ'), wbI('__uí','sh','shuí','who'),
-      wbI('__ōu','d','dōu','all / both'), wbI('__ǎ','f','fǎ','Fǎyǔ: French'), wbI('__īng','t','tīng','listen'), wbI('__ǐng','q','qǐng','please')]},
-    {title:'🎵 Add the tones', sub:'workbook p27', qs:[
-      wbT('da qiu','dǎ qiú',['dà qiú','dǎ qiǔ','dá qiù']), wbT('Hanyu','Hànyǔ',['Hānyǔ','Hànyù','Hǎnyǔ']), wbT('pengyou','péngyou',['pěngyou','pēngyou','péngyòu']),
-      wbT('lanqiu','lánqiú',['lǎnqiú','lànqiú','lánqiū']), wbT('zaijian','zàijiàn',['zāijiàn','zàijiān','zǎijiàn']), wbT('Fayu','Fǎyǔ',['Fàyǔ','Fǎyù','Fāyǔ']),
-      wbT('jiaolian','jiàoliàn',['jiǎoliàn','jiàolián','jiāoliàn']), wbT('xuesheng','xuésheng',['xuěsheng','xuèsheng','xuēsheng']), wbT('xiaozhang','xiàozhǎng',['xiǎozhǎng','xiàozhàng','xiāozhǎng'])]},
-    {title:'🧩 Which final fits?', sub:'workbook p28 · e ü un ing ie', qs:[
-      {q:'zh + <b>___</b>', p:'Which final makes a real sound?', a:'e', o:['e','ü','ing','ie'], ex:'zhe ✔. ü, ing, ie go with j q x (ju, jing, jie).'},
-      {q:'ch + <b>___</b>', p:'Which final makes a real sound?', a:'un', o:['ie','ü','ing','un'], ex:'chun ✔.'},
-      {q:'r + <b>___</b>', p:'Which final makes a real sound?', a:'e', o:['ü','ing','ie','e'], ex:'re ✔.'},
-      {q:'sh + <b>___</b>', p:'Which final makes a real sound?', a:'un', o:['ie','un','ü','ing'], ex:'shun ✔.'}]},
-    {title:'🔁 Translate', sub:'workbook p28', qs:[
-      wbE('shénme','what',['what','study','French','have','all / both','Chinese (language)']), wbE('xué','study',['what','study','French','have','all / both','Chinese (language)']),
-      wbE('Fǎyǔ','French',['what','study','French','have','all / both','Chinese (language)']), wbE('yǒu','have',['what','study','French','have','all / both','Chinese (language)']),
-      wbE('dōu','all / both',['what','study','French','have','all / both','Chinese (language)']), wbE('Hànyǔ','Chinese (language)',['what','study','French','have','all / both','Chinese (language)'])]},
-    {title:'💬 Choose the word', sub:'workbook p28', qs:[
-      wbD('A: Tā shì <b>___</b>?<br>B: Tā shì wǒ de hǎo péngyou Jiékè.','shuí',['shénme','shuí'],'Answer is a person → shuí (who).'),
-      wbD('A: Dàwèi xué <b>___</b>?<br>B: Tā xué Hànyǔ.','shénme',['shénme','shuí'],'Answer is a thing (Chinese) → shénme (what).'),
-      wbD('A: Mǎlì hé Àimǐlì <b>___</b> xué Fǎyǔ ma?<br>B: Shì de, tāmen dōu xué Fǎyǔ.','dōu',['yě','dōu'],'Two people, “all” → dōu. (If the answer is unclear, check with your teacher.)')]},
-    {title:'💬 Fill the dialogue', sub:'workbook p29', qs:[
-      wbD('A: Tāmen shì <b>___</b>?','shuí',['Fǎyǔ','yě','dōu','hǎo','shuí'],'Who are they?'),
-      wbD('A: Nǐ xué Hànyǔ, tāmen <b>___</b> xué ma?','yě',['Fǎyǔ','yě','dōu','hǎo','shuí'],'Do they also study it?'),
-      wbD('B: Bù, tāmen xué <b>___</b>.','Fǎyǔ',['Fǎyǔ','yě','dōu','hǎo','shuí'],'They study French.'),
-      wbD('A: Mǎlì <b>___</b> shì nǐ de hǎo péngyou ma?','yě',['Fǎyǔ','yě','dōu','hǎo','shuí'],'Is Mary also your good friend?'),
-      wbD('B: Shì de, tā yě shì wǒ de <b>___</b> péngyou.','hǎo',['Fǎyǔ','yě','dōu','hǎo','shuí'],'hǎo péngyou = good friend.'),
-      wbD('B: Shì de, wǒmen <b>___</b> xué Hànyǔ.','dōu',['Fǎyǔ','yě','dōu','hǎo','shuí'],'We all study Chinese.')]},
-    {title:'✍️ Count the strokes', sub:'workbook p30', qs:[wbS('校','xiào',10),wbS('汉','hàn',5),wbS('有','yǒu',6),wbS('是','shì',9),wbS('长','zhǎng',4),wbS('谁','shuí',10)]}
-  ],
-  l9:[
-    {title:'🔤 Starting sounds', sub:'workbook p31', qs:[
-      wbI('__éng','p','péng'), wbI('__ōng','zh','zhōng','Zhōngwén'), wbI('__uāng','g','guāng','light: guāngpán'), wbI('__a','m','ma'), wbI('__e','n','ne'),
-      wbI('__ǐ','j','jǐ','how many'), wbI('__éi','m','méi','méiyǒu'), wbI('__án','p','pán','disk'), wbI('__āng','zh','zhāng','measure word')]},
-    {title:'🧩 Finish the word', sub:'workbook p31', qs:[
-      {q:'<span class="wbbig">xièx__</span>', p:'Which letters finish the word?', a:'ie', o:['ie','ei','ia','ue'], ex:'xièxie = thanks'},
-      {q:'<span class="wbbig">méiy__u</span>', p:'Which letters finish the word?', a:'ǒ', o:['ǒ','ò','ó','ō'], ex:'méiyǒu = do not have'},
-      {q:'<span class="wbbig">H__nyǔ</span>', p:'Which letters finish the word?', a:'àn', o:['àn','ān','án','ǎn'], ex:'Hànyǔ'},
-      {q:'<span class="wbbig">lánq__ú</span>', p:'Which letter finishes the word?', a:'i', o:['i','u','e','a'], ex:'lánqiú = basketball (q + iú)'},
-      {q:'<span class="wbbig">z__jiàn</span>', p:'Which letters finish the word?', a:'ài', o:['ài','āi','ái','ǎi'], ex:'zàijiàn = goodbye'},
-      {q:'<span class="wbbig">Zh__wén</span>', p:'Which letters finish the word?', a:'ōng', o:['ōng','óng','ǒng','òng'], ex:'Zhōngwén = Chinese'},
-      {q:'<span class="wbbig">__énme</span>', p:'Which starting sound?', a:'sh', o:['sh','zh','ch','s'], ex:'shénme = what'}]},
-    {title:'🧩 Which final fits?', sub:'workbook p32 · iao ua ün ui ong', qs:[
-      {q:'q + <b>___</b>', p:'Which final makes a real sound?', a:'iao', o:['iao','ua','ui','ong'], ex:'qiao ✔ — j q x go with i/ü-type finals.'},
-      {q:'x + <b>___</b>', p:'Which final makes a real sound?', a:'ün', o:['ua','ong','ui','ün'], ex:'xun ✔ — ü is written as plain u after j q x.'},
-      {q:'zh + <b>___</b>', p:'Which final makes a real sound?', a:'ua', o:['iao','ün','ie','ua'], ex:'zhua ✔ (also zhui, zhong).'},
-      {q:'j + <b>___</b>', p:'Which final makes a real sound?', a:'iao', o:['iao','ua','ui','ong'], ex:'jiao ✔'}]},
-    {title:'🔁 Translate', sub:'workbook p32', qs:[
-      wbE('jǐ','how many',['how many','measure word','Chinese','have no','CD','have']), wbE('zhāng','measure word',['how many','measure word','Chinese','have no','CD','have']),
-      wbE('Zhōngwén','Chinese',['how many','measure word','Chinese','have no','CD','have']), wbE('méiyǒu','have no',['how many','measure word','Chinese','have no','CD','have']),
-      wbE('guāngpán','CD',['how many','measure word','Chinese','have no','CD','have']), wbE('yǒu','have',['how many','measure word','Chinese','have no','CD','have'])]},
-    {title:'🔢 Numbers 3–10 in pinyin', sub:'workbook p32', qs:[3,4,5,6,7,8,9,10].map(n=>({q:`<span class="wbbig">${n}</span>`, p:'How do you say it?', a:WB_NUM[n-1], pool:WB_NUM, ex:`${n} = ${WB_NUM[n-1]}`}))},
-    {title:'💬 Fill the dialogue', sub:'workbook p33', qs:[
-      wbD('A: Jiāmíng, nǐ yǒu Zhōngwén guāngpán <b>___</b>?','ma',['zhāng','jǐ','ma','méiyǒu','yǒu'],'Yes/no question.'),
-      wbD('B: <b>___</b>, wǒ yǒu Zhōngwén guāngpán.','Yǒu',['zhāng','jǐ','ma','méiyǒu','Yǒu'],'Yes = repeat the verb.'),
-      wbD('A: Nǐ yǒu <b>___</b> zhāng Zhōngwén guāngpán?','jǐ',['zhāng','jǐ','ma','méiyǒu','yǒu'],'jǐ = how many.'),
-      wbD('B: Wǒ yǒu sān <b>___</b> Zhōngwén guāngpán.','zhāng',['zhāng','jǐ','ma','méiyǒu','yǒu'],'number + measuring cup + thing.'),
-      wbD('B: <b>___</b>, Dàwèi méiyǒu Zhōngwén guāngpán.','Méiyǒu',['zhāng','jǐ','ma','Méiyǒu','yǒu'],'Say it with 没有, never 不有.')]},
-    {title:'🗣️ Answer in Chinese', sub:'workbook p33 (picture rebuilt as words)', qs:[
-      {q:'📷 A French book (法语).<br>Jiékè xué Hànyǔ, Àimǐlì xué Hànyǔ ma?', p:'Pick the best answer.', a:'Bù, Àimǐlì xué Fǎyǔ.', o:['Bù, Àimǐlì xué Fǎyǔ.','Shì, Àimǐlì xué Fǎyǔ.','Bù, Àimǐlì xué Hànyǔ.','Shì, Àimǐlì méiyǒu.'], ex:'No — she studies French.'}]},
-    {title:'✍️ Count the strokes', sub:'workbook p34', qs:[wbS('光','guāng',6),wbS('篮','lán',16),wbS('打','dǎ',5),wbS('文','wén',4),wbS('球','qiú',11),wbS('张','zhāng',7)]}
-  ],
-  l10:[
-    {title:'🔤 Starting sounds', sub:'workbook p35', qs:[
-      wbI('__è','zh','zhè','this'), wbI('__ěi','g','gěi','give'), wbI('__ián','q','qián','money'), wbI('__uō','d','duō','many'), wbI('__uì','d','duì','right'),
-      wbI('__ǐ','l','lǐ','inside'), wbI('__āo','b','bāo','wallet: qiánbāo'), wbI('__ǎo','sh','shǎo','few: duōshao')]},
-    {title:'🧩 Finish the word', sub:'workbook p35', qs:[
-      {q:'<span class="wbbig">duōsh__</span>', p:'Which letters finish the word?', a:'ao', o:['ao','ou','ai','an'], ex:'duōshao = how much'},
-      {q:'<span class="wbbig">g__āngpán</span>', p:'Which letter?', a:'u', o:['u','i','o','e'], ex:'guāngpán = CD'},
-      {q:'<span class="wbbig">__iàozhǎng</span>', p:'Which starting sound?', a:'x', o:['x','j','q','sh'], ex:'xiàozhǎng = principal'},
-      {q:'<span class="wbbig">qi__bāo</span>', p:'Which letters?', a:'án', o:['án','ān','ǎn','àn'], ex:'qiánbāo = wallet'},
-      {q:'<span class="wbbig">xué__eng</span>', p:'Which starting sound?', a:'sh', o:['sh','s','ch','zh'], ex:'xuésheng = student'},
-      {q:'<span class="wbbig">jiào__iàn</span>', p:'Which starting sound?', a:'l', o:['l','n','d','t'], ex:'jiàoliàn = coach'},
-      {q:'<span class="wbbig">bú __èqi</span>', p:'Which starting sound?', a:'k', o:['k','g','h','q'], ex:'bú kèqi = you’re welcome'}]},
-    {title:'🔢 Numbers: pinyin → figure', sub:'workbook p36', qs:(()=>{
-      const F=['96','80','22','15','67','58','44','100'];
-      return [['shíwǔ','15'],['èrshí’èr','22'],['liùshíqī','67'],['sìshísì','44'],['wǔshíbā','58'],['bāshí','80'],['jiǔshíliù','96'],['yìbǎi','100']]
-        .map(([py,n])=>({q:`<span class="wbbig">${py}</span>`, p:'Which number?', a:n, pool:F, ex:`${py} = ${n}`}));})()},
-    {title:'🧮 Number recipe (bonus)', sub:'10s and 1s — 38 = 3 tens + 8', qs:[
-      {q:'<span class="wbbig">38</span>', p:'How do you say it?', a:'sānshíbā', o:['sānshíbā','bāshísān','sānbāshí','sìshíbā'], ex:'3 · 10 · 8'},
-      {q:'<span class="wbbig">26</span>', p:'How do you say it?', a:'èrshíliù', o:['èrshíliù','liùshíèr','èrliùshí','èrshíwǔ'], ex:'2 · 10 · 6'},
-      {q:'<span class="wbbig">99</span>', p:'How do you say it?', a:'jiǔshíjiǔ', o:['jiǔshíjiǔ','jiǔjiǔshí','jiǔshíbā','yìbǎi'], ex:'9 · 10 · 9'},
-      {q:'<span class="wbbig">shísì</span>', p:'Which number? (10 + 4)', a:'14', o:['14','40','41','104'], ex:'shí sì = 10 + 4 = 14'},
-      {q:'<span class="wbbig">sìshí</span>', p:'Which number? (4 × 10)', a:'40', o:['14','40','41','104'], ex:'sì shí = 4 tens = 40'}]},
-    {title:'💬 Fill the dialogue', sub:'workbook p37', qs:[
-      wbD('A: Zhè shì <b>___</b> de qiánbāo?','shuí',['duōshao','yuán','xièxie','duì','shuí','zhè','lǐ'],'Whose wallet is this?'),
-      wbD('B: <b>___</b> shì wǒ de qiánbāo.','Zhè',['duōshao','yuán','xièxie','duì','shuí','Zhè','lǐ'],'This is my wallet.'),
-      wbD('A: Qiánbāo <b>___</b> yǒu duōshao qián?','lǐ',['duōshao','yuán','xièxie','duì','shuí','zhè','lǐ'],'lǐ = inside, AFTER the thing.'),
-      wbD('A: Qiánbāo lǐ yǒu <b>___</b> qián?','duōshao',['duōshao','yuán','xièxie','duì','shuí','zhè','lǐ'],'How much money?'),
-      wbD('B: 26 <b>___</b> qián, duì ma?','yuán',['duōshao','yuán','xièxie','duì','shuí','zhè','lǐ'],'yuán = Chinese “dollars”.'),
-      wbD('A: <b>___</b>, gěi nǐ.','Duì',['duōshao','yuán','xièxie','Duì','shuí','zhè','lǐ'],'Right! Here you go.'),
-      wbD('B: <b>___</b>.','Xièxie',['duōshao','yuán','Xièxie','duì','shuí','zhè','lǐ'],'Thank you.')]},
-    {title:'✍️ Count the strokes', sub:'workbook p37', qs:[wbS('多','duō',6),wbS('再','zài',6),wbS('友','yǒu',4),wbS('给','gěi',9),wbS('朋','péng',8),wbS('光','guāng',6)]}
-  ],
-  l11:[
-    {title:'🔤 Starting sounds', sub:'workbook p39', qs:[
-      wbI('__é','h','hé','and'), wbI('__ǎo','zh','zhǎo','look for'), wbI('__ēng','sh','shēng','shēngrì: birthday'), wbI('__ài','z','zài','be at'),
-      wbI('__uài','k','kuài','kuàilè: happy'), wbI('__ù','zh','zhù','wish'), wbI('__ǐ','l','lǐ','zhèlǐ: here')]},
-    {title:'🎵 Add the tones', sub:'workbook p39', qs:[
-      wbT('Hanyu','Hànyǔ',['Hānyǔ','Hànyù','Hǎnyǔ']), wbT('zheli','zhèlǐ',['zhělǐ','zhèlì','zhēlǐ']), wbT('kuaile','kuàilè',['kuǎilè','kuàilé','kuāilè']),
-      wbT('duoshao','duōshao',['duǒshao','duōshǎo','duóshao']), wbT('nin hao','nín hǎo',['nǐn hǎo','nín hào','nīn hǎo']), wbT('shengri','shēngrì',['shěngrì','shēngrí','shèngrì']), wbT('qianbao','qiánbāo',['qiànbāo','qiánbǎo','qiānbāo'])]},
-    {title:'🔀 Tone change of 不', sub:'workbook p40 · '+WB_BU_RULE, qs:[
-      wbBu('bú hǎo',false,'bù hǎo','hǎo is 3rd tone, so 不 stays bù.'), wbBu('bú duì',true,'','duì is 4th tone → bú.'), wbBu('bùxíng',true,'','xíng is 2nd tone → bù.'),
-      wbBu('bù huì',false,'bú huì','huì is 4th tone → bú.'), wbBu('bù kèqi',false,'bú kèqi','kè is 4th tone → bú.'), wbBu('bú gāo',false,'bù gāo','gāo is 1st tone → bù.'),
-      wbBu('bù zuò',false,'bú zuò','zuò is 4th tone → bú.'), wbBu('bù néng',true,'','néng is 2nd tone → bù.'), wbBu('bù lǐmào',true,'','lǐ is 3rd tone → bù.')]},
-    {title:'🔁 Meaning', sub:'workbook p40', qs:[
-      wbE('zhǎo','find',['find','and','here','where','birthday','happy']), wbE('hé','and',['find','and','here','where','birthday','happy']), wbE('zhèlǐ','here',['find','and','here','where','birthday','happy']),
-      wbE('nǎlǐ','where',['find','and','here','where','birthday','happy']), wbE('shēngrì','birthday',['find','and','here','where','birthday','happy']), wbE('kuàilè','happy',['find','and','here','where','birthday','happy'])]},
-    {title:'💬 Fill the dialogue 1', sub:'workbook p41', qs:[
-      wbD('A: Lín lǎoshī <b>___</b> hǎo!','nín',['nǐ','ma','zài','zhǎo','nín'],'nín = polite you.'),
-      wbD('B: <b>___</b> hǎo, nǐ zhǎo wǒ ma?','Nǐ',['Nǐ','ma','zài','zhǎo','nín'],'The teacher says plain nǐ back.'),
-      wbD('A: Bù, wǒ <b>___</b> wǒ de péngyou Jiāmíng.','zhǎo',['nǐ','ma','zài','zhǎo','nín'],'I’m looking for my friend.'),
-      wbD('A: Tā zài zhèlǐ <b>___</b>?','ma',['nǐ','ma','zài','zhǎo','nín'],'Is he here?'),
-      wbD('B: Bù, tā bú <b>___</b> zhèlǐ.','zài',['nǐ','ma','zài','zhǎo','nín'],'He is not here. (bú before 4th-tone zài)')]},
-    {title:'💬 Fill the dialogue 2', sub:'workbook p41', qs:[
-      wbD('A: <b>___</b> hǎo!','Nǐ',['shénme','nǎlǐ','nàlǐ','zhèlǐ','Nǐ'],'Hello!'),
-      wbD('B: Nǐ hǎo! Nǐ zhǎo <b>___</b>?','shénme',['shénme','nǎlǐ','nàlǐ','zhèlǐ','nǐ'],'What are you looking for?'),
-      wbD('A: Wǒ zhǎo wǒ de Zhōngwén guāngpán, tāmen zài <b>___</b> ma?','zhèlǐ',['shénme','nǎlǐ','nàlǐ','zhèlǐ','nǐ'],'Are they here?'),
-      wbD('A: Tāmen zài <b>___</b>?','nǎlǐ',['shénme','nǎlǐ','nàlǐ','zhèlǐ','nǐ'],'Where are they?'),
-      wbD('B: Tāmen zài <b>___</b>.','nàlǐ',['shénme','nǎlǐ','nàlǐ','zhèlǐ','nǐ'],'nàlǐ = there (like nà = that).')]},
-    {title:'✍️ Count the strokes', sub:'workbook p42', qs:[wbS('你','nǐ',7),wbS('什','shén',4),wbS('您','nín',11),wbS('叫','jiào',5),wbS('么','me',3),wbS('快','kuài',7)]}
-  ]
-};
-
-function wbDone(lessonId, idx){ const lp=lessonProgress(lessonId); lp.wb=lp.wb||{}; lp.wb[idx]=true; progress[lessonId]=lp; saveProgress(progress); }
-function wbCount(lessonId){ const lp=lessonProgress(lessonId); const n=(WORKBOOK[lessonId]||[]).length; let d=0; for(let i=0;i<n;i++) if(lp.wb && lp.wb[i]) d++; return {d,n}; }
-
-/* ---- WORKBOOK LAB: list of practice sets for one lesson ---- */
-function renderWorkbook(lessonId){
-  const lesson=findLesson(lessonId); const sets=WORKBOOK[lessonId]||[];
-  topBar("\u{1F9EA} Workbook Lab", ()=>nav({screen:"lesson", lessonId}));
-  const sub=document.createElement('p'); sub.className="subtitle";
-  sub.textContent=`Lesson ${lesson.num} · practice made from your exercise book. Tap a set. Wrong answer? Just tap again!`; app.appendChild(sub);
-  const lp=lessonProgress(lessonId);
-  sets.forEach((s,i)=>{
-    const done=lp.wb && lp.wb[i];
-    const t=document.createElement('div'); t.className="tile";
-    t.innerHTML=`<div><div class="name">${s.title}</div><div class="sub">${s.sub} · ${s.qs.length} questions</div></div><span class="status">${done?'\u2713 Done':''}</span><span class="arrow">\u2192</span>`;
-    t.onclick=()=>nav({screen:"wbset", lessonId, setIdx:i});
-    app.appendChild(t);
-  });
-}
-
-/* ---- one quiz set ---- */
-function renderWbSet(lessonId, setIdx){
-  const set=WORKBOOK[lessonId][setIdx];
-  topBar(set.title, ()=>nav({screen:"workbook", lessonId}));
-  let i=0, firstTry=0, missedThis=false;
-  const wrap=document.createElement('div'); app.appendChild(wrap);
-  function draw(){
-    wrap.innerHTML="";
-    if(i>=set.qs.length){
-      wbDone(lessonId,setIdx);
-      const pct=Math.round(100*firstTry/set.qs.length);
-      const msg = pct===100 ? "\u{1F3C6} Perfect plate! Every one first try." : pct>=70 ? "\u{1F525} Tasty work! Re-taste the ones you missed later." : "\u{1F373} Good cooking practice. Do it again to polish it.";
-      wrap.innerHTML=`<div class="card"><div class="wbbig">${firstTry} / ${set.qs.length}</div><div class="english">${msg}</div></div>`;
-      const row=document.createElement('div'); row.className="nav-row";
-      const again=document.createElement('button'); again.className="btn secondary"; again.textContent="\u21BB Again"; again.onclick=()=>{ i=0; firstTry=0; draw(); };
-      const back=document.createElement('button'); back.className="btn"; back.textContent="Back to sets"; back.onclick=()=>nav({screen:"workbook", lessonId});
-      row.appendChild(again); row.appendChild(back); wrap.appendChild(row); return;
-    }
-    const q=set.qs[i]; missedThis=false;
-    const opts=wbOptions(q, q.pool);
-    wrap.innerHTML=`<div class="progress-line">${i+1} / ${set.qs.length}</div>
-      <div class="card" style="min-height:140px"><div class="wbq">${q.q}</div>${q.p?`<div class="type">${q.p}</div>`:''}</div>
-      <div id="wbOpts" class="wbopts"></div><div id="wbFb" class="wbfb"></div>`;
-    const box=wrap.querySelector('#wbOpts'), fb=wrap.querySelector('#wbFb');
-    opts.forEach(o=>{
-      const b=document.createElement('button'); b.className="wbopt"; b.innerHTML=o;
-      b.onclick=()=>{
-        if(b.classList.contains('right')) return;
-        if(String(o)===String(q.a)){
-          b.classList.add('right'); if(!missedThis) firstTry++;
-          box.querySelectorAll('.wbopt').forEach(x=>x.disabled=true);
-          fb.innerHTML=`<div class="wbgood">\u2705 ${q.ex||'Correct!'}</div>`;
-          const nx=document.createElement('button'); nx.className="btn"; nx.textContent = i===set.qs.length-1 ? "Finish" : "Next \u2192"; nx.onclick=()=>{ i++; draw(); };
-          fb.appendChild(nx);
-        } else { missedThis=true; b.classList.add('wrong'); setTimeout(()=>b.classList.remove('wrong'),500); }
-      };
-      box.appendChild(b);
-    });
-  }
-  draw();
-}
-
 /* ============ ROUTING ============ */
 let route = {screen:"home"};
 function nav(next){ route = next; render(); window.scrollTo(0,0); }
@@ -1030,8 +568,6 @@ function render(){
   if(route.screen==="patterns") return renderPatterns();
   if(route.screen==="match") return renderMatch();
   if(route.screen==="strokes") return renderStrokes();
-  if(route.screen==="workbook") return renderWorkbook(route.lessonId);
-  if(route.screen==="wbset") return renderWbSet(route.lessonId, route.setIdx);
 }
 
 function topBar(title, onBack){
@@ -1139,9 +675,6 @@ function renderLessonHub(lessonId){
     app.appendChild(p);
   }
 
-  if(lesson.story){ const st=document.createElement('div'); st.className="storybox"; st.textContent=lesson.story; app.appendChild(st); }
-  if(lesson.note){ const nt=document.createElement('div'); nt.className="draftnote"; nt.textContent=lesson.note; app.appendChild(nt); }
-
   const vocabTile = document.createElement('div');
   vocabTile.className = "tile";
   vocabTile.innerHTML = `<div><div class="name">\u{1F9C2} Ingredient Cards</div><div class="sub">${lesson.vocab.length} ingredients to prep</div></div><span class="status">${lp.vocabDone?'\u2713 Done':''}</span><span class="arrow">\u2192</span>`;
@@ -1154,36 +687,11 @@ function renderLessonHub(lessonId){
   dialogueTile.onclick = ()=> nav({screen:"dialogue", lessonId});
   app.appendChild(dialogueTile);
 
-  if(WORKBOOK[lessonId]){
-    const wc=wbCount(lessonId);
-    const wbTile=document.createElement('div'); wbTile.className="tile";
-    wbTile.innerHTML=`<div><div class="name">\u{1F9EA} Workbook Lab</div><div class="sub">${wc.n} practice sets from your exercise book</div></div><span class="status">${wc.d}/${wc.n} \u2713</span><span class="arrow">\u2192</span>`;
-    wbTile.onclick=()=>nav({screen:"workbook", lessonId});
-    app.appendChild(wbTile);
-  }
-
   if(lesson.numbers){
     const nb=document.createElement('div'); nb.className="tipbox"; nb.innerHTML="<b>\u{1F522} Numbers 1\u201310:</b><br>"+lesson.numbers; app.appendChild(nb);
   }
   if(lesson.tip){
     const tb=document.createElement('div'); tb.className="tipbox"; tb.innerHTML="<b>\u{1F468}\u200D\u{1F373} Chef\u2019s tip</b><br>"+lesson.tip; app.appendChild(tb);
-  }
-  if(lesson.sections && lesson.sections.length){
-    const lab=document.createElement('div'); lab.className="section-label"; lab.textContent="\u{1F4D6} From the textbook (tap to open)"; app.appendChild(lab);
-    lesson.sections.forEach(sec=>{
-      const d=document.createElement('details'); d.className="sec";
-      const sm=document.createElement('summary'); sm.textContent=sec.title; d.appendChild(sm);
-      const inner=document.createElement('div'); inner.className="inner";
-      sec.items.forEach(it=>{
-        const row=document.createElement('div'); row.className="dialogue-line";
-        row.innerHTML=`<div class="hanzi">${it.hanzi}</div><div class="pinyin">${it.pinyin}</div><div class="english">${it.english}</div>`;
-        inner.appendChild(row);
-      });
-      d.appendChild(inner); app.appendChild(d);
-    });
-  }
-  if(lesson.sounds){
-    const sb=document.createElement('div'); sb.className="tipbox"; sb.innerHTML=lesson.sounds; app.appendChild(sb);
   }
   if(lesson.extra && lesson.extra.length){
     const label = document.createElement('div');
@@ -1422,13 +930,6 @@ function renderStrokes(){
       </div>
     `;
     app.appendChild(card);
-  });
-
-  const lab=document.createElement('div'); lab.className="section-label"; lab.textContent="\u270D\uFE0F Writing-order rules (from the book, Lessons 7\u20138)"; app.appendChild(lab);
-  STROKE_RULES.forEach(r=>{
-    const row=document.createElement('div'); row.className="dialogue-line";
-    row.innerHTML=`<div class="hanzi">${r.examples}</div><div class="pinyin">${r.rule}</div><div class="english">${r.kitchen}</div>`;
-    app.appendChild(row);
   });
 }
 
